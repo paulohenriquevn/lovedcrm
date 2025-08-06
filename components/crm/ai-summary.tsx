@@ -4,9 +4,6 @@
  * Baseado na especificação do agente 07-design-tokens.md
  */
 
-import { cn } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { 
   Sparkles, 
   ChevronDown, 
@@ -18,6 +15,16 @@ import {
   CheckCircle
 } from "lucide-react"
 import { useState } from "react"
+
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+
+const getConfidenceColor = (conf: number): string => {
+  if (conf >= 80) {return 'text-emerald-600 bg-emerald-50'}
+  if (conf >= 60) {return 'text-yellow-600 bg-yellow-50'}
+  return 'text-red-600 bg-red-50'
+}
 
 interface AISummaryProps {
   summary: string
@@ -63,6 +70,186 @@ const sentimentConfig = {
   }
 }
 
+function SummaryHeader({ 
+  sentiment, 
+  confidence, 
+  onCopy, 
+  onRegenerate, 
+  expandable, 
+  isExpanded, 
+  setIsExpanded 
+}: {
+  sentiment?: 'positive' | 'negative' | 'neutral' | 'mixed'
+  confidence?: number
+  onCopy?: () => void
+  onRegenerate?: () => void
+  expandable: boolean
+  isExpanded: boolean
+  setIsExpanded: (expanded: boolean) => void
+}): React.ReactElement {
+  const sentimentInfo = sentiment == null ? null : sentimentConfig[sentiment]
+  const SentimentIcon = sentimentInfo?.icon
+
+  return (
+    <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center gap-2">
+        <Sparkles className="h-4 w-4 text-violet-600 animate-pulse" />
+        <span className="text-sm font-semibold text-violet-700">
+          Resumo com IA
+        </span>
+        {sentiment != null && SentimentIcon != null ? <Badge variant="secondary" className={cn(
+            "text-xs",
+            sentimentInfo?.color,
+            sentimentInfo?.bgColor
+          )}>
+            <SentimentIcon className="h-3 w-3 mr-1" />
+            {sentimentInfo?.label}
+          </Badge> : null}
+      </div>
+
+      <div className="flex items-center gap-2">
+        {confidence != null && confidence > 0 ? <Badge 
+            variant="secondary" 
+            className={cn("text-xs", getConfidenceColor(confidence))}
+            title={`Confiança: ${confidence}%`}
+          >
+            {confidence}%
+          </Badge> : null}
+        
+        <SummaryActionButtons 
+          onCopy={onCopy}
+          onRegenerate={onRegenerate}
+          expandable={expandable}
+          isExpanded={isExpanded}
+          setIsExpanded={setIsExpanded}
+        />
+      </div>
+    </div>
+  )
+}
+
+function SummaryActionButtons({
+  onCopy,
+  onRegenerate,
+  expandable,
+  isExpanded,
+  setIsExpanded
+}: {
+  onCopy?: () => void
+  onRegenerate?: () => void
+  expandable: boolean
+  isExpanded: boolean
+  setIsExpanded: (expanded: boolean) => void
+}): React.ReactElement {
+  const handleCopyClick = (): void => {
+    if (onCopy != null) {
+      onCopy()
+    }
+  }
+
+  const handleRegenerateClick = (): void => {
+    if (onRegenerate != null) {
+      onRegenerate()
+    }
+  }
+
+  const handleExpandClick = (): void => {
+    setIsExpanded(!isExpanded)
+  }
+
+  return (
+    <div className="flex items-center gap-1">
+      {onCopy == null ? null : <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="h-6 w-6 p-0"
+          onClick={handleCopyClick}
+          title="Copiar resumo"
+        >
+          <Copy className="h-3 w-3" />
+        </Button>}
+      
+      {onRegenerate == null ? null : <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="h-6 w-6 p-0"
+          onClick={handleRegenerateClick}
+          title="Regenerar resumo"
+        >
+          <RefreshCw className="h-3 w-3" />
+        </Button>}
+
+      {expandable ? <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className="h-6 w-6 p-0"
+          onClick={handleExpandClick}
+          title={isExpanded ? "Recolher" : "Expandir"}
+        >
+          {isExpanded ? (
+            <ChevronUp className="h-3 w-3" />
+          ) : (
+            <ChevronDown className="h-3 w-3" />
+          )}
+        </Button> : null}
+    </div>
+  )
+}
+
+function NextActionsSection({ 
+  nextActions, 
+  isExpanded 
+}: { 
+  nextActions: string[]
+  isExpanded: boolean 
+}): React.ReactElement | null {
+  if (nextActions.length === 0 || !isExpanded) {
+    return null
+  }
+
+  return (
+    <div className="px-4 pb-4">
+      <h4 className="text-xs font-medium text-violet-700 mb-2 uppercase tracking-wide">
+        Próximas Ações Sugeridas
+      </h4>
+      <ul className="space-y-1">
+        {nextActions.map((action, index) => (
+          <li key={`action-${action.slice(0, 20)}-${index}`} className="flex items-start gap-2 text-xs text-violet-800">
+            <span className="text-violet-400 mt-0.5">•</span>
+            {action}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function MetadataFooter({ 
+  modelUsed, 
+  tokensUsed, 
+  isExpanded 
+}: { 
+  modelUsed?: string
+  tokensUsed?: number
+  isExpanded: boolean 
+}): React.ReactElement | null {
+  if ((modelUsed == null && tokensUsed == null) || !isExpanded) {
+    return null
+  }
+
+  return (
+    <div className="px-4 py-2 border-t border-violet-200/50 bg-violet-50/50">
+      <div className="flex items-center justify-between text-xs text-violet-600">
+        <span>Modelo: {modelUsed}</span>
+        {tokensUsed != null && tokensUsed > 0 ? <span>{tokensUsed.toLocaleString()} tokens</span> : null}
+      </div>
+    </div>
+  )
+}
+
 export function AISummary({ 
   summary, 
   confidence, 
@@ -74,27 +261,22 @@ export function AISummary({
   expandable = false,
   onRegenerate,
   onCopy
-}: AISummaryProps) {
+}: AISummaryProps): React.ReactElement {
   const [isExpanded, setIsExpanded] = useState(!expandable)
   const [copied, setCopied] = useState(false)
 
-  const sentimentInfo = sentiment ? sentimentConfig[sentiment] : null
-  const SentimentIcon = sentimentInfo?.icon
-
-  const handleCopy = async () => {
-    if (onCopy) {
-      onCopy()
-    } else {
+  const handleCopy = async (): Promise<void> => {
+    if (onCopy == null) {
       await navigator.clipboard.writeText(summary)
+    } else {
+      onCopy()
     }
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const getConfidenceColor = (conf: number) => {
-    if (conf >= 80) return 'text-emerald-600 bg-emerald-50'
-    if (conf >= 60) return 'text-yellow-600 bg-yellow-50'
-    return 'text-red-600 bg-red-50'
+  const enhancedOnCopy = (): void => {
+    void handleCopy()
   }
 
   return (
@@ -105,78 +287,15 @@ export function AISummary({
     )}>
       {/* Header */}
       <div className="p-4">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-violet-600 animate-pulse" />
-            <span className="text-sm font-semibold text-violet-700">
-              Resumo com IA
-            </span>
-            {sentiment && SentimentIcon && (
-              <Badge variant="secondary" className={cn(
-                "text-xs",
-                sentimentInfo.color,
-                sentimentInfo.bgColor
-              )}>
-                <SentimentIcon className="h-3 w-3 mr-1" />
-                {sentimentInfo.label}
-              </Badge>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2">
-            {confidence && (
-              <Badge 
-                variant="secondary" 
-                className={cn("text-xs", getConfidenceColor(confidence))}
-                title={`Confiança: ${confidence}%`}
-              >
-                {confidence}%
-              </Badge>
-            )}
-            
-            <div className="flex items-center gap-1">
-              {onCopy && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-6 w-6 p-0"
-                  onClick={handleCopy}
-                  title="Copiar resumo"
-                >
-                  <Copy className="h-3 w-3" />
-                </Button>
-              )}
-              
-              {onRegenerate && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-6 w-6 p-0"
-                  onClick={onRegenerate}
-                  title="Regenerar resumo"
-                >
-                  <RefreshCw className="h-3 w-3" />
-                </Button>
-              )}
-
-              {expandable && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-6 w-6 p-0"
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  title={isExpanded ? "Recolher" : "Expandir"}
-                >
-                  {isExpanded ? (
-                    <ChevronUp className="h-3 w-3" />
-                  ) : (
-                    <ChevronDown className="h-3 w-3" />
-                  )}
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
+        <SummaryHeader 
+          sentiment={sentiment}
+          confidence={confidence}
+          onCopy={enhancedOnCopy}
+          onRegenerate={onRegenerate}
+          expandable={expandable}
+          isExpanded={isExpanded}
+          setIsExpanded={setIsExpanded}
+        />
 
         {/* Summary Content */}
         <div className={cn(
@@ -188,41 +307,13 @@ export function AISummary({
           </p>
         </div>
 
-        {copied && (
-          <div className="mt-2 text-xs text-emerald-600 font-medium">
+        {copied ? <div className="mt-2 text-xs text-emerald-600 font-medium">
             ✓ Resumo copiado!
-          </div>
-        )}
+          </div> : null}
       </div>
 
-      {/* Next Actions */}
-      {nextActions.length > 0 && isExpanded && (
-        <div className="px-4 pb-4">
-          <h4 className="text-xs font-medium text-violet-700 mb-2 uppercase tracking-wide">
-            Próximas Ações Sugeridas
-          </h4>
-          <ul className="space-y-1">
-            {nextActions.map((action, index) => (
-              <li key={index} className="flex items-start gap-2 text-xs text-violet-800">
-                <span className="text-violet-400 mt-0.5">•</span>
-                {action}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* Footer with metadata */}
-      {(modelUsed || tokensUsed) && isExpanded && (
-        <div className="px-4 py-2 border-t border-violet-200/50 bg-violet-50/50">
-          <div className="flex items-center justify-between text-xs text-violet-600">
-            <span>Modelo: {modelUsed}</span>
-            {tokensUsed && (
-              <span>{tokensUsed.toLocaleString()} tokens</span>
-            )}
-          </div>
-        </div>
-      )}
+      <NextActionsSection nextActions={nextActions} isExpanded={isExpanded} />
+      <MetadataFooter modelUsed={modelUsed} tokensUsed={tokensUsed} isExpanded={isExpanded} />
     </div>
   )
 }
@@ -236,9 +327,9 @@ export function AISummaryCompact({
   summary: string
   confidence?: number
   className?: string 
-}) {
+}): React.ReactElement {
   const [showFull, setShowFull] = useState(false)
-  const truncatedSummary = summary.length > 100 ? summary.substring(0, 100) + '...' : summary
+  const truncatedSummary = summary.length > 100 ? `${summary.slice(0, 100)}...` : summary
 
   return (
     <div className={cn(
@@ -253,6 +344,7 @@ export function AISummaryCompact({
           </p>
           {summary.length > 100 && (
             <button
+              type="button"
               onClick={() => setShowFull(!showFull)}
               className="text-xs text-violet-600 hover:text-violet-700 mt-1 font-medium"
             >
@@ -260,11 +352,9 @@ export function AISummaryCompact({
             </button>
           )}
         </div>
-        {confidence && (
-          <Badge variant="secondary" className="text-xs bg-white/50">
+        {confidence != null && confidence > 0 ? <Badge variant="secondary" className="text-xs bg-white/50">
             {confidence}%
-          </Badge>
-        )}
+          </Badge> : null}
       </div>
     </div>
   )

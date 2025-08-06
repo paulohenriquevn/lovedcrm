@@ -19,7 +19,7 @@ export function OrganizationBadge({
   children, 
   className,
   showLabel = false 
-}: OrganizationBadgeProps) {
+}: OrganizationBadgeProps): JSX.Element {
   const tierStyles = {
     free: "bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200",
     pro: "bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200",
@@ -32,7 +32,7 @@ export function OrganizationBadge({
     enterprise: "👑"
   }
 
-  const displayContent = children || (showLabel ? organizationTierLabels[`tier${tier.charAt(0).toUpperCase() + tier.slice(1)}` as keyof typeof organizationTierLabels] : tierIcons[tier])
+  const displayContent = children ?? (showLabel ? organizationTierLabels[`tier${tier.charAt(0).toUpperCase() + tier.slice(1)}` as keyof typeof organizationTierLabels] : tierIcons[tier])
   
   return (
     <span 
@@ -44,7 +44,7 @@ export function OrganizationBadge({
       )}
       title={`Plano ${organizationTierLabels[`tier${tier.charAt(0).toUpperCase() + tier.slice(1)}` as keyof typeof organizationTierLabels]}`}
     >
-      {typeof displayContent === 'string' && !children && (
+      {typeof displayContent === 'string' && Boolean(!children) && (
         <span className="text-[10px]" aria-hidden="true">
           {tierIcons[tier]}
         </span>
@@ -65,7 +65,7 @@ export function CurrentOrganizationBadge({
   orgName: string
   tier: 'free' | 'pro' | 'enterprise'
   className?: string 
-}) {
+}): JSX.Element {
   return (
     <div className={cn(
       "inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-violet-200 bg-gradient-to-r from-violet-50 to-purple-50",

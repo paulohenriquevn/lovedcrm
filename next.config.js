@@ -28,10 +28,13 @@ const nextConfig = withNextIntl({
     }
 
     const rules = [
+      // ====================================================================
+      // 🚨 CRITICAL: ADD NEW API ROUTES HERE - BEFORE GENERIC /api/:path* 
+      // ====================================================================
       // IMPORTANT: More specific rules FIRST!
       {
-        source: '/api/auth/:endpoint*',
-        destination: `${backendUrl}/auth/:endpoint*`,
+        source: '/api/auth/:path*',
+        destination: `${backendUrl}/auth/:path*`,
       },
       {
         source: '/api/users/:path*',
@@ -50,9 +53,16 @@ const nextConfig = withNextIntl({
         destination: `${backendUrl}/billing/:path*`,
       },
       {
+        source: '/api/crm/leads:path*',
+        destination: `${backendUrl}/crm/leads/`,
+      },
+      {
         source: '/api/admin/:path*',
         destination: `${backendUrl}/admin/:path*`,
       },
+      // ====================================================================
+      // 🚨 ADD NEW ROUTES ABOVE THIS LINE - NOT BELOW!
+      // ====================================================================
       {
         source: '/api/:path*',
         destination: `${backendUrl}/:path*`,
@@ -93,6 +103,29 @@ const nextConfig = withNextIntl({
   // Para MVP: disable static export em páginas com useSearchParams
   experimental: {
     missingSuspenseWithCSRBailout: false,
+  },
+
+  // Image domains configuration for external images
+  images: {
+    domains: [
+      'images.unsplash.com',
+      'upload.wikimedia.org',
+    ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/photo-*',
+      },
+      {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org',
+        port: '',
+        pathname: '/wikipedia/commons/**',
+      },
+    ],
+    formats: ['image/webp', 'image/avif'],
   },
 
   // Headers de segurança

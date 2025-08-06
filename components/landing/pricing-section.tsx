@@ -6,11 +6,6 @@
 
 'use client'
 
-import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Switch } from '@/components/ui/switch'
 import { 
   Check, 
   Star, 
@@ -24,6 +19,14 @@ import {
   Shield,
   Headphones
 } from 'lucide-react'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Switch } from '@/components/ui/switch'
+import { useScrollAnimation, scrollAnimationVariants, staggerContainer, staggerItem, cardHoverVariants, buttonPressVariants, enhancedCardHoverVariants, iconBounceVariants } from '@/hooks/use-scroll-animation'
 
 const pricingPlans = [
   {
@@ -76,7 +79,7 @@ const pricingPlans = [
       'App mobile'
     ],
     limitations: [],
-    badge: '🔥 MAIS POPULAR'
+    badge: 'MAIS POPULAR'
   },
   {
     id: 'enterprise',
@@ -104,7 +107,7 @@ const pricingPlans = [
       'Suporte 24/7'
     ],
     limitations: [],
-    badge: '👑 ENTERPRISE'
+    badge: 'ENTERPRISE'
   }
 ]
 
@@ -133,6 +136,10 @@ declare global {
 
 export function PricingSection() {
   const [isYearly, setIsYearly] = useState(false)
+  const { ref: headerRef, isInView: headerInView } = useScrollAnimation()
+  const { ref: plansRef, isInView: plansInView } = useScrollAnimation()
+  const { ref: roiRef, isInView: roiInView } = useScrollAnimation()
+  const { ref: faqRef, isInView: faqInView } = useScrollAnimation()
 
   const handlePlanSelect = (planId: string) => {
     if (typeof gtag !== 'undefined') {
@@ -147,9 +154,15 @@ export function PricingSection() {
     <section className="py-20 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
+        <motion.div 
+          ref={headerRef}
+          className="text-center mb-16"
+          initial="hidden"
+          animate={headerInView ? "visible" : "hidden"}
+          variants={scrollAnimationVariants}
+        >
           <Badge className="mb-4 bg-violet-50 text-violet-700 border-violet-200">
-            💰 Preços Transparentes
+Preços Transparentes
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
             Planos que{" "}
@@ -164,7 +177,7 @@ export function PricingSection() {
 
           {/* Billing Toggle */}
           <div className="flex items-center justify-center gap-3 mb-4">
-            <span className={`text-sm ${!isYearly ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
+            <span className={`text-sm ${isYearly ? 'text-muted-foreground' : 'text-foreground font-medium'}`}>
               Mensal
             </span>
             <Switch 
@@ -179,26 +192,39 @@ export function PricingSection() {
               2 meses grátis!
             </Badge>
           </div>
-        </div>
+        </motion.div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {pricingPlans.map((plan) => {
+        <motion.div 
+          ref={plansRef}
+          className="grid md:grid-cols-3 gap-8 mb-16"
+          initial="hidden"
+          animate={plansInView ? "visible" : "hidden"}
+          variants={staggerContainer}
+        >
+          {pricingPlans.map((plan, index) => {
             const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice
             const isPopular = plan.id === 'pro'
             
             return (
-              <Card key={plan.id} className={`relative ${plan.color} ${isPopular ? 'scale-105 shadow-xl' : 'hover:shadow-lg'} transition-all duration-300`}>
-                {plan.badge && (
-                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
+              <motion.div
+                key={plan.id}
+                variants={staggerItem}
+                initial="rest"
+                whileHover="hover"
+              >
+                <motion.div
+                  variants={enhancedCardHoverVariants}
+                >
+                  <Card className={`relative ${plan.color} ${isPopular ? 'scale-105 shadow-xl' : ''} h-full ${plan.badge ? 'mt-4' : ''}`}>
+                {plan.badge ? <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground z-10">
                     {plan.badge}
-                  </Badge>
-                )}
+                  </Badge> : null}
                 
                 <CardHeader className="text-center pb-2">
                   <div className="flex items-center justify-center mb-4">
-                    <div className={`h-12 w-12 rounded-lg flex items-center justify-center ${isPopular ? 'bg-primary/20' : 'bg-gray-100'}`}>
-                      <plan.icon className={`h-6 w-6 ${isPopular ? 'text-primary' : 'text-gray-600'}`} />
+                    <div className={`h-12 w-12 rounded-lg flex items-center justify-center ${isPopular ? 'bg-primary/20' : 'bg-muted'}`}>
+                      <plan.icon className={`h-6 w-6 ${isPopular ? 'text-primary' : 'text-muted-foreground'}`} />
                     </div>
                   </div>
                   
@@ -217,11 +243,9 @@ export function PricingSection() {
                         <span className="text-muted-foreground">/{isYearly ? 'ano' : 'mês'}</span>
                       )}
                     </div>
-                    {plan.monthlyPrice > 0 && isYearly && (
-                      <p className="text-xs text-emerald-600 mt-1">
+                    {plan.monthlyPrice > 0 && isYearly ? <p className="text-xs text-emerald-600 mt-1">
                         ~R$ {Math.round(price/12)}/mês
-                      </p>
-                    )}
+                      </p> : null}
                     {plan.monthlyPrice === 0 && (
                       <p className="text-sm text-muted-foreground mt-1">Para sempre</p>
                     )}
@@ -229,15 +253,27 @@ export function PricingSection() {
                 </CardHeader>
 
                 <CardContent className="pt-0">
-                  <Button 
-                    className="w-full mb-6" 
-                    variant={plan.buttonVariant}
-                    size="lg"
-                    onClick={() => handlePlanSelect(plan.id)}
+                  <motion.div
+                    variants={buttonPressVariants}
+                    initial="rest"
+                    whileHover="hover"
+                    whileTap="press"
                   >
-                    {plan.buttonText}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                    <Button 
+                      className="w-full mb-6" 
+                      variant={plan.buttonVariant}
+                      size="lg"
+                      onClick={() => handlePlanSelect(plan.id)}
+                    >
+                      {plan.buttonText}
+                      <motion.div
+                        variants={iconBounceVariants}
+                        className="ml-2"
+                      >
+                        <ArrowRight className="h-4 w-4" />
+                      </motion.div>
+                    </Button>
+                  </motion.div>
 
                   {/* Features */}
                   <div className="space-y-3">
@@ -250,19 +286,27 @@ export function PricingSection() {
                     
                     {plan.limitations.map((limitation, index) => (
                       <div key={index} className="flex items-center gap-3 opacity-60">
-                        <div className="h-4 w-4 rounded-full border border-gray-300 flex-shrink-0"></div>
+                        <div className="h-4 w-4 rounded-full border border-gray-300 flex-shrink-0" />
                         <span className="text-sm text-muted-foreground line-through">{limitation}</span>
                       </div>
                     ))}
                   </div>
                 </CardContent>
-              </Card>
+                  </Card>
+                </motion.div>
+              </motion.div>
             )
           })}
-        </div>
+        </motion.div>
 
         {/* ROI Calculator */}
-        <Card className="mb-16 bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
+        <motion.div
+          ref={roiRef}
+          initial="hidden"
+          animate={roiInView ? "visible" : "hidden"}
+          variants={scrollAnimationVariants}
+        >
+          <Card className="mb-16 bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
           <CardContent className="p-8">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold text-foreground mb-4">
@@ -273,8 +317,13 @@ export function PricingSection() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center">
+            <motion.div 
+              className="grid md:grid-cols-3 gap-6"
+              variants={staggerContainer}
+              initial="hidden"
+              animate={roiInView ? "visible" : "hidden"}
+            >
+              <motion.div className="text-center" variants={staggerItem}>
                 <div className="bg-white rounded-lg p-6 mb-4">
                   <BarChart3 className="h-8 w-8 text-primary mx-auto mb-3" />
                   <div className="text-2xl font-bold text-primary mb-2">4h/dia</div>
@@ -283,9 +332,9 @@ export function PricingSection() {
                 <p className="text-xs text-muted-foreground">
                   R$ 80/hora × 4h × 22 dias = <strong>R$ 7.040/mês</strong>
                 </p>
-              </div>
+              </motion.div>
 
-              <div className="text-center">
+              <motion.div className="text-center" variants={staggerItem}>
                 <div className="bg-white rounded-lg p-6 mb-4">
                   <Users className="h-8 w-8 text-emerald-600 mx-auto mb-3" />
                   <div className="text-2xl font-bold text-emerald-600 mb-2">30%</div>
@@ -294,9 +343,9 @@ export function PricingSection() {
                 <p className="text-xs text-muted-foreground">
                   100 leads × 30% × R$ 3.000 = <strong>R$ 90.000/mês</strong>
                 </p>
-              </div>
+              </motion.div>
 
-              <div className="text-center">
+              <motion.div className="text-center" variants={staggerItem}>
                 <div className="bg-white rounded-lg p-6 mb-4">
                   <Star className="h-8 w-8 text-yellow-500 mx-auto mb-3" />
                   <div className="text-2xl font-bold text-yellow-600 mb-2">ROI</div>
@@ -305,68 +354,46 @@ export function PricingSection() {
                 <p className="text-xs text-muted-foreground">
                   <strong className="text-2xl text-emerald-600">32,000%</strong> no primeiro ano
                 </p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </CardContent>
-        </Card>
+          </Card>
+        </motion.div>
 
         {/* FAQ */}
-        <div className="max-w-3xl mx-auto">
+        <motion.div 
+          ref={faqRef}
+          className="max-w-3xl mx-auto"
+          initial="hidden"
+          animate={faqInView ? "visible" : "hidden"}
+          variants={scrollAnimationVariants}
+        >
           <h3 className="text-2xl font-bold text-center mb-8">
             Perguntas Frequentes
           </h3>
-          <div className="space-y-6">
+          <motion.div 
+            className="space-y-6"
+            variants={staggerContainer}
+            initial="hidden"
+            animate={faqInView ? "visible" : "hidden"}
+          >
             {faqs.map((faq, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
-                  <h4 className="font-semibold text-foreground mb-2">
-                    {faq.question}
-                  </h4>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {faq.answer}
-                  </p>
-                </CardContent>
-              </Card>
+              <motion.div key={index} variants={staggerItem}>
+                <Card>
+                  <CardContent className="p-6">
+                    <h4 className="font-semibold text-foreground mb-2">
+                      {faq.question}
+                    </h4>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {faq.answer}
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
-        {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <Card className="max-w-2xl mx-auto bg-primary text-primary-foreground">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold mb-4">
-                Pronto para Transformar sua Agência?
-              </h3>
-              <p className="mb-6 opacity-90">
-                Junte-se a 500+ agências brasileiras que já crescem com o Loved CRM
-              </p>
-              <Button 
-                size="lg" 
-                variant="secondary" 
-                className="bg-white text-primary hover:bg-gray-100"
-                onClick={() => handlePlanSelect('trial')}
-              >
-                Começar Teste Grátis de 30 Dias
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <div className="flex items-center justify-center gap-6 mt-6 text-sm opacity-80">
-                <div className="flex items-center gap-2">
-                  <Check className="h-4 w-4" />
-                  <span>Sem cartão de crédito</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-4 w-4" />
-                  <span>Setup em 5 minutos</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-4 w-4" />
-                  <span>Suporte em português</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     </section>
   )

@@ -6,18 +6,6 @@
 
 'use client'
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { OrganizationBadge, CurrentOrganizationBadge } from "@/components/ui/organization-badge"
-import { PipelineStage, PipelineProgress } from "@/components/crm/pipeline-stage"
-import { AISummary, AISummaryCompact } from "@/components/crm/ai-summary"
-import { CommunicationChannelBadge, MessageBubble, WhatsAppMessage } from "@/components/crm/communication-channel"
-import { Timeline, TimelineStats } from "@/components/crm/timeline"
-import type { TimelineEntry } from "@/components/crm/timeline"
-import { designTokens } from "@/types/design-tokens"
 import { 
   Sparkles, 
   Palette, 
@@ -26,8 +14,20 @@ import {
   BarChart3,
   Smartphone
 } from "lucide-react"
+import { useState } from "react"
 
-export default function DesignTokensDemo() {
+import { AISummary, AISummaryCompact } from "@/components/crm/ai-summary"
+import { CommunicationChannelBadge, MessageBubble, WhatsAppMessage } from "@/components/crm/communication-channel"
+import { PipelineStage, PipelineProgress } from "@/components/crm/pipeline-stage"
+import { Timeline, TimelineStats } from "@/components/crm/timeline"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { OrganizationBadge, CurrentOrganizationBadge } from "@/components/ui/organization-badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+import type { TimelineEntry } from "@/components/crm/timeline"
+
+export default function DesignTokensDemo(): JSX.Element {
   const [selectedTier, setSelectedTier] = useState<'free' | 'pro' | 'enterprise'>('pro')
   const [selectedStage, setSelectedStage] = useState<'lead' | 'contact' | 'proposal' | 'negotiation' | 'closed'>('contact')
 
@@ -314,7 +314,7 @@ export default function DesignTokensDemo() {
                     content="Claro! Vou te enviar nossa apresentação. Qual o melhor horário para conversarmos?"
                     direction="outbound"
                     channel="whatsapp"
-                    timestamp={new Date(Date.now() - 60000)}
+                    timestamp={new Date(Date.now() - 60_000)}
                     status="delivered"
                   />
                 </div>
@@ -333,7 +333,7 @@ export default function DesignTokensDemo() {
                   <WhatsAppMessage
                     content="Perfeito! Vamos agendar uma conversa para entender melhor suas necessidades. Você tem disponibilidade amanhã?"
                     direction="outbound"
-                    timestamp={new Date(Date.now() - 120000)}
+                    timestamp={new Date(Date.now() - 120_000)}
                     status="delivered"
                     attachmentCount={1}
                   />
@@ -395,7 +395,10 @@ export default function DesignTokensDemo() {
                 entries={demoTimelineEntries}
                 groupByDate={false}
                 showLeadContext
-                onEntryClick={(entry) => console.log('Clicked entry:', entry)}
+                onEntryClick={(entry): void => {
+                  // Entry clicked - in real app, would navigate or show details
+                  void entry
+                }}
               />
             </CardContent>
           </Card>

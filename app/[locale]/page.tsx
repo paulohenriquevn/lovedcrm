@@ -6,13 +6,14 @@
 
 'use client'
 
-import { HeroSection } from '@/components/landing/hero-section'
-import { ProblemSolutionSection } from '@/components/landing/problem-solution-section'
-import { FeaturesSection } from '@/components/landing/features-section'
-import { SocialProofSection } from '@/components/landing/social-proof-section'
-import { PricingSection } from '@/components/landing/pricing-section'
 import { FAQSection } from '@/components/landing/faq-section'
+import { FeaturesSection } from '@/components/landing/features-section'
 import { Footer } from '@/components/landing/footer'
+import { HeroSection } from '@/components/landing/hero-section'
+import { PricingSection } from '@/components/landing/pricing-section'
+import { ProblemSolutionSection } from '@/components/landing/problem-solution-section'
+import { SocialProofSection } from '@/components/landing/social-proof-section'
+import { ScrollToTop } from '@/components/ui/scroll-to-top'
 
 export default function HomePage() {
   return (
@@ -37,6 +38,9 @@ export default function HomePage() {
       
       {/* Footer */}
       <Footer />
+      
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </main>
   )
 }

@@ -6,10 +6,7 @@
 
 'use client'
 
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
+import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Star, 
   Quote, 
@@ -19,6 +16,17 @@ import {
   MapPin,
   Calendar
 } from 'lucide-react'
+import Image from 'next/image'
+import { useState } from 'react'
+
+import { ImageLoading } from '@/components/loading/section-loading'
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { useScrollAnimation, scrollAnimationVariants, staggerContainer, staggerItem } from '@/hooks/use-scroll-animation'
+import { testimonialImages, companyLogos, getImageProps } from '@/lib/images'
+
 
 const testimonials = [
   {
@@ -27,7 +35,7 @@ const testimonials = [
     role: "CEO",
     company: "Pixel Creative",
     location: "São Paulo, SP",
-    avatar: "/api/placeholder/64/64",
+    avatar: testimonialImages.carlos,
     rating: 5,
     quote: "Loved CRM transformou nossa agência. Antes perdíamos 30% dos leads no WhatsApp bagunçado. Agora convertemos 90% dos leads qualificados. A IA em português é impressionante!",
     results: "De R$ 45k para R$ 120k/mês em 6 meses",
@@ -40,7 +48,7 @@ const testimonials = [
     role: "Diretora Comercial",
     company: "Growth Hub",
     location: "Rio de Janeiro, RJ",
-    avatar: "/api/placeholder/64/64",
+    avatar: testimonialImages.marina,
     rating: 5,
     quote: "O pipeline visual mudou tudo. Minha equipe agora vê exatamente onde cada lead está. As automações do WhatsApp economizam 3 horas por dia. ROI de 400% no primeiro trimestre.",
     results: "Team de 6 para 15 pessoas",
@@ -53,7 +61,7 @@ const testimonials = [
     role: "Fundador",
     company: "Digital First",
     location: "Belo Horizonte, MG",
-    avatar: "/api/placeholder/64/64",
+    avatar: testimonialImages.rafael,
     rating: 5,
     quote: "Setup em 5 minutos, sem complicação. A timeline unificada é genial - vejo todo histórico do cliente numa tela. Fechamos 60% mais negócios só com melhor organização.",
     results: "200% aumento em conversões",
@@ -62,13 +70,43 @@ const testimonials = [
   }
 ]
 
-const companyLogos = [
-  { name: "Pixel Creative", industry: "Design & Branding" },
-  { name: "Growth Hub", industry: "Performance Marketing" },
-  { name: "Digital First", industry: "Marketing Digital" },
-  { name: "Creative Lab", industry: "Conteúdo & Social" },
-  { name: "Scale Agency", industry: "Growth Hacking" },
-  { name: "Brand Boost", industry: "Branding & UX" }
+const companyData = [
+  { 
+    key: 'pixelCreative',
+    name: "Pixel Creative", 
+    industry: "Design & Branding",
+    image: companyLogos.pixelCreative
+  },
+  { 
+    key: 'growthHub',
+    name: "Growth Hub", 
+    industry: "Performance Marketing",
+    image: companyLogos.growthHub
+  },
+  { 
+    key: 'digitalFirst',
+    name: "Digital First", 
+    industry: "Marketing Digital",
+    image: companyLogos.digitalFirst
+  },
+  { 
+    key: 'creativeLab',
+    name: "Creative Lab", 
+    industry: "Conteúdo & Social",
+    image: companyLogos.creativeLab
+  },
+  { 
+    key: 'scaleAgency',
+    name: "Scale Agency", 
+    industry: "Growth Hacking",
+    image: companyLogos.scaleAgency
+  },
+  { 
+    key: 'brandBoost',
+    name: "Brand Boost", 
+    industry: "Branding & UX",
+    image: companyLogos.brandBoost
+  }
 ]
 
 const stats = [
@@ -120,13 +158,23 @@ declare global {
 }
 
 export function SocialProofSection() {
+  const [imageLoading, setImageLoading] = useState<{[key: string]: boolean}>({})
+
+  const handleImageLoad = (imageKey: string) => {
+    setImageLoading(prev => ({ ...prev, [imageKey]: false }))
+  }
+
+  const handleImageLoadStart = (imageKey: string) => {
+    setImageLoading(prev => ({ ...prev, [imageKey]: true }))
+  }
+
   return (
     <section className="py-20 px-4 bg-gradient-to-b from-gray-50/50 to-background">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
           <Badge className="mb-4 bg-emerald-50 text-emerald-700 border-emerald-200">
-            ⭐ Agências que Cresceram com a Gente
+Agências que Cresceram com a Gente
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
             Resultados{" "}
@@ -169,7 +217,7 @@ export function SocialProofSection() {
                 
                 {/* Rating */}
                 <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
+                  {Array.from({length: 5}).map((_, i) => (
                     <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
@@ -190,12 +238,21 @@ export function SocialProofSection() {
 
                 {/* Author Info */}
                 <div className="flex items-center gap-4">
-                  <Avatar className="h-12 w-12">
-                    <AvatarImage src={testimonial.avatar} />
-                    <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                      {testimonial.name.split(' ').map(n => n[0]).join('')}
-                    </AvatarFallback>
-                  </Avatar>
+                  <div className="relative">
+                    <Avatar className="h-12 w-12">
+                      <AnimatePresence>
+                        {imageLoading[`testimonial-${testimonial.id}`] ? <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-full z-10" /> : null}
+                      </AnimatePresence>
+                      <AvatarImage 
+                        {...getImageProps(testimonial.avatar, 96, 96)}
+                        onLoadStart={() => handleImageLoadStart(`testimonial-${testimonial.id}`)}
+                        onLoad={() => handleImageLoad(`testimonial-${testimonial.id}`)}
+                      />
+                      <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                        {testimonial.name.split(' ').map(n => n[0]).join('')}
+                      </AvatarFallback>
+                    </Avatar>
+                  </div>
                   <div className="flex-1">
                     <div className="font-semibold text-foreground">{testimonial.name}</div>
                     <div className="text-sm text-muted-foreground">
@@ -220,7 +277,7 @@ export function SocialProofSection() {
           <CardContent className="p-8">
             <div className="text-center mb-8">
               <Badge className="mb-3 bg-violet-100 text-violet-700">
-                📊 CASE STUDY
+CASE STUDY
               </Badge>
               <h3 className="text-2xl font-bold text-foreground mb-2">
                 Como a {caseStudyHighlight.company} Duplicou o Faturamento
@@ -233,22 +290,22 @@ export function SocialProofSection() {
             <div className="grid md:grid-cols-2 gap-8">
               {/* Before */}
               <div className="text-center">
-                <h4 className="text-lg font-semibold text-red-700 mb-4">❌ Antes do Loved CRM</h4>
+                <h4 className="text-lg font-semibold text-red-700 mb-4">Antes do Loved CRM</h4>
                 <div className="space-y-3">
                   <div className="bg-red-50 rounded-lg p-3 border border-red-200">
                     <div className="text-2xl font-bold text-red-700">{caseStudyHighlight.before.revenue}</div>
                     <div className="text-sm text-red-600">Faturamento mensal</div>
                   </div>
                   <div className="grid grid-cols-3 gap-2">
-                    <div className="bg-white rounded p-2 border">
+                    <div className="bg-background rounded p-2 border">
                       <div className="font-bold text-red-700">{caseStudyHighlight.before.conversion}</div>
                       <div className="text-xs text-muted-foreground">Conversão</div>
                     </div>
-                    <div className="bg-white rounded p-2 border">
+                    <div className="bg-background rounded p-2 border">
                       <div className="font-bold text-red-700">{caseStudyHighlight.before.team}</div>
                       <div className="text-xs text-muted-foreground">Equipe</div>
                     </div>
-                    <div className="bg-white rounded p-2 border">
+                    <div className="bg-background rounded p-2 border">
                       <div className="font-bold text-red-700">{caseStudyHighlight.before.leads}</div>
                       <div className="text-xs text-muted-foreground">Leads</div>
                     </div>
@@ -258,22 +315,22 @@ export function SocialProofSection() {
 
               {/* After */}
               <div className="text-center">
-                <h4 className="text-lg font-semibold text-emerald-700 mb-4">✅ Depois do Loved CRM</h4>
+                <h4 className="text-lg font-semibold text-emerald-700 mb-4">Depois do Loved CRM</h4>
                 <div className="space-y-3">
                   <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-200">
                     <div className="text-2xl font-bold text-emerald-700">{caseStudyHighlight.after.revenue}</div>
                     <div className="text-sm text-emerald-600">Faturamento mensal</div>
                   </div>
                   <div className="grid grid-cols-3 gap-2">
-                    <div className="bg-white rounded p-2 border">
+                    <div className="bg-background rounded p-2 border">
                       <div className="font-bold text-emerald-700">{caseStudyHighlight.after.conversion}</div>
                       <div className="text-xs text-muted-foreground">Conversão</div>
                     </div>
-                    <div className="bg-white rounded p-2 border">
+                    <div className="bg-background rounded p-2 border">
                       <div className="font-bold text-emerald-700">{caseStudyHighlight.after.team}</div>
                       <div className="text-xs text-muted-foreground">Equipe</div>
                     </div>
-                    <div className="bg-white rounded p-2 border">
+                    <div className="bg-background rounded p-2 border">
                       <div className="font-bold text-emerald-700">{caseStudyHighlight.after.leads}</div>
                       <div className="text-xs text-muted-foreground">Leads</div>
                     </div>
@@ -303,10 +360,21 @@ export function SocialProofSection() {
             Agências que confiam no Loved CRM
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-6 gap-6 opacity-60">
-            {companyLogos.map((company, index) => (
-              <div key={index} className="text-center">
-                <div className="h-12 w-24 bg-gray-100 rounded-lg flex items-center justify-center mb-2 mx-auto">
-                  <span className="text-xs font-medium text-gray-600">{company.name}</span>
+            {companyData.map((company) => (
+              <div key={company.key} className="text-center group">
+                <div className="h-12 w-24 rounded-lg overflow-hidden mb-2 mx-auto relative hover:opacity-80 transition-opacity">
+                  <AnimatePresence>
+                    {imageLoading[`company-${company.key}`] ? <div className="absolute inset-0 bg-gray-100 animate-pulse rounded-lg z-10" /> : null}
+                  </AnimatePresence>
+                  <Image
+                    {...getImageProps(company.image, 96, 48)}
+                    fill
+                    className="object-cover filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                    sizes="96px"
+                    onLoadStart={() => handleImageLoadStart(`company-${company.key}`)}
+                    onLoad={() => handleImageLoad(`company-${company.key}`)}
+                  />
+                  <div className="absolute inset-0 bg-background/20 group-hover:bg-background/0 transition-all duration-300" />
                 </div>
                 <p className="text-xs text-muted-foreground">{company.industry}</p>
               </div>

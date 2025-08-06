@@ -6,30 +6,31 @@
 
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
 import {
   LayoutDashboard,
   Kanban,
   Users,
-  Clock,
-  MessageCircle,
-  Mail,
-  Phone,
-  Sparkles,
+  User,
   BarChart3,
   Settings,
-  Zap,
   ChevronLeft,
   ChevronRight,
   Plus,
   Target
 } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import { useMemberCount } from '@/hooks/use-member-count'
+import { cn } from '@/lib/utils'
+
+// Hooks para dados reais
+import { useAuthStore } from '@/stores/auth'
+
 
 interface SidebarProps {
   className?: string
@@ -51,7 +52,7 @@ interface NavigationSection {
 
 const navigationSections: NavigationSection[] = [
   {
-    title: 'Core CRM',
+    title: 'Principal',
     items: [
       {
         label: 'Dashboard',
@@ -60,72 +61,29 @@ const navigationSections: NavigationSection[] = [
         description: 'Visão geral da agência'
       },
       {
-        label: 'Pipeline',
-        href: '/admin/pipeline',
+        label: 'CRM',
+        href: '/admin/crm',
         icon: Kanban,
-        badge: '23',
-        badgeVariant: 'default',
-        description: 'Kanban de leads e negócios'
-      },
-      {
-        label: 'Clientes',
-        href: '/admin/clients',
-        icon: Users,
-        description: 'Base de clientes e contatos'
-      },
-      {
-        label: 'Timeline',
-        href: '/admin/timeline',
-        icon: Clock,
-        badge: '7',
-        badgeVariant: 'secondary',
-        description: 'Histórico de interações'
-      }
-    ]
-  },
-  {
-    title: 'Comunicação',
-    items: [
-      {
-        label: 'WhatsApp',
-        href: '/admin/whatsapp',
-        icon: MessageCircle,
-        badge: '12',
-        badgeVariant: 'default',
-        description: 'Mensagens WhatsApp Business'
-      },
-      {
-        label: 'Email',
-        href: '/admin/email',
-        icon: Mail,
-        badge: '5',
-        badgeVariant: 'secondary',
-        description: 'Campanhas e comunicação por email'
-      },
-      {
-        label: 'Chamadas',
-        href: '/admin/voip',
-        icon: Phone,
-        description: 'VoIP e gravações de chamadas'
-      }
-    ]
-  },
-  {
-    title: 'IA & Insights',
-    items: [
-      {
-        label: 'Resumos IA',
-        href: '/admin/ai-summaries',
-        icon: Sparkles,
-        badge: 'NOVO',
+        badge: 'BETA',
         badgeVariant: 'outline',
-        description: 'Resumos automáticos com IA'
+        description: 'Sistema de gestão de clientes'
+      }
+    ]
+  },
+  {
+    title: 'Gestão',
+    items: [
+      {
+        label: 'Equipe',
+        href: '/admin/team',
+        icon: Users,
+        description: 'Gerenciar membros da organização'
       },
       {
-        label: 'Relatórios',
-        href: '/admin/reports',
+        label: 'Faturamento',
+        href: '/admin/billing',
         icon: BarChart3,
-        description: 'Analytics e métricas'
+        description: 'Planos e pagamentos'
       }
     ]
   },
@@ -133,18 +91,10 @@ const navigationSections: NavigationSection[] = [
     title: 'Configurações',
     items: [
       {
-        label: 'Equipe',
-        href: '/admin/team',
-        icon: Users,
-        description: 'Gerenciar membros da agência'
-      },
-      {
-        label: 'Integrações',
-        href: '/admin/integrations',
-        icon: Zap,
-        badge: '3',
-        badgeVariant: 'secondary',
-        description: 'APIs e conectores externos'
+        label: 'Perfil',
+        href: '/admin/profile',
+        icon: User,
+        description: 'Seu perfil pessoal'
       },
       {
         label: 'Configurações',
@@ -156,19 +106,36 @@ const navigationSections: NavigationSection[] = [
   }
 ]
 
-export function Sidebar({ className }: SidebarProps) {
+export function Sidebar({ className }: SidebarProps): JSX.Element {
   const [collapsed, setCollapsed] = useState(false)
   const pathname = usePathname()
 
-  const toggleCollapsed = () => {
+  // Hooks para dados reais
+  const { organization } = useAuthStore()
+  const { memberCount, isLoading: memberLoading } = useMemberCount()
+
+  // Fallbacks para dados de loading
+  const currentOrg = organization || {
+    id: '',
+    name: 'Organização',
+    tier: 'free',
+    owner_id: '',
+    created_at: '',
+    updated_at: ''
+  }
+
+  const toggleCollapsed = (): void => {
     setCollapsed(!collapsed)
   }
 
-  const isActiveRoute = (href: string) => {
+  const isActiveRoute = (href: string): boolean => {
+    // Remove locale prefix from pathname for comparison
+    const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}(?:-[A-Z]{2})?/, '') || '/'
+    
     if (href === '/admin') {
-      return pathname === '/admin' || pathname.endsWith('/admin')
+      return pathWithoutLocale === '/admin' || pathWithoutLocale.endsWith('/admin')
     }
-    return pathname.startsWith(href)
+    return pathWithoutLocale.startsWith(href)
   }
 
   return (
@@ -255,9 +222,9 @@ export function Sidebar({ className }: SidebarProps) {
                       {!collapsed && (
                         <>
                           <span className="flex-1 text-left">{item.label}</span>
-                          {item.badge && (
+                          {Boolean(item.badge) && (
                             <Badge 
-                              variant={item.badgeVariant || "secondary"} 
+                              variant={item.badgeVariant ?? "secondary"} 
                               className="ml-auto text-xs"
                             >
                               {item.badge}
@@ -271,7 +238,7 @@ export function Sidebar({ className }: SidebarProps) {
               })}
             </div>
             
-            {sectionIndex < navigationSections.length - 1 && !collapsed && (
+            {sectionIndex < navigationSections.length - 1 && !collapsed && Boolean(navigationSections.length > 1) && (
               <Separator className="mt-4" />
             )}
           </div>
@@ -290,40 +257,38 @@ export function Sidebar({ className }: SidebarProps) {
                   Organização Ativa
                 </span>
               </div>
-              <p className="text-xs text-violet-600">
-                Silva Digital Agency
+              <p className="text-xs text-violet-600 truncate">
+                {currentOrg.name}
               </p>
               <p className="text-xs text-violet-500">
-                12 membros conectados
+                {memberLoading ? '...' : memberCount} membros conectados
               </p>
             </div>
 
             {/* Plan Status */}
             <div className="bg-muted/50 rounded-lg p-3">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-medium">Plano Pro</span>
+                <span className="text-xs font-medium">Plano {(currentOrg.tier || 'free').charAt(0).toUpperCase() + (currentOrg.tier || 'free').slice(1)}</span>
                 <Badge variant="secondary" className="text-xs">
                   Ativo
                 </Badge>
               </div>
               <div className="w-full bg-muted rounded-full h-2 mb-1">
-                <div className="bg-primary h-2 rounded-full w-3/4"></div>
+                <div className="bg-primary h-2 rounded-full w-3/4" />
               </div>
               <p className="text-xs text-muted-foreground">
-                1.250/2.000 leads este mês
+                Funcionalidades disponíveis
               </p>
             </div>
           </div>
         )}
         
-        {collapsed && (
-          <div className="flex flex-col items-center space-y-2">
+        {collapsed ? <div className="flex flex-col items-center space-y-2">
             <div className="h-2 w-2 bg-primary rounded-full animate-pulse" />
             <Badge variant="secondary" className="text-xs rotate-90 whitespace-nowrap">
-              Pro
+              {(currentOrg.tier || 'FREE').slice(0, 3).toUpperCase()}
             </Badge>
-          </div>
-        )}
+          </div> : null}
       </div>
     </div>
   )

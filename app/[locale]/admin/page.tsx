@@ -6,12 +6,6 @@
 
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { MainLayout } from '@/components/layout/main-layout'
-import { PipelineStage } from '@/components/crm/pipeline-stage'
-import { AISummaryCompact } from '@/components/crm/ai-summary'
-import { CommunicationChannelBadge } from '@/components/crm/communication-channel'
 import { 
   TrendingUp, 
   Users, 
@@ -24,6 +18,12 @@ import {
   ArrowDown,
   Plus
 } from 'lucide-react'
+
+import { AISummaryCompact } from '@/components/crm/ai-summary'
+import { CommunicationChannelBadge } from '@/components/crm/communication-channel'
+import { PipelineStage } from '@/components/crm/pipeline-stage'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 // Mock data - in real app, this would come from API
 const dashboardMetrics = {
@@ -40,7 +40,7 @@ const dashboardMetrics = {
     period: 'this week'
   },
   revenue: {
-    value: 89500,
+    value: 89_500,
     change: -2.5,
     changeType: 'decrease' as const,
     period: 'this month'
@@ -54,11 +54,11 @@ const dashboardMetrics = {
 }
 
 const pipelineStats = [
-  { stage: 'lead', count: 45, value: 180000 },
-  { stage: 'contact', count: 23, value: 156000 },
-  { stage: 'proposal', count: 12, value: 98000 },
-  { stage: 'negotiation', count: 8, value: 67000 },
-  { stage: 'closed', count: 159, value: 892000 }
+  { stage: 'lead', count: 45, value: 180_000 },
+  { stage: 'contact', count: 23, value: 156_000 },
+  { stage: 'proposal', count: 12, value: 98_000 },
+  { stage: 'negotiation', count: 8, value: 67_000 },
+  { stage: 'closed', count: 159, value: 892_000 }
 ] as const
 
 const recentActivity = [
@@ -127,244 +127,238 @@ const upcomingTasks = [
   }
 ]
 
-export default function AdminDashboard() {
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 0
-    }).format(value)
-  }
+// Helper functions extracted for better maintainability
+const formatCurrency = (value: number): string => {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 0
+  }).format(value)
+}
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return 'text-red-600 bg-red-50 border-red-200'
-      case 'medium':
-        return 'text-yellow-600 bg-yellow-50 border-yellow-200'
-      case 'low':
-        return 'text-green-600 bg-green-50 border-green-200'
-      default:
-        return 'text-gray-600 bg-gray-50 border-gray-200'
+const getPriorityColor = (priority: string): string => {
+  switch (priority) {
+    case 'high': {
+      return 'text-red-600 bg-red-50 border-red-200'
+    }
+    case 'medium': {
+      return 'text-yellow-600 bg-yellow-50 border-yellow-200'
+    }
+    case 'low': {
+      return 'text-green-600 bg-green-50 border-green-200'
+    }
+    default: {
+      return 'text-gray-600 bg-gray-50 border-gray-200'
     }
   }
+}
 
+// Extracted components for better structure
+function MetricsCard({ metric, icon, title, formatValue }: {
+  metric: typeof dashboardMetrics[keyof typeof dashboardMetrics]
+  icon: React.ComponentType<{ className?: string }>
+  title: string
+  formatValue?: (value: number) => string
+}): JSX.Element {
+  const IconComponent = icon
+  const displayValue = formatValue ? formatValue(metric.value) : metric.value
+  const changeValue = Math.abs(metric.change)
+  const changeSign = metric.changeType === 'increase' ? '+' : ''
+  const showPercent = typeof metric.change === 'number' && title.includes('Taxa')
+  
   return (
-    <MainLayout>
-      <div className="space-y-6">
-        {/* Page Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-            <p className="text-muted-foreground">
-              Visão geral da Silva Digital Agency
-            </p>
-          </div>
-          
-          <div className="flex gap-2">
-            <Button size="sm" variant="outline">
-              <Calendar className="mr-2 h-4 w-4" />
-              Hoje
-            </Button>
-            <Button size="sm">
-              <Plus className="mr-2 h-4 w-4" />
-              Novo Lead
-            </Button>
-          </div>
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        <IconComponent className="h-4 w-4 text-muted-foreground" />
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{displayValue}</div>
+        <div className="flex items-center text-xs text-muted-foreground">
+          {metric.changeType === 'increase' ? (
+            <ArrowUp className="mr-1 h-3 w-3 text-green-600" />
+          ) : (
+            <ArrowDown className="mr-1 h-3 w-3 text-red-600" />
+          )}
+          <span className={metric.changeType === 'increase' ? 'text-green-600' : 'text-red-600'}>
+            {changeSign}{changeValue}{showPercent ? '%' : ''}
+          </span>
+          <span className="ml-1">{metric.period}</span>
         </div>
+      </CardContent>
+    </Card>
+  )
+}
 
-        {/* Metrics Grid */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+function TaskItem({ task }: { task: typeof upcomingTasks[0] }): JSX.Element {
+  return (
+    <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-muted/50">
+      <div className={`h-2 w-2 rounded-full mt-2 ${getPriorityColor(task.priority).split(' ')[2]}`} />
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium truncate">{task.title}</p>
+        <p className="text-xs text-muted-foreground">{task.description}</p>
+        <div className="flex items-center gap-1 mt-1">
+          <Clock className="h-3 w-3 text-muted-foreground" />
+          <span className="text-xs text-muted-foreground">{task.time}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function PipelineOverview(): JSX.Element {
+  return (
+  <div className="md:col-span-2">
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Target className="h-5 w-5" />
+          Pipeline de Vendas
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-4 md:grid-cols-5">
+          {pipelineStats.map((stat) => (
+            <div key={stat.stage} className="text-center">
+              <PipelineStage 
+                stage={stat.stage}
+                count={stat.count}
+                variant="compact"
+              />
+              <div className="mt-2">
+                <p className="text-xs text-muted-foreground">
+                  {formatCurrency(stat.value)}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <div className="mt-6 pt-4 border-t border-border">
+          <Button variant="outline" className="w-full">
+            Ver Pipeline Completo
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  </div>
+  )
+}
+
+export default function AdminDashboard(): JSX.Element {
+  return (
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Visão geral da Silva Digital Agency
+          </p>
+        </div>
+        
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline">
+            <Calendar className="mr-2 h-4 w-4" />
+            Hoje
+          </Button>
+          <Button size="sm">
+            <Plus className="mr-2 h-4 w-4" />
+            Novo Lead
+          </Button>
+        </div>
+      </div>
+
+      {/* Metrics Grid */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <MetricsCard 
+          metric={dashboardMetrics.totalLeads} 
+          icon={Users} 
+          title="Total de Leads" 
+        />
+        <MetricsCard 
+          metric={dashboardMetrics.activeDeals} 
+          icon={Target} 
+          title="Negócios Ativos" 
+        />
+        <MetricsCard 
+          metric={dashboardMetrics.revenue} 
+          icon={DollarSign} 
+          title="Receita do Mês" 
+          formatValue={formatCurrency}
+        />
+        <MetricsCard 
+          metric={dashboardMetrics.conversionRate} 
+          icon={TrendingUp} 
+          title="Taxa de Conversão" 
+          formatValue={(value): string => `${value}%`}
+        />
+      </div>
+
+      {/* Main Content Grid */}
+      <div className="grid gap-6 md:grid-cols-3">
+        
+        <PipelineOverview />
+
+        {/* Quick Actions */}
+        <div className="space-y-6">
+          
+          {/* AI Summary */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Total de Leads
-              </CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
+            <CardHeader>
+              <CardTitle className="text-base">Insights Recentes</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{dashboardMetrics.totalLeads.value}</div>
-              <div className="flex items-center text-xs text-muted-foreground">
-                {dashboardMetrics.totalLeads.changeType === 'increase' ? (
-                  <ArrowUp className="mr-1 h-3 w-3 text-green-600" />
-                ) : (
-                  <ArrowDown className="mr-1 h-3 w-3 text-red-600" />
-                )}
-                <span className={dashboardMetrics.totalLeads.changeType === 'increase' ? 'text-green-600' : 'text-red-600'}>
-                  {Math.abs(dashboardMetrics.totalLeads.change)}%
-                </span>
-                <span className="ml-1">{dashboardMetrics.totalLeads.period}</span>
-              </div>
+              <AISummaryCompact 
+                summary="12 leads qualificados esta semana. Maria Silva e Carlos Oliveira com alta probabilidade de conversão. Foco em marketing digital crescendo 40%."
+                confidence={94}
+              />
             </CardContent>
           </Card>
 
+          {/* Upcoming Tasks */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Negócios Ativos
-              </CardTitle>
-              <Target className="h-4 w-4 text-muted-foreground" />
+            <CardHeader>
+              <CardTitle className="text-base">Próximas Tarefas</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{dashboardMetrics.activeDeals.value}</div>
-              <div className="flex items-center text-xs text-muted-foreground">
-                <ArrowUp className="mr-1 h-3 w-3 text-green-600" />
-                <span className="text-green-600">
-                  +{dashboardMetrics.activeDeals.change}
-                </span>
-                <span className="ml-1">{dashboardMetrics.activeDeals.period}</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Receita do Mês
-              </CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{formatCurrency(dashboardMetrics.revenue.value)}</div>
-              <div className="flex items-center text-xs text-muted-foreground">
-                <ArrowDown className="mr-1 h-3 w-3 text-red-600" />
-                <span className="text-red-600">
-                  {dashboardMetrics.revenue.change}%
-                </span>
-                <span className="ml-1">{dashboardMetrics.revenue.period}</span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Taxa de Conversão
-              </CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{dashboardMetrics.conversionRate.value}%</div>
-              <div className="flex items-center text-xs text-muted-foreground">
-                <ArrowUp className="mr-1 h-3 w-3 text-green-600" />
-                <span className="text-green-600">
-                  +{dashboardMetrics.conversionRate.change}%
-                </span>
-                <span className="ml-1">{dashboardMetrics.conversionRate.period}</span>
+              <div className="space-y-3">
+                {upcomingTasks.map((task) => (
+                  <TaskItem key={task.id} task={task} />
+                ))}
               </div>
             </CardContent>
           </Card>
         </div>
+      </div>
 
-        {/* Main Content Grid */}
-        <div className="grid gap-6 md:grid-cols-3">
-          
-          {/* Pipeline Overview */}
-          <div className="md:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5" />
-                  Pipeline de Vendas
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4 md:grid-cols-5">
-                  {pipelineStats.map((stat) => (
-                    <div key={stat.stage} className="text-center">
-                      <PipelineStage 
-                        stage={stat.stage}
-                        count={stat.count}
-                        variant="compact"
-                      />
-                      <div className="mt-2">
-                        <p className="text-xs text-muted-foreground">
-                          {formatCurrency(stat.value)}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+      {/* Recent Activity */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Activity className="h-5 w-5" />
+            Atividade Recente
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {recentActivity.map((activity) => (
+              <div key={activity.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/50">
+                <CommunicationChannelBadge channel={activity.channel} />
+                
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium">{activity.title}</p>
+                  <p className="text-xs text-muted-foreground">{activity.description}</p>
                 </div>
                 
-                <div className="mt-6 pt-4 border-t border-border">
-                  <Button variant="outline" className="w-full">
-                    Ver Pipeline Completo
-                  </Button>
+                <div className="text-xs text-muted-foreground">
+                  {activity.time}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            ))}
           </div>
-
-          {/* Quick Actions */}
-          <div className="space-y-6">
-            
-            {/* AI Summary */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Insights Recentes</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <AISummaryCompact 
-                  summary="12 leads qualificados esta semana. Maria Silva e Carlos Oliveira com alta probabilidade de conversão. Foco em marketing digital crescendo 40%."
-                  confidence={94}
-                />
-              </CardContent>
-            </Card>
-
-            {/* Upcoming Tasks */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Próximas Tarefas</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {upcomingTasks.map((task) => (
-                    <div key={task.id} className="flex items-start gap-3 p-2 rounded-lg hover:bg-muted/50">
-                      <div className={`h-2 w-2 rounded-full mt-2 ${getPriorityColor(task.priority).split(' ')[2]}`} />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate">{task.title}</p>
-                        <p className="text-xs text-muted-foreground">{task.description}</p>
-                        <div className="flex items-center gap-1 mt-1">
-                          <Clock className="h-3 w-3 text-muted-foreground" />
-                          <span className="text-xs text-muted-foreground">{task.time}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Activity className="h-5 w-5" />
-              Atividade Recente
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {recentActivity.map((activity) => (
-                <div key={activity.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/50">
-                  <CommunicationChannelBadge channel={activity.channel} />
-                  
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium">{activity.title}</p>
-                    <p className="text-xs text-muted-foreground">{activity.description}</p>
-                  </div>
-                  
-                  <div className="text-xs text-muted-foreground">
-                    {activity.time}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </MainLayout>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

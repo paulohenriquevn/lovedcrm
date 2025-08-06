@@ -4,11 +4,8 @@
  * Baseado na especificação do agente 07-design-tokens.md
  */
 
-import { cn } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { CommunicationChannelBadge, WhatsAppMessage } from "./communication-channel"
-import { AISummaryCompact } from "./ai-summary"
+import { formatDistanceToNow, format } from "date-fns"
+import { ptBR } from "date-fns/locale"
 import { 
   MessageCircle,
   Mail,
@@ -20,8 +17,12 @@ import {
   TrendingUp,
   Activity
 } from "lucide-react"
-import { formatDistanceToNow, format } from "date-fns"
-import { ptBR } from "date-fns/locale"
+
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
+
+import { AISummaryCompact } from "./ai-summary"
+import { CommunicationChannelBadge, WhatsAppMessage } from "./communication-channel"
 
 type TimelineEntryType = 'whatsapp' | 'email' | 'voip' | 'note' | 'ai_summary' | 'lead_update' | 'meeting'
 
@@ -127,9 +128,11 @@ function TimelineEntryHeader({
 }: { 
   entry: TimelineEntry
   showLeadContext?: boolean 
-}) {
+}): React.ReactElement {
   const config = entryConfig[entry.type]
   const Icon = config.icon
+
+  const isCommunicationEntry = entry.type === 'whatsapp' || entry.type === 'email' || entry.type === 'voip' || entry.type === 'note'
 
   return (
     <div className="flex items-center gap-2 mb-2">
@@ -145,18 +148,16 @@ function TimelineEntryHeader({
           {config.label}
         </span>
         
-        {entry.type === 'whatsapp' || entry.type === 'email' || entry.type === 'voip' || entry.type === 'note' ? (
+        {isCommunicationEntry ? (
           <Badge variant="outline" className="text-xs">
-            {(entry as CommunicationEntry).direction === 'inbound' ? 'Recebido' : 'Enviado'}
+            {(entry).direction === 'inbound' ? 'Recebido' : 'Enviado'}
           </Badge>
         ) : null}
 
-        {showLeadContext && entry.leadName && (
-          <Badge variant="secondary" className="text-xs">
+        {showLeadContext === true && entry.leadName != null && entry.leadName.length > 0 ? <Badge variant="secondary" className="text-xs">
             <User className="h-3 w-3 mr-1" />
             {entry.leadName}
-          </Badge>
-        )}
+          </Badge> : null}
       </div>
 
       <time className="text-xs text-gray-500" title={entry.timestamp.toLocaleString('pt-BR')}>
@@ -169,7 +170,7 @@ function TimelineEntryHeader({
   )
 }
 
-function CommunicationEntryContent({ entry }: { entry: CommunicationEntry }) {
+function CommunicationEntryContent({ entry }: { entry: CommunicationEntry }): React.ReactElement {
   if (entry.type === 'whatsapp') {
     return (
       <div className="-mx-2">
@@ -197,18 +198,16 @@ function CommunicationEntryContent({ entry }: { entry: CommunicationEntry }) {
           {entry.content}
         </p>
         
-        {entry.attachmentCount && entry.attachmentCount > 0 && (
-          <div className="mt-2 text-xs text-gray-600 flex items-center gap-1">
+        {entry.attachmentCount != null && entry.attachmentCount > 0 ? <div className="mt-2 text-xs text-gray-600 flex items-center gap-1">
             <FileText className="h-3 w-3" />
             {entry.attachmentCount} anexo{entry.attachmentCount > 1 ? 's' : ''}
-          </div>
-        )}
+          </div> : null}
       </div>
     </div>
   )
 }
 
-function AISummaryEntryContent({ entry }: { entry: AISummaryEntry }) {
+function AISummaryEntryContent({ entry }: { entry: AISummaryEntry }): React.ReactElement {
   return (
     <div className="ml-8">
       <AISummaryCompact 
@@ -219,7 +218,7 @@ function AISummaryEntryContent({ entry }: { entry: AISummaryEntry }) {
   )
 }
 
-function LeadUpdateEntryContent({ entry }: { entry: LeadUpdateEntry }) {
+function LeadUpdateEntryContent({ entry }: { entry: LeadUpdateEntry }): React.ReactElement {
   return (
     <div className="ml-8">
       <div className="p-3 rounded-lg bg-orange-50 border border-orange-200">
@@ -241,25 +240,19 @@ function LeadUpdateEntryContent({ entry }: { entry: LeadUpdateEntry }) {
   )
 }
 
-function MeetingEntryContent({ entry }: { entry: MeetingEntry }) {
+function MeetingEntryContent({ entry }: { entry: MeetingEntry }): React.ReactElement {
   return (
     <div className="ml-8">
       <div className="p-3 rounded-lg bg-indigo-50 border border-indigo-200">
         <h4 className="text-sm font-medium text-gray-900 mb-1">
           {entry.title}
         </h4>
-        {entry.description && (
-          <p className="text-sm text-gray-700 mb-2">
+        {entry.description != null && entry.description.length > 0 ? <p className="text-sm text-gray-700 mb-2">
             {entry.description}
-          </p>
-        )}
+          </p> : null}
         <div className="flex items-center gap-4 text-xs text-gray-600">
-          {entry.duration && (
-            <span>Duração: {entry.duration}min</span>
-          )}
-          {entry.outcome && (
-            <span className="font-medium">Resultado: {entry.outcome}</span>
-          )}
+          {entry.duration != null && entry.duration > 0 ? <span>Duração: {entry.duration}min</span> : null}
+          {entry.outcome != null && entry.outcome.length > 0 ? <span className="font-medium">Resultado: {entry.outcome}</span> : null}
         </div>
       </div>
     </div>
@@ -274,14 +267,30 @@ function TimelineEntryComponent({
   entry: TimelineEntry
   showLeadContext?: boolean
   onClick?: () => void 
-}) {
+}): React.ReactElement {
+  const handleClick = (): void => {
+    if (onClick != null) {
+      onClick()
+    }
+  }
+
+  const handleKeyPress = (event: React.KeyboardEvent): void => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      handleClick()
+    }
+  }
+
   return (
     <div 
       className={cn(
         "relative pl-8 pb-6 transition-colors duration-200",
-        onClick && "cursor-pointer hover:bg-gray-50/50 rounded-lg p-2 -m-2"
+        onClick != null && "cursor-pointer hover:bg-gray-50/50 rounded-lg p-2 -m-2"
       )}
-      onClick={onClick}
+      onClick={onClick == null ? undefined : handleClick}
+      onKeyDown={onClick == null ? undefined : handleKeyPress}
+      role={onClick == null ? undefined : "button"}
+      tabIndex={onClick == null ? undefined : 0}
     >
       {/* Linha vertical da timeline */}
       <div className="absolute left-3 top-6 bottom-0 w-px bg-gray-200" />
@@ -294,23 +303,64 @@ function TimelineEntryComponent({
         />
         
         {(entry.type === 'whatsapp' || entry.type === 'email' || entry.type === 'voip' || entry.type === 'note') && (
-          <CommunicationEntryContent entry={entry as CommunicationEntry} />
+          <CommunicationEntryContent entry={entry} />
         )}
         
         {entry.type === 'ai_summary' && (
-          <AISummaryEntryContent entry={entry as AISummaryEntry} />
+          <AISummaryEntryContent entry={entry} />
         )}
         
         {entry.type === 'lead_update' && (
-          <LeadUpdateEntryContent entry={entry as LeadUpdateEntry} />
+          <LeadUpdateEntryContent entry={entry} />
         )}
         
         {entry.type === 'meeting' && (
-          <MeetingEntryContent entry={entry as MeetingEntry} />
+          <MeetingEntryContent entry={entry} />
         )}
       </div>
     </div>
   )
+}
+
+function TimelineEntryList({ 
+  entries, 
+  showLeadContext, 
+  onEntryClick 
+}: { 
+  entries: TimelineEntry[]
+  showLeadContext?: boolean
+  onEntryClick?: (entry: TimelineEntry) => void 
+}): React.ReactElement {
+  return <div className="space-y-1">
+    {entries.map((entry) => (
+      <TimelineEntryComponent
+        key={entry.id}
+        entry={entry}
+        showLeadContext={showLeadContext}
+        onClick={onEntryClick == null ? undefined : () => onEntryClick(entry)}
+      />
+    ))}
+  </div>
+}
+
+function DateGroupHeader({ 
+  dateKey, 
+  entriesCount 
+}: { 
+  dateKey: string
+  entriesCount: number 
+}): React.ReactElement {
+  return <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm py-2 mb-4">
+    <div className="flex items-center gap-3">
+      <h3 className="text-sm font-semibold text-gray-900">
+        {format(new Date(dateKey), "dd 'de' MMMM, yyyy", { locale: ptBR })}
+      </h3>
+      <div className="flex-1 h-px bg-gray-200" />
+      <Badge variant="secondary" className="text-xs">
+        {entriesCount} atividade{entriesCount === 1 ? '' : 's'}
+      </Badge>
+    </div>
+  </div>
 }
 
 export function Timeline({ 
@@ -319,7 +369,7 @@ export function Timeline({
   groupByDate = true, 
   showLeadContext = false,
   onEntryClick 
-}: TimelineProps) {
+}: TimelineProps): React.ReactElement {
   const sortedEntries = [...entries].sort((a, b) => 
     b.timestamp.getTime() - a.timestamp.getTime()
   )
@@ -327,14 +377,11 @@ export function Timeline({
   if (!groupByDate) {
     return (
       <div className={cn("space-y-1", className)}>
-        {sortedEntries.map((entry) => (
-          <TimelineEntryComponent
-            key={entry.id}
-            entry={entry}
-            showLeadContext={showLeadContext}
-            onClick={onEntryClick ? () => onEntryClick(entry) : undefined}
-          />
-        ))}
+        <TimelineEntryList 
+          entries={sortedEntries}
+          showLeadContext={showLeadContext}
+          onEntryClick={onEntryClick}
+        />
       </div>
     )
   }
@@ -342,7 +389,7 @@ export function Timeline({
   // Agrupar por data
   const entriesByDate = sortedEntries.reduce((groups, entry) => {
     const dateKey = format(entry.timestamp, 'yyyy-MM-dd')
-    if (!groups[dateKey]) {
+    if (groups[dateKey] == null) {
       groups[dateKey] = []
     }
     groups[dateKey].push(entry)
@@ -353,30 +400,16 @@ export function Timeline({
     <div className={cn("space-y-6", className)}>
       {Object.entries(entriesByDate).map(([dateKey, dateEntries]) => (
         <div key={dateKey}>
-          {/* Header da data */}
-          <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm py-2 mb-4">
-            <div className="flex items-center gap-3">
-              <h3 className="text-sm font-semibold text-gray-900">
-                {format(new Date(dateKey), "dd 'de' MMMM, yyyy", { locale: ptBR })}
-              </h3>
-              <div className="flex-1 h-px bg-gray-200" />
-              <Badge variant="secondary" className="text-xs">
-                {dateEntries.length} atividade{dateEntries.length !== 1 ? 's' : ''}
-              </Badge>
-            </div>
-          </div>
+          <DateGroupHeader 
+            dateKey={dateKey} 
+            entriesCount={dateEntries.length} 
+          />
 
-          {/* Entradas da data */}
-          <div className="space-y-1">
-            {dateEntries.map((entry) => (
-              <TimelineEntryComponent
-                key={entry.id}
-                entry={entry}
-                showLeadContext={showLeadContext}
-                onClick={onEntryClick ? () => onEntryClick(entry) : undefined}
-              />
-            ))}
-          </div>
+          <TimelineEntryList 
+            entries={dateEntries}
+            showLeadContext={showLeadContext}
+            onEntryClick={onEntryClick}
+          />
         </div>
       ))}
     </div>
@@ -390,17 +423,18 @@ export function TimelineStats({
 }: { 
   entries: TimelineEntry[]
   className?: string 
-}) {
+}): React.ReactElement {
   const stats = entries.reduce((acc, entry) => {
     acc.total++
-    acc[entry.type] = (acc[entry.type] || 0) + 1
+    const currentCount = acc[entry.type]
+    acc[entry.type] = (currentCount == null ? 0 : currentCount) + 1
     return acc
   }, { total: 0 } as Record<string, number>)
 
   return (
     <div className={cn("grid grid-cols-2 md:grid-cols-4 gap-4", className)}>
       {Object.entries(entryConfig).map(([type, config]) => {
-        const count = stats[type] || 0
+        const count = stats[type] == null ? 0 : stats[type]
         const Icon = config.icon
         
         return (

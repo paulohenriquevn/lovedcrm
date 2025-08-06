@@ -6,16 +6,17 @@
 
 'use client'
 
+import { cn } from '@/lib/utils'
+
 import { Header } from './header'
 import { Sidebar } from './sidebar'
-import { cn } from '@/lib/utils'
 
 interface MainLayoutProps {
   children: React.ReactNode
   className?: string
 }
 
-export function MainLayout({ children, className }: MainLayoutProps) {
+export function MainLayout({ children, className }: MainLayoutProps): JSX.Element {
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}

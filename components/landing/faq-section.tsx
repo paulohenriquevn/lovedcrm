@@ -6,10 +6,7 @@
 
 'use client'
 
-import { useState } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { motion, AnimatePresence } from 'framer-motion'
 import { 
   ChevronDown, 
   ChevronUp, 
@@ -22,6 +19,12 @@ import {
   Zap,
   ArrowRight
 } from 'lucide-react'
+import { useState } from 'react'
+
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { useScrollAnimation, scrollAnimationVariants, staggerContainer, staggerItem, buttonPressVariants } from '@/hooks/use-scroll-animation'
 
 const faqCategories = [
   {
@@ -146,11 +149,232 @@ const faqCategories = [
   }
 ]
 
-export function FAQSection() {
+function CategorySidebar({ 
+  activeCategory, 
+  setActiveCategory 
+}: { 
+  activeCategory: string
+  setActiveCategory: (category: string) => void 
+}): React.ReactElement {
+  return <div className="w-full">
+    <h3 className="font-semibold text-foreground mb-4">Categorias</h3>
+    <div className="space-y-2">
+      {faqCategories.map((category) => (
+        <button
+          key={category.id}
+          type="button"
+          onClick={() => setActiveCategory(category.id)}
+          className={`w-full text-left p-3 rounded-lg flex items-center gap-3 transition-all duration-200 ${
+            activeCategory === category.id
+              ? 'bg-primary/10 text-primary border border-primary/20'
+              : 'hover:bg-gray-50 text-muted-foreground'
+          }`}
+        >
+          <category.icon className={`h-4 w-4 ${category.color}`} />
+          <span className="font-medium">{category.name}</span>
+        </button>
+      ))}
+    </div>
+
+    {/* Contact CTA */}
+    <Card className="mt-8 bg-gradient-to-br from-violet-50 to-purple-50 border-violet-200">
+      <CardContent className="p-4 text-center">
+        <Users className="h-8 w-8 text-primary mx-auto mb-3" />
+        <h4 className="font-semibold text-sm mb-2">Ainda com dúvidas?</h4>
+        <p className="text-xs text-muted-foreground mb-4">
+          Fale com nossa equipe especializada em agências
+        </p>
+        <Button type="button" size="sm" className="w-full">
+          <MessageSquare className="h-4 w-4 mr-2" />
+          Chat ao Vivo
+        </Button>
+      </CardContent>
+    </Card>
+  </div>
+}
+
+function FAQItem({ 
+  faq, 
+  isOpen, 
+  onToggle 
+}: { 
+  faq: { question: string; answer: string }
+  isOpen: boolean
+  onToggle: () => void 
+}): React.ReactElement {
+  return <Card className="w-full overflow-hidden hover:shadow-md transition-shadow">
+    <CardContent className="p-0 w-full">
+      <motion.button
+        type="button"
+        onClick={onToggle}
+        className="w-full p-6 text-left flex items-center justify-between hover:bg-gray-50/50 transition-colors"
+      >
+        <h4 className="font-semibold text-foreground flex-1 pr-4">
+          {faq.question}
+        </h4>
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <ChevronDown className={`h-5 w-5 ${isOpen ? 'text-primary' : 'text-muted-foreground'} flex-shrink-0`} />
+        </motion.div>
+      </motion.button>
+      
+      <AnimatePresence>
+        {isOpen ? <motion.div 
+            className="w-full px-6 pb-6 border-t bg-gray-50/30"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <p className="text-muted-foreground leading-relaxed pt-4">
+              {faq.answer}
+            </p>
+          </motion.div> : null}
+      </AnimatePresence>
+    </CardContent>
+  </Card>
+}
+
+function FAQContent({ 
+  activeCategoryData, 
+  activeCategory, 
+  openItems, 
+  toggleItem 
+}: { 
+  activeCategoryData: typeof faqCategories[0]
+  activeCategory: string
+  openItems: string[]
+  toggleItem: (categoryId: string, questionIndex: number) => void 
+}): React.ReactElement {
+  return <div className="w-full">
+    <div className="flex items-center gap-3 mb-6">
+      <activeCategoryData.icon className={`h-6 w-6 ${activeCategoryData.color}`} />
+      <h3 className="text-xl font-bold text-foreground">
+        {activeCategoryData.name}
+      </h3>
+    </div>
+
+    <div className="space-y-4 w-full">
+      {activeCategoryData.questions.map((faq, index) => {
+        const itemId = `${activeCategory}-${index}`
+        const isOpen = openItems.includes(itemId)
+
+        return (
+          <FAQItem
+            key={`${faq.question}-${index}`}
+            faq={faq}
+            isOpen={isOpen}
+            onToggle={() => toggleItem(activeCategory, index)}
+          />
+        )
+      })}
+    </div>
+  </div>
+}
+
+function ContactOption({ 
+  icon: Icon, 
+  title, 
+  description, 
+  color 
+}: { 
+  icon: React.ComponentType<{ className?: string }>
+  title: string
+  description: string
+  color: string 
+}): React.ReactElement {
+  return <div className="text-center">
+    <div className={`h-12 w-12 ${color} rounded-lg flex items-center justify-center mx-auto mb-3`}>
+      <Icon className={`h-6 w-6 ${color.replace('bg-', 'text-').replace('-100', '-600')}`} />
+    </div>
+    <h4 className="font-semibold mb-1">{title}</h4>
+    <p className="text-sm text-muted-foreground">{description}</p>
+  </div>
+}
+
+function BottomCTA({ ctaRef, ctaInView }: { ctaRef: any, ctaInView: boolean }): React.ReactElement {
+  return <motion.div 
+    ref={ctaRef}
+    className="mt-16 text-center"
+    initial="hidden"
+    animate={ctaInView ? "visible" : "hidden"}
+    variants={scrollAnimationVariants}
+  >
+    <Card className="max-w-4xl mx-auto bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
+      <CardContent className="p-8">
+        <h3 className="text-2xl font-bold text-foreground mb-4">
+          Não Encontrou sua Dúvida?
+        </h3>
+        <p className="text-muted-foreground mb-6 text-lg">
+          Nossa equipe especializada em agências digitais está aqui para ajudar. 
+          <br />
+          <strong className="text-foreground">Resposta garantida em até 2 horas!</strong>
+        </p>
+
+        <motion.div 
+          className="grid md:grid-cols-3 gap-4 mb-8"
+          variants={staggerContainer}
+          initial="hidden"
+          animate={ctaInView ? "visible" : "hidden"}
+        >
+          <motion.div variants={staggerItem}>
+            <ContactOption 
+              icon={MessageSquare}
+              title="WhatsApp"
+              description="Chat direto com especialista"
+              color="bg-green-100"
+            />
+          </motion.div>
+          
+          <motion.div variants={staggerItem}>
+            <ContactOption 
+              icon={HelpCircle}
+              title="Central de Ajuda"
+              description="Documentação completa"
+              color="bg-blue-100"
+            />
+          </motion.div>
+          
+          <motion.div variants={staggerItem}>
+            <ContactOption 
+              icon={Users}
+              title="Consultoria"
+              description="Call gratuita de 30min"
+              color="bg-violet-100"
+            />
+          </motion.div>
+        </motion.div>
+
+        <motion.div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <motion.div variants={buttonPressVariants} whileTap="press">
+            <Button type="button" size="lg">
+              <MessageSquare className="mr-2 h-5 w-5" />
+              Falar com Especialista
+            </Button>
+          </motion.div>
+          
+          <motion.div variants={buttonPressVariants} whileTap="press">
+            <Button type="button" size="lg" variant="outline">
+              Agendar Demo Gratuita
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </motion.div>
+        </motion.div>
+      </CardContent>
+    </Card>
+  </motion.div>
+}
+
+export function FAQSection(): React.ReactElement {
   const [openItems, setOpenItems] = useState<string[]>(['geral-0']) // Primeira pergunta aberta por padrão
   const [activeCategory, setActiveCategory] = useState('geral')
+  const { ref: headerRef, isInView: headerInView } = useScrollAnimation()
+  const { ref: contentRef, isInView: contentInView } = useScrollAnimation()
+  const { ref: ctaRef, isInView: ctaInView } = useScrollAnimation()
 
-  const toggleItem = (categoryId: string, questionIndex: number) => {
+  const toggleItem = (categoryId: string, questionIndex: number): void => {
     const itemId = `${categoryId}-${questionIndex}`
     setOpenItems(prev => 
       prev.includes(itemId) 
@@ -163,11 +387,17 @@ export function FAQSection() {
 
   return (
     <section className="py-20 px-4 bg-gradient-to-b from-background to-gray-50/50">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
+        <motion.div 
+          ref={headerRef}
+          className="text-center mb-16"
+          initial="hidden"
+          animate={headerInView ? "visible" : "hidden"}
+          variants={scrollAnimationVariants}
+        >
           <Badge className="mb-4 bg-blue-50 text-blue-700 border-blue-200">
-            ❓ Dúvidas Frequentes
+Dúvidas Frequentes
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
             Tire Todas as suas{" "}
@@ -179,142 +409,33 @@ export function FAQSection() {
             Respostas diretas para as perguntas mais comuns sobre o Loved CRM. 
             Não encontrou sua dúvida? <strong className="text-foreground">Nossa equipe responde em minutos!</strong>
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid lg:grid-cols-4 gap-8">
-          {/* Category Sidebar */}
-          <div className="lg:col-span-1">
-            <h3 className="font-semibold text-foreground mb-4">Categorias</h3>
-            <div className="space-y-2">
-              {faqCategories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className={`w-full text-left p-3 rounded-lg flex items-center gap-3 transition-all duration-200 ${
-                    activeCategory === category.id
-                      ? 'bg-primary/10 text-primary border border-primary/20'
-                      : 'hover:bg-gray-50 text-muted-foreground'
-                  }`}
-                >
-                  <category.icon className={`h-4 w-4 ${category.color}`} />
-                  <span className="font-medium">{category.name}</span>
-                </button>
-              ))}
-            </div>
+        <motion.div 
+          ref={contentRef}
+          className="flex flex-col lg:flex-row gap-8 w-full"
+          initial="hidden"
+          animate={contentInView ? "visible" : "hidden"}
+          variants={staggerContainer}
+        >
+          <motion.div variants={staggerItem} className="lg:w-1/4 w-full">
+            <CategorySidebar 
+              activeCategory={activeCategory}
+              setActiveCategory={setActiveCategory}
+            />
+          </motion.div>
 
-            {/* Contact CTA */}
-            <Card className="mt-8 bg-gradient-to-br from-violet-50 to-purple-50 border-violet-200">
-              <CardContent className="p-4 text-center">
-                <Users className="h-8 w-8 text-primary mx-auto mb-3" />
-                <h4 className="font-semibold text-sm mb-2">Ainda com dúvidas?</h4>
-                <p className="text-xs text-muted-foreground mb-4">
-                  Fale com nossa equipe especializada em agências
-                </p>
-                <Button size="sm" className="w-full">
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Chat ao Vivo
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+          <motion.div variants={staggerItem} className="lg:w-3/4 w-full">
+            <FAQContent 
+              activeCategoryData={activeCategoryData}
+              activeCategory={activeCategory}
+              openItems={openItems}
+              toggleItem={toggleItem}
+            />
+          </motion.div>
+        </motion.div>
 
-          {/* FAQ Content */}
-          <div className="lg:col-span-3">
-            <div className="flex items-center gap-3 mb-6">
-              <activeCategoryData.icon className={`h-6 w-6 ${activeCategoryData.color}`} />
-              <h3 className="text-xl font-bold text-foreground">
-                {activeCategoryData.name}
-              </h3>
-            </div>
-
-            <div className="space-y-4">
-              {activeCategoryData.questions.map((faq, index) => {
-                const itemId = `${activeCategory}-${index}`
-                const isOpen = openItems.includes(itemId)
-
-                return (
-                  <Card key={index} className="overflow-hidden hover:shadow-md transition-shadow">
-                    <CardContent className="p-0">
-                      <button
-                        onClick={() => toggleItem(activeCategory, index)}
-                        className="w-full p-6 text-left flex items-center justify-between hover:bg-gray-50/50 transition-colors"
-                      >
-                        <h4 className="font-semibold text-foreground pr-4">
-                          {faq.question}
-                        </h4>
-                        {isOpen ? (
-                          <ChevronUp className="h-5 w-5 text-primary flex-shrink-0" />
-                        ) : (
-                          <ChevronDown className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-                        )}
-                      </button>
-                      
-                      {isOpen && (
-                        <div className="px-6 pb-6 border-t bg-gray-50/30">
-                          <p className="text-muted-foreground leading-relaxed pt-4">
-                            {faq.answer}
-                          </p>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="mt-16 text-center">
-          <Card className="max-w-4xl mx-auto bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-4">
-                Não Encontrou sua Dúvida?
-              </h3>
-              <p className="text-muted-foreground mb-6 text-lg">
-                Nossa equipe especializada em agências digitais está aqui para ajudar. 
-                <br />
-                <strong className="text-foreground">Resposta garantida em até 2 horas!</strong>
-              </p>
-
-              <div className="grid md:grid-cols-3 gap-4 mb-8">
-                <div className="text-center">
-                  <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <MessageSquare className="h-6 w-6 text-green-600" />
-                  </div>
-                  <h4 className="font-semibold mb-1">WhatsApp</h4>
-                  <p className="text-sm text-muted-foreground">Chat direto com especialista</p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <HelpCircle className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <h4 className="font-semibold mb-1">Central de Ajuda</h4>
-                  <p className="text-sm text-muted-foreground">Documentação completa</p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="h-12 w-12 bg-violet-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Users className="h-6 w-6 text-violet-600" />
-                  </div>
-                  <h4 className="font-semibold mb-1">Consultoria</h4>
-                  <p className="text-sm text-muted-foreground">Call gratuita de 30min</p>
-                </div>
-              </div>
-
-              <Button size="lg" className="mr-4">
-                <MessageSquare className="mr-2 h-5 w-5" />
-                Falar com Especialista
-              </Button>
-              
-              <Button size="lg" variant="outline">
-                Agendar Demo Gratuita
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+        <BottomCTA ctaRef={ctaRef} ctaInView={ctaInView} />
       </div>
     </section>
   )

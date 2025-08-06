@@ -4,10 +4,8 @@
  * Baseado na especificação do agente 07-design-tokens.md
  */
 
-import { cn } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { communicationChannelLabels } from "@/types/design-tokens"
+import { formatDistanceToNow } from "date-fns"
+import { ptBR } from "date-fns/locale"
 import { 
   MessageCircle,
   Mail,
@@ -18,8 +16,12 @@ import {
   AlertCircle,
   MoreHorizontal
 } from "lucide-react"
-import { formatDistanceToNow } from "date-fns"
-import { ptBR } from "date-fns/locale"
+
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { communicationChannelLabels } from "@/types/design-tokens"
+
 
 type CommunicationChannel = 'whatsapp' | 'email' | 'voip' | 'note'
 type MessageDirection = 'inbound' | 'outbound'
@@ -67,10 +69,10 @@ export function CommunicationChannelBadge({
   status, 
   className, 
   showLabel = false 
-}: CommunicationChannelBadgeProps) {
+}: CommunicationChannelBadgeProps): React.ReactElement {
   const config = channelConfig[channel]
   const Icon = config.icon
-  const StatusIcon = status ? statusConfig[status].icon : null
+  const StatusIcon = status == null ? null : statusConfig[status].icon
 
   return (
     <Badge 
@@ -82,10 +84,8 @@ export function CommunicationChannelBadge({
       )}
     >
       <Icon className="h-3 w-3" />
-      {showLabel && communicationChannelLabels[channel]}
-      {StatusIcon && (
-        <StatusIcon className={cn("h-3 w-3", statusConfig[status!].color)} />
-      )}
+      {showLabel ? communicationChannelLabels[channel] : null}
+      {StatusIcon != null && status != null ? <StatusIcon className={cn("h-3 w-3", statusConfig[status].color)} /> : null}
     </Badge>
   )
 }
@@ -102,6 +102,75 @@ interface MessageBubbleProps {
   onMenuClick?: () => void
 }
 
+function MessageBubbleHeader({
+  isOutbound,
+  senderName,
+  channel,
+  onMenuClick
+}: {
+  isOutbound: boolean
+  senderName?: string
+  channel: CommunicationChannel
+  onMenuClick?: () => void
+}): React.ReactElement {
+  return <div className="flex items-center justify-between mb-2">
+    <div className="flex items-center gap-2">
+      {!isOutbound && senderName != null && senderName.length > 0 ? <span className="text-xs font-medium opacity-75">
+          {senderName}
+        </span> : null}
+      <CommunicationChannelBadge 
+        channel={channel} 
+        className="scale-75 origin-left" 
+      />
+    </div>
+    {onMenuClick == null ? null : <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+        onClick={onMenuClick}
+      >
+        <MoreHorizontal className="h-3 w-3" />
+      </Button>}
+  </div>
+}
+
+function MessageBubbleFooter({
+  timestamp,
+  status,
+  isOutbound
+}: {
+  timestamp: Date
+  status?: MessageStatus
+  isOutbound: boolean
+}): React.ReactElement {
+  const StatusIcon = status == null ? null : statusConfig[status].icon
+
+  return (
+    <div className="flex items-center justify-between mt-3 pt-2 border-t border-current/10">
+      <time className="text-xs opacity-75" title={timestamp.toLocaleString('pt-BR')}>
+        {formatDistanceToNow(timestamp, { 
+          addSuffix: true, 
+          locale: ptBR 
+        })}
+      </time>
+      
+      {status != null && StatusIcon != null ? <div className="flex items-center gap-1">
+          <StatusIcon className={cn(
+            "h-3 w-3", 
+            isOutbound ? "text-white/70" : statusConfig[status].color
+          )} />
+          <span className={cn(
+            "text-xs",
+            isOutbound ? "text-white/70" : "opacity-75"
+          )}>
+            {statusConfig[status].label}
+          </span>
+        </div> : null}
+    </div>
+  )
+}
+
 export function MessageBubble({
   content,
   direction,
@@ -112,10 +181,9 @@ export function MessageBubble({
   className,
   attachmentCount = 0,
   onMenuClick
-}: MessageBubbleProps) {
+}: MessageBubbleProps): React.ReactElement {
   const config = channelConfig[channel]
   const isOutbound = direction === 'outbound'
-  const StatusIcon = status ? statusConfig[status].icon : null
 
   return (
     <div className={cn(
@@ -130,30 +198,12 @@ export function MessageBubble({
           : cn("bg-white border-2", config.styles.replace('text-', 'border-').replace('bg-', '').replace('border-', 'border-')),
         "hover:shadow-sm"
       )}>
-        {/* Header com sender e canal */}
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            {!isOutbound && senderName && (
-              <span className="text-xs font-medium opacity-75">
-                {senderName}
-              </span>
-            )}
-            <CommunicationChannelBadge 
-              channel={channel} 
-              className="scale-75 origin-left" 
-            />
-          </div>
-          {onMenuClick && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={onMenuClick}
-            >
-              <MoreHorizontal className="h-3 w-3" />
-            </Button>
-          )}
-        </div>
+        <MessageBubbleHeader 
+          isOutbound={isOutbound}
+          senderName={senderName}
+          channel={channel}
+          onMenuClick={onMenuClick}
+        />
 
         {/* Conteúdo da mensagem */}
         <div className="text-sm leading-relaxed">
@@ -168,31 +218,51 @@ export function MessageBubble({
           </div>
         )}
 
-        {/* Footer com timestamp e status */}
-        <div className="flex items-center justify-between mt-3 pt-2 border-t border-current/10">
-          <time className="text-xs opacity-75" title={timestamp.toLocaleString('pt-BR')}>
-            {formatDistanceToNow(timestamp, { 
-              addSuffix: true, 
-              locale: ptBR 
-            })}
-          </time>
-          
-          {status && StatusIcon && (
-            <div className="flex items-center gap-1">
-              <StatusIcon className={cn(
-                "h-3 w-3", 
-                isOutbound ? "text-white/70" : statusConfig[status].color
-              )} />
-              <span className={cn(
-                "text-xs",
-                isOutbound ? "text-white/70" : "opacity-75"
-              )}>
-                {statusConfig[status].label}
-              </span>
-            </div>
-          )}
-        </div>
+        <MessageBubbleFooter 
+          timestamp={timestamp}
+          status={status}
+          isOutbound={isOutbound}
+        />
       </div>
+    </div>
+  )
+}
+
+function WhatsAppMessageHeader({
+  isOutbound,
+  senderName
+}: {
+  isOutbound: boolean
+  senderName?: string
+}): React.ReactElement | null {
+  if (isOutbound || senderName == null || senderName.length === 0) {
+    return null
+  }
+
+  return (
+    <div className="text-xs font-semibold text-green-600 mb-1">
+      {senderName}
+    </div>
+  )
+}
+
+function WhatsAppMessageStatus({
+  status,
+  isOutbound
+}: {
+  status?: MessageStatus
+  isOutbound: boolean
+}): React.ReactElement | null {
+  if (status == null || !isOutbound) {
+    return null
+  }
+
+  return (
+    <div className="ml-2">
+      {status === 'read' && <CheckCheck className="h-4 w-4 text-blue-500" />}
+      {status === 'delivered' && <CheckCheck className="h-4 w-4 text-gray-400" />}
+      {status === 'sent' && <Clock className="h-3 w-3 text-gray-400" />}
+      {status === 'failed' && <AlertCircle className="h-4 w-4 text-red-500" />}
     </div>
   )
 }
@@ -206,7 +276,7 @@ export function WhatsAppMessage({
   senderName,
   className,
   attachmentCount = 0
-}: Omit<MessageBubbleProps, 'channel'>) {
+}: Omit<MessageBubbleProps, 'channel'>): React.ReactElement {
   const isOutbound = direction === 'outbound'
   
   return (
@@ -221,11 +291,10 @@ export function WhatsAppMessage({
           ? "bg-[#dcf8c6] text-gray-800 ml-auto" // WhatsApp outgoing green
           : "bg-white text-gray-800 border border-gray-200", // WhatsApp incoming white
       )}>
-        {!isOutbound && senderName && (
-          <div className="text-xs font-semibold text-green-600 mb-1">
-            {senderName}
-          </div>
-        )}
+        <WhatsAppMessageHeader 
+          isOutbound={isOutbound}
+          senderName={senderName}
+        />
 
         <div className="text-sm leading-relaxed">
           {content}
@@ -246,14 +315,10 @@ export function WhatsAppMessage({
             })}
           </time>
           
-          {status && isOutbound && (
-            <div className="ml-2">
-              {status === 'read' && <CheckCheck className="h-4 w-4 text-blue-500" />}
-              {status === 'delivered' && <CheckCheck className="h-4 w-4 text-gray-400" />}
-              {status === 'sent' && <Clock className="h-3 w-3 text-gray-400" />}
-              {status === 'failed' && <AlertCircle className="h-4 w-4 text-red-500" />}
-            </div>
-          )}
+          <WhatsAppMessageStatus 
+            status={status}
+            isOutbound={isOutbound}
+          />
         </div>
       </div>
     </div>
@@ -261,6 +326,6 @@ export function WhatsAppMessage({
 }
 
 // Hook para obter cor do canal
-export function useCommunicationChannelColor(channel: CommunicationChannel) {
+export function useCommunicationChannelColor(channel: CommunicationChannel): string {
   return channelConfig[channel].color
 }

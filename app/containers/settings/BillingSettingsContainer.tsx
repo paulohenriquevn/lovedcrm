@@ -7,6 +7,7 @@ import { ErrorMessage } from '@/components/common/error-message'
 import { LoadingSpinner } from '@/components/common/loading-spinner'
 import { BillingSettingsView } from '@/components/settings/BillingSettingsView'
 import { logger } from '@/lib/logger'
+import { useAuthStore } from '@/stores/auth'
 import { useBillingStore, useBillingSelectors } from '@/stores/billing'
 
 // Removed unused type interfaces to resolve lint errors
@@ -250,6 +251,7 @@ function ErrorState({ error, onRetry }: { error: string; onRetry: () => void }) 
 }
 
 export function BillingSettingsContainer() {
+  const { user, organization } = useAuthStore()
   const storeData = useBillingStore()
   const { isLoading } = useBillingSelectors()
 
@@ -259,11 +261,18 @@ export function BillingSettingsContainer() {
   const handleCancelSubscription = useSubscriptionCancellation()
   const handleManagePaymentMethods = useCustomerPortal()
 
-  // Load billing data on mount - using stable reference
+  // Load billing data only when user and organization are available
   useEffect(() => {
-    const { fetchAllData } = useBillingStore.getState()
-    void fetchAllData()
-  }, [])
+    if (user && organization) {
+      const { fetchAllData } = useBillingStore.getState()
+      void fetchAllData()
+    }
+  }, [user, organization])
+
+  // Show loading while user/organization are loading
+  if (!user || !organization) {
+    return <LoadingState />
+  }
 
   // Render loading state
   if (isLoading && !storeData.currentPlan) {

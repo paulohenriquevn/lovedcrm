@@ -4,16 +4,16 @@
  * Baseado na especificação do agente 07-design-tokens.md
  */
 
-import { cn } from "@/lib/utils"
-import { pipelineStageLabels } from "@/types/design-tokens"
-import { LucideIcon } from "lucide-react"
-import { 
+import { LucideIcon , 
   User, 
   Phone, 
   FileText, 
   Handshake, 
   CheckCircle2 
 } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+import { pipelineStageLabels } from "@/types/design-tokens"
 
 type PipelineStage = 'lead' | 'contact' | 'proposal' | 'negotiation' | 'closed'
 
@@ -65,7 +65,7 @@ export function PipelineStage({
   variant = 'default',
   interactive = false,
   onClick
-}: PipelineStageProps) {
+}: PipelineStageProps): React.ReactElement {
   const config = stageConfig[stage]
   const Icon = config.icon
 
@@ -81,7 +81,7 @@ export function PipelineStage({
         <span className="text-sm font-medium">
           {pipelineStageLabels[stage]}
         </span>
-        {count !== undefined && (
+        {count != null && (
           <span className="text-xs opacity-75 bg-white/50 px-1.5 py-0.5 rounded-full">
             {count}
           </span>
@@ -106,7 +106,7 @@ export function PipelineStage({
               {pipelineStageLabels[stage]}
             </h3>
           </div>
-          {count !== undefined && (
+          {count != null && (
             <span className="text-sm font-medium bg-white/70 px-2 py-1 rounded-full">
               {count}
             </span>
@@ -115,11 +115,9 @@ export function PipelineStage({
         <p className="text-xs opacity-75 mb-auto">
           {config.description}
         </p>
-        {interactive && (
-          <div className="text-xs opacity-50 mt-2">
+        {interactive ? <div className="text-xs opacity-50 mt-2">
             Clique para ver detalhes
-          </div>
-        )}
+          </div> : null}
       </div>
     )
   }
@@ -139,7 +137,7 @@ export function PipelineStage({
             {pipelineStageLabels[stage]}
           </h3>
         </div>
-        {count !== undefined && (
+        {count != null && (
           <span className="text-sm opacity-75 font-medium">
             {count}
           </span>
@@ -159,7 +157,7 @@ export function PipelineProgress({
 }: { 
   currentStage: PipelineStage
   className?: string 
-}) {
+}): React.ReactElement {
   const stages: PipelineStage[] = ['lead', 'contact', 'proposal', 'negotiation', 'closed']
   const currentIndex = stages.indexOf(currentStage)
 
@@ -195,7 +193,7 @@ export function PipelineProgress({
 }
 
 // Hook para obter cor do pipeline stage
-export function usePipelineStageColor(stage: PipelineStage) {
+export function usePipelineStageColor(stage: PipelineStage): string {
   const colors = {
     lead: 'hsl(220, 9%, 46%)',
     contact: 'hsl(217, 91%, 60%)',
