@@ -140,7 +140,7 @@ Especializado para Agências de 5-20 Colaboradores
 
         {/* Trust Indicators */}
         <motion.div 
-          className="flex items-center justify-center gap-8 mb-12 text-sm text-muted-foreground"
+          className="flex items-center justify-center gap-8 mb-12 text-sm text-foreground"
           variants={heroAnimations.trustIndicators}
         >
           <div className="flex items-center gap-2">

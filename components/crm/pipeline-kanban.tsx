@@ -228,7 +228,7 @@ function LeadCard({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1">
               <h4 
-                className="font-semibold text-sm text-foreground truncate flex-1"
+                className="font-semibold text-sm text-foreground truncate max-w-[200px]"
                 title={lead.name}
               >
                 {lead.name}
@@ -239,7 +239,7 @@ function LeadCard({
             </div>
             {lead.source != null && lead.source.length > 0 ? <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1 min-w-0">
                 <Building2 className="h-3 w-3 flex-shrink-0" />
-                <span className="truncate flex-1" title={lead.source}>
+                <span className="truncate max-w-[180px]" title={lead.source}>
                   {lead.source}
                 </span>
               </p> : null}
@@ -306,7 +306,7 @@ function LeadCard({
           {lead.email != null && lead.email.length > 0 ? (
             <div className="flex items-center gap-1 text-xs text-muted-foreground min-w-0">
               <Mail className="h-3 w-3 flex-shrink-0" />
-              <span className="truncate flex-1" title={lead.email}>
+              <span className="truncate max-w-[180px]" title={lead.email}>
                 {lead.email}
               </span>
             </div>
@@ -314,7 +314,7 @@ function LeadCard({
           {lead.phone != null && lead.phone.length > 0 ? (
             <div className="flex items-center gap-1 text-xs text-muted-foreground min-w-0">
               <Phone className="h-3 w-3 flex-shrink-0" />
-              <span className="truncate flex-1" title={lead.phone}>
+              <span className="truncate max-w-[180px]" title={lead.phone}>
                 {lead.phone}
               </span>
             </div>
@@ -442,7 +442,7 @@ function StageColumn({
   onWhatsApp: (lead: Lead) => void
 }): React.ReactElement {
   return <div
-    className="min-w-[320px] flex-shrink-0"
+    className="w-[320px] flex-shrink-0"
     onDragOver={handleDragOver}
     onDrop={() => onDrop(stage.id)}
   >
