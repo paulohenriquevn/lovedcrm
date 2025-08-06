@@ -10,73 +10,196 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 10% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    /* === LOVED CRM BRAND TOKENS === */
+    
+    /* Primary - Loved Purple */
+    --primary: 262 83% 58%;           /* #8B5CF6 mais escuro para contraste */
+    --primary-foreground: 210 40% 98%; /* Branco para texto sobre primary */
+    
+    /* Secondary - Warm Gray */
+    --secondary: 220 14% 96%;          /* Cinza muito claro para backgrounds */
+    --secondary-foreground: 220 9% 46%; /* Gray-600 para texto */
+    
+    /* Accent - Emerald Success */
+    --accent: 160 84% 39%;             /* #10B981 Emerald-500 */
+    --accent-foreground: 0 0% 98%;     /* Branco para texto sobre accent */
+    
+    /* Muted - Neutral Backgrounds */
+    --muted: 220 14% 96%;              /* Gray-50 para backgrounds neutros */
+    --muted-foreground: 220 9% 46%;    /* Gray-600 para texto muted */
+    
+    /* Destructive - Red Alerts */
+    --destructive: 0 84% 60%;          /* #EF4444 Red-500 */
+    --destructive-foreground: 0 0% 98%; /* Branco para texto sobre red */
+    
+    /* Borders e Inputs */
+    --border: 220 13% 91%;             /* Gray-200 para bordas sutis */
+    --input: 220 13% 91%;              /* Gray-200 para input borders */
+    --ring: 262 83% 58%;               /* Primary color para focus rings */
+    
+    /* Backgrounds */
+    --background: 0 0% 100%;           /* Branco puro */
+    --foreground: 224 71% 4%;          /* Quase preto para texto principal */
+    
+    /* Cards */
+    --card: 0 0% 100%;                 /* Branco para cards */
+    --card-foreground: 224 71% 4%;     /* Texto escuro em cards */
+    
+    /* Popover */
+    --popover: 0 0% 100%;              /* Branco para popovers */
+    --popover-foreground: 224 71% 4%;  /* Texto escuro em popovers */
+    
+    /* Sidebar (para layouts admin) */
+    --sidebar-background: 224 71% 4%;         /* Escuro para sidebar */
+    --sidebar-foreground: 220 9% 78%;         /* Texto claro em sidebar */
+    --sidebar-primary: 262 83% 58%;           /* Primary em sidebar */
+    --sidebar-primary-foreground: 0 0% 98%;   /* Texto sobre primary */
+    --sidebar-accent: 220 14% 14%;            /* Accent mais escuro */
+    --sidebar-accent-foreground: 220 9% 78%;  /* Texto sobre accent */
+    --sidebar-border: 220 13% 22%;            /* Bordas em sidebar */
+    --sidebar-ring: 262 83% 58%;              /* Ring color em sidebar */
+    
+    /* Charts - Loved CRM específico */
+    --chart-1: 262 83% 58%;            /* Primary violet */
+    --chart-2: 160 84% 39%;            /* Emerald success */
+    --chart-3: 217 91% 60%;            /* Blue communication */
+    --chart-4: 43 96% 56%;             /* Yellow warning */
+    --chart-5: 25 95% 53%;             /* Orange negotiation */
+    
+    /* Border Radius */
     --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* === B2B ORGANIZATION TOKENS === */
+    
+    /* Organization Tiers */
+    --tier-free: 220 9% 46%;           /* Gray-600 */
+    --tier-pro: 262 83% 58%;           /* Primary Violet */
+    --tier-enterprise: 224 71% 4%;     /* Dark Gray */
+    
+    /* Multi-tenancy Visual Cues */
+    --org-scope: 262 83% 58%;          /* Primary para indicar contexto org */
+    --org-isolation: 160 84% 39%;      /* Green para indicar dados seguros */
+    --cross-org-warning: 0 84% 60%;    /* Red para alertas cross-org */
+    
+    /* Team Collaboration */
+    --team-member: 217 91% 60%;        /* Blue-500 para membros */
+    --team-admin: 262 83% 58%;         /* Primary para admins */
+    --team-owner: 224 71% 4%;          /* Dark para owners */
+    
+    /* Pipeline Stages (CRM-specific) */
+    --pipeline-lead: 220 9% 46%;       /* Gray-600 - inicial */
+    --pipeline-contact: 217 91% 60%;   /* Blue-500 - em contato */
+    --pipeline-proposal: 43 96% 56%;   /* Yellow-400 - proposta */
+    --pipeline-negotiation: 25 95% 53%; /* Orange-500 - negociação */
+    --pipeline-closed: 160 84% 39%;    /* Green-500 - fechado */
+    
+    /* Communication Channels */
+    --whatsapp: 142 76% 36%;           /* WhatsApp Green */
+    --email: 217 91% 60%;              /* Blue para email */
+    --voip: 262 83% 58%;               /* Primary para VoIP */
+    --note: 220 9% 46%;                /* Gray para notas */
+    
+    /* AI Features */
+    --ai-summary: 262 83% 58%;         /* Primary para IA */
+    --ai-suggestion: 160 84% 39%;      /* Green para sugestões */
+    --ai-warning: 43 96% 56%;          /* Yellow para atenção */
+
+    /* WhatsApp Brand Colors */
+    --whatsapp-green: 142 76% 36%;         /* #25D366 official */
+    --whatsapp-dark: 142 82% 17%;          /* #128C7E dark green */
+    --whatsapp-light: 142 76% 96%;         /* Very light green */
+    
+    /* Message Bubbles */
+    --whatsapp-incoming: 142 76% 96%;      /* Light green for incoming */
+    --whatsapp-outgoing: 217 91% 95%;      /* Light blue for outgoing */
+
+    /* Timeline Colors */
+    --timeline-whatsapp: 142 76% 36%;      /* WhatsApp green */
+    --timeline-email: 217 91% 60%;         /* Email blue */
+    --timeline-voip: 262 83% 58%;          /* VoIP primary */
+    --timeline-note: 220 9% 46%;           /* Note gray */
+    --timeline-ai: 262 83% 58%;            /* AI primary */
+    
+    /* Timeline States */
+    --timeline-sent: 160 84% 39%;          /* Green success */
+    --timeline-delivered: 217 91% 60%;     /* Blue delivered */
+    --timeline-read: 142 76% 36%;          /* WhatsApp green read */
+    --timeline-failed: 0 84% 60%;          /* Red failed */
+
+    /* Security States */
+    --security-isolated: 160 84% 39%;      /* Green - dados seguros */
+    --security-shared: 217 91% 60%;        /* Blue - compartilhado */
+    --security-warning: 43 96% 56%;        /* Yellow - atenção */
+    --security-danger: 0 84% 60%;          /* Red - perigo cross-org */
+    
+    /* Organization Context */
+    --org-current: 262 83% 58%;            /* Primary - org atual */
+    --org-scope-indicator: 262 83% 90%;    /* Light purple background */
+    --org-isolation-border: 160 84% 39%;   /* Green border para isolamento */
+
+    /* Professional timing (not too playful) */
+    --transition-fast: 150ms ease-out;
+    --transition-normal: 250ms ease-out;  
+    --transition-slow: 350ms ease-out;
+    
+    /* Specific CRM animations */
+    --pipeline-drag: 200ms cubic-bezier(0.2, 0, 0, 1);
+    --timeline-appear: 300ms ease-out;
+    --ai-summary-expand: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    --whatsapp-message: 150ms ease-out;
+    
+    /* Organization context transitions */
+    --org-switch: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --tier-upgrade: 250ms ease-out;
   }
+
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* === DARK MODE TOKENS === */
+    
+    --background: 224 71% 4%;          /* Escuro */
+    --foreground: 210 40% 98%;         /* Claro */
+    
+    --card: 224 71% 4%;                /* Escuro */
+    --card-foreground: 210 40% 98%;    /* Claro */
+    
+    --popover: 224 71% 4%;             /* Escuro */
+    --popover-foreground: 210 40% 98%; /* Claro */
+    
+    --primary: 262 83% 67%;            /* Violet-400 mais claro no dark */
+    --primary-foreground: 224 71% 4%;  /* Escuro para contraste */
+    
+    --secondary: 215 28% 17%;          /* Gray-800 */
+    --secondary-foreground: 210 40% 98%; /* Claro */
+    
+    --muted: 215 28% 17%;              /* Gray-800 */
+    --muted-foreground: 217 19% 27%;   /* Gray-700 */
+    
+    --accent: 160 84% 39%;             /* Emerald-500 mantém */
+    --accent-foreground: 0 0% 98%;     /* Branco */
+    
+    --destructive: 0 63% 31%;          /* Red-800 mais escuro */
+    --destructive-foreground: 210 40% 98%; /* Claro */
+    
+    --border: 215 28% 17%;             /* Gray-800 */
+    --input: 215 28% 17%;              /* Gray-800 */
+    --ring: 262 83% 67%;               /* Violet-400 */
+    
+    /* Sidebar dark mode */
+    --sidebar-background: 0 0% 0%;            /* Preto para sidebar */
+    --sidebar-foreground: 220 9% 78%;         /* Cinza claro */
+    --sidebar-primary: 262 83% 67%;           /* Violet-400 */
+    --sidebar-primary-foreground: 0 0% 0%;    /* Preto */
+    --sidebar-accent: 220 14% 22%;            /* Gray-700 */
+    --sidebar-accent-foreground: 220 9% 78%;  /* Cinza claro */
+    --sidebar-border: 220 13% 13%;            /* Gray-900 */
+    --sidebar-ring: 262 83% 67%;              /* Violet-400 */
+
+    /* Charts dark mode */
+    --chart-1: 262 83% 67%;            /* Violet-400 */
+    --chart-2: 160 84% 50%;            /* Emerald lighter */
+    --chart-3: 217 91% 70%;            /* Blue lighter */
+    --chart-4: 43 96% 66%;             /* Yellow lighter */
+    --chart-5: 25 95% 63%;             /* Orange lighter */
   }
 }
 
@@ -86,6 +209,174 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* === LOVED CRM UTILITIES === */
+@layer utilities {
+  /* Enhanced focus states for Brazilian users (high keyboard usage) */
+  .focus-visible-violet {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2;
+  }
+
+  /* Organization context indicators */
+  .org-scope-indicator {
+    @apply bg-gradient-to-r from-violet-50 to-purple-50 border-l-4 border-violet-500;
+  }
+
+  .org-isolation-border {
+    @apply border-l-4 border-emerald-500;
+  }
+
+  /* Pipeline stage animations */
+  .pipeline-drag-item {
+    @apply transition-transform duration-200 hover:scale-105;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  /* Timeline animations */
+  .timeline-appear {
+    animation: timeline-appear 300ms ease-out;
+  }
+
+  /* AI Summary expand animation */
+  .ai-summary-expand {
+    animation: ai-summary-expand 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* WhatsApp message animation */
+  .whatsapp-message {
+    animation: whatsapp-message 150ms ease-out;
+  }
+
+  /* Organization context transitions */
+  .org-switch {
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Tier upgrade animation */
+  .tier-upgrade {
+    animation: tier-upgrade 250ms ease-out;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .mobile-optimized {
+      @apply text-base leading-relaxed;
+    }
+  }
+}
+
+@layer components {
+  /* WhatsApp message bubble styles */
+  .whatsapp-bubble-incoming {
+    @apply bg-white border border-gray-200 text-gray-800 rounded-2xl;
+  }
+
+  .whatsapp-bubble-outgoing {
+    @apply text-gray-800 rounded-2xl;
+    background-color: #dcf8c6; /* WhatsApp official outgoing green */
+  }
+
+  /* Pipeline stage card styles */
+  .pipeline-stage-lead {
+    @apply bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100;
+  }
+
+  .pipeline-stage-contact {
+    @apply bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100;
+  }
+
+  .pipeline-stage-proposal {
+    @apply bg-yellow-50 border-yellow-200 text-yellow-700 hover:bg-yellow-100;
+  }
+
+  .pipeline-stage-negotiation {
+    @apply bg-orange-50 border-orange-200 text-orange-700 hover:bg-orange-100;
+  }
+
+  .pipeline-stage-closed {
+    @apply bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100;
+  }
+
+  /* AI Summary gradient */
+  .ai-summary-gradient {
+    @apply bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200;
+  }
+
+  /* Organization tier badges */
+  .tier-free-badge {
+    @apply bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200;
+  }
+
+  .tier-pro-badge {
+    @apply bg-violet-100 text-violet-700 border-violet-200 hover:bg-violet-200;
+  }
+
+  .tier-enterprise-badge {
+    @apply bg-gray-900 text-gray-100 border-gray-800 hover:bg-gray-800;
+  }
+
+  /* Communication channel badges */
+  .channel-whatsapp {
+    @apply bg-green-50 text-green-700 border-green-200;
+  }
+
+  .channel-email {
+    @apply bg-blue-50 text-blue-700 border-blue-200;
+  }
+
+  .channel-voip {
+    @apply bg-violet-50 text-violet-700 border-violet-200;
+  }
+
+  .channel-note {
+    @apply bg-gray-50 text-gray-700 border-gray-200;
+  }
+}
+
+/* Keyframes for custom animations */
+@keyframes timeline-appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ai-summary-expand {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    max-height: 500px;
+    opacity: 1;
+  }
+}
+
+@keyframes whatsapp-message {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes tier-upgrade {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
 

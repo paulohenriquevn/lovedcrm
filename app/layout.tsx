@@ -19,16 +19,16 @@ const geistMono = localFont({
   variable: '--font-geist-mono',
   weight: '100 900',
 })
-const SITE_TITLE = 'NextJS + FastAPI SaaS Starter'
+const SITE_TITLE = 'Loved CRM - CRM para Agências Digitais'
 const SITE_DESCRIPTION =
-  'Complete SaaS starter with authentication, billing, multi-tenancy, and AI chat. Built with Next.js, FastAPI, and PostgreSQL.'
+  'O único CRM que agências digitais brasileiras realmente precisam. Pipeline Kanban, WhatsApp Business, VoIP integrado e IA para resumos automáticos de conversas.'
 
 export const metadata: Metadata = {
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   openGraph: {
     title: SITE_TITLE,
-    description: 'Complete SaaS starter with authentication, billing, multi-tenancy, and AI chat.',
+    description: SITE_DESCRIPTION,
     images: [
       {
         url: `/og?title=${SITE_TITLE}`,
@@ -38,12 +38,12 @@ export const metadata: Metadata = {
       },
     ],
     type: 'website',
-    siteName: 'SaaS Starter',
+    siteName: 'Loved CRM',
   },
   twitter: {
     card: 'summary_large_image',
     title: SITE_TITLE,
-    description: 'Complete SaaS starter with authentication, billing, multi-tenancy, and AI chat.',
+    description: SITE_DESCRIPTION,
     images: [
       {
         url: `/og?title=${SITE_TITLE}`,

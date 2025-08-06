@@ -1,5 +1,5 @@
 /**
- * Homepage - Loved CRM Landing Page
+ * Landing Page - Loved CRM
  * Página principal otimizada para conversão de agências digitais brasileiras
  * Baseado na especificação do agente 08-landing-page.md
  */
@@ -14,7 +14,7 @@ import { PricingSection } from '@/components/landing/pricing-section'
 import { FAQSection } from '@/components/landing/faq-section'
 import { Footer } from '@/components/landing/footer'
 
-export default function HomePage() {
+export default function LandingPage() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
