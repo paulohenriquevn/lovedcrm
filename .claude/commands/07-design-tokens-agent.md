@@ -29,6 +29,38 @@
 - **Metodologia**: Sector-First Design + Token Generation + Psychological Color Theory
 - **Framework**: DevSolo Docs com 95% de certeza obrigatória
 
+## **🛡️ REGRA UNIVERSAL - CHAIN OF PRESERVATION**
+
+### **🚨 PRESERVAÇÃO ABSOLUTA DO TRABALHO DOS AGENTES ANTERIORES**
+
+**REGRA FUNDAMENTAL**: Este agente deve preservar 100% das especificações definidas nos agentes anteriores:
+- **01-vision.md** (Agente 01 - Visionário): Propósito, escopo, funcionalidades principais
+- **02-prd.md** (Agente 02 - Product Manager): Todas as funcionalidades, critérios de aceite, jobs-to-be-done
+- **03-tech.md** (Agente 03 - Tech Architect): Arquitetura definida, componentes, padrões técnicos
+- **04-database.md** (Agente 04 - Database Architect): Schema, tabelas, relacionamentos, campos
+- **05-apis.md** (Agente 05 - API Architect): Endpoints, validações, regras de negócio, integrações
+- **06-diagrams.md** (Agente 06 - Solution Diagrams): Fluxos, componentes, integrações visuais
+
+**PRESERVAÇÃO OBRIGATÓRIA DOS AGENTES ANTERIORES**:
+- ✅ **DEVE preservar**: Paleta de cores base, identidade visual, tokens shadcn/ui existentes, variáveis CSS atuais
+- ✅ **PODE evoluir**: Adicionar tokens setoriais específicos, criar variações temáticas, otimizar contraste
+- ❌ **NUNCA pode**: Remover tokens existentes, quebrar compatibilidade shadcn/ui, alterar sistema base
+
+**RESPONSABILIDADE CRÍTICA**: O trabalho deste agente será **PRESERVADO INTEGRALMENTE** por todos os agentes seguintes.
+
+### **🚨 VALIDAÇÃO CRÍTICA 0.0 - PRESERVAÇÃO ABSOLUTA AGENTES ANTERIORES (NUNCA REMOVER/REDUZIR):**
+
+"Os design tokens evoluem o sistema atual preservando 100% da compatibilidade com shadcn/ui e mantendo todos os tokens base existentes?"
+
+- ✅ **ACEITO**: "Extensão incremental do tailwind.config.js + preservação completa CSS custom properties + adição de tokens setoriais específicos"
+- ✅ **ACEITO**: "Manutenção de todos os componentes shadcn/ui + compatibilidade total + evolução não-destrutiva do sistema"
+- ✅ **ACEITO**: "Tokens setoriais como EXTENSÃO do sistema base + justificativa psicológica + pesquisa competitiva aplicada"
+- ❌ **REJEITADO**: Recriação do sistema de design OU alteração de tokens base OU quebra de compatibilidade shadcn/ui
+- ❌ **REJEITADO**: Remoção de variáveis CSS existentes OU modificação de componentes /ui/ OU incompatibilidade com sistema atual
+- ❌ **REJEITADO**: Tokens genéricos sem pesquisa setorial OU ignorar funcionalidades definidas nos agentes anteriores
+
+**REGRA ABSOLUTA**: **EVOLUÇÃO INCREMENTAL vs RECRIAÇÃO TOTAL - Este agente EVOLUI o sistema de design existente, JAMAIS recria do zero**
+
 ## **INPUT/OUTPUT**
 
 ### **INPUT ESPERADO:**

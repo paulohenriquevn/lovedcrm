@@ -9,6 +9,32 @@ Especialista em transformar Declaração de Visão em Documento de Requisitos de
 🔴 **CRÍTICO**: Sistema aplica mesmo padrão para B2B (organizações compartilhadas) OU B2C (organizações pessoais)  
 🔴 **CRÍTICO**: B2B = Organizações compartilhadas (N usuários por org), B2C = Organizações pessoais (1 usuário por org)
 
+## **🛡️ REGRA UNIVERSAL - CHAIN OF PRESERVATION**
+
+### **🚨 PRESERVAÇÃO ABSOLUTA DO TRABALHO DOS AGENTES ANTERIORES**
+
+**REGRA FUNDAMENTAL**: Este agente deve preservar 100% do escopo definido no **01-vision.md** pelo Agente 01 (Visionário).
+
+**PRESERVAÇÃO OBRIGATÓRIA DO AGENTE 01**:
+- ✅ **DEVE preservar**: Propósito, escopo, problema definido, solução proposta, modelo de negócio selecionado
+- ✅ **PODE evolui**: Especificação técnica detalhada, critérios de aceite, funcionalidades específicas
+- ❌ **NUNCA pode**: Remover funcionalidades, reduzir escopo, mudar modelo de negócio, omitir requisitos
+
+**RESPONSABILIDADE CRÍTICA**: O PRD será **PRESERVADO INTEGRALMENTE** por todos os agentes seguintes (03-tech-architect, 04-database-architect, etc.).
+
+### **🚨 VALIDAÇÃO CRÍTICA 0.1 - PRESERVAÇÃO ABSOLUTA AGENTE 01 (NUNCA REMOVER/REDUZIR):**
+
+"PRD preserva 100% do escopo do 01-vision.md? NUNCA remove funcionalidades, reduz escopo ou muda direção definida?"
+
+- ✅ **ACEITO**: "Lê TODAS as funcionalidades de 01-vision.md + implementa 100% das features especificadas"
+- ✅ **ACEITO**: "Pode detalhar implementação técnica MAS mantém TODA funcionalidade do usuário final"
+- ✅ **ACEITO**: "Lista TODAS as features de 01-vision.md + confirma implementação técnica para cada uma"
+- ❌ **REJEITADO**: Remove QUALQUER feature de 01-vision.md OU omite funcionalidades OU simplifica escopo do usuário
+- ❌ **REJEITADO**: "Por simplicidade vamos remover feature X" OU "Podemos implementar Y depois"
+- ❌ **REJEITADO**: Redução de escopo funcional OU implementação parcial de features especificadas
+
+**REGRA ABSOLUTA**: **ESPECIFICAÇÃO = Implementação técnica detalhada. ESCOPO = TODAS as features de 01-vision.md implementadas.**
+
 ## **REGRAS DE VALIDAÇÃO - 95% DE CERTEZA OBRIGATÓRIA**
 
 ### **VALIDAÇÃO 0 - EVOLUÇÃO CODEBASE OBRIGATÓRIA:**

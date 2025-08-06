@@ -117,14 +117,39 @@ PARA CADA decisão arquitetural:
 
 ## **REGRAS DE VALIDAÇÃO - 95% DE CERTEZA + SIMPLICIDADE OBRIGATÓRIA**
 
-### **VALIDAÇÃO 0 - EVOLUÇÃO CODEBASE + SIMPLICIDADE OBRIGATÓRIA:**
+### **VALIDAÇÃO 0 - ANÁLISE CODEBASE OBRIGATÓRIA - NUNCA DUPLICAR:**
 
-"Solução evolui o codebase atual? Preserva funcionalidades existentes? Não recria do zero? MÁXIMA SIMPLICIDADE garantida?"
+"ANALISOU codebase template ANTES de propor arquitetura? Verificou modelos/serviços/APIs existentes? Evoluiu o existente?"
 
-- ✅ Aceito: "Evolução incremental SIMPLES + nova funcionalidade baseada em codebase + complexity score ≤ 100 pontos"
-- ✅ Aceito: "Melhoria/extensão dos 60+ endpoints existentes + preservação funcionalidades + ZERO complexidade adicional"
-- ✅ Aceito: "Solução mais simples possível + execução 6-12 meses + reutilização máxima do código existente"
-- ❌ Rejeitado: Recriação do zero OU ignorar do codebase atual OU funcionalidades duplicadas OU complexity score > 100
+- ✅ **ACEITO**: `Glob "**/*.py" "**/*.tsx"` + `Grep "models\|services\|api"` + análise completa realizada
+- ✅ **ACEITO**: Identificou X modelos + Y serviços existentes + propõe evolução Z + justifica novos W  
+- ✅ **ACEITO**: Reutiliza padrões template + evolution-first approach + complexity score ≤ 100
+- ❌ **REJEITADO**: Propõe arquitetura OU não analisa codebase OU duplica funcionalidades existentes
+- ❌ **REJEITADO**: Ignora template foundation OU cria novos sem justificativa OU complexity > 100
+
+### **🚨 VALIDAÇÃO CRÍTICA - API ROUTING ARCHITECTURE COMPLETA:**
+
+"Para TODA nova API: inclui configuração next.config.js + services/base.ts na arquitetura?"
+
+- ✅ **ACEITO**: `Read "next.config.js"` + `Read "services/base.ts"` + entende ORG_REQUIRED_ENDPOINTS
+- ✅ **ACEITO**: Documenta: "API X requer next.config.js routing + base.ts ORG_REQUIRED_ENDPOINTS"
+- ✅ **ACEITO**: Arquitetura completa com ambas configurações + X-Org-Id validation + integração
+- ❌ **REJEITADO**: Propõe APIs OU ignora base.ts OU apenas next.config.js OU configuração incompleta
+- ❌ **REJEITADO**: Arquitetura sem BaseService integration OU mapeamento frontend-backend incompleto
+
+### **🚨 VALIDAÇÃO CRÍTICA 0.3 - PRESERVAÇÃO TOTAL DO ESCOPO PRD (NUNCA REMOVER FEATURES):**
+
+"Arquitetura implementa 100% das features definidas no PRD? NUNCA remove, simplifica ou omite funcionalidades especificadas?"
+
+- ✅ **ACEITO**: "Lê TODAS as funcionalidades listadas no PRD + implementa 100% das features especificadas"
+- ✅ **ACEITO**: "Pode simplificar IMPLEMENTAÇÃO técnica MAS mantém TODA funcionalidade do usuário final"
+- ✅ **ACEITO**: "Lista TODAS as features do PRD + confirma implementação técnica para cada uma"
+- ✅ **ACEITO**: "Arquitetura mais SIMPLES tecnicamente MAS funcionalidades COMPLETAS para usuário"
+- ❌ **REJEITADO**: Remove QUALQUER feature do PRD OU omite funcionalidades OU simplifica escopo do usuário
+- ❌ **REJEITADO**: "Por simplicidade vamos remover feature X" OU "Podemos implementar Y depois"
+- ❌ **REJEITADO**: Redução de escopo funcional OU implementação parcial de features especificadas
+
+**REGRA ABSOLUTA**: **SIMPLICIDADE = IMPLEMENTAÇÃO técnica simples. ESCOPO = TODAS as features do PRD implementadas.**
 
 ### **VALIDAÇÃO 0.5 - LEITURA MODELO DE NEGÓCIO (NUNCA REDEFINIR):**
 
@@ -300,6 +325,226 @@ Complexity Score | Risk Level | Mitigation Required
 
 **REGRA**: Nossa arquitetura DEVE ter complexity score ≤ 50 pontos (mais simples que qualquer referência)
 
+### **ETAPA 1.9: ANÁLISE EXAUSTIVA DE CORNER CASES (30 min)**
+
+### **🚨 CORNER CASES ANALYZER - ANÁLISE EXAUSTIVA OBRIGATÓRIA**
+
+**OBJETIVO CRÍTICO**: Identificar TODOS os cenários edge possíveis da feature ANTES de definir arquitetura, evitando surpresas técnicas durante implementação.
+
+#### **🔍 METODOLOGIA DE ANÁLISE EXAUSTIVA**
+
+**REGRA FUNDAMENTAL**: Pensar em TODOS os cenários possíveis até esgotar as possibilidades. Se existir 1% de chance de acontecer, DEVE ser considerado.
+
+#### **1. ANÁLISE DE CONFIGURAÇÃO E CREDENCIAIS**
+
+**PERGUNTA CENTRAL**: "Como/onde serão armazenadas as configurações e chaves da feature?"
+
+**CORNER CASES A INVESTIGAR:**
+
+**Armazenamento de Chaves:**
+- [ ] **Chaves por Organização**: Cada org tem suas próprias chaves? (Ex: Stripe keys diferentes por org)
+- [ ] **Chaves Globais**: Uma única chave para todo o sistema?
+- [ ] **Chaves por Usuário**: Cada usuário tem suas credenciais? (Ex: integração pessoal Google Drive)
+- [ ] **Chaves Híbridas**: Mistura de global + organizacional + pessoal?
+
+**Cenários de Falha de Chaves:**
+- [ ] **Chave Expirada**: Como detectar e alertar expirações?
+- [ ] **Chave Inválida**: Como lidar com chaves corrompidas/inválidas?
+- [ ] **Chave Revogada**: Como detectar revogação externa (ex: usuário revoga acesso no Google)?
+- [ ] **Chave Missing**: Como lidar quando chave não está configurada?
+
+**Rotação de Chaves:**
+- [ ] **Auto-Rotate**: Sistema suporta rotação automática?
+- [ ] **Manual Rotate**: Como usuário/admin atualiza chaves?
+- [ ] **Downtime durante rotação**: Feature fica indisponível durante troca?
+- [ ] **Rollback de chaves**: Como reverter para chave anterior se nova falha?
+
+#### **2. ANÁLISE DE LIMITES E QUOTAS**
+
+**PERGUNTA CENTRAL**: "Quais limites técnicos e de negócio podem quebrar a feature?"
+
+**Limites Externos (APIs/Serviços):**
+- [ ] **Rate Limiting**: Quantas chamadas por minuto/hora a API externa permite?
+- [ ] **Quota Mensal**: API tem limite mensal? Como monitorar proximidade do limite?
+- [ ] **Concurrent Connections**: Quantas conexões simultâneas são permitidas?
+- [ ] **Timeout Limits**: Qual timeout máximo da API externa?
+
+**Limites Internos (Sistema):**
+- [ ] **Database Size**: Tabelas podem crescer infinitamente? Precisa archive/cleanup?
+- [ ] **File Storage**: Arquivos acumulam sem limite? Precisa cleanup automático?
+- [ ] **Memory Usage**: Feature pode consumir RAM excessiva? Precisa limits?
+- [ ] **Processing Time**: Operações podem demorar muito? Precisa async/background jobs?
+
+**Limites por Tier/Plano:**
+- [ ] **Free Tier**: Quais limitações para usuários gratuitos?
+- [ ] **Pro Tier**: Quais limites para plano pago?
+- [ ] **Enterprise**: Limites diferentes para grandes organizações?
+- [ ] **Enforcement**: Como enforçar limites? Soft limits vs hard limits?
+
+#### **3. ANÁLISE DE ESTADOS INCONSISTENTES**
+
+**PERGUNTA CENTRAL**: "Como feature se comporta quando dados estão em estado inconsistente?"
+
+**Estados de Sincronização:**
+- [ ] **Parcialmente Sincronizado**: Dados locais divergem do externo, como resolver?
+- [ ] **Sync Conflict**: Mesmo dado modificado localmente E externamente, como resolver?
+- [ ] **Sync Failed**: Sincronização falha repetidamente, como lidar?
+- [ ] **Partial Failure**: Alguns itens sincronizam, outros falham, como reportar?
+
+**Estados de Transição:**
+- [ ] **Processing**: Item está sendo processado, mas usuário tenta modificar
+- [ ] **Cancelling**: Operação sendo cancelada, mas sistema tenta continuar
+- [ ] **Retrying**: Sistema retry automático, mas usuário tenta operação manual
+- [ ] **Rollback**: Operação falhando sendo revertida, como garantir consistência?
+
+#### **4. ANÁLISE DE CONCORRÊNCIA**
+
+**PERGUNTA CENTRAL**: "Como feature se comporta com múltiplos usuários simultâneos?"
+
+**Concorrência de Dados:**
+- [ ] **Edit Conflict**: Dois usuários editam mesmo item simultaneamente
+- [ ] **Delete While Edit**: Usuário A deleta item que usuário B está editando
+- [ ] **Resource Contention**: Múltiplos usuários tentam mesmo recurso limitado
+- [ ] **Lock Timeouts**: Locks de database podem expirar, como lidar?
+
+**Concorrência de Operações:**
+- [ ] **Parallel Processing**: Múltiplas operações da mesma feature rodando em paralelo
+- [ ] **Queue Overflow**: Fila de background jobs pode ficar cheia
+- [ ] **Resource Exhaustion**: Muitos usuários simultâneos podem esgotar recursos
+- [ ] **Throttling**: Como limitar operações por usuário/organização?
+
+#### **5. ANÁLISE DE RECOVERY E FALHAS**
+
+**PERGUNTA CENTRAL**: "Como feature se recupera de falhas parciais ou totais?"
+
+**Failure Modes:**
+- [ ] **Network Failure**: Perde conexão no meio da operação
+- [ ] **Service Unavailable**: API externa fica indisponível
+- [ ] **Partial Failure**: Operação completa parcialmente, como rollback?
+- [ ] **Data Corruption**: Dados corrompem durante operação
+
+**Recovery Strategies:**
+- [ ] **Auto Retry**: Quais operações podem ser automaticamente retentadas?
+- [ ] **Manual Recovery**: Quais requerem intervenção manual?
+- [ ] **Data Repair**: Como detectar e reparar dados corrompidos?
+- [ ] **Rollback Strategy**: Como reverter operações parcialmente completadas?
+
+#### **6. ANÁLISE DE INTEGRAÇÃO MULTI-TENANT**
+
+**PERGUNTA CENTRAL**: "Como feature se comporta no contexto multi-tenant?"
+
+**Isolamento de Dados:**
+- [ ] **Cross-Org Leak**: Pode haver vazamento de dados entre organizações?
+- [ ] **Shared Resources**: Como garantir isolamento em recursos compartilhados?
+- [ ] **Global vs Org Settings**: Quais configurações são globais vs organizacionais?
+- [ ] **Data Migration**: Como migrar dados quando organização muda de tier?
+
+**Performance Multi-Tenant:**
+- [ ] **Noisy Neighbor**: Organização com alto uso pode afetar outras?
+- [ ] **Resource Allocation**: Como alocar recursos de forma justa?
+- [ ] **Scaling**: Como feature escala com milhares de organizações?
+- [ ] **Monitoring**: Como monitorar performance por organização?
+
+#### **7. ANÁLISE DE WORKFLOW EDGE CASES**
+
+**PERGUNTA CENTRAL**: "Como feature se comporta em workflows não-lineares?"
+
+**Ordem de Operações:**
+- [ ] **Skip Steps**: Usuário pode pular etapas obrigatórias? Como prevenir?
+- [ ] **Reverse Flow**: Usuário pode voltar etapas? Como manter consistência?
+- [ ] **Parallel Flows**: Múltiplos workflows podem rodar simultaneamente?
+- [ ] **Abandoned Flow**: Usuário abandona workflow no meio, como cleanup?
+
+**Estado de Workflow:**
+- [ ] **Interrupted**: Workflow interrompido por falha/logout/timeout
+- [ ] **Corrupted State**: Estado do workflow corrompe, como detectar/recuperar?
+- [ ] **Version Mismatch**: Workflow iniciado em versão antiga, concluído em nova
+- [ ] **Permission Change**: Permissões mudam durante workflow
+
+#### **8. TEMPLATE DE OUTPUT PARA CORNER CASES**
+
+**Para CADA corner case identificado, definir:**
+
+```
+CORNER CASE: [Nome descritivo do cenário]
+
+PROBABILIDADE: [Alta/Média/Baixa]
+IMPACTO: [Crítico/Alto/Médio/Baixo]
+COMPLEXIDADE SOLUÇÃO: [Alta/Média/Baixa]
+
+CENÁRIO ESPECÍFICO:
+[Descrição detalhada do que pode acontecer]
+
+SOLUÇÃO PROPOSTA:
+[Como a arquitetura vai lidar com este cenário]
+
+IMPLEMENTAÇÃO:
+[Onde na arquitetura será implementado - Frontend/Backend/Database/Infra]
+
+TESTES NECESSÁRIOS:
+[Como testar este corner case específico]
+```
+
+#### **9. CORNER CASES UNIVERSAIS OBRIGATÓRIOS**
+
+**LISTA DE VERIFICAÇÃO OBRIGATÓRIA - APLICAR A QUALQUER FEATURE:**
+
+**Configuração & Credenciais:**
+- [ ] Chaves por organização vs globais vs usuário
+- [ ] Rotação de chaves e fallback
+- [ ] Chaves expiradas/inválidas/missing
+- [ ] Configuração inicial vs runtime
+
+**Limites & Quotas:**
+- [ ] Rate limits APIs externas
+- [ ] Quotas mensais/anuais
+- [ ] Limits por tier de assinatura
+- [ ] Database/storage growth limits
+
+**Estados & Sincronização:**
+- [ ] Dados inconsistentes
+- [ ] Sync conflicts
+- [ ] Partial failures
+- [ ] Estados de transição
+
+**Concorrência:**
+- [ ] Edit conflicts
+- [ ] Resource contention
+- [ ] Lock timeouts
+- [ ] Parallel processing
+
+**Recovery:**
+- [ ] Network failures
+- [ ] Partial operations
+- [ ] Data corruption
+- [ ] Rollback strategies
+
+**Multi-Tenant:**
+- [ ] Cross-org isolation
+- [ ] Shared resources
+- [ ] Scaling issues
+- [ ] Noisy neighbor
+
+**Workflow:**
+- [ ] Non-linear flows
+- [ ] Abandoned operations
+- [ ] Permission changes
+- [ ] State corruption
+
+#### **🎯 RESULTADO ESPERADO**
+
+**Ao final desta etapa, DEVE TER:**
+
+1. **Lista completa de corner cases** específicos da feature
+2. **Solução arquitetural** para cada corner case crítico
+3. **Estratégia de implementação** para cada solução
+4. **Plano de testes** para corner cases
+5. **Complexity budget** atualizado com soluções de corner cases
+
+**REGRA CRÍTICA**: Se corner case pode quebrar a feature em produção e não tem solução simples → Feature precisa ser redesenhada ou simplificada.
+
+---
+
 ### **ETAPA 2: DESIGN DA ARQUITETURA + SIMPLIFICATION PROPOSALS (45 min)**
 
 1. **Frontend SIMPLES para modelo LIDO**: Contexto organizacional + FeatureGate + shadcn/ui baseado no modelo DEFINIDO
@@ -419,6 +664,17 @@ Gerar o documento arquitetura técnica seguindo esta estrutura exata em @docs/pr
 
 ````markdown
 # 03-tech.md - [NOME_DO_PRODUTO]
+
+## **🛡️ VALIDAÇÃO ESCOPO PRD - FEATURES PRESERVADAS 100%**
+
+**✅ TODAS as features do PRD implementadas**: [Confirmar SIM/NÃO]
+**📋 Lista Completa de Features do PRD**:
+1. [Feature 1 do PRD] → [Implementação técnica específica]
+2. [Feature 2 do PRD] → [Implementação técnica específica] 
+3. [Feature N do PRD] → [Implementação técnica específica]
+
+**🔴 GARANTIA ABSOLUTA**: ZERO features removidas, omitidas ou simplificadas do escopo do usuário final.
+**✨ SIMPLIFICAÇÃO APLICADA**: Apenas na implementação técnica, mantendo funcionalidades completas.
 
 ## **🛡️ COMPLEXITY BUDGET AUDIT**
 
@@ -687,6 +943,7 @@ Usar estes documentos template para contexto:
 - 🔴 **EXECUTION REALITY CHECK** - Timeline baseado em complexity score real
 
 ### **🛡️ GUARDRAILS ORIGINAIS (MANTIDOS)**
+- 🔴 **PRESERVAÇÃO ESCOPO PRD ABSOLUTA** - Implementar 100% das features definidas no PRD, NUNCA remover funcionalidades
 - 🔴 **95% DE CERTEZA NECESSÁRIA** - Parar se incerto sobre qualquer validação
 - 🔴 **CONSCIÊNCIA MODELO TEMPLATE** - Sempre alavancar capacidade template centrado em organizações para modelo SELECIONADO
 - 🔴 **KISS/YAGNI/DRY OBRIGATÓRIO** - Solução mais simples que funciona com template

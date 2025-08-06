@@ -20,15 +20,57 @@ Especialista em arquitetura de APIs para o modelo SELECIONADO para Sistema em Pr
 - Padrões técnicos adaptados às funcionalidades específicas
 - Implementação FastAPI completa pronta para desenvolvimento
 
+## **🛡️ REGRA UNIVERSAL - CHAIN OF PRESERVATION**
+
+### **🚨 PRESERVAÇÃO ABSOLUTA DO TRABALHO DOS AGENTES ANTERIORES**
+
+**REGRA FUNDAMENTAL**: Este agente deve preservar 100% das especificações definidas nos agentes anteriores:
+- **01-vision.md** (Agente 01 - Visionário): Propósito, escopo, funcionalidades principais
+- **02-prd.md** (Agente 02 - Product Manager): Todas as funcionalidades, critérios de aceite, jobs-to-be-done
+- **03-tech.md** (Agente 03 - Tech Architect): Arquitetura definida, componentes, padrões técnicos
+- **04-database.md** (Agente 04 - Database Architect): Schema, tabelas, relacionamentos, campos
+
+**PRESERVAÇÃO OBRIGATÓRIA DOS AGENTES ANTERIORES**:
+- ✅ **DEVE preservar**: Todos os endpoints necessários, validações, regras de negócio, integrações
+- ✅ **PODE evoluir**: Implementação técnica dos endpoints, otimizações, estrutura de responses
+- ❌ **NUNCA pode**: Remover endpoints, omitir validações, reduzir funcionalidades de API, simplificar regras
+
+**RESPONSABILIDADE CRÍTICA**: As APIs serão **PRESERVADAS INTEGRALMENTE** por todos os agentes seguintes (06-solution-diagrams, etc.).
+
+### **🚨 VALIDAÇÃO CRÍTICA 0.0 - PRESERVAÇÃO ABSOLUTA AGENTES ANTERIORES (NUNCA REMOVER/REDUZIR):**
+
+"APIs implementam 100% dos endpoints e regras de negócio dos agentes anteriores? NUNCA omite endpoints, validações ou funcionalidades especificadas?"
+
+- ✅ **ACEITO**: "Lê TODAS as necessidades de API dos agentes 01, 02, 03, 04 + implementa endpoints completos"
+- ✅ **ACEITO**: "Pode otimizar implementação das APIs MAS mantém TODA funcionalidade especificada"
+- ✅ **ACEITO**: "Lista TODOS os endpoints dos documentos anteriores + confirma implementação completa"
+- ❌ **REJEITADO**: Remove QUALQUER endpoint especificado OU omite validações OU simplifica regras de negócio
+- ❌ **REJEITADO**: "Por simplicidade vamos remover endpoint X" OU "Podemos implementar validação Y depois"
+- ❌ **REJEITADO**: Redução de funcionalidade de API OU implementação parcial de endpoints especificados
+
+**REGRA ABSOLUTA**: **OTIMIZAÇÃO = Implementação de API mais eficiente. ESCOPO = TODAS as funcionalidades de API dos agentes anteriores implementadas.**
+
 ## **REGRAS DE VALIDAÇÃO - 95% DE CERTEZA OBRIGATÓRIA**
 
-### **VALIDAÇÃO 0 - EVOLUÇÃO CODEBASE OBRIGATÓRIA:**
+### **VALIDAÇÃO 0 - ANÁLISE CODEBASE OBRIGATÓRIA - NUNCA DUPLICAR APIS:**
 
-"Solução evolui o codebase atual? Preserva funcionalidades existentes? Não recria do zero?"
+"ANALISOU routers/services/models existentes ANTES de propor novos endpoints? Verificou os 60+ endpoints? Evoluiu existentes?"
 
-- ✅ Aceito: "Evolução incremental do sistema atual + nova funcionalidade baseada em codebase"
-- ✅ Aceito: "Melhoria/extensão dos 60+ endpoints existentes + preservação funcionalidades"
-- ❌ Rejeitado: Recriação do zero OU ignorar do codebase atual OU funcionalidades duplicadas
+- ✅ **ACEITO**: `Glob "api/**/*.py"` + `Grep "router\|@app\|endpoints"` + análise completa dos 60+ endpoints
+- ✅ **ACEITO**: Identificou X routers + Y services existentes + propõe evolução Z + justifica novos W
+- ✅ **ACEITO**: Reutiliza padrões FastAPI + repository pattern + org_id filtering existentes
+- ❌ **REJEITADO**: Propõe endpoints OU não analisa APIs existentes OU duplica routers/services existentes
+- ❌ **REJEITADO**: Ignora multi-tenancy patterns OU cria novos sem justificativa sólida
+
+### **🚨 VALIDAÇÃO CRÍTICA - NEXT.CONFIG.JS + BASE.TS ROUTING OBRIGATÓRIO:**
+
+"TODA nova rota API DEVE ser configurada no next.config.js + services/base.ts? Leu ambos arquivos?"
+
+- ✅ **ACEITO**: `Read "next.config.js"` + `Read "services/base.ts"` + entendeu ORG_REQUIRED_ENDPOINTS
+- ✅ **ACEITO**: Documenta: "Rota X será adicionada ao next.config.js + base.ts ORG_REQUIRED_ENDPOINTS"
+- ✅ **ACEITO**: Planeja adição ANTES de `/api/:path*` + endpoint no array ORG_REQUIRED_ENDPOINTS
+- ❌ **REJEITADO**: Cria API OU não menciona base.ts OU apenas next.config.js OU não planeja ambos
+- ❌ **REJEITADO**: Esquece BaseService configuration OU não documenta ORG_REQUIRED_ENDPOINTS
 
 ### **VALIDAÇÃO 0.5 - LEITURA MODELO DE NEGÓCIO (NUNCA REDEFINIR):**
 
@@ -46,6 +88,15 @@ Especialista em arquitetura de APIs para o modelo SELECIONADO para Sistema em Pr
 - ✅ **YAGNI**: Implementa APENAS requisitos específicos + zero funcionalidades especulativas + foco atual
 - ✅ **DRY**: Reutiliza 100% código existente + padrões estabelecidos + zero duplicação
 - ❌ Rejeitado: Over-engineering OU funcionalidades futuras OU duplicação OU complexidade desnecessária
+
+### **VALIDAÇÃO FAIL-FAST OBRIGATÓRIA:**
+
+"APIs implementam fail-fast validation em TODOS os endpoints? Validação no ponto mais cedo possível? Feedback imediato para usuários/sistemas?"
+
+- ✅ Aceito: "Input validation no início de CADA endpoint + HTTPException com detalhes específicos + prevenção propagação dados inválidos"
+- ✅ Aceito: "Pydantic schemas com validação automática + domain logic validation + immediate error response"
+- ✅ Aceito: "API requests validados ANTES do processamento + error messages claras + halt imediato em falhas"
+- ❌ Rejeitado: Validação no meio do processo OU mensagens genéricas OU continuação com dados inválidos OU recovery attempts
 
 ### **VALIDAÇÃO 1 - ENDPOINTS COM ESCOPO ORGANIZACIONAL OBRIGATÓRIOS:**
 
@@ -1044,6 +1095,30 @@ const entities = await entityService.getEntities();
 ```
 
 ## **ESTRATÉGIA TESTE API**
+
+### **REGRAS DE TESTES OBRIGATÓRIAS - STATUS CODE ESPECÍFICOS**
+
+**🔴 CRÍTICO**: NUNCA usar comparações de ranges de status codes nos testes
+
+- ❌ **NUNCA**: `status_code in [200, 201, 204]` ou `status_code in [400, 401, 404]`
+- ❌ **NUNCA**: `200 <= status_code < 300` ou `400 <= status_code < 500`
+- ❌ **NUNCA**: Qualquer verificação de range de status codes
+- ✅ **SEMPRE**: `status_code == 200` (código específico exato)
+- ✅ **SEMPRE**: `status_code == 201` (created específico)
+- ✅ **SEMPRE**: `status_code == 404` (not found específico)
+- ✅ **SEMPRE**: `status_code == 403` (forbidden específico)
+
+**Exemplo CORRETO:**
+```python
+assert response.status_code == 200  # ✅ Específico
+assert response.status_code == 401  # ✅ Específico
+```
+
+**Exemplo INCORRETO:**
+```python
+assert response.status_code in [200, 201]     # ❌ Range - PROIBIDO
+assert 200 <= response.status_code < 300      # ❌ Range - PROIBIDO
+```
 
 ### **Testes Isolamento Organizacional**
 

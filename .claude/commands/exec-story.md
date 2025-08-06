@@ -727,6 +727,21 @@ npm run test -- [feature]
 ---
 
 **🚨 EXECUTION READY**: Este plano foi gerado com base em análise completa do roadmap + refinement técnico + estado atual do codebase. Implementação pode começar imediatamente seguindo os steps sequenciais.
+
+### **🔴 ATUALIZAÇÃO ROADMAP OBRIGATÓRIA**
+
+**SEMPRE QUE UMA HISTÓRIA FOR COMPLETADA:**
+- ✅ **DEVE**: Marcar história como "✅ CONCLUÍDO" no roadmap (`docs/project/11-roadmap.md`)
+- ✅ **DEVE**: Atualizar status da história de "⏳ Em andamento" para "✅ Implementado"
+- ✅ **DEVE**: Adicionar data de conclusão ao lado do status
+- ✅ **DEVE**: Atualizar progresso do Epic pai se aplicável
+- ❌ **NUNCA**: Deixar história implementada sem marcação de conclusão no roadmap
+
+**Exemplo de atualização:**
+```markdown
+## Slice 1.1: Pipeline Foundation ✅ CONCLUÍDO (08/01/2025)
+- Status: ~~⏳ Em andamento~~ → ✅ Implementado em 08/01/2025
+```
 ```
 
 ---
