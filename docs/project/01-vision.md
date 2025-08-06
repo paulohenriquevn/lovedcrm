@@ -1,9 +1,9 @@
 # 🎯 Loved CRM - Visão Estratégica do Produto
 
-**Data do Documento:** 05 de Janeiro de 2025  
-**Versão:** 1.0  
+**Data do Documento:** 06 de Janeiro de 2025  
+**Versão:** 1.1 (Atualizada com Insights de Mercado Brasileiro)  
 **Responsável:** Equipe de Produto  
-**Status:** Aprovado para Desenvolvimento
+**Status:** Aprovado para Desenvolvimento - Foco Agências 5-20 Colaboradores
 
 ---
 
@@ -13,15 +13,22 @@
 **Transformar a gestão de relacionamento com clientes para agências digitais brasileiras através de um CRM completo que integra pipeline visual, comunicação unificada e inteligência artificial em uma única plataforma.**
 
 ### Problema Principal
-Agências digitais de pequeno e médio porte no Brasil (2-5 colaboradores) enfrentam fragmentação extrema na gestão de clientes, utilizando múltiplas ferramentas desconectadas (WhatsApp Business, planilhas, e-mail, telefone) que geram perda de leads, baixa produtividade e experiência inconsistente para clientes.
+Agências digitais brasileiras de 5-20 colaboradores enfrentam **fragmentação extrema** na gestão de relacionamento com clientes, dependendo de múltiplas ferramentas desconectadas (WhatsApp Business, planilhas, Gmail, sistemas telefônicos) que resultam em:
+- **Perda de leads por falta de acompanhamento sistematizado**
+- **Baixa produtividade** devido à mudança constante entre ferramentas  
+- **Experiência inconsistente** para clientes e equipe interna
+- **Dificuldade de colaboração** entre membros da equipe
+- **Ausência de histórico unificado** de comunicações
 
 ### Proposta de Valor
 CRM especializado para agências que unifica **pipeline Kanban fixo** (Lead → Contato → Proposta → Negociação → Fechado), **timeline de comunicação integrada** (WhatsApp, VoIP, email), **IA para resumos automáticos** de conversas e **gestão completa do relacionamento** em uma única interface moderna e intuitiva.
 
 ### Mercado-Alvo
+- **Público Primário:** Agências digitais brasileiras de 5-20 colaboradores
 - **TAM:** R$ 2,18 bilhões (20,3 milhões de micro e pequenas empresas no Brasil)
 - **SAM:** R$ 717 milhões (1.196+ agências digitais × R$ 600k receita média anual)
 - **SOM:** R$ 36 milhões (2% market share nos primeiros 3 anos)
+- **Posicionamento:** "O único CRM que agências digitais brasileiras realmente precisam"
 
 ### Modelo de Negócio
 SaaS B2B com **assinatura recorrente mensal** de R$ 197/mês por organização (até 5 usuários), focado em **organizações compartilhadas** para colaboração entre equipes de agências.
@@ -148,13 +155,14 @@ SaaS B2B com **assinatura recorrente mensal** de R$ 197/mês por organização (
 
 ### Vantagem Competitiva
 
-#### Diferenciadores Únicos
-1. **Especialização em agências digitais brasileiras**
-2. **WhatsApp Business API integrado nativamente**
-3. **IA para resumos de conversa em português**
-4. **Timeline unificada de comunicação**
-5. **Preço competitivo com funcionalidades premium**
-6. **Interface em português com UX otimizada**
+#### Diferenciadores Únicos (Vantagem Competitiva Sustentável)
+1. **Especialização exclusiva em agências digitais brasileiras** - profundo conhecimento do mercado
+2. **WhatsApp Business API integrado nativamente** - 99% de penetração no Brasil
+3. **IA treinada para português brasileiro** - resumos e análises em linguagem natural  
+4. **Timeline unificada de comunicação** - WhatsApp + VoIP + Email + Notas em uma interface
+5. **Pipeline Kanban fixo otimizado** - 5 estágios validados para agências (Lead→Contato→Proposta→Negociação→Fechado)
+6. **Preço 27% mais competitivo** que principais concorrentes internacionais
+7. **Compliance LGPD nativo** - desde a concepção, não adaptação posterior
 
 #### Barreira de Entrada
 - **Integração WhatsApp Business API** (complexidade técnica alta)
@@ -166,13 +174,14 @@ SaaS B2B com **assinatura recorrente mensal** de R$ 197/mês por organização (
 
 ## 👥 Personas e Segmentação
 
-### Persona Primária: Gestor de Agência Digital
+### Persona Primária: Gestor de Agência Digital Brasileira
 
 **Demografia:**
-- **Idade:** 28-45 anos
+- **Idade:** 28-45 anos  
 - **Cargo:** Sócio-fundador, Diretor Comercial, Gerente de Contas
-- **Equipe:** 2-5 colaboradores
-- **Localização:** São Paulo, Rio de Janeiro, Belo Horizonte, Porto Alegre
+- **Equipe:** 5-20 colaboradores (equipe média-alta no segmento)
+- **Localização:** São Paulo, Rio de Janeiro, Belo Horizonte, Porto Alegre, Curitiba
+- **Faturamento:** R$ 50k-500k/mês
 
 **Comportamento:**
 - **Ferramentas atuais:** WhatsApp Business, planilhas Google, Gmail
@@ -609,5 +618,24 @@ SaaS B2B com **assinatura recorrente mensal** de R$ 197/mês por organização (
 
 **Este documento serve como norte estratégico para o desenvolvimento do Loved CRM. Revisões trimestrais serão realizadas para ajustes baseados em aprendizados de mercado e feedback dos usuários.**
 
-**Última atualização:** 05 de Janeiro de 2025  
-**Próxima revisão:** 05 de Abril de 2025
+## 🎯 **Principais Atualizações - Versão 1.1**
+
+### **Refinamento de Mercado-Alvo**
+- **Expansão de escala**: Agências de 5-20 colaboradores (anteriormente 2-5)
+- **Justificativa**: Maior potencial de receita e necessidade mais sofisticada de CRM
+- **Segmento premium**: Agências com faturamento R$ 50k-500k/mês
+
+### **Diferenciadores Competitivos Aprimorados**  
+- **Compliance LGPD nativo**: Vantagem sobre adaptações posteriores de concorrentes
+- **IA especializada em português brasileiro**: Não apenas tradução, mas compreensão cultural
+- **Pipeline otimizado para agências**: 5 estágios validados por pesquisa de mercado
+
+### **Posicionamento de Mercado Fortalecido**
+- **"O único CRM que agências digitais brasileiras realmente precisam"**
+- **27% mais competitivo** que HubSpot/Salesforce em preço
+- **Foco exclusivo no mercado brasileiro** vs abordagem generalista dos concorrentes
+
+---
+
+**Última atualização:** 06 de Janeiro de 2025  
+**Próxima revisão:** 06 de Abril de 2025
