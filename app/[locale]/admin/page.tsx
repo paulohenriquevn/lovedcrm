@@ -139,16 +139,16 @@ const formatCurrency = (value: number): string => {
 const getPriorityColor = (priority: string): string => {
   switch (priority) {
     case 'high': {
-      return 'text-red-600 bg-red-50 border-red-200'
+      return 'text-red-600 dark:text-red-400 bg-red-500/10 border-red-500/20'
     }
     case 'medium': {
-      return 'text-yellow-600 bg-yellow-50 border-yellow-200'
+      return 'text-yellow-600 dark:text-yellow-400 bg-yellow-500/10 border-yellow-500/20'
     }
     case 'low': {
-      return 'text-green-600 bg-green-50 border-green-200'
+      return 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20'
     }
     default: {
-      return 'text-gray-600 bg-gray-50 border-gray-200'
+      return 'text-muted-foreground bg-muted border-border'
     }
   }
 }
@@ -176,11 +176,11 @@ function MetricsCard({ metric, icon, title, formatValue }: {
         <div className="text-2xl font-bold">{displayValue}</div>
         <div className="flex items-center text-xs text-muted-foreground">
           {metric.changeType === 'increase' ? (
-            <ArrowUp className="mr-1 h-3 w-3 text-green-600" />
+            <ArrowUp className="mr-1 h-3 w-3 text-emerald-600 dark:text-emerald-400" />
           ) : (
-            <ArrowDown className="mr-1 h-3 w-3 text-red-600" />
+            <ArrowDown className="mr-1 h-3 w-3 text-red-600 dark:text-red-400" />
           )}
-          <span className={metric.changeType === 'increase' ? 'text-green-600' : 'text-red-600'}>
+          <span className={metric.changeType === 'increase' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}>
             {changeSign}{changeValue}{showPercent ? '%' : ''}
           </span>
           <span className="ml-1">{metric.period}</span>

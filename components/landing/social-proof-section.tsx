@@ -169,11 +169,11 @@ export function SocialProofSection() {
   }
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-gray-50/50 to-background">
+    <section className="py-20 px-4 bg-gradient-to-b from-muted/20 to-background">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <Badge className="mb-4 bg-emerald-50 text-emerald-700 border-emerald-200">
+          <Badge className="mb-4 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20">
 Agências que Cresceram com a Gente
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
@@ -192,7 +192,7 @@ Agências que Cresceram com a Gente
         {/* Stats Grid */}
         <div className="grid md:grid-cols-4 gap-6 mb-16">
           {stats.map((stat, index) => (
-            <Card key={index} className="text-center hover:shadow-lg transition-all duration-300">
+            <Card key={index} className="text-center bg-card border border-border hover:border-primary/20 hover:shadow-lg transition-all duration-300">
               <CardContent className="p-6">
                 <div className="flex items-center justify-center mb-4">
                   <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center">
@@ -210,7 +210,7 @@ Agências que Cresceram com a Gente
         {/* Testimonials */}
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           {testimonials.map((testimonial, index) => (
-            <Card key={testimonial.id} className="relative overflow-hidden hover:shadow-xl transition-all duration-300 group">
+            <Card key={testimonial.id} className="relative overflow-hidden bg-card border border-border hover:border-primary/10 hover:shadow-xl transition-all duration-300 group">
               <CardContent className="p-6">
                 {/* Quote Icon */}
                 <Quote className="h-8 w-8 text-primary/20 mb-4" />
@@ -228,7 +228,7 @@ Agências que Cresceram com a Gente
                 </p>
 
                 {/* Results Highlight */}
-                <div className="bg-emerald-50 rounded-lg p-3 mb-6 border border-emerald-200">
+                <div className="bg-emerald-500/10 rounded-lg p-3 mb-6 border border-emerald-500/20">
                   <div className="flex items-center gap-2 mb-1">
                     <TrendingUp className="h-4 w-4 text-emerald-600" />
                     <span className="text-sm font-semibold text-emerald-800">Resultado:</span>
@@ -273,7 +273,7 @@ Agências que Cresceram com a Gente
         </div>
 
         {/* Case Study Highlight */}
-        <Card className="mb-16 bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
+        <Card className="mb-16 bg-card border border-border shadow-sm">
           <CardContent className="p-8">
             <div className="text-center mb-8">
               <Badge className="mb-3 bg-violet-100 text-violet-700">
@@ -292,7 +292,7 @@ CASE STUDY
               <div className="text-center">
                 <h4 className="text-lg font-semibold text-red-700 mb-4">Antes do Loved CRM</h4>
                 <div className="space-y-3">
-                  <div className="bg-red-50 rounded-lg p-3 border border-red-200">
+                  <div className="bg-red-500/10 rounded-lg p-3 border border-red-500/20">
                     <div className="text-2xl font-bold text-red-700">{caseStudyHighlight.before.revenue}</div>
                     <div className="text-sm text-red-600">Faturamento mensal</div>
                   </div>
@@ -317,7 +317,7 @@ CASE STUDY
               <div className="text-center">
                 <h4 className="text-lg font-semibold text-emerald-700 mb-4">Depois do Loved CRM</h4>
                 <div className="space-y-3">
-                  <div className="bg-emerald-50 rounded-lg p-3 border border-emerald-200">
+                  <div className="bg-emerald-500/10 rounded-lg p-3 border border-emerald-500/20">
                     <div className="text-2xl font-bold text-emerald-700">{caseStudyHighlight.after.revenue}</div>
                     <div className="text-sm text-emerald-600">Faturamento mensal</div>
                   </div>

@@ -167,7 +167,7 @@ function CategorySidebar({
           className={`w-full text-left p-3 rounded-lg flex items-center gap-3 transition-all duration-200 ${
             activeCategory === category.id
               ? 'bg-primary/10 text-primary border border-primary/20'
-              : 'hover:bg-gray-50 text-muted-foreground'
+              : 'hover:bg-muted/50 text-muted-foreground'
           }`}
         >
           <category.icon className={`h-4 w-4 ${category.color}`} />
@@ -177,7 +177,7 @@ function CategorySidebar({
     </div>
 
     {/* Contact CTA */}
-    <Card className="mt-8 bg-gradient-to-br from-violet-50 to-purple-50 border-violet-200">
+    <Card className="mt-8 bg-card border border-border shadow-sm">
       <CardContent className="p-4 text-center">
         <Users className="h-8 w-8 text-primary mx-auto mb-3" />
         <h4 className="font-semibold text-sm mb-2">Ainda com dúvidas?</h4>
@@ -202,12 +202,12 @@ function FAQItem({
   isOpen: boolean
   onToggle: () => void 
 }): React.ReactElement {
-  return <Card className="w-full overflow-hidden hover:shadow-md transition-shadow">
+  return <Card className="w-full overflow-hidden bg-card border border-border hover:border-primary/10 hover:shadow-md transition-all duration-300">
     <CardContent className="p-0 w-full">
       <motion.button
         type="button"
         onClick={onToggle}
-        className="w-full p-6 text-left flex items-center justify-between hover:bg-gray-50/50 transition-colors"
+        className="w-full p-6 text-left flex items-center justify-between hover:bg-muted/30 transition-colors"
       >
         <h4 className="font-semibold text-foreground flex-1 pr-4">
           {faq.question}
@@ -222,7 +222,7 @@ function FAQItem({
       
       <AnimatePresence>
         {isOpen ? <motion.div 
-            className="w-full px-6 pb-6 border-t bg-gray-50/30"
+            className="w-full px-6 pb-6 border-t border-border bg-muted/20"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -286,8 +286,8 @@ function ContactOption({
   color: string 
 }): React.ReactElement {
   return <div className="text-center">
-    <div className={`h-12 w-12 ${color} rounded-lg flex items-center justify-center mx-auto mb-3`}>
-      <Icon className={`h-6 w-6 ${color.replace('bg-', 'text-').replace('-100', '-600')}`} />
+    <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+      <Icon className="h-6 w-6 text-primary" />
     </div>
     <h4 className="font-semibold mb-1">{title}</h4>
     <p className="text-sm text-muted-foreground">{description}</p>
@@ -302,7 +302,7 @@ function BottomCTA({ ctaRef, ctaInView }: { ctaRef: any, ctaInView: boolean }): 
     animate={ctaInView ? "visible" : "hidden"}
     variants={scrollAnimationVariants}
   >
-    <Card className="max-w-4xl mx-auto bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
+    <Card className="max-w-4xl mx-auto bg-card border border-border shadow-sm">
       <CardContent className="p-8">
         <h3 className="text-2xl font-bold text-foreground mb-4">
           Não Encontrou sua Dúvida?
@@ -324,7 +324,7 @@ function BottomCTA({ ctaRef, ctaInView }: { ctaRef: any, ctaInView: boolean }): 
               icon={MessageSquare}
               title="WhatsApp"
               description="Chat direto com especialista"
-              color="bg-green-100"
+              color=""
             />
           </motion.div>
           
@@ -333,7 +333,7 @@ function BottomCTA({ ctaRef, ctaInView }: { ctaRef: any, ctaInView: boolean }): 
               icon={HelpCircle}
               title="Central de Ajuda"
               description="Documentação completa"
-              color="bg-blue-100"
+              color=""
             />
           </motion.div>
           
@@ -342,7 +342,7 @@ function BottomCTA({ ctaRef, ctaInView }: { ctaRef: any, ctaInView: boolean }): 
               icon={Users}
               title="Consultoria"
               description="Call gratuita de 30min"
-              color="bg-violet-100"
+              color=""
             />
           </motion.div>
         </motion.div>
@@ -386,7 +386,7 @@ export function FAQSection(): React.ReactElement {
   const activeCategoryData = faqCategories.find(cat => cat.id === activeCategory) || faqCategories[0]
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-background to-gray-50/50">
+    <section className="py-20 px-4 bg-gradient-to-b from-background to-muted/20">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div 
@@ -396,7 +396,7 @@ export function FAQSection(): React.ReactElement {
           animate={headerInView ? "visible" : "hidden"}
           variants={scrollAnimationVariants}
         >
-          <Badge className="mb-4 bg-blue-50 text-blue-700 border-blue-200">
+          <Badge className="mb-4 bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20">
 Dúvidas Frequentes
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">

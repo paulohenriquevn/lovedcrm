@@ -31,8 +31,8 @@ export function DangerZoneSection({
       <div className="flex items-center mb-6">
         <AlertTriangle className="h-6 w-6 text-red-500 mr-3" />
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">Zona de Perigo</h2>
-          <p className="text-sm text-gray-600">Ações irreversíveis que afetam sua conta</p>
+          <h2 className="text-xl font-semibold text-foreground">Zona de Perigo</h2>
+          <p className="text-sm text-muted-foreground">Ações irreversíveis que afetam sua conta</p>
         </div>
       </div>
 

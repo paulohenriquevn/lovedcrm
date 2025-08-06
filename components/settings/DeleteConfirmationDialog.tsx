@@ -46,7 +46,7 @@ export function DeleteConfirmationDialog({
         <div>
           <label
             htmlFor="delete-confirm-input"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-sm font-medium text-foreground mb-2"
           >
             Digite &quot;DELETAR MINHA CONTA&quot; para confirmar:
           </label>

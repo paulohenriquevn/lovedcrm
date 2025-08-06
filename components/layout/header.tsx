@@ -89,16 +89,16 @@ export function Header({ className }: HeaderProps) {
   const getRoleBadgeStyle = (role: string) => {
     switch (role) {
       case 'owner': {
-        return 'bg-violet-100 text-violet-700 border-violet-200'
+        return 'bg-primary/10 text-primary border-primary/20'
       }
       case 'admin': {
-        return 'bg-blue-100 text-blue-700 border-blue-200'
+        return 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20'
       }
       case 'member': {
-        return 'bg-gray-100 text-gray-700 border-gray-200'
+        return 'bg-muted text-muted-foreground border-border'
       }
       default: {
-        return 'bg-gray-100 text-gray-700 border-gray-200'
+        return 'bg-muted text-muted-foreground border-border'
       }
     }
   }
@@ -106,16 +106,16 @@ export function Header({ className }: HeaderProps) {
   const getTierBadgeStyle = (tier: string) => {
     switch (tier) {
       case 'free': {
-        return 'bg-gray-100 text-gray-600 border-gray-200'
+        return 'bg-muted text-muted-foreground border-border'
       }
       case 'pro': {
-        return 'bg-violet-100 text-violet-700 border-violet-200'
+        return 'bg-primary/10 text-primary border-primary/20'
       }
       case 'enterprise': {
-        return 'bg-gray-900 text-gray-100 border-gray-800'
+        return 'bg-foreground text-background border-foreground'
       }
       default: {
-        return 'bg-gray-100 text-gray-600 border-gray-200'
+        return 'bg-muted text-muted-foreground border-border'
       }
     }
   }
@@ -216,7 +216,7 @@ export function Header({ className }: HeaderProps) {
                       key={org.id}
                       onClick={() => handleOrgSwitch(org.id)}
                       className={`p-3 cursor-pointer ${
-                        isCurrentOrg ? 'bg-violet-50' : ''
+                        isCurrentOrg ? 'bg-primary/5' : ''
                       }`}
                       disabled={orgLoading}
                     >

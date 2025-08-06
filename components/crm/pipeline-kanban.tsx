@@ -54,23 +54,23 @@ interface PipelineKanbanProps {
 const STAGE_DISPLAY_CONFIG: Record<PipelineStage, { name: string; color: string }> = {
   [PipelineStage.LEAD]: {
     name: 'Lead',
-    color: 'bg-gray-50 border-gray-200'
+    color: 'bg-muted/50 border-border'
   },
   [PipelineStage.CONTATO]: {
     name: 'Contato',
-    color: 'bg-blue-50 border-blue-200'
+    color: 'bg-blue-500/10 border-blue-500/20'
   },
   [PipelineStage.PROPOSTA]: {
     name: 'Proposta',
-    color: 'bg-yellow-50 border-yellow-200'
+    color: 'bg-yellow-500/10 border-yellow-500/20'
   },
   [PipelineStage.NEGOCIACAO]: {
     name: 'Negociação',
-    color: 'bg-orange-50 border-orange-200'
+    color: 'bg-orange-500/10 border-orange-500/20'
   },
   [PipelineStage.FECHADO]: {
     name: 'Fechado',
-    color: 'bg-emerald-50 border-emerald-200'
+    color: 'bg-emerald-500/10 border-emerald-500/20'
   }
 }
 
@@ -84,16 +84,16 @@ const getPriorityFromValue = (value?: number): 'low' | 'medium' | 'high' => {
 const getPriorityColor = (priority: string): string => {
   switch (priority) {
     case 'high': {
-      return 'text-red-600'
+      return 'text-red-600 dark:text-red-400'
     }
     case 'medium': {
-      return 'text-yellow-600'
+      return 'text-yellow-600 dark:text-yellow-400'
     }
     case 'low': {
-      return 'text-green-600'
+      return 'text-emerald-600 dark:text-emerald-400'
     }
     default: {
-      return 'text-gray-600'
+      return 'text-muted-foreground'
     }
   }
 }
@@ -279,8 +279,8 @@ function LeadCard({
         {/* Value */}
         {lead.estimated_value != null && lead.estimated_value > 0 ? (
           <div className="flex items-center gap-1 mb-2">
-            <DollarSign className="h-3 w-3 text-green-600" />
-            <span className="text-sm font-medium text-green-600">
+            <DollarSign className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+            <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
               {formatCurrency(lead.estimated_value)}
             </span>
           </div>
@@ -364,7 +364,7 @@ function LeadCard({
 
         {/* Last Contact */}
         {lead.last_contact_at == null ? null : <div className="mt-2 pt-2 border-t border-border">
-            <div className="flex items-center gap-1 text-xs text-orange-600">
+            <div className="flex items-center gap-1 text-xs text-orange-600 dark:text-orange-400">
               <Calendar className="h-3 w-3" />
               <span>Último contato: {new Date(lead.last_contact_at).toLocaleDateString('pt-BR')}</span>
             </div>

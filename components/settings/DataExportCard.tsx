@@ -42,11 +42,11 @@ export function DataExportCard({
       <div className="flex items-center mb-4">
         <Icon className={`h-8 w-8 ${iconColor} mr-3`} />
         <div>
-          <h3 className="font-medium text-gray-900">{title}</h3>
-          <p className="text-sm text-gray-600">{description}</p>
+          <h3 className="font-medium text-foreground">{title}</h3>
+          <p className="text-sm text-muted-foreground">{description}</p>
         </div>
       </div>
-      <div className="space-y-2 text-sm text-gray-600 mb-4">
+      <div className="space-y-2 text-sm text-muted-foreground mb-4">
         {items.map(item => (
           <div key={item}>• {item}</div>
         ))}

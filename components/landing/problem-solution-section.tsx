@@ -128,9 +128,9 @@ export function ProblemSolutionSection() {
           >
             {problems.map((problem, index) => (
               <motion.div key={index} variants={staggerItem}>
-                <Card className="h-full bg-background border border-border hover:border-red-300 hover:shadow-lg transition-all duration-300 group">
+                <Card className="h-full bg-card border border-border hover:border-red-500/30 hover:shadow-lg transition-all duration-300 group">
                   <CardContent className="p-8">
-                    <div className="flex items-center justify-center w-16 h-16 bg-red-50 rounded-xl mb-6 group-hover:bg-red-100 transition-colors">
+                    <div className="flex items-center justify-center w-16 h-16 bg-red-500/10 rounded-xl mb-6 group-hover:bg-red-500/20 transition-colors">
                       <problem.icon className="h-8 w-8 text-red-600" />
                     </div>
                     
@@ -143,7 +143,7 @@ export function ProblemSolutionSection() {
                     </p>
                     
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                      <div className="flex items-center justify-between p-3 bg-red-500/10 rounded-lg">
                         <span className="text-sm font-medium text-muted-foreground">Impacto:</span>
                         <span className="text-sm font-semibold text-red-700">{problem.metric}</span>
                       </div>
@@ -187,9 +187,9 @@ export function ProblemSolutionSection() {
           >
             {solutions.map((solution, index) => (
               <motion.div key={index} variants={staggerItem}>
-                <Card className="h-full bg-background border border-border hover:border-emerald-300 hover:shadow-lg transition-all duration-300 group">
+                <Card className="h-full bg-card border border-border hover:border-emerald-500/30 hover:shadow-lg transition-all duration-300 group">
                   <CardContent className="p-8">
-                    <div className="flex items-center justify-center w-16 h-16 bg-emerald-50 rounded-xl mb-6 group-hover:bg-emerald-100 transition-colors">
+                    <div className="flex items-center justify-center w-16 h-16 bg-emerald-500/10 rounded-xl mb-6 group-hover:bg-emerald-500/20 transition-colors">
                       <solution.icon className="h-8 w-8 text-emerald-600" />
                     </div>
                     
@@ -202,7 +202,7 @@ export function ProblemSolutionSection() {
                     </p>
                     
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-lg">
+                      <div className="flex items-center justify-between p-3 bg-emerald-500/10 rounded-lg">
                         <span className="text-sm font-medium text-muted-foreground">Resultado:</span>
                         <span className="text-sm font-semibold text-emerald-700">{solution.benefit}</span>
                       </div>
@@ -219,7 +219,7 @@ export function ProblemSolutionSection() {
 
           {/* Success Summary */}
           <motion.div 
-            className="mt-12 p-8 bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl border border-emerald-200"
+            className="mt-12 p-8 bg-emerald-500/5 rounded-xl border border-emerald-500/20"
             initial={{ opacity: 0, y: 20 }}
             animate={solutionsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ delay: 0.6, duration: 0.5 }}
@@ -255,7 +255,7 @@ export function ProblemSolutionSection() {
           animate={ctaInView ? "visible" : "hidden"}
           variants={scrollAnimationVariants}
         >
-          <Card className="max-w-5xl mx-auto bg-gradient-to-br from-slate-50 via-white to-violet-50 border border-border shadow-xl">
+          <Card className="max-w-5xl mx-auto bg-card border border-border shadow-xl">
             <CardContent className="p-12">
               <Badge className="mb-6 bg-violet-100 text-violet-700 border-violet-200 px-4 py-2">
                 Teste Grátis por 30 Dias
@@ -314,7 +314,7 @@ export function ProblemSolutionSection() {
               </motion.div>
               
               <motion.div 
-                className="bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl p-6 border border-emerald-200"
+                className="bg-emerald-500/5 rounded-xl p-6 border border-emerald-500/20"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={ctaInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
                 transition={{ delay: 0.4, duration: 0.5 }}

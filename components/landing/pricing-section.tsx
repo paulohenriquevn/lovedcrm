@@ -37,7 +37,7 @@ const pricingPlans = [
     yearlyPrice: 0,
     description: 'Ideal para agências pequenas testando o sistema',
     icon: Users,
-    color: 'border-gray-200 hover:border-gray-300',
+    color: 'border-border hover:border-border/80',
     buttonVariant: 'outline' as const,
     buttonText: 'Começar Grátis',
     features: [
@@ -63,7 +63,7 @@ const pricingPlans = [
     yearlyPrice: 970, // 2 meses grátis
     description: 'Perfeito para agências de 5-15 pessoas em crescimento',
     icon: Zap,
-    color: 'border-violet-200 hover:border-violet-300 bg-violet-50/50',
+    color: 'border-primary/20 hover:border-primary/30 bg-primary/5',
     buttonVariant: 'default' as const,
     buttonText: 'Teste 30 Dias Grátis',
     features: [
@@ -89,7 +89,7 @@ const pricingPlans = [
     yearlyPrice: 2970,
     description: 'Agências com 15+ pessoas e necessidades avançadas',
     icon: Crown,
-    color: 'border-gray-800 hover:border-gray-700 bg-gray-50/50',
+    color: 'border-foreground/20 hover:border-foreground/30 bg-muted/50',
     buttonVariant: 'default' as const,
     buttonText: 'Falar com Consultor',
     features: [
@@ -161,7 +161,7 @@ export function PricingSection() {
           animate={headerInView ? "visible" : "hidden"}
           variants={scrollAnimationVariants}
         >
-          <Badge className="mb-4 bg-violet-50 text-violet-700 border-violet-200">
+          <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
 Preços Transparentes
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
@@ -216,7 +216,7 @@ Preços Transparentes
                 <motion.div
                   variants={enhancedCardHoverVariants}
                 >
-                  <Card className={`relative ${plan.color} ${isPopular ? 'scale-105 shadow-xl' : ''} h-full ${plan.badge ? 'mt-4' : ''}`}>
+                  <Card className={`relative bg-card ${plan.color} ${isPopular ? 'scale-105 shadow-xl border-primary/30' : 'border-border hover:border-primary/20'} hover:shadow-lg transition-all duration-300 h-full ${plan.badge ? 'mt-4' : ''}`}>
                 {plan.badge ? <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground z-10">
                     {plan.badge}
                   </Badge> : null}
@@ -286,7 +286,7 @@ Preços Transparentes
                     
                     {plan.limitations.map((limitation, index) => (
                       <div key={index} className="flex items-center gap-3 opacity-60">
-                        <div className="h-4 w-4 rounded-full border border-gray-300 flex-shrink-0" />
+                        <div className="h-4 w-4 rounded-full border border-border flex-shrink-0" />
                         <span className="text-sm text-muted-foreground line-through">{limitation}</span>
                       </div>
                     ))}
@@ -306,7 +306,7 @@ Preços Transparentes
           animate={roiInView ? "visible" : "hidden"}
           variants={scrollAnimationVariants}
         >
-          <Card className="mb-16 bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
+          <Card className="mb-16 bg-card border border-border shadow-sm">
           <CardContent className="p-8">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold text-foreground mb-4">

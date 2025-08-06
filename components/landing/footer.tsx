@@ -193,7 +193,7 @@ export function Footer() {
         </div>
 
         {/* Newsletter Subscription */}
-        <Card className="bg-muted border-border mb-12">
+        <Card className="bg-card border border-border shadow-sm mb-12">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div className="flex-1">

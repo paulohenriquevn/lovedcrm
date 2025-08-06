@@ -120,7 +120,7 @@ function CoreFeatureCard({
     whileHover="hover"
   >
     <motion.div variants={cardHoverVariants}>
-      <Card className="relative overflow-hidden group border-2 hover:border-primary/20 h-full">
+      <Card className="relative overflow-hidden group bg-card border border-border hover:border-primary/20 hover:shadow-lg transition-all duration-300 h-full">
         {/* Background Image */}
         <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-500">
           <Image
@@ -133,12 +133,12 @@ function CoreFeatureCard({
         
         <CardContent className="p-8 relative z-10">
           {/* Badge */}
-          <Badge className="absolute top-4 right-4 text-xs font-medium bg-background/90 backdrop-blur-sm">
+          <Badge className="absolute top-4 right-4 text-xs font-medium bg-primary/10 text-primary border-primary/20">
             {feature.badge}
           </Badge>
           
           {/* Icon */}
-          <div className="h-14 w-14 bg-background/90 backdrop-blur-sm rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary/20 group-hover:backdrop-blur-none transition-all">
+          <div className="h-14 w-14 bg-primary/10 rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-all">
             <feature.icon className="h-7 w-7 text-primary" />
           </div>
 
@@ -177,7 +177,7 @@ function AdvancedFeatureCard({
   feature: typeof advancedFeatures[0]
   index: number 
 }): React.ReactElement {
-  return <Card key={`advanced-${feature.title}-${index}`} className="hover:shadow-lg transition-all duration-300 group">
+  return <Card key={`advanced-${feature.title}-${index}`} className="bg-card border border-border hover:border-primary/10 hover:shadow-lg transition-all duration-300 group">
     <CardContent className="p-6">
       <div className="flex items-start gap-4">
         <div className="h-10 w-10 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
@@ -214,7 +214,7 @@ function IntegrationItem({
   const logoConfig = integrationLogos[integration.key as keyof typeof integrationLogos]
   
   return <div key={`integration-${integration.name}-${index}`} className="group">
-    <div className="h-14 w-14 mx-auto bg-background rounded-lg flex items-center justify-center shadow-md group-hover:scale-110 group-hover:shadow-lg transition-all duration-300 border border-border">
+    <div className="h-14 w-14 mx-auto bg-card border border-border rounded-lg flex items-center justify-center shadow-sm group-hover:scale-110 group-hover:shadow-md group-hover:border-primary/20 transition-all duration-300">
       {logoConfig ? (
         <Image
           {...getImageProps(logoConfig, 40, 40)}
@@ -333,7 +333,7 @@ Funcionalidades Exclusivas
         </div>
 
         {/* Performance Stats */}
-        <Card className="bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
+        <Card className="bg-card border border-border shadow-sm">
           <CardContent className="p-8">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold text-foreground mb-2">
