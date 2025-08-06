@@ -1,0 +1,171 @@
+[flake8]
+# Configuration for flake8 (Python linting)
+
+# Maximum line length - optimized for readability
+max-line-length = 100
+
+# Maximum cyclomatic complexity - enforce KISS principle
+max-complexity = 10
+
+# Ignore specific error codes
+ignore = 
+    # E203: Whitespace before ':' (conflicts with black)
+    E203,
+    # W503: Line break before binary operator (conflicts with black)
+    W503,
+    # E501: Line too long (handled by black)
+    E501,
+    # B008: Function calls in argument defaults (normal for FastAPI)
+    B008,
+    # N805: First argument should be 'self' (incorrect for Pydantic validators with @validator)
+    N805,
+    # W291,W293: Whitespace issues (handled by black/isort)
+    W291,W293
+
+# Error codes to always report
+select = 
+    E,W,F,C,N,B,S,G,T,P,I,D,Q,A,SIM,PIE,PT,RSE,RET,SLF,SIM,TID,TCH,ARG,PTH,ERA,PGH,PYI,PL,TRY,FLY,PERF,LOG,RUF
+
+# Per-file ignores
+per-file-ignores =
+    # Ignore import errors in __init__.py files
+    __init__.py:F401,F403
+    # Ignore docstring requirements in tests
+    tests/*:D
+    # Ignore some rules in migration files
+    alembic/*:E501,F401
+    # Ignore specific rules in configuration files
+    config.py:S105,S106
+    # Ignore assert statements in tests
+    tests/*:S101
+    # Ignore E712 (comparison to True) in SQLAlchemy files - required for proper queries
+    core/deps.py:E712
+    repositories/*:E712
+    routers/*:E712
+    services/*:E712
+    # Ignore D402 (docstring signature) in specific service files
+    services/recaptcha_service.py:D402
+
+# Exclude files and directories
+exclude =
+    .git,
+    __pycache__,
+    .tox,
+    .env,
+    venv,
+    env,
+    build,
+    dist,
+    .eggs,
+    *.egg,
+    node_modules,
+    .next,
+    .vscode,
+    .idea,
+    migrations,
+    alembic/versions
+
+# File patterns to check
+filename = *.py
+
+# Show source code for each error
+show-source = true
+
+# Show pep8 violation statistics
+statistics = true
+
+# Count the number of occurrences of each error/warning code
+count = true
+
+# Enable off-by-default extensions
+enable-extensions = 
+    # flake8-bugbear
+    B,
+    # flake8-comprehensions  
+    C4,
+    # flake8-simplify
+    SIM,
+    # flake8-pie
+    PIE,
+    # flake8-pytest-style
+    PT,
+    # flake8-return
+    RET,
+    # flake8-self
+    SLF,
+    # flake8-simplify (duplicate)
+    # SIM,
+    # flake8-tidy-imports
+    TID,
+    # flake8-type-checking
+    TCH,
+    # flake8-unused-arguments
+    ARG,
+    # flake8-use-pathlib
+    PTH,
+    # flake8-erradicate
+    ERA,
+    # flake8-pygrep-hooks
+    PGH,
+    # flake8-pyi
+    PYI,
+    # flake8-pylint
+    PL,
+    # flake8-tryceratops
+    TRY,
+    # flake8-flynt
+    FLY,
+    # flake8-perf
+    PERF,
+    # flake8-logging
+    LOG,
+    # Ruff specific
+    RUF
+
+# Inline comments
+inline-quotes = double
+
+# Maximum function length
+max-function-length = 50
+
+# Maximum method length for classes
+max-method-length = 50
+
+# Docstring conventions
+docstring-convention = google
+
+# Plugin configurations
+
+# flake8-pytest-style configuration
+pytest-fixture-no-parentheses = true
+pytest-parametrize-names-type = csv
+pytest-parametrize-values-type = tuple
+pytest-parametrize-values-row-type = tuple
+
+# flake8-bugbear configuration
+# B008: Do not perform function calls in argument defaults
+# B024: Abstract base class without abstract methods
+
+# flake8-comprehensions configuration
+# Automatically enabled
+
+# flake8-simplify configuration
+# SIM106: Use any() for or conditions
+# SIM108: Use ternary operator instead of if-else
+# SIM118: Use key in dict instead of key in dict.keys()
+
+# flake8-return configuration  
+# RET504: Unnecessary variable assignment before return statement
+
+# flake8-use-pathlib configuration
+# PTH100: os.path.abspath() should be replaced by Path.resolve()
+# PTH103: os.makedirs() should be replaced by Path.mkdir()
+# PTH118: os.path.join() should be replaced by Path / operator
+
+# flake8-bandit configuration for security
+# S101: Use of assert detected
+# S104: Possible binding to all interfaces
+# S105: Possible hardcoded password
+# S106: Possible hardcoded password
+# S107: Possible hardcoded password
+# S108: Probable insecure usage of temp file/directory

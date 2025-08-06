@@ -1,0 +1,49 @@
+{
+  "name": "Create Subscription Success",
+  "request": {
+    "method": "POST",
+    "urlPath": "/v1/subscriptions"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": "sub_test_{{randomValue type='ALPHANUMERIC' length=24}}",
+      "object": "subscription",
+      "status": "active",
+      "current_period_start": "{{now}}",
+      "current_period_end": "{{now offset='+30 days'}}",
+      "customer": "{{jsonPath request.body '$.customer'}}",
+      "created": "{{now}}",
+      "cancel_at_period_end": false,
+      "canceled_at": null,
+      "trial_start": null,
+      "trial_end": null,
+      "items": {
+        "object": "list",
+        "data": [
+          {
+            "id": "si_test_{{randomValue type='ALPHANUMERIC' length=24}}",
+            "object": "subscription_item",
+            "price": {
+              "id": "{{jsonPath request.body '$.items[0].price'}}",
+              "object": "price",
+              "unit_amount": 2000,
+              "currency": "usd",
+              "recurring": {
+                "interval": "month",
+                "interval_count": 1
+              },
+              "product": "prod_test_{{randomValue type='ALPHANUMERIC' length=24}}"
+            },
+            "quantity": 1
+          }
+        ]
+      },
+      "metadata": {},
+      "livemode": false
+    }
+  }
+}

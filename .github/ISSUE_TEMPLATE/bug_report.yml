@@ -1,0 +1,185 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in the multi-tenant SaaS system
+title: '[BUG] '
+labels: ['bug', 'needs-triage']
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Bug Report
+
+        Thank you for taking the time to report a bug! Please provide as much detail as possible to help us reproduce and fix the issue.
+
+        **Before submitting:**
+        - [ ] Search existing issues to avoid duplicates
+        - [ ] Verify the bug exists in the latest version
+        - [ ] Check if this might be a configuration issue
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which part of the system is affected?
+      options:
+        - Frontend (Next.js/React)
+        - Backend (FastAPI/Python)
+        - Database (PostgreSQL)
+        - Authentication & Authorization
+        - Multi-Tenancy (Organization isolation)
+        - Billing & Subscriptions (Stripe)
+        - Deployment (Railway)
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this bug?
+      options:
+        - Critical (System down, data loss, security vulnerability)
+        - High (Core functionality broken, affects multiple users)
+        - Medium (Feature not working as expected)
+        - Low (Minor issue, cosmetic)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is
+      placeholder: Describe what happened and what you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this bug?
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Fill in '...'
+        4. See error
+      value: |
+        1. 
+        2. 
+        3. 
+        4.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should happen instead?
+      placeholder: Describe the expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Describe what actually happened, include error messages
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Where did this bug occur?
+      options:
+        - Production (Railway)
+        - Local Development
+        - Testing Environment
+        - CI/CD Pipeline
+    validations:
+      required: true
+
+  - type: input
+    id: organization
+    attributes:
+      label: Organization Context
+      description: If relevant, provide organization ID or context (remove sensitive data)
+      placeholder: "e.g., Organization ID: org_123... or 'affects all orgs'"
+
+  - type: textarea
+    id: technical_details
+    attributes:
+      label: Technical Details
+      description: Browser, OS, versions, API endpoints, etc.
+      placeholder: |
+        **Browser:** Chrome 120.0.0
+        **OS:** Windows 11
+        **API Endpoint:** /api/organizations
+        **Response Status:** 500
+        **Error Code:** ORG_001
+      value: |
+        **Browser:** 
+        **OS:** 
+        **API Endpoint:** 
+        **Response Status:** 
+        **Error Code:**
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs & Error Messages
+      description: Include relevant logs, error messages, or stack traces
+      placeholder: Paste logs here (remove sensitive information like tokens, passwords, emails)
+      render: text
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain the problem
+      placeholder: Drag and drop or paste screenshots here
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context about the problem
+      placeholder: |
+        - When did this start happening?
+        - Does it happen consistently?
+        - Any recent changes that might be related?
+        - Workarounds you've tried?
+
+  - type: checkboxes
+    id: multi_tenancy
+    attributes:
+      label: Multi-Tenancy Check
+      description: For data-related bugs, please confirm
+      options:
+        - label: I have verified this bug does NOT involve cross-organization data access
+          required: false
+        - label: This bug is isolated to my organization only
+          required: false
+        - label: I have checked that no sensitive data from other organizations is visible
+          required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have searched for similar issues
+          required: true
+        - label: I have provided clear reproduction steps
+          required: true
+        - label: I have removed any sensitive information (passwords, tokens, personal data)
+          required: true
+        - label: I understand this is a multi-tenant system and have considered organization isolation
+          required: true

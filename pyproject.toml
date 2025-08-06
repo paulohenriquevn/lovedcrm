@@ -1,0 +1,161 @@
+[tool.black]
+line-length = 100
+target-version = ['py310']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | migrations/versions
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 100
+known_first_party = ["api", "tests"]
+force_single_line = false
+atomic = true
+include_trailing_comma = true
+use_parentheses = true
+src_paths = ["api", "tests"]
+combine_as_imports = true
+force_grid_wrap = 0
+
+# MyPy configuration moved to mypy.ini (single source of truth)
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+asyncio_mode = "auto"
+addopts = [
+    "-ra",
+    "-q", 
+    "--strict-markers",
+    "--strict-config",
+    "--cov=api",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "--cov-report=xml",
+    "--cov-fail-under=70",  # 70% minimum coverage as per coding standards
+    "--cov-branch"
+]
+testpaths = ["tests", "api"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "e2e: marks tests as end-to-end tests",
+    "smoke: marks tests as smoke tests",
+    "security: marks tests as security tests"
+]
+filterwarnings = [
+    "error",
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning"
+]
+
+[tool.coverage.run]
+source = ["api"]
+omit = [
+    "*/tests/*",
+    "*/venv/*",
+    "*/migrations/*",
+    "api/utils/__init__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.bandit]
+# 🔒 Bandit Security Analysis Configuration
+targets = ["api"]
+exclude_dirs = ["migrations", "tests", "env", "venv", "node_modules", ".git", "__pycache__", ".pytest_cache"]
+severity = "medium"
+confidence = "medium"
+format = "txt"
+
+# Skip checks that don't apply to our context
+skips = [
+    "B101",  # assert_used - Allow asserts in development
+    "B201",  # flask_debug_true - We use FastAPI, not Flask
+    "B601",  # paramiko_calls - We don't use paramiko
+]
+
+# Enable specific security tests for multi-tenant SaaS
+tests = [
+    "B102",  # exec_used
+    "B103",  # set_bad_file_permissions
+    "B104",  # hardcoded_bind_all_interfaces
+    "B105",  # hardcoded_password_string
+    "B106",  # hardcoded_password_funcarg
+    "B107",  # hardcoded_password_default
+    "B108",  # hardcoded_tmp_directory
+    "B110",  # try_except_pass
+    "B301",  # pickle_usage
+    "B302",  # marshaller_usage
+    "B303",  # md5_usage
+    "B304",  # des_usage
+    "B305",  # cipher_usage
+    "B306",  # mktemp_q
+    "B307",  # eval_usage
+    "B308",  # mark_safe_usage
+    "B309",  # httpsconnection_usage
+    "B310",  # urllib_urlopen
+    "B311",  # random_usage
+    "B312",  # telnetlib_usage
+    "B320",  # xml_bad_xmlparser
+    "B321",  # ftplib_usage
+    "B322",  # input_usage
+    "B323",  # unverified_context
+    "B324",  # hashlib_new_insecure_functions
+    "B325",  # tempnam_usage
+    "B401",  # import_telnetlib
+    "B402",  # import_ftplib
+    "B403",  # import_pickle
+    "B404",  # import_subprocess
+    "B501",  # request_with_no_cert_validation
+    "B502",  # ssl_with_bad_version
+    "B503",  # ssl_with_bad_defaults
+    "B504",  # ssl_with_no_version
+    "B505",  # weak_cryptographic_key
+    "B506",  # yaml_load
+    "B507",  # ssh_no_host_key_verification
+    "B602",  # subprocess_popen_with_shell_equals_true
+    "B603",  # subprocess_without_shell_equals_true
+    "B604",  # any_other_function_with_shell_equals_true
+    "B605",  # start_process_with_a_shell
+    "B606",  # start_process_with_no_shell
+    "B607",  # start_process_with_partial_path
+    "B608",  # hardcoded_sql_expressions
+    "B609",  # linux_commands_wildcard_injection
+    "B610",  # django_extra_used
+    "B611",  # django_rawsql_used
+    "B701",  # jinja2_autoescape_false
+    "B702",  # use_of_mako_templates
+    "B703",  # django_mark_safe
+]

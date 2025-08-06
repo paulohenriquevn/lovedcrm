@@ -1,0 +1,157 @@
+# CODEOWNERS - Multi-Tenant SaaS System
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global ownership - these users/teams are the default owners for everything
+* @your-team @your-admin
+
+# =================== CORE SYSTEM ===================
+
+# Root configuration files
+/.github/ @your-team @devops-team
+/CLAUDE.md @your-team @tech-lead
+/README.md @your-team @docs-team
+/package.json @frontend-team @your-team
+/requirements.txt @backend-team @your-team
+/railway.json @devops-team @your-team
+
+# =================== BACKEND (API) ===================
+
+# Core backend infrastructure
+/api/ @backend-team @your-team
+/api/core/ @backend-team @tech-lead
+/api/models/ @backend-team @database-team
+/api/repositories/ @backend-team @database-team
+
+# Critical multi-tenancy components (requires extra review)
+/api/core/organization_middleware.py @backend-team @tech-lead @security-team
+/api/core/deps.py @backend-team @tech-lead
+/api/services/ @backend-team
+
+# Security and authentication
+/api/core/security.py @backend-team @security-team @tech-lead
+/api/routers/auth.py @backend-team @security-team
+/api/services/auth* @backend-team @security-team
+
+# Billing and payments (Stripe integration)
+/api/routers/billing.py @backend-team @billing-team @tech-lead
+/api/services/stripe_service.py @backend-team @billing-team
+/api/models/billing.py @backend-team @billing-team @database-team
+
+# Organization management (critical for multi-tenancy)
+/api/routers/organizations.py @backend-team @tech-lead
+/api/services/organization* @backend-team @tech-lead
+/api/models/organization* @backend-team @database-team @tech-lead
+
+# =================== FRONTEND ===================
+
+# Frontend application
+/app/ @frontend-team @your-team
+/components/ @frontend-team @ui-team
+/containers/ @frontend-team
+
+# Critical frontend multi-tenancy
+/services/base.ts @frontend-team @tech-lead
+/hooks/use-org-context.ts @frontend-team @tech-lead
+/components/providers/org-provider.tsx @frontend-team @tech-lead
+
+# Admin interface (organization management)
+/app/[locale]/admin/ @frontend-team @admin-team @tech-lead
+/containers/organizations/ @frontend-team @admin-team @tech-lead
+
+# Authentication pages
+/app/[locale]/auth/ @frontend-team @security-team
+/containers/auth/ @frontend-team @security-team
+
+# Settings and billing
+/app/[locale]/admin/settings/ @frontend-team @admin-team
+/app/[locale]/admin/billing/ @frontend-team @billing-team
+/containers/settings/ @frontend-team @admin-team
+/components/settings/ @frontend-team @admin-team
+
+# UI components and design system
+/components/ui/ @frontend-team @ui-team
+/lib/design-tokens.ts @frontend-team @ui-team
+
+# =================== DATABASE ===================
+
+# Database migrations (critical for production)
+/migrations/ @database-team @backend-team @tech-lead
+/migrations/migrate @database-team @devops-team @tech-lead
+
+# Migration files (require careful review)
+/migrations/*.sql @database-team @backend-team @tech-lead
+
+# =================== TESTING ===================
+
+# Test configurations
+/tests/ @qa-team @backend-team
+/tests/e2e/api/ @qa-team @backend-team
+/tests/unit/ @qa-team @backend-team
+
+# Critical multi-tenancy tests
+/tests/e2e/api/test_multi_tenant_isolation.py @qa-team @backend-team @tech-lead @security-team
+
+# Security and authentication tests
+/tests/e2e/api/test_auth.py @qa-team @backend-team @security-team
+
+# Frontend tests
+/tests/frontend/ @qa-team @frontend-team
+*.test.tsx @qa-team @frontend-team
+*.test.ts @qa-team @frontend-team
+
+# =================== DOCUMENTATION ===================
+
+# Core documentation
+/docs/ @docs-team @your-team
+/docs/MULTI-TENANCY-* @docs-team @tech-lead @backend-team
+/docs/PRODUCTION-* @docs-team @devops-team
+/docs/SECURITY-* @docs-team @security-team
+
+# Agent system documentation
+/agents/ @docs-team @your-team @tech-lead
+
+# =================== DEPLOYMENT & DEVOPS ===================
+
+# CI/CD and deployment
+/.github/workflows/ @devops-team @your-team
+/docker-compose*.yml @devops-team @backend-team
+/Dockerfile* @devops-team @backend-team
+
+# Configuration files
+/next.config.js @frontend-team @devops-team
+/tailwind.config.js @frontend-team @ui-team
+/tsconfig.json @frontend-team @your-team
+/pyproject.toml @backend-team @your-team
+/pytest.ini @qa-team @backend-team
+
+# =================== SECURITY CRITICAL ===================
+
+# Security configuration (requires security team review)
+/api/core/security.py @security-team @tech-lead @backend-team
+/api/core/token_blacklist.py @security-team @backend-team
+/middleware.ts @security-team @frontend-team
+
+# Environment and secrets
+.env* @devops-team @security-team @tech-lead
+/docs/GITHUB-SECRETS-* @devops-team @security-team
+
+# =================== INTERNATIONALIZATION ===================
+
+# Translation files
+/messages/ @i18n-team @frontend-team
+/lib/i18n/ @i18n-team @frontend-team
+/next-intl.config.ts @i18n-team @frontend-team
+
+# =================== SPECIAL FILES ===================
+
+# Package management
+package-lock.json @frontend-team @devops-team
+requirements.txt @backend-team @devops-team
+
+# Git configuration
+.gitignore @devops-team @your-team
+.gitattributes @devops-team @your-team
+
+# Editor configuration
+.vscode/ @your-team
+.cursor/ @your-team

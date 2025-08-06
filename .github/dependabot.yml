@@ -1,0 +1,126 @@
+# Dependabot configuration for automated dependency updates
+version: 2
+
+updates:
+  # Frontend dependencies (Node.js/npm)
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '08:00'
+      timezone: 'UTC'
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
+    commit-message:
+      prefix: 'deps'
+      prefix-development: 'dev-deps'
+      include: 'scope'
+    labels:
+      - 'dependencies'
+      - 'frontend'
+    reviewers:
+      - 'your-team'
+    groups:
+      react-ecosystem:
+        patterns:
+          - 'react*'
+          - '@types/react*'
+      next-ecosystem:
+        patterns:
+          - 'next*'
+          - '@next/*'
+      ui-components:
+        patterns:
+          - '@radix-ui/*'
+          - 'lucide-react'
+          - 'tailwindcss*'
+      testing:
+        patterns:
+          - 'vitest*'
+          - '@testing-library/*'
+          - 'playwright*'
+      eslint-ecosystem:
+        patterns:
+          - 'eslint*'
+          - '@typescript-eslint/*'
+
+  # Backend dependencies (Python/pip)
+  - package-ecosystem: 'pip'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '08:00'
+      timezone: 'UTC'
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: 'deps'
+      include: 'scope'
+    labels:
+      - 'dependencies'
+      - 'backend'
+      - 'python'
+    reviewers:
+      - 'your-team'
+    groups:
+      fastapi-ecosystem:
+        patterns:
+          - 'fastapi*'
+          - 'uvicorn*'
+          - 'starlette*'
+      database:
+        patterns:
+          - 'sqlalchemy*'
+          - 'alembic*'
+          - 'psycopg*'
+          - 'redis*'
+      testing:
+        patterns:
+          - 'pytest*'
+          - 'httpx*'
+          - 'faker*'
+      security:
+        patterns:
+          - 'cryptography*'
+          - 'passlib*'
+          - 'python-jose*'
+      linting:
+        patterns:
+          - 'black*'
+          - 'isort*'
+          - 'flake8*'
+          - 'mypy*'
+          - 'bandit*'
+
+  # Docker dependencies
+  - package-ecosystem: 'docker'
+    directory: '/'
+    schedule:
+      interval: 'monthly'
+      day: 'first-monday'
+      time: '09:00'
+      timezone: 'UTC'
+    commit-message:
+      prefix: 'docker'
+    labels:
+      - 'dependencies'
+      - 'docker'
+    reviewers:
+      - 'your-team'
+
+  # GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/.github/workflows'
+    schedule:
+      interval: 'monthly'
+      day: 'first-tuesday'
+      time: '09:00'
+      timezone: 'UTC'
+    commit-message:
+      prefix: 'actions'
+    labels:
+      - 'dependencies'
+      - 'github-actions'
+    reviewers:
+      - 'your-team'

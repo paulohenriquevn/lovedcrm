@@ -1,0 +1,578 @@
+{
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "create": "Criar",
+    "update": "Atualizar",
+    "updating": "Atualizando...",
+    "confirm": "Confirmar",
+    "yes": "Sim",
+    "no": "Não",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "search": "Pesquisar",
+    "filter": "Filtrar",
+    "clear": "Limpar",
+    "apply": "Aplicar",
+    "close": "Fechar",
+    "back": "Voltar",
+    "home": "Início",
+    "dashboard": "Painel",
+    "settings": "Configurações",
+    "profile": "Perfil",
+    "logout": "Sair",
+    "login": "Entrar",
+    "register": "Registrar",
+    "user": "Usuário",
+    "features": {
+      "title": "Por Que Escolher Nossa Plataforma?",
+      "subtitle": "Tudo que você precisa para construir e escalar seu negócio",
+      "performance": {
+        "title": "Super Rápido",
+        "description": "Construído para velocidade com arquitetura moderna e performance otimizada"
+      },
+      "security": {
+        "title": "Segurança Empresarial",
+        "description": "Segurança nível bancário com criptografia ponta a ponta e conformidade"
+      },
+      "analytics": {
+        "title": "Analytics Avançado",
+        "description": "Insights em tempo real e relatórios detalhados para impulsionar seu negócio"
+      }
+    }
+  },
+  "navigation": {
+    "home": "Início",
+    "dashboard": "Painel",
+    "admin": "Administração",
+    "team": "Equipe",
+    "organizations": "Organizações",
+    "users": "Usuários",
+    "billing": "Faturamento",
+    "analytics": "Análises",
+    "settings": "Configurações",
+    "profile": "Perfil"
+  },
+  "auth": {
+    "login": {
+      "title": "Entrar",
+      "subtitle": "Digite suas credenciais para acessar sua conta",
+      "email": "E-mail",
+      "password": "Senha",
+      "forgotPassword": "Esqueceu a senha?",
+      "noAccount": "Não tem uma conta?",
+      "signUp": "Cadastrar-se",
+      "signIn": "Entrar",
+      "signingIn": "Entrando...",
+      "signInWithGoogle": "Entrar com Google",
+      "rememberMe": "Lembrar de mim",
+      "showPassword": "Mostrar senha",
+      "hidePassword": "Ocultar senha",
+      "orContinueWith": "Ou continue com email"
+    },
+    "register": {
+      "title": "Criar Conta",
+      "subtitle": "Crie sua conta para começar",
+      "fullName": "Nome Completo",
+      "email": "E-mail",
+      "password": "Senha",
+      "confirmPassword": "Confirmar Senha",
+      "haveAccount": "Já tem uma conta?",
+      "signIn": "Entrar",
+      "signUpWithGoogle": "Cadastrar-se com Google",
+      "agreeToTerms": "Concordo com os Termos de Serviço e Política de Privacidade",
+      "termsOfService": "Termos de Serviço",
+      "and": "e",
+      "privacyPolicy": "Política de Privacidade",
+      "success": {
+        "title": "Conta criada com sucesso!",
+        "description": "Redirecionando para o dashboard..."
+      },
+      "error": {
+        "title": "Erro ao criar conta",
+        "generic": "Erro ao criar conta"
+      },
+      "googleError": {
+        "title": "Erro no Google Sign Up"
+      },
+      "testimonial": {
+        "text": "Esta plataforma transformou como gerenciamos nosso negócio. Simples, poderosa e confiável.",
+        "author": "Sarah Chen, CEO da TechStart"
+      }
+    },
+    "forgotPassword": {
+      "title": "Esqueci a Senha",
+      "subtitle": "Digite seu e-mail e enviaremos instruções para redefinir sua senha",
+      "email": "E-mail *",
+      "emailPlaceholder": "seu@email.com",
+      "sendInstructions": "Enviar Instruções",
+      "sendResetLink": "Enviar Link de Redefinição",
+      "backToLogin": "Voltar ao Login",
+      "noAccount": "Não tem uma conta?",
+      "createAccount": "Criar Conta",
+      "success": {
+        "title": "E-mail Enviado!",
+        "description": "Se existir uma conta associada ao e-mail",
+        "instructions": "você receberá instruções para redefinir sua senha",
+        "checkSpam": "Não esqueça de verificar sua pasta de spam",
+        "resendEmail": "Reenviar E-mail"
+      }
+    },
+    "resetPassword": {
+      "title": "Redefinir Senha",
+      "subtitle": "Digite sua nova senha",
+      "newPassword": "Nova Senha",
+      "confirmNewPassword": "Confirmar Nova Senha",
+      "resetPassword": "Redefinir Senha",
+      "newPasswordPlaceholder": "Digite sua nova senha",
+      "confirmPasswordPlaceholder": "Confirme sua nova senha",
+      "rememberPassword": "Lembrou da senha?",
+      "success": {
+        "title": "Senha Redefinida com Sucesso!",
+        "subtitle": "Sua senha foi redefinida com sucesso. Agora você pode entrar com sua nova senha.",
+        "signIn": "Entrar"
+      },
+      "noToken": {
+        "title": "Link de Reset Inválido",
+        "subtitle": "Este link de redefinição de senha é inválido ou expirou. Solicite uma nova redefinição de senha.",
+        "requestNew": "Solicitar Novo Reset"
+      }
+    },
+    "changePassword": {
+      "title": "Alterar Senha",
+      "tempPasswordDescription": "Você precisa alterar sua senha temporária para continuar",
+      "changePasswordFor": "Altere a senha para: {email}",
+      "tempPassword": "Senha Temporária *",
+      "newPassword": "Nova Senha *",
+      "confirmNewPassword": "Confirmar Nova Senha *",
+      "tempPasswordPlaceholder": "Digite sua senha temporária",
+      "newPasswordPlaceholder": "Digite sua nova senha",
+      "confirmPasswordPlaceholder": "Confirme sua nova senha",
+      "passwordRequirements": "Requisitos da senha",
+      "changingPassword": "Alterando senha...",
+      "changePasswordAndLogin": "Alterar Senha e Fazer Login",
+      "backToLogin": "Voltar ao login",
+      "validation": {
+        "tempPasswordRequired": "Senha temporária é obrigatória",
+        "newPasswordRequired": "Nova senha é obrigatória",
+        "newPasswordMinLength": "Nova senha deve ter pelo menos 6 caracteres",
+        "confirmPasswordRequired": "Confirmação de senha é obrigatória",
+        "passwordsNotMatch": "Senhas não coincidem",
+        "newPasswordMustDiffer": "A nova senha deve ser diferente da senha temporária"
+      }
+    },
+    "common": {
+      "orContinueWith": "Ou continue com e-mail",
+      "showPassword": "Mostrar senha",
+      "hidePassword": "Ocultar senha",
+      "brandName": "SaaS Starter"
+    },
+    "oauth": {
+      "error": {
+        "title": "Erro de Autenticação",
+        "subtitle": "Falha ao entrar com Google",
+        "redirecting": "Redirecionando para página de login..."
+      },
+      "processing": {
+        "title": "Fazendo login",
+        "subtitle": "Processando autenticação do Google...",
+        "loading": "Processando...",
+        "finishing": "Quase pronto..."
+      }
+    }
+  },
+  "dashboard": {
+    "welcome": "Bem-vindo de volta",
+    "overview": "Visão Geral",
+    "stats": {
+      "totalUsers": "Total de Usuários",
+      "activeOrganizations": "Organizações Ativas",
+      "monthlyRevenue": "Receita Mensal",
+      "growthRate": "Taxa de Crescimento"
+    },
+    "recentActivity": "Atividade Recente",
+    "quickActions": "Ações Rápidas"
+  },
+  "organization": {
+    "name": "Nome da Organização",
+    "members": "Membros",
+    "settings": "Configurações da Organização",
+    "invite": "Convidar Membros",
+    "roles": {
+      "owner": "Proprietário",
+      "admin": "Administrador",
+      "member": "Membro"
+    },
+    "status": {
+      "active": "Ativo",
+      "inactive": "Inativo",
+      "pending": "Pendente"
+    }
+  },
+  "user": {
+    "profile": "Perfil",
+    "preferences": "Preferências",
+    "security": "Segurança",
+    "language": "Idioma",
+    "timezone": "Fuso Horário",
+    "notifications": "Notificações",
+    "privacy": "Privacidade",
+    "noName": "Sem nome",
+    "advancedManagementActive": "Gestão avançada ativa",
+    "saveChanges": "Salvar alterações",
+    "status": {
+      "label": "Status",
+      "active": "Ativo",
+      "inactive": "Inativo"
+    },
+    "fullName": "Nome completo",
+    "email": "Email",
+    "phone": "Telefone",
+    "notProvided": "Não informado",
+    "suspendUser": "Suspender usuário",
+    "activateUser": "Ativar usuário",
+    "deleteUser": "Excluir usuário",
+    "deleting": "Excluindo..."
+  },
+  "form": {
+    "required": "Este campo é obrigatório",
+    "invalidEmail": "Por favor, digite um endereço de e-mail válido",
+    "passwordTooShort": "A senha deve ter pelo menos 8 caracteres",
+    "passwordsNotMatch": "As senhas não coincidem",
+    "saveChanges": "Salvar Alterações",
+    "discardChanges": "Descartar Alterações",
+    "unsavedChanges": "Você tem alterações não salvas"
+  },
+  "error": {
+    "generic": "Algo deu errado. Tente novamente.",
+    "network": "Erro de rede. Verifique sua conexão.",
+    "unauthorized": "Você não está autorizado a realizar esta ação.",
+    "notFound": "O recurso solicitado não foi encontrado.",
+    "validation": "Por favor, verifique sua entrada e tente novamente.",
+    "serverError": "Erro do servidor. Tente novamente mais tarde.",
+    "boundary": {
+      "title": "Ops! Algo deu errado",
+      "description": "Ocorreu um erro inesperado. Nossa equipe foi notificada.",
+      "devDetails": "Detalhes do erro (desenvolvimento)",
+      "unknownError": "Erro desconhecido",
+      "retry": "Tentar novamente",
+      "goHome": "Ir para o início"
+    },
+    "organizationError": {
+      "title": "Erro da Organização",
+      "tryAgain": "Tentar Novamente"
+    }
+  },
+  "language": {
+    "selectLanguage": "Selecionar Idioma",
+    "english": "Inglês",
+    "portuguese": "Português",
+    "spanish": "Espanhol",
+    "languageChanged": "Idioma alterado com sucesso"
+  },
+  "search": {
+    "placeholder": "Digite um comando ou busque...",
+    "noResults": "Nenhum resultado encontrado.",
+    "quickActions": "Ações Rápidas",
+    "navigation": "Navegação",
+    "dashboardDesc": "Visão geral da organização",
+    "teamDesc": "Gerenciar membros da equipe",
+    "billingDesc": "Planos e faturas",
+    "settingsDesc": "Configurações da conta"
+  },
+  "date": {
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "thisWeek": "Esta semana",
+    "thisMonth": "Este mês",
+    "thisYear": "Este ano",
+    "custom": "Período personalizado"
+  },
+  "currency": {
+    "usd": "USD",
+    "brl": "BRL",
+    "eur": "EUR"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Painel",
+      "subtitle": "Visão geral da sua organização",
+      "welcome": "Bem-vindo de volta",
+      "loading": "Carregando dados do dashboard...",
+      "loadError": "Erro ao carregar dashboard",
+      "quickActions": "Ações Rápidas",
+      "quickActionsDescription": "Gerencie sua organização com ações rápidas",
+      "stats": {
+        "totalUsers": "Total de Usuários",
+        "organizations": "Organizações",
+        "activeUsers": "Usuários Ativos",
+        "newRegistrations": "Novos Cadastros"
+      },
+      "actions": {
+        "team": {
+          "title": "Gestão de Equipe",
+          "description": "Convide membros, gerencie papéis e organize sua equipe",
+          "action": "Gerenciar Equipe"
+        },
+        "settings": {
+          "title": "Configurações da Organização",
+          "description": "Atualize o perfil e preferências da sua organização",
+          "action": "Abrir Configurações"
+        },
+        "billing": {
+          "title": "Cobrança e Planos",
+          "description": "Gerencie assinaturas, pagamentos e histórico de cobrança",
+          "action": "Ver Cobrança"
+        }
+      },
+      "systemMetrics": {
+        "title": "Métricas do Sistema",
+        "description": "Estado atual dos recursos do servidor",
+        "cpu": "CPU",
+        "memory": "Memória",
+        "disk": "Disco",
+        "uptime": "Uptime"
+      },
+      "recentActivity": {
+        "title": "Atividade Recente",
+        "description": "Últimas ações realizadas no sistema"
+      }
+    },
+    "team": {
+      "title": "Gestão de Equipe",
+      "subtitle": "Gerencie os membros da sua organização",
+      "manageInvites": "Gerenciar Convites",
+      "inviteButton": "Convidar Membro",
+      "members": "Membros",
+      "roles": "Papéis",
+      "status": "Status",
+      "actions": "Ações",
+      "noMembers": "Nenhum membro da equipe encontrado",
+      "stats": {
+        "totalMembers": "Total de Membros",
+        "administrators": "Administradores",
+        "activeMembers": "Membros Ativos"
+      },
+      "dialogs": {
+        "changeRole": {
+          "title": "Alterar Role do Membro",
+          "description": "Você está prestes a alterar o role de {name} para {role}."
+        },
+        "removeMember": {
+          "title": "Remover Membro",
+          "description": "Tem certeza que deseja remover {name} da organização?"
+        }
+      }
+    },
+    "settings": {
+      "title": "Configurações",
+      "subtitle": "Gerencie as configurações da sua organização",
+      "profile": "Configurações de Perfil",
+      "preferences": "Preferências",
+      "billing": "Faturamento",
+      "notifications": "Notificações",
+      "security": "Segurança",
+      "advanced": "Avançado",
+      "password": {
+        "currentPassword": "Senha Atual",
+        "newPassword": "Nova Senha",
+        "confirmNewPassword": "Confirmar Nova Senha",
+        "currentPasswordPlaceholder": "Digite sua senha atual",
+        "newPasswordPlaceholder": "Digite sua nova senha",
+        "confirmPasswordPlaceholder": "Confirme sua nova senha",
+        "minimumCharacters": "Mínimo de 8 caracteres",
+        "changing": "Alterando...",
+        "changePassword": "Alterar Senha"
+      }
+    },
+    "billing": {
+      "title": "Faturamento",
+      "subtitle": "Gerencie sua assinatura e faturamento",
+      "currentPlan": "Plano Atual",
+      "changePlan": "Alterar Plano",
+      "invoices": "Faturas",
+      "paymentMethod": "Método de Pagamento"
+    }
+  },
+  "team": {
+    "invite": {
+      "title": "Convidar Membro",
+      "subtitle": "Envie um convite para participar da sua organização",
+      "email": "Endereço de Email",
+      "role": "Papel",
+      "message": "Mensagem Pessoal",
+      "sendInvite": "Enviar Convite",
+      "success": "Convite enviado com sucesso",
+      "error": "Falha ao enviar convite"
+    },
+    "members": {
+      "name": "Nome",
+      "email": "Email",
+      "role": "Papel",
+      "joinedAt": "Ingressou em",
+      "lastActive": "Última Atividade",
+      "changeRole": "Alterar Papel",
+      "removeMember": "Remover Membro"
+    },
+    "roles": {
+      "owner": "Proprietário",
+      "admin": "Administrador",
+      "member": "Membro"
+    }
+  },
+  "toast": {
+    "success": {
+      "title": "Sucesso",
+      "accountCreated": "Conta criada com sucesso!",
+      "memberInvited": "Membro convidado com sucesso",
+      "memberRemoved": "Membro removido com sucesso",
+      "settingsSaved": "Configurações salvas com sucesso",
+      "passwordChanged": "Senha alterada com sucesso"
+    },
+    "error": {
+      "title": "Erro",
+      "description": "Algo deu errado. Tente novamente.",
+      "generic": "Algo deu errado",
+      "accountCreation": "Falha ao criar conta",
+      "memberInvite": "Falha ao convidar membro",
+      "memberRemove": "Falha ao remover membro",
+      "settingsSave": "Falha ao salvar configurações",
+      "passwordChange": "Falha ao alterar senha",
+      "unauthorized": "Você não está autorizado a realizar esta ação",
+      "networkError": "Erro de rede. Verifique sua conexão."
+    },
+    "info": {
+      "title": "Informação",
+      "redirecting": "Redirecionando...",
+      "processing": "Processando...",
+      "loading": "Carregando..."
+    },
+    "passwordChange": {
+      "title": "Alteração de Senha Necessária",
+      "description": "Você precisa alterar sua senha temporária antes de continuar."
+    },
+    "loginSuccess": {
+      "title": "Bem-vindo de volta!",
+      "description": "Você foi logado com sucesso."
+    },
+    "emailNotVerified": {
+      "title": "Email Não Verificado",
+      "action": "Reenviar email de verificação"
+    },
+    "emailSent": {
+      "title": "Email Enviado",
+      "description": "Email de verificação foi enviado para sua caixa de entrada."
+    },
+    "googleError": {
+      "title": "Erro no Login do Google"
+    }
+  },
+  "validation": {
+    "required": "Este campo é obrigatório",
+    "email": {
+      "required": "Email é obrigatório",
+      "invalid": "Por favor, digite um endereço de email válido"
+    },
+    "password": {
+      "required": "Senha é obrigatória",
+      "minLength": "Senha deve ter pelo menos 6 caracteres",
+      "minLengthReset": "Senha deve ter pelo menos 8 caracteres",
+      "uppercase": "Senha deve conter pelo menos uma letra maiúscula",
+      "lowercase": "Senha deve conter pelo menos uma letra minúscula",
+      "number": "Senha deve conter pelo menos um número",
+      "special": "Senha deve conter pelo menos um caractere especial",
+      "mismatch": "Senhas não coincidem",
+      "strength": "Senha deve ter pelo menos 8 caracteres, incluindo maiúscula, minúscula e número"
+    },
+    "name": {
+      "minLength": "Nome deve ter pelo menos 2 caracteres"
+    },
+    "phone": {
+      "invalid": "Digite um telefone válido"
+    },
+    "url": {
+      "invalid": "Digite uma URL válida"
+    },
+    "numeric": {
+      "only": "Digite apenas números"
+    },
+    "number": {
+      "invalid": "Digite um número válido",
+      "min": "Valor deve ser maior ou igual a {min}",
+      "max": "Valor deve ser menor ou igual a {max}",
+      "range": "Valor deve estar entre {min} e {max}"
+    },
+    "minLength": "Deve ter pelo menos {min} caracteres",
+    "maxLength": "Deve ter no máximo {max} caracteres",
+    "terms": "Você deve aceitar os termos e condições para continuar",
+    "error": {
+      "generic": "Erro de validação"
+    }
+  },
+  "buttons": {
+    "signIn": "Entrar",
+    "signUp": "Cadastrar-se",
+    "createAccount": "Criar Conta",
+    "forgotPassword": "Esqueci a Senha",
+    "resetPassword": "Redefinir Senha",
+    "sendResetLink": "Enviar Link de Redefinição",
+    "backToLogin": "Voltar ao Login",
+    "continueWithGoogle": "Continuar com Google",
+    "showPassword": "Mostrar Senha",
+    "hidePassword": "Ocultar Senha",
+    "acceptInvite": "Aceitar Convite",
+    "declineInvite": "Recusar Convite"
+  },
+  "placeholders": {
+    "fullName": "Digite seu nome completo",
+    "email": "seu@email.com",
+    "password": "Digite sua senha",
+    "confirmPassword": "Confirme sua senha",
+    "searchMembers": "Buscar membros...",
+    "personalMessage": "Mensagem pessoal opcional..."
+  },
+  "links": {
+    "noAccount": "Não tem uma conta?",
+    "haveAccount": "Já tem uma conta?",
+    "termsOfUse": "Termos de Serviço",
+    "privacyPolicy": "Política de Privacidade",
+    "acceptTerms": "Concordo com os Termos de Serviço e Política de Privacidade"
+  },
+  "toast": {
+    "passwordChange": {
+      "title": "🔑 Senha temporária detectada",
+      "description": "Você precisa criar uma nova senha para continuar."
+    },
+    "loginSuccess": {
+      "title": "Sucesso",
+      "description": "Login realizado com sucesso!"
+    },
+    "emailNotVerified": {
+      "title": "Email não verificado",
+      "description": "Por favor, verifique seu email antes de fazer login.",
+      "action": "Reenviar email"
+    },
+    "emailSent": {
+      "title": "Email enviado",
+      "description": "Verifique sua caixa de entrada para o link de verificação."
+    },
+    "passwordReset": {
+      "title": "Senha alterada",
+      "description": "Sua senha foi alterada com sucesso!"
+    },
+    "error": {
+      "title": "Erro",
+      "description": "Ocorreu um erro. Tente novamente.",
+      "tokenNotFound": "Token de reset não encontrado na URL."
+    },
+    "googleError": {
+      "title": "Erro no Google Login",
+      "description": "Ocorreu um erro com a autenticação do Google."
+    }
+  }
+}

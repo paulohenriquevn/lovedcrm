@@ -1,0 +1,216 @@
+name: Feature Request
+description: Suggest a new feature or enhancement for the multi-tenant SaaS system
+title: '[FEATURE] '
+labels: ['enhancement', 'needs-triage']
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Feature Request
+
+        Thank you for suggesting a new feature! Please provide detailed information to help us understand and evaluate your request.
+
+        **Before submitting:**
+        - [ ] Search existing issues to avoid duplicates
+        - [ ] Consider if this aligns with the project's multi-tenant architecture
+        - [ ] Think about how this feature affects different user roles (admin, member, owner)
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which part of the system would this feature affect?
+      options:
+        - Frontend (Next.js/React)
+        - Backend (FastAPI/Python)
+        - Database Schema
+        - Authentication & Authorization
+        - Multi-Tenancy & Organization Management
+        - Billing & Subscriptions
+        - User Management & Invitations
+        - Settings & Preferences
+        - API & Integrations
+        - DevOps & Deployment
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature?
+      options:
+        - High (Critical for business operations)
+        - Medium (Would significantly improve user experience)
+        - Low (Nice to have)
+        - Enhancement (Polish or optimization)
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve?
+      placeholder: |
+        Describe the current pain point or limitation:
+        - What specific issue are users facing?
+        - Why is the current solution insufficient?
+        - Who is affected by this problem?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe your ideal solution
+      placeholder: |
+        What would you like to see implemented?
+        - Detailed description of the feature
+        - How should it work from a user perspective?
+        - What would the user interface look like?
+    validations:
+      required: true
+
+  - type: textarea
+    id: user_stories
+    attributes:
+      label: User Stories
+      description: Describe how different user types would use this feature
+      placeholder: |
+        **As an Organization Owner:**
+        - I want to... so that I can...
+
+        **As an Organization Admin:**
+        - I want to... so that I can...
+
+        **As an Organization Member:**
+        - I want to... so that I can...
+      value: |
+        **As an Organization Owner:**
+        - I want to... so that I can...
+
+        **As an Organization Admin:**
+        - I want to... so that I can...
+
+        **As an Organization Member:**
+        - I want to... so that I can...
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What needs to be implemented for this feature to be complete?
+      placeholder: |
+        - [ ] Functional requirement 1
+        - [ ] Functional requirement 2
+        - [ ] UI/UX requirement
+        - [ ] API endpoint requirement
+        - [ ] Permission/role requirement
+        - [ ] Multi-tenancy isolation requirement
+      value: |
+        - [ ] 
+        - [ ] 
+        - [ ]
+
+  - type: dropdown
+    id: user_type
+    attributes:
+      label: Primary User Type
+      description: Who would primarily use this feature?
+      options:
+        - Organization Owner
+        - Organization Admin
+        - Organization Member
+        - System Administrator
+        - All Users
+        - External Users (via API)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: multi_tenancy_considerations
+    attributes:
+      label: Multi-Tenancy Considerations
+      description: How does this feature handle organization isolation?
+      options:
+        - label: This feature should be scoped to individual organizations
+          required: false
+        - label: This feature should work across organizations (admin/system level)
+          required: false
+        - label: This feature requires new permission levels
+          required: false
+        - label: This feature affects billing or subscription tiers
+          required: false
+
+  - type: textarea
+    id: technical_requirements
+    attributes:
+      label: Technical Requirements
+      description: Any technical considerations or requirements?
+      placeholder: |
+        - Database schema changes needed
+        - API endpoints to be created/modified
+        - Third-party integrations required
+        - Performance considerations
+        - Security requirements
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternative Solutions
+      description: Have you considered any alternative approaches?
+      placeholder: |
+        What other solutions did you consider?
+        - Alternative approach 1: pros/cons
+        - Alternative approach 2: pros/cons
+        - Why is your proposed solution the best?
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples & Mockups
+      description: Visual examples, mockups, or references
+      placeholder: |
+        - Link to similar features in other applications
+        - Attach mockups or wireframes
+        - Describe specific UI interactions
+
+  - type: input
+    id: business_value
+    attributes:
+      label: Business Value
+      description: How would this feature benefit the business?
+      placeholder: 'e.g., Increase user retention, reduce support tickets, enable new pricing tier'
+
+  - type: textarea
+    id: implementation_notes
+    attributes:
+      label: Implementation Notes
+      description: Any thoughts on how this could be implemented?
+      placeholder: |
+        - Suggested implementation approach
+        - Potential challenges or risks
+        - Dependencies on other features
+        - Estimated complexity (if known)
+
+  - type: checkboxes
+    id: feature_checklist
+    attributes:
+      label: Feature Request Checklist
+      options:
+        - label: I have searched for similar feature requests
+          required: true
+        - label: I have considered how this fits with the multi-tenant architecture
+          required: true
+        - label: I have thought about different user roles and permissions
+          required: true
+        - label: I understand this feature should maintain organization data isolation
+          required: true
+        - label: I have provided clear acceptance criteria
+          required: true

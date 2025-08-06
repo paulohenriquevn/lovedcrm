@@ -1,0 +1,26 @@
+{
+  "name": "Create Customer Success",
+  "request": {
+    "method": "POST",
+    "urlPath": "/v1/customers"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": "cus_test_{{randomValue type='ALPHANUMERIC' length=24}}",
+      "object": "customer",
+      "email": "{{jsonPath request.body '$.email'}}",
+      "name": "{{jsonPath request.body '$.name'}}",
+      "created": "{{now}}",
+      "livemode": false,
+      "metadata": {},
+      "default_source": null,
+      "invoice_prefix": "TEST",
+      "balance": 0,
+      "delinquent": false
+    }
+  }
+}

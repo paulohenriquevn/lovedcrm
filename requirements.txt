@@ -1,0 +1,99 @@
+# 🚀 NextJS + FastAPI SaaS Starter - Simplified Dependencies
+# Consolidated requirements file following KISS principle
+
+# =====================================================
+# 🔧 CORE FASTAPI 
+# =====================================================
+fastapi==0.111.1
+uvicorn[standard]==0.30.3
+python-multipart==0.0.9
+python-dotenv==1.0.1
+
+# =====================================================
+# 🗄️ DATABASE & ORM
+# =====================================================
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.7
+asyncpg==0.29.0
+
+# =====================================================
+# 🔍 DATA VALIDATION
+# =====================================================
+pydantic==2.8.2
+pydantic-settings==2.0.3
+
+# =====================================================
+# 🔐 AUTHENTICATION & SECURITY
+# =====================================================
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.3.0
+bleach==6.1.0
+
+# =====================================================
+# 🌐 OAUTH & HTTP
+# =====================================================
+authlib==1.2.1
+httpx==0.27.0
+requests==2.31.0
+urllib3==1.26.18
+
+# =====================================================
+# 📧 EMAIL SERVICES
+# =====================================================
+fastapi-mail==1.4.1
+jinja2==3.1.3
+
+# =====================================================
+# 💳 PAYMENT PROCESSING
+# =====================================================
+stripe==7.8.0
+
+# =====================================================
+# 🧠 CACHE & BACKGROUND JOBS
+# =====================================================
+celery==5.3.4
+redis==5.0.1
+# 🔒 Redis async support for token blacklist security
+redis[hiredis]==5.0.1
+# 🚦 Rate limiting with Redis backend
+slowapi==0.1.9
+
+# =====================================================
+# 📊 MONITORING & LOGGING
+# =====================================================
+structlog==23.2.0
+python-json-logger==2.0.7
+psutil==5.9.6
+sentry-sdk[fastapi]==2.17.0
+
+# =====================================================
+# 🛠️ DEVELOPMENT & TESTING (OPTIONAL)
+# =====================================================
+# Only install these in development:
+# pip install pytest pytest-asyncio factory-boy faker
+# pip install black isort flake8 mypy
+
+# Testing Framework
+pytest==7.4.3
+pytest-asyncio==0.21.1
+factory-boy==3.3.0
+faker==22.0.0
+
+# Code Quality
+black==23.11.0
+isort==5.12.0
+flake8>=6.0.0,<7.0.0
+mypy==1.7.1
+bandit==1.7.5
+
+# =====================================================
+# 🔧 UTILITIES
+# =====================================================
+python-slugify==8.0.1
+user-agents==2.2.0
+
+# =====================================================
+# 🔐 TWO-FACTOR AUTHENTICATION
+# =====================================================
+pyotp==2.9.0
+qrcode[pil]==7.4.2

@@ -1,0 +1,546 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "update": "Actualizar",
+    "updating": "Actualizando...",
+    "confirm": "Confirmar",
+    "yes": "Sí",
+    "no": "No",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "clear": "Limpiar",
+    "apply": "Aplicar",
+    "close": "Cerrar",
+    "back": "Atrás",
+    "home": "Inicio",
+    "dashboard": "Panel",
+    "settings": "Configuración",
+    "profile": "Perfil",
+    "logout": "Cerrar sesión",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "user": "Usuario",
+    "features": {
+      "title": "¿Por Qué Elegir Nuestra Plataforma?",
+      "subtitle": "Todo lo que necesitas para construir y escalar tu negocio",
+      "performance": {
+        "title": "Ultra Rápido",
+        "description": "Construido para velocidad con arquitectura moderna y rendimiento optimizado"
+      },
+      "security": {
+        "title": "Seguridad Empresarial",
+        "description": "Seguridad nivel bancario con encriptación de extremo a extremo y cumplimiento"
+      },
+      "analytics": {
+        "title": "Analytics Avanzado",
+        "description": "Insights en tiempo real y reportes detallados para impulsar tu negocio"
+      }
+    }
+  },
+  "navigation": {
+    "home": "Inicio",
+    "dashboard": "Panel",
+    "admin": "Administración",
+    "team": "Equipo",
+    "organizations": "Organizaciones",
+    "users": "Usuarios",
+    "billing": "Facturación",
+    "analytics": "Análisis",
+    "settings": "Configuración",
+    "profile": "Perfil"
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar Sesión",
+      "subtitle": "Ingresa tus credenciales para acceder a tu cuenta",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "noAccount": "¿No tienes una cuenta?",
+      "signUp": "Registrarse",
+      "signIn": "Iniciar sesión",
+      "signingIn": "Iniciando sesión...",
+      "signInWithGoogle": "Iniciar sesión con Google",
+      "rememberMe": "Recordarme",
+      "showPassword": "Mostrar contraseña",
+      "hidePassword": "Ocultar contraseña",
+      "orContinueWith": "O continúa con email"
+    },
+    "register": {
+      "title": "Crear Cuenta",
+      "subtitle": "Crea tu cuenta para comenzar",
+      "fullName": "Nombre Completo",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar Contraseña",
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "signIn": "Iniciar sesión",
+      "signUpWithGoogle": "Registrarse con Google",
+      "agreeToTerms": "Acepto los Términos de Servicio y la Política de Privacidad",
+      "termsOfService": "Términos de Servicio",
+      "and": "y",
+      "privacyPolicy": "Política de Privacidad",
+      "success": {
+        "title": "¡Cuenta creada exitosamente!",
+        "description": "Redirigiendo al panel..."
+      },
+      "error": {
+        "title": "Error al crear cuenta",
+        "generic": "Error al crear cuenta"
+      },
+      "googleError": {
+        "title": "Error de Google Sign Up"
+      },
+      "testimonial": {
+        "text": "Esta plataforma ha transformado cómo gestionamos nuestro negocio. Simple, poderosa y confiable.",
+        "author": "Sarah Chen, CEO de TechStart"
+      }
+    },
+    "forgotPassword": {
+      "title": "Olvidé mi Contraseña",
+      "subtitle": "Ingresa tu correo y te enviaremos instrucciones para restablecer tu contraseña",
+      "email": "Correo *",
+      "emailPlaceholder": "tu@correo.com",
+      "sendInstructions": "Enviar Instrucciones",
+      "sendResetLink": "Enviar Enlace de Restablecimiento",
+      "backToLogin": "Volver al Inicio de Sesión",
+      "noAccount": "¿No tienes una cuenta?",
+      "createAccount": "Crear Cuenta",
+      "success": {
+        "title": "¡Correo Enviado!",
+        "description": "Si existe una cuenta asociada al correo",
+        "instructions": "recibirás instrucciones para restablecer tu contraseña",
+        "checkSpam": "No olvides revisar tu carpeta de spam",
+        "resendEmail": "Reenviar Correo"
+      }
+    },
+    "resetPassword": {
+      "title": "Restablecer Contraseña",
+      "subtitle": "Ingresa tu nueva contraseña",
+      "newPassword": "Nueva Contraseña",
+      "confirmNewPassword": "Confirmar Nueva Contraseña",
+      "resetPassword": "Restablecer Contraseña",
+      "newPasswordPlaceholder": "Ingresa tu nueva contraseña",
+      "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
+      "rememberPassword": "¿Recordaste la contraseña?",
+      "success": {
+        "title": "¡Contraseña Restablecida Exitosamente!",
+        "subtitle": "Tu contraseña ha sido restablecida exitosamente. Ahora puedes iniciar sesión con tu nueva contraseña.",
+        "signIn": "Iniciar Sesión"
+      },
+      "noToken": {
+        "title": "Enlace de Reset Inválido",
+        "subtitle": "Este enlace de restablecimiento de contraseña es inválido o ha expirado. Solicita un nuevo restablecimiento de contraseña.",
+        "requestNew": "Solicitar Nuevo Reset"
+      }
+    },
+    "changePassword": {
+      "title": "Cambiar Contraseña",
+      "tempPasswordDescription": "Necesitas cambiar tu contraseña temporal para continuar",
+      "changePasswordFor": "Cambiar contraseña para: {email}",
+      "tempPassword": "Contraseña Temporal *",
+      "newPassword": "Nueva Contraseña *",
+      "confirmNewPassword": "Confirmar Nueva Contraseña *",
+      "tempPasswordPlaceholder": "Ingresa tu contraseña temporal",
+      "newPasswordPlaceholder": "Ingresa tu nueva contraseña",
+      "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
+      "passwordRequirements": "Requisitos de contraseña",
+      "changingPassword": "Cambiando contraseña...",
+      "changePasswordAndLogin": "Cambiar Contraseña e Iniciar Sesión",
+      "backToLogin": "Volver al login",
+      "validation": {
+        "tempPasswordRequired": "Contraseña temporal es requerida",
+        "newPasswordRequired": "Nueva contraseña es requerida",
+        "newPasswordMinLength": "Nueva contraseña debe tener al menos 6 caracteres",
+        "confirmPasswordRequired": "Confirmación de contraseña es requerida",
+        "passwordsNotMatch": "Las contraseñas no coinciden",
+        "newPasswordMustDiffer": "La nueva contraseña debe ser diferente de la contraseña temporal"
+      }
+    },
+    "common": {
+      "orContinueWith": "O continúa con correo",
+      "showPassword": "Mostrar contraseña",
+      "hidePassword": "Ocultar contraseña",
+      "brandName": "SaaS Starter"
+    },
+    "oauth": {
+      "error": {
+        "title": "Error de Autenticación",
+        "subtitle": "Error al iniciar sesión con Google",
+        "redirecting": "Redirigiendo a la página de inicio de sesión..."
+      },
+      "processing": {
+        "title": "Iniciando sesión",
+        "subtitle": "Procesando autenticación de Google...",
+        "loading": "Procesando...",
+        "finishing": "Casi listo..."
+      }
+    }
+  },
+  "dashboard": {
+    "welcome": "Bienvenido de nuevo",
+    "overview": "Resumen",
+    "stats": {
+      "totalUsers": "Total de Usuarios",
+      "activeOrganizations": "Organizaciones Activas",
+      "monthlyRevenue": "Ingresos Mensuales",
+      "growthRate": "Tasa de Crecimiento"
+    },
+    "recentActivity": "Actividad Reciente",
+    "quickActions": "Acciones Rápidas"
+  },
+  "organization": {
+    "name": "Nombre de la Organización",
+    "members": "Miembros",
+    "settings": "Configuración de la Organización",
+    "invite": "Invitar Miembros",
+    "roles": {
+      "owner": "Propietario",
+      "admin": "Administrador",
+      "member": "Miembro"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "pending": "Pendiente"
+    }
+  },
+  "user": {
+    "profile": "Perfil",
+    "preferences": "Preferencias",
+    "security": "Seguridad",
+    "language": "Idioma",
+    "timezone": "Zona Horaria",
+    "notifications": "Notificaciones",
+    "privacy": "Privacidad",
+    "noName": "Sin nombre",
+    "advancedManagementActive": "Gestión avanzada activa",
+    "saveChanges": "Guardar cambios",
+    "status": {
+      "label": "Estado",
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "fullName": "Nombre completo",
+    "email": "Email",
+    "phone": "Teléfono",
+    "notProvided": "No proporcionado",
+    "suspendUser": "Suspender usuario",
+    "activateUser": "Activar usuario",
+    "deleteUser": "Eliminar usuario",
+    "deleting": "Eliminando..."
+  },
+  "form": {
+    "required": "Este campo es obligatorio",
+    "invalidEmail": "Por favor, ingresa una dirección de correo válida",
+    "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+    "passwordsNotMatch": "Las contraseñas no coinciden",
+    "saveChanges": "Guardar Cambios",
+    "discardChanges": "Descartar Cambios",
+    "unsavedChanges": "Tienes cambios sin guardar"
+  },
+  "error": {
+    "generic": "Algo salió mal. Inténtalo de nuevo.",
+    "network": "Error de red. Verifica tu conexión.",
+    "unauthorized": "No estás autorizado para realizar esta acción.",
+    "notFound": "El recurso solicitado no fue encontrado.",
+    "validation": "Por favor, verifica tu entrada e inténtalo de nuevo.",
+    "serverError": "Error del servidor. Inténtalo más tarde.",
+    "boundary": {
+      "title": "¡Ups! Algo salió mal",
+      "description": "Ocurrió un error inesperado. Nuestro equipo ha sido notificado.",
+      "devDetails": "Detalles del error (desarrollo)",
+      "unknownError": "Error desconocido",
+      "retry": "Intentar de nuevo",
+      "goHome": "Ir al inicio"
+    },
+    "organizationError": {
+      "title": "Error de Organización",
+      "tryAgain": "Intentar de Nuevo"
+    }
+  },
+  "language": {
+    "selectLanguage": "Seleccionar Idioma",
+    "english": "Inglés",
+    "portuguese": "Portugués",
+    "spanish": "Español",
+    "languageChanged": "Idioma cambiado exitosamente"
+  },
+  "search": {
+    "placeholder": "Escribe un comando o busca...",
+    "noResults": "No se encontraron resultados.",
+    "quickActions": "Acciones Rápidas",
+    "navigation": "Navegación",
+    "dashboardDesc": "Resumen de la organización",
+    "teamDesc": "Gestionar miembros del equipo",
+    "billingDesc": "Planes y facturas",
+    "settingsDesc": "Configuración de la cuenta"
+  },
+  "date": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "thisWeek": "Esta semana",
+    "thisMonth": "Este mes",
+    "thisYear": "Este año",
+    "custom": "Rango personalizado"
+  },
+  "currency": {
+    "usd": "USD",
+    "brl": "BRL",
+    "eur": "EUR"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Panel",
+      "subtitle": "Resumen de tu organización",
+      "welcome": "Bienvenido de nuevo",
+      "loading": "Cargando datos del panel...",
+      "loadError": "Error al cargar panel",
+      "quickActions": "Acciones Rápidas",
+      "quickActionsDescription": "Gestiona tu organización con acciones rápidas",
+      "stats": {
+        "totalUsers": "Total de Usuarios",
+        "organizations": "Organizaciones",
+        "activeUsers": "Usuarios Activos",
+        "newRegistrations": "Nuevos Registros"
+      },
+      "actions": {
+        "team": {
+          "title": "Gestión de Equipo",
+          "description": "Invita miembros, gestiona roles y organiza tu equipo",
+          "action": "Gestionar Equipo"
+        },
+        "settings": {
+          "title": "Configuración de Organización",
+          "description": "Actualiza el perfil y preferencias de tu organización",
+          "action": "Abrir Configuración"
+        },
+        "billing": {
+          "title": "Facturación y Planes",
+          "description": "Gestiona suscripciones, pagos e historial de facturación",
+          "action": "Ver Facturación"
+        }
+      },
+      "systemMetrics": {
+        "title": "Métricas del Sistema",
+        "description": "Estado actual de los recursos del servidor",
+        "cpu": "CPU",
+        "memory": "Memoria",
+        "disk": "Disco",
+        "uptime": "Uptime"
+      },
+      "recentActivity": {
+        "title": "Actividad Reciente",
+        "description": "Últimas acciones realizadas en el sistema"
+      }
+    },
+    "team": {
+      "title": "Gestión de Equipo",
+      "subtitle": "Gestiona los miembros de tu organización",
+      "manageInvites": "Gestionar Invitaciones",
+      "inviteButton": "Invitar Miembro",
+      "members": "Miembros",
+      "roles": "Roles",
+      "status": "Estado",
+      "actions": "Acciones",
+      "noMembers": "No se encontraron miembros del equipo",
+      "stats": {
+        "totalMembers": "Total de Miembros",
+        "administrators": "Administradores",
+        "activeMembers": "Miembros Activos"
+      },
+      "dialogs": {
+        "changeRole": {
+          "title": "Cambiar Rol del Miembro",
+          "description": "Estás a punto de cambiar el rol de {name} a {role}."
+        },
+        "removeMember": {
+          "title": "Remover Miembro",
+          "description": "¿Estás seguro de que quieres remover a {name} de la organización?"
+        }
+      }
+    },
+    "settings": {
+      "title": "Configuración",
+      "subtitle": "Gestiona la configuración de tu organización",
+      "profile": "Configuración de Perfil",
+      "preferences": "Preferencias",
+      "billing": "Facturación",
+      "notifications": "Notificaciones",
+      "security": "Seguridad",
+      "advanced": "Avanzado",
+      "password": {
+        "currentPassword": "Contraseña Actual",
+        "newPassword": "Nueva Contraseña",
+        "confirmNewPassword": "Confirmar Nueva Contraseña",
+        "currentPasswordPlaceholder": "Ingresa tu contraseña actual",
+        "newPasswordPlaceholder": "Ingresa tu nueva contraseña",
+        "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
+        "minimumCharacters": "Mínimo 8 caracteres",
+        "changing": "Cambiando...",
+        "changePassword": "Cambiar Contraseña"
+      }
+    },
+    "billing": {
+      "title": "Facturación",
+      "subtitle": "Gestiona tu suscripción y facturación",
+      "currentPlan": "Plan Actual",
+      "changePlan": "Cambiar Plan",
+      "invoices": "Facturas",
+      "paymentMethod": "Método de Pago"
+    }
+  },
+  "team": {
+    "invite": {
+      "title": "Invitar Miembro",
+      "subtitle": "Envía una invitación para unirse a tu organización",
+      "email": "Dirección de Email",
+      "role": "Rol",
+      "message": "Mensaje Personal",
+      "sendInvite": "Enviar Invitación",
+      "success": "Invitación enviada exitosamente",
+      "error": "Error al enviar invitación"
+    },
+    "members": {
+      "name": "Nombre",
+      "email": "Email",
+      "role": "Rol",
+      "joinedAt": "Se unió",
+      "lastActive": "Última Actividad",
+      "changeRole": "Cambiar Rol",
+      "removeMember": "Remover Miembro"
+    },
+    "roles": {
+      "owner": "Propietario",
+      "admin": "Administrador",
+      "member": "Miembro"
+    }
+  },
+  "toast": {
+    "success": {
+      "title": "Éxito",
+      "accountCreated": "¡Cuenta creada exitosamente!",
+      "memberInvited": "Miembro invitado exitosamente",
+      "memberRemoved": "Miembro removido exitosamente",
+      "settingsSaved": "Configuración guardada exitosamente",
+      "passwordChanged": "Contraseña cambiada exitosamente"
+    },
+    "error": {
+      "title": "Error",
+      "description": "Algo salió mal. Inténtalo de nuevo.",
+      "generic": "Algo salió mal",
+      "accountCreation": "Error al crear cuenta",
+      "memberInvite": "Error al invitar miembro",
+      "memberRemove": "Error al remover miembro",
+      "settingsSave": "Error al guardar configuración",
+      "passwordChange": "Error al cambiar contraseña",
+      "unauthorized": "No estás autorizado para realizar esta acción",
+      "networkError": "Error de red. Verifica tu conexión."
+    },
+    "info": {
+      "title": "Información",
+      "redirecting": "Redirigiendo...",
+      "processing": "Procesando...",
+      "loading": "Cargando..."
+    },
+    "passwordChange": {
+      "title": "Cambio de Contraseña Requerido",
+      "description": "Necesitas cambiar tu contraseña temporal antes de continuar."
+    },
+    "loginSuccess": {
+      "title": "¡Bienvenido de vuelta!",
+      "description": "Has iniciado sesión exitosamente."
+    },
+    "emailNotVerified": {
+      "title": "Email No Verificado",
+      "action": "Reenviar email de verificación"
+    },
+    "emailSent": {
+      "title": "Email Enviado",
+      "description": "El email de verificación ha sido enviado a tu bandeja de entrada."
+    },
+    "googleError": {
+      "title": "Error de Inicio de Sesión con Google"
+    }
+  },
+  "validation": {
+    "required": "Este campo es obligatorio",
+    "email": {
+      "required": "El email es obligatorio",
+      "invalid": "Por favor, ingresa una dirección de email válida"
+    },
+    "password": {
+      "required": "La contraseña es obligatoria",
+      "minLength": "La contraseña debe tener al menos 6 caracteres",
+      "minLengthReset": "La contraseña debe tener al menos 8 caracteres",
+      "uppercase": "La contraseña debe contener al menos una letra mayúscula",
+      "lowercase": "La contraseña debe contener al menos una letra minúscula",
+      "number": "La contraseña debe contener al menos un número",
+      "special": "La contraseña debe contener al menos un carácter especial",
+      "mismatch": "Las contraseñas no coinciden",
+      "strength": "La contraseña debe tener al menos 8 caracteres, incluyendo mayúscula, minúscula y número"
+    },
+    "name": {
+      "minLength": "El nombre debe tener al menos 2 caracteres"
+    },
+    "phone": {
+      "invalid": "Ingresa un teléfono válido"
+    },
+    "url": {
+      "invalid": "Ingresa una URL válida"
+    },
+    "numeric": {
+      "only": "Ingresa solo números"
+    },
+    "number": {
+      "invalid": "Ingresa un número válido",
+      "min": "El valor debe ser mayor o igual a {min}",
+      "max": "El valor debe ser menor o igual a {max}",
+      "range": "El valor debe estar entre {min} y {max}"
+    },
+    "minLength": "Debe tener al menos {min} caracteres",
+    "maxLength": "Debe tener como máximo {max} caracteres",
+    "terms": "Debes aceptar los términos y condiciones para continuar",
+    "error": {
+      "generic": "Error de validación"
+    }
+  },
+  "buttons": {
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse",
+    "createAccount": "Crear Cuenta",
+    "forgotPassword": "Olvidé la Contraseña",
+    "resetPassword": "Restablecer Contraseña",
+    "sendResetLink": "Enviar Enlace de Restablecimiento",
+    "backToLogin": "Volver al Inicio de Sesión",
+    "continueWithGoogle": "Continuar con Google",
+    "showPassword": "Mostrar Contraseña",
+    "hidePassword": "Ocultar Contraseña",
+    "acceptInvite": "Aceptar Invitación",
+    "declineInvite": "Rechazar Invitación"
+  },
+  "placeholders": {
+    "fullName": "Ingresa tu nombre completo",
+    "email": "tu@email.com",
+    "password": "Ingresa tu contraseña",
+    "confirmPassword": "Confirma tu contraseña",
+    "searchMembers": "Buscar miembros...",
+    "personalMessage": "Mensaje personal opcional..."
+  },
+  "links": {
+    "noAccount": "¿No tienes una cuenta?",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "termsOfUse": "Términos de Servicio",
+    "privacyPolicy": "Política de Privacidad",
+    "acceptTerms": "Acepto los Términos de Servicio y la Política de Privacidad"
+  }
+}

@@ -1,0 +1,11 @@
+api/
+tests/
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+.next/
+node_modules/
+dist/
+build/
+*.d.ts

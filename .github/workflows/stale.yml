@@ -1,0 +1,114 @@
+name: Stale Issues & PRs
+
+on:
+  schedule:
+    # Run every day at 1:00 AM UTC
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    name: Mark Stale Issues & PRs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Handle Stale Items
+        uses: actions/stale@v9
+        with:
+          # Repository token
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Issues configuration
+          stale-issue-message: |
+            This issue has been automatically marked as stale because it has not had recent activity.
+
+            **Next steps:**
+            - **Comment** if this issue is still relevant
+            - **Update** the issue with current information
+            - **Add labels** to help categorize the issue
+
+            **This issue will be automatically closed in 7 days if no further activity occurs.**
+
+            Thank you for your contribution to improving our multi-tenant SaaS system!
+
+          close-issue-message: |
+            This issue has been automatically closed due to inactivity.
+
+            **Don't worry!** If this issue is still relevant:
+            - **Reopen** the issue
+            - **Comment** with updated information
+            - **Create a new issue** if the context has changed
+
+            We appreciate your understanding and contribution!
+
+          stale-issue-label: 'stale'
+          close-issue-label: 'closed-due-to-inactivity'
+
+          # Pull requests configuration
+          stale-pr-message: |
+            This pull request has been automatically marked as stale because it has not had recent activity.
+
+            **To keep this PR active:**
+            - **Comment** on the status
+            - **Rebase** with the latest main branch
+            - **Address** any review feedback
+            - **Update** the PR description if needed
+
+            **This PR will be automatically closed in 3 days if no further activity occurs.**
+
+            Thank you for your contribution!
+
+          close-pr-message: |
+            This pull request has been automatically closed due to inactivity.
+
+            **To continue with this work:**
+            - **Reopen** the pull request
+            - **Create a new PR** with updated changes
+            - **Comment** if you need assistance
+
+            Your contribution is valued!
+
+          stale-pr-label: 'stale'
+          close-pr-label: 'closed-due-to-inactivity'
+
+          # Timing configuration
+          days-before-stale: 21 # Mark as stale after 21 days
+          days-before-close: 7 # Close issues 7 days after stale
+          days-before-pr-close: 3 # Close PRs 3 days after stale
+
+          # Exemptions
+          exempt-issue-labels: |
+            security
+            critical
+            pinned
+            blocked
+            in-progress
+            needs-design
+            epic
+
+          exempt-pr-labels: |
+            security
+            critical
+            work-in-progress
+            blocked
+            needs-review
+
+          exempt-milestones: true
+          exempt-all-assignees: true
+
+          # Limits
+          operations-per-run: 100
+
+          # Additional options
+          delete-branch: false
+          start-date: '2024-01-01T00:00:00Z'
+
+          # Only process items updated before the stale date
+          only-labels: ''
+
+          # Debug mode (set to true for testing)
+          debug-only: false

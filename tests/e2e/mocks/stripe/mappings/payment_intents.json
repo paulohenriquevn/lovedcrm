@@ -1,0 +1,40 @@
+{
+  "name": "Create Payment Intent Success",
+  "request": {
+    "method": "POST",
+    "urlPath": "/v1/payment_intents"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "id": "pi_test_{{randomValue type='ALPHANUMERIC' length=24}}",
+      "object": "payment_intent",
+      "status": "succeeded",
+      "amount": "{{jsonPath request.body '$.amount'}}",
+      "currency": "{{jsonPath request.body '$.currency'}}",
+      "created": "{{now}}",
+      "customer": "{{jsonPath request.body '$.customer'}}",
+      "metadata": {},
+      "livemode": false,
+      "client_secret": "pi_test_{{randomValue type='ALPHANUMERIC' length=24}}_secret_{{randomValue type='ALPHANUMERIC' length=24}}",
+      "charges": {
+        "object": "list",
+        "data": [
+          {
+            "id": "ch_test_{{randomValue type='ALPHANUMERIC' length=24}}",
+            "object": "charge",
+            "amount": "{{jsonPath request.body '$.amount'}}",
+            "currency": "{{jsonPath request.body '$.currency'}}",
+            "status": "succeeded",
+            "paid": true,
+            "refunded": false,
+            "created": "{{now}}"
+          }
+        ]
+      }
+    }
+  }
+}

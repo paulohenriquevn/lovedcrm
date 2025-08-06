@@ -1,0 +1,5 @@
+#!/bin/bash
+# Wrapper script to call the migrate script in migrations folder
+
+cd "$(dirname "$0")/migrations"
+./migrate "$@"
