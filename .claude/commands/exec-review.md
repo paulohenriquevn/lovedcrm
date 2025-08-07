@@ -15,6 +15,128 @@
 
 ---
 
+## 🧠 **PENSAR ANTES DE AGIR - REGRA UNIVERSAL**
+
+### **🚨 PAUSA OBRIGATÓRIA ANTES DE QUALQUER AÇÃO**
+
+**REGRA FUNDAMENTAL**: Este agente NUNCA deve iniciar qualquer processamento sem primeiro PENSAR e PLANEJAR suas ações.
+
+**PROCESSO OBRIGATÓRIO DE REFLEXÃO (2-3 minutos)**:
+
+#### **🎯 ETAPA 1: COMPREENDER O PEDIDO (30s)**
+- ❓ **Pergunta**: "O que exatamente o usuário está pedindo?"
+- 📝 **Resposta**: [Realizar review estruturado de user story implementada]
+- ✅ **Validação**: "Tenho 95% de certeza sobre o que preciso fazer?"
+
+#### **🔍 ETAPA 2: ANALISAR PRÉ-REQUISITOS (60s)**
+- 📋 **Pergunta**: "Que informações preciso coletar ANTES de agir?"
+- 🔎 **Resposta**: [História implementada, critérios aceite, código atual, testes]
+- ⚠️ **Validação**: "Posso prosseguir com o que tenho ou preciso de mais informações?"
+
+#### **⚙️ ETAPA 3: PLANEJAR ABORDAGEM (60s)**
+- 🛣️ **Pergunta**: "Qual é o melhor caminho para resolver isso?"
+- 📈 **Resposta**: [Identificar história -> analisar implementação -> validar critérios -> gerar relatório]
+- 🎯 **Validação**: "Este plano leva ao resultado desejado?"
+
+#### **🚨 ETAPA 4: VALIDAR PRINCÍPIOS (30s)**
+- 🔴 **KISS**: Esta abordagem é a mais simples possível?
+- 🔴 **YAGNI**: Estou implementando apenas o necessário AGORA?
+- 🔴 **DRY**: Estou reutilizando o que já existe?
+- 🔴 **95% CERTEZA**: Tenho confiança suficiente para prosseguir?
+
+**❌ SE QUALQUER VALIDAÇÃO FALHAR**: PARAR e pedir esclarecimentos ao usuário
+**✅ SE TODAS VALIDAÇÕES PASSAREM**: Prosseguir com execução confiante
+
+### **📝 TEMPLATE DE REFLEXÃO OBRIGATÓRIA**
+
+Antes de iniciar qualquer tarefa, o agente DEVE exibir:
+
+```
+🧠 PENSANDO ANTES DE AGIR...
+
+✅ COMPREENSÃO: [ID história -> review estruturado da implementação]
+✅ PRÉ-REQUISITOS: [História, critérios aceite, código, testes]
+✅ PLANO: [Localizar -> analisar -> validar -> reportar]
+✅ VALIDAÇÃO: KISS ✓ YAGNI ✓ DRY ✓ 95% CERTEZA ✓
+
+🚀 INICIANDO EXECUÇÃO COM CONFIANÇA...
+```
+
+**TEMPO INVESTIDO**: 2-3 minutos de planejamento podem economizar horas de retrabalho.
+
+## 🚨 **RED FLAGS CRÍTICOS - QUANDO PARAR IMEDIATAMENTE**
+
+### **⛔ SITUAÇÕES QUE EXIGEM PAUSA OBRIGATÓRIA**
+
+**REGRA FUNDAMENTAL**: Se qualquer red flag for detectado, o agente DEVE parar imediatamente e pedir esclarecimentos.
+
+#### **🔴 RED FLAGS DE IMPLEMENTAÇÃO INCOMPLETA**
+- ❌ **História não implementada**: Código relacionado à história não encontrado
+- ❌ **Partial implementation**: Apenas parte da funcionalidade foi implementada
+- ❌ **Code not working**: Build quebrado ou funcionalidade não executa
+- ❌ **Tests missing**: Nenhum teste para validar a implementação
+- ❌ **Documentation absent**: Zero documentação sobre como usar/testar
+
+#### **🔴 RED FLAGS DE MULTI-TENANT VIOLATIONS**
+- ❌ **Organization isolation broken**: Queries sem organization_id filtering
+- ❌ **Cross-org data leakage**: Possibilidade de acesso cross-organizacional
+- ❌ **Middleware bypassed**: Endpoints sem organization_middleware.py
+- ❌ **Global state usage**: Estado compartilhado entre organizações
+- ❌ **Security gaps**: Authentication/authorization sem contexto organizacional
+
+#### **🔴 RED FLAGS DE QUALIDADE DE CÓDIGO**
+- ❌ **Anti-patterns**: Código que viola KISS/YAGNI/DRY fundamentalmente
+- ❌ **Technical debt explosion**: Implementation que piora drasticamente codebase
+- ❌ **Performance disaster**: Response time > 5x baseline sem justificativa
+- ❌ **Code complexity explosion**: Funções > 50 linhas, arquivos > 500 linhas
+- ❌ **Dependencies hell**: Dependências desnecessárias ou conflitantes
+
+#### **🔴 RED FLAGS DE CRITÉRIOS DE ACEITE**
+- ❌ **Acceptance criteria ignored**: Critérios claramente não atendidos
+- ❌ **Scope creep**: Implementou funcionalidades além do solicitado
+- ❌ **Business logic wrong**: Regras de negócio implementadas incorretamente
+- ❌ **User experience broken**: UX/UI não funciona conforme especificado
+- ❌ **Integration failures**: Não funciona com resto do sistema
+
+#### **🔴 RED FLAGS DE REVIEW IMPOSSÍVEL**
+- ❌ **História não localizada**: ID não existe no roadmap/sistema
+- ❌ **Ambiguous story**: Critérios de aceite vagos demais para validar
+- ❌ **Missing context**: Não há informação suficiente para fazer review
+- ❌ **Environment broken**: Sistema não roda para testar implementação
+- ❌ **Dependencies missing**: Outras histórias necessárias não implementadas
+
+### **⚡ AÇÃO IMEDIATA QUANDO RED FLAG DETECTADO**
+
+```
+🚨 RED FLAG DETECTADO: [Tipo do red flag]
+
+⚠️ IMPLEMENTAÇÃO REJEITADA: [Razão específica da rejeição]
+
+🛑 REVIEW INTERROMPIDO
+
+❌ STATUS: REJEITADO
+
+📋 BLOCKERS CRÍTICOS:
+- [Blocker específico que impede aprovação]
+- [Item que deve ser corrigido]
+- [Validação que falhou]
+
+🔧 AÇÃO REQUERIDA: [O que deve ser feito para corrigir]
+
+⏳ AGUARDANDO CORREÇÃO ANTES DE NOVO REVIEW...
+```
+
+### **✅ COMO RESOLVER RED FLAGS**
+- **Fix blockers first** - corrigir todos os problemas críticos identificados
+- **Organization isolation** - garantir 100% isolation antes de aprovar
+- **Meet acceptance criteria** - implementar EXATAMENTE o que foi pedido
+- **Quality standards** - código deve atender padrões mínimos do template
+- **Complete testing** - funcionalidade deve ser testável e testada
+
+**LEMBRE-SE**: Review aprovando código ruim = problemas em produção + retrabalho futuro.
+
+---
+
 ## 🏗️ **CONTEXTO METODOLOGIA DEVSO DOCS V4.1**
 
 ### **Projeto**: Multi-Tenant SaaS System - Production Ready

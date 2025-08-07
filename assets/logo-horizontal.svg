@@ -1,0 +1,8 @@
+<svg width="300" height="80" viewBox="0 0 300 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Heart Icon -->
+  <path d="M40 70C40 70 10 55 10 35C10 25.6 17.6 18 27 18C31.4 18 35.2 20.3 37.5 24C38.1 25 38.7 26 40 27.5C41.3 26 41.9 25 42.5 24C44.8 20.3 48.6 18 53 18C62.4 18 70 25.6 70 35C70 55 40 70 40 70Z" fill="#9333EA"/>
+  
+  <!-- Text -->
+  <text x="90" y="30" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="700" fill="#1F2937">Loved</text>
+  <text x="90" y="55" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="500" fill="#6B7280">CRM</text>
+</svg>

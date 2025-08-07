@@ -129,12 +129,17 @@ make db-up
 # Apply migrations
 cd migrations && ./migrate apply
 
-# Reset database
+# Reset database (WARNING: deletes all data)
 cd migrations && ./migrate init
 
+# Check migration status
+cd migrations && ./migrate status
+
 # Production database access
-make connect-db-prod
-make db-prod-migration-apply
+make connect-db-prod                  # Interactive PostgreSQL connection
+make db-prod-migration-apply         # Apply migrations to production
+make db-prod-migration-status        # Check production migration status
+make check-db-prod                   # Complete health check
 ```
 
 ### Testing Commands
@@ -162,22 +167,44 @@ make test                    # All tests via Makefile
 
 **E2E Testing Environment:**
 ```bash
-make test-start              # Start test environment
-make test-run                # Run E2E tests
-make test-stop               # Stop test environment
+make test-start              # Start complete E2E test environment
+make test-run                # Run all E2E tests
+make test-stop               # Stop and cleanup test environment
+make test-verify             # Verify test environment health
+make test-rebuild            # Rebuild test API image (after dependency changes)
+
+# Hot updates (no restart required)
 make test-hot-migrate        # Hot schema updates (2s vs 45s)
+make test-hot-data          # Reload test data (3s vs 45s)  
+make test-hot-reset         # Reset data keeping schema (5s vs 45s)
+make test-hot-all           # Apply all hot updates
+
+# Test environment logs
+make test-logs              # View all service logs
+make test-logs-api          # View API logs only
+make test-logs-db           # View database logs only
 ```
 
 ### Code Quality
 ```bash
 # Linting and formatting
-npm run lint                 # All linters
+npm run lint                 # All linters (frontend + backend)
 npm run fix                  # Auto-fix issues
 npm run typecheck           # TypeScript check
 
 # Backend quality
-make backend-lint           # Python linters
-make backend-security       # Security scan
+make backend-lint           # Python linters (flake8, mypy, bandit)
+make backend-security       # Security scan (bandit)
+make backend-fix           # Auto-fix backend formatting
+
+# Security analysis
+npm run security            # Python security scan
+npm run security:json       # Generate JSON security report
+npm run security:html       # Generate HTML security report
+
+# Complete quality check
+make lint-all               # All linters (frontend + backend)
+make ci-quick              # Quick CI checks (linting + unit tests)
 ```
 
 ### Docker Development
@@ -187,6 +214,42 @@ make dev-start              # Start in background
 make dev-logs               # View logs
 make dev-stop               # Stop services
 ```
+
+## SAAS Mode Configuration
+
+**CRITICAL:** This template supports two distinct operating modes configured via environment variable:
+
+### SAAS_MODE=B2B (Team Collaboration)
+- **Use Case**: Digital agencies, team-based CRM, collaborative workspaces
+- **Features**: Team management, role-based permissions, shared organization resources
+- **Organization**: Shared workspaces with multiple members
+- **UI**: Team features, member management, role assignments visible
+
+### SAAS_MODE=B2C (Individual Use)
+- **Use Case**: Personal productivity apps, individual dashboards, solo entrepreneurs
+- **Features**: Personal data management, individual subscriptions, private workspaces
+- **Organization**: Auto-created personal organizations (one per user)
+- **UI**: Team features hidden, focus on individual productivity
+
+### Configuration
+```bash
+# B2B Mode (default)
+SAAS_MODE=B2B
+ENABLE_TEAM_FEATURES=true
+SHOW_MEMBER_MANAGEMENT=true
+
+# B2C Mode
+SAAS_MODE=B2C  
+ENABLE_TEAM_FEATURES=false
+SHOW_MEMBER_MANAGEMENT=false
+```
+
+**Important Notes:**
+- Both modes use organization-scoped data isolation (org_id filtering)
+- Auto-organization creation on registration works for both modes
+- Header-based multi-tenancy (X-Org-Id) is always enforced
+- UI adapts automatically based on SAAS_MODE configuration
+- Billing plans can be configured differently for each mode
 
 ## Multi-Tenancy Implementation
 
@@ -359,14 +422,20 @@ SECRET_KEY=your-secret-key-min-32-chars
 JWT_ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
-# Multi-tenancy
+# Multi-tenancy (Critical for data isolation)
 ENFORCE_ORGANIZATION_CONTEXT=true
 AUTO_CREATE_ORGANIZATION=true
+ALLOW_CROSS_ORG_ACCESS=false
 
-# Features
-SAAS_MODE=B2B  # or B2C
+# SaaS Configuration
+SAAS_MODE=B2B  # B2B (team collaboration) or B2C (individual use)
 ENABLE_BILLING=true
 ENABLE_AI_FEATURES=true
+
+# Optional Features
+ENABLE_RECAPTCHA=false
+RECAPTCHA_SITE_KEY=your-recaptcha-site-key
+RECAPTCHA_SECRET_KEY=your-recaptcha-secret-key
 ```
 
 ### Development Tools Configuration
@@ -422,3 +491,43 @@ make db-prod-migration-apply
 - Monitor query performance with org filtering
 
 This architecture ensures complete data isolation between organizations while providing a rich CRM experience for digital agencies.
+
+## Development Rules & Guidelines
+
+### 95% Confidence Rule
+**CRITICAL:** Before implementing any feature, ensure 95%+ confidence about requirements:
+- ✅ **MUST**: Ask questions until absolutely certain about business requirements
+- ✅ **MUST**: Stop and obtain specific evidence if any validation fails  
+- ❌ **NEVER**: Assume requirements or make speculative interpretations
+- ❌ **NEVER**: Proceed without complete validation of user inputs
+
+### Codebase Analysis Rule
+**BEFORE creating any component, service, API, or model:**
+1. **SEARCH FIRST**: Use Glob/Grep/Read tools to analyze existing codebase
+2. **VERIFY EXISTS**: Check if component/service already exists
+3. **EVOLVE vs CREATE**: If exists, evolve existing; if not, follow similar patterns
+4. **DOCUMENT**: "Analyzed X files, found Y similar, decision: evolving Z"
+5. **JUSTIFY**: Clear reasoning for evolution vs new creation
+
+### Fail-Fast Validation
+**Always detect errors as early as possible:**
+- ✅ Validate data at input/function start/process beginning
+- ✅ Immediately halt execution when validation fails
+- ✅ Provide specific error messages with resolution guidance
+- ✅ Prevent invalid data from propagating through system
+
+### Multi-Tenancy Security (Non-Negotiable)
+**Every feature MUST follow these patterns:**
+- ✅ Organization-scoped data isolation (org_id filtering)
+- ✅ Header-based isolation (X-Org-Id + middleware validation)  
+- ✅ Repository pattern with automatic org filtering
+- ✅ JWT with organization context
+- ❌ **NEVER** create routes without organization validation
+- ❌ **NEVER** implement user_id isolation (always use org_id)
+
+### Technology Stack Constraints
+**MUST use established technology stack:**
+- ✅ Next.js 14 + FastAPI + PostgreSQL + Railway only
+- ✅ shadcn/ui + Tailwind CSS + Lucide icons
+- ✅ Leverage existing 55+ production endpoints
+- ❌ **NEVER** suggest alternative technologies or frameworks

@@ -1,627 +1,405 @@
 # exec-refine
 
-**Refina user stories seguindo metodologia DevSolo Docs V4.1**
+**🚨 AVISO CRÍTICO: Este agente DEVE usar ferramentas Read/LS/Bash para analisar o codebase REAL antes de qualquer ação. Refinements baseados em suposições são FALHA CRÍTICA.**
 
-**Argumentos:**
+**Especialista em REFINAMENTO TÉCNICO COMPLETO de user stories com PESQUISA ATIVA INTENSIVA, integrando roadmap + análise profunda do codebase local + pesquisa extensiva de soluções open source + melhores práticas + análise de riscos para gerar refinamentos técnicos detalhados com 99% de certeza técnica.**
 
-- `story`: Texto completo da user story para refinar
+**Entrada:**
+- `story_id`: ID da história do roadmap (ex: "2.1", "1.3")
+
+**Saída**: Refinamento técnico completo salvo automaticamente em `docs/refined/`
 
 **Uso:**
-
 ```bash
-/exec-refine "Como usuário eu quero um sistema completo de relatórios"
-/exec-refine "Implementar dashboard de analytics robusto e escalável"
+/exec-refine "2.1"
+/exec-refine "1.3"
 ```
 
 ---
 
-## 🏗️ **CONTEXTO METODOLOGIA DEVSO DOCS V4.1**
+## 👶 **PARA DESENVOLVEDORES JÚNIOR - O QUE ESTE AGENTE FAZ**
 
-### **Projeto**: Multi-Tenant SaaS System - Production Ready
+### **🎯 ANALOGIA SIMPLES: ARQUITETO TÉCNICO PESQUISADOR**
+Imagine um arquiteto que antes de fazer a planta da casa:
+- **Pesquisa** todos os materiais disponíveis no mercado atual
+- **Analisa** o terreno onde será construída (seu codebase)
+- **Estuda** projetos similares bem-sucedidos (melhores práticas)
+- **Calcula** custos, riscos e timeline realista
+- **Documenta** tudo para que qualquer engenheiro possa executar
 
-- **Stack**: Next.js 14 + FastAPI + PostgreSQL + Railway
-- **Arquitetura**: Clean Architecture + Header-Based Multi-Tenancy + i18n
-- **Status**: ✅ PRODUCTION - 60+ endpoints live on Railway
-- **Filosofia**: 95% de confiança + Organization Isolation + Anti-Scope Creep
+### **📝 EXEMPLO PRÁTICO**
+**Input**: `/exec-refine "2.1"` (sistema de billing)
 
-### 🚨 **PRINCÍPIOS FUNDAMENTAIS - EXTREMAMENTE IMPORTANTES (NUNCA QUEBRAR)**
+**O agente vai:**
+1. **`Read requirements.txt`** → Descobrir FastAPI==0.104.1, SQLAlchemy==2.0.23 instaladas
+2. **`Read package.json`** → Descobrir Next.js 14.0.4, React 18.2.0 instalados  
+3. **`LS api/models/`** → Encontrar user.py, organization.py, subscription.py existentes
+4. **`LS components/ui/`** → Catalogar Button, Card, Input, Form componentes disponíveis
+5. **`Read docs/project/11-roadmap.md`** → Extrair história 2.1 billing completa
+6. **Contextualizar**: "Billing deve usar Stripe + integrar com models/subscription.py existente"
+7. **Pesquisar** soluções compatíveis: "stripe-python 7.8.0 compatível com FastAPI 0.104.1"
+8. **Documentar** especificação técnica baseada em estado REAL do projeto
 
+**Output**: Arquivo `docs/refined/2.1-billing-system.md` com:
+- "Stripe v12.3.0 é melhor que PayPal por X, Y, Z razões técnicas"
+- "Integração com seu auth atual em api/services/auth.py"
+- "Riscos: webhook failures (mitigação: retry queue)"
+- "Timeline: 18h (baseado na análise do seu código)"
+
+### **✅ GARANTIAS**
+- **99% certeza técnica**: Pesquisa exaustiva + análise contextual
+- **Zero surpresas**: Todos riscos mapeados com mitigações
+- **Pronto para execução**: exec-story depois usa este refinement
+- **Justificado**: Toda decisão tecnicamente fundamentada
+
+---
+
+## 🚨 **MISSÃO: REFINAMENTO TÉCNICO COM 99% CERTEZA (RESEARCH PHASE)**
+
+### **PROCESSO AUTOMÁTICO EM 6 FASES COM PESQUISA EXTENSIVA**
+
+**O agente NUNCA deve gerar refinement sem 99% de certeza técnica. SEMPRE executar pesquisa intensiva até atingir clareza técnica absoluta.**
+
+### **🚨 PRINCÍPIOS FUNDAMENTAIS OBRIGATÓRIOS**
 - **KISS (Keep It Simple, Stupid)**: **SEMPRE** escolher a solução mais simples que funciona
-- **YAGNI (You Aren't Gonna Need It)**: **NUNCA** implementar funcionalidades "para o futuro"
-- **DRY (Don't Repeat Yourself)**: **SEMPRE** reutilizar código existente antes de criar novo
-- **⚠️ CRITICAL**: Quebrar estes princípios é considerado falha crítica
+- **YAGNI (You Aren't Gonna Need It)**: **NUNCA** especificar funcionalidades "para o futuro" 
+- **DRY (Don't Repeat Yourself)**: **SEMPRE** priorizar extensão/reutilização do código existente
+- **⚠️ CRITICAL**: Quebrar estes princípios é considerado falha crítica no refinement
 
-### **Complexidade Multi-Tenant**:
+#### **🔍 FASE 0: ANÁLISE DO ESTADO ATUAL DO PROJETO (OBRIGATÓRIA)**
 
-- **Threshold**: Até 8.0/10 (coordenação frontend+backend+org-isolation)
-- **Abordagem**: Organization-centric development, clean architecture
-- **Validação**: Cada story deve manter multi-tenancy e entregar valor org-scoped
+**🚨 REGRA ABSOLUTA: DEVE LER FISICAMENTE ARQUIVOS ANTES DE QUALQUER AÇÃO**
 
----
+### **📁 LEITURA OBRIGATÓRIA DE ARQUIVOS CRÍTICOS**
+- ✅ **DEVE**: `Read requirements.txt` - LISTAR todas bibliotecas Python + versões exatas
+- ✅ **DEVE**: `Read package.json` - LISTAR todas bibliotecas Frontend + versões exatas  
+- ✅ **DEVE**: `Bash cd migrations && ./migrate status` - VERIFICAR versão atual do schema
+- ✅ **DEVE**: `LS api/models/` - MAPEAR todos models existentes
+- ✅ **DEVE**: `LS api/services/` - MAPEAR todos services existentes
+- ✅ **DEVE**: `LS api/routers/` - MAPEAR todos routers existentes
+- ✅ **DEVE**: `LS components/ui/` - CATALOGAR componentes shadcn/ui disponíveis
+- ✅ **DEVE**: `LS app/[locale]/admin/` - MAPEAR estrutura de rotas existentes
+- ✅ **DEVE**: `Read .env.example` - IDENTIFICAR configurações disponíveis
+- ✅ **DEVE**: `Read docker-compose.yml` - ANALISAR services configurados
 
-## 🎯 **PRINCÍPIOS FUNDAMENTAIS DA METODOLOGIA**
+### **🚨 VALIDAÇÃO OBRIGATÓRIA**
+- ❌ **FALHA CRÍTICA**: Não usar ferramentas Read/LS/Bash para análise real
+- ❌ **FALHA CRÍTICA**: Assumir estado do projeto sem verificação direta
+- ❌ **FALHA CRÍTICA**: Sugerir soluções baseadas em suposições
+- ✅ **OBRIGATÓRIO**: Cada item acima DEVE ter evidência de leitura real
 
-### **1. REGRA DE 95% DE CLAREZA**
+#### **📋 FASE 1: LEITURA DO ROADMAP (CONTEXTUALIZADA)**
+- ✅ **DEVE**: Ler AUTOMATICAMENTE o arquivo `docs/project/11-roadmap.md`
+- ✅ **DEVE**: Localizar história pelo `story_id` fornecido (ex: "2.1", "1.3")
+- ✅ **DEVE**: Extrair TODOS dados: User Story, Acceptance Criteria, Contexto, Epic
+- ✅ **DEVE**: Validar que história existe e está completa no roadmap
+- ✅ **DEVE**: **CONTEXTUALIZAR** história com estado atual do projeto (Fase 0)
+- ❌ **NUNCA**: Interpretar história sem contexto do projeto atual
+- ❌ **NUNCA**: Assumir ou inventar dados da história não presentes no roadmap
 
-- **NUNCA** refinar story sem 95% de certeza sobre valor e implementação
-- **SEMPRE** questionar ambiguidades até resolução completa
-- **SEMPRE** confirmar entendimento antes de quebrar/simplificar
-- **NUNCA** assumir contexto ou requisitos não explícitos
+#### **🔍 FASE 2: PESQUISA ATIVA INTENSIVA CONTEXTUALIZADA**
+- ✅ **DEVE**: Pesquisar soluções **COMPATÍVEIS** com versões atuais (Fase 0)
+- ✅ **DEVE**: **KISS**: Priorizar soluções mais simples que atendem os requisitos
+- ✅ **DEVE**: **DRY**: Filtrar opções que **ESTENDEM** funcionalidades existentes  
+- ✅ **DEVE**: **YAGNI**: Focar APENAS nos requisitos da história atual
+- ✅ **DEVE**: Validar compatibilidade com Next.js + FastAPI + PostgreSQL atuais
+- ✅ **DEVE**: Comparar alternativas considerando **migration path** do estado atual
+- ❌ **NUNCA**: Sugerir soluções complexas quando simples funcionam
+- ❌ **NUNCA**: Especificar funcionalidades não solicitadas na história
 
-### **2. VERTICAL SLICE VALIDATION**
+#### **📊 FASE 3: ANÁLISE CONTEXTUAL PROFUNDA OBRIGATÓRIA**
+- ✅ **DEVE**: Usar dados do projeto atual (Fase 0) + história (Fase 1) como contexto
+- ✅ **DEVE**: Validar que TODOS critérios de aceite são preservados no refinement
+- ✅ **DEVE**: Mapear TODOS arquivos do codebase relacionados
+- ✅ **DEVE**: Analisar padrões arquiteturais estabelecidos no projeto
+- ✅ **DEVE**: Identificar pontos de integração existentes
+- ✅ **DEVE**: Validar organization isolation em toda implementação
+- ✅ **DEVE**: Estimar impacto em performance e segurança
 
-- **SEMPRE** garantir que story entrega valor completo (UI + API + DB)
-- **NUNCA** histórias que implementam apenas uma camada
-- **SEMPRE** validar que slice funciona independentemente
-- **SEMPRE** testar fluxo end-to-end após implementação
+#### **🎯 FASE 4: ANÁLISE DE RISCOS E MITIGAÇÕES OBRIGATÓRIA**
+- ✅ **DEVE**: Mapear TODOS riscos técnicos possíveis (Alto/Médio/Baixo)
+- ✅ **DEVE**: **KISS**: Propor mitigações simples e diretas
+- ✅ **DEVE**: **DRY**: Identificar riscos de duplicação/conflito com código existente
+- ✅ **DEVE**: **YAGNI**: Validar que complexidade é justificada pelos requisitos atuais
+- ✅ **DEVE**: Calcular timeline realista baseado em complexidade real
+- ✅ **DEVE**: Validar viabilidade técnica com 99% de confiança
+- ❌ **NUNCA**: Over-engineer mitigações para problemas simples
+- ❌ **NUNCA**: Assumir viabilidade sem validação completa
+- ❌ **NUNCA**: Especificar soluções para problemas futuros hipotéticos
 
-### **3. ANTI-SCOPE CREEP**
-
-- **NUNCA** adicionar funcionalidades durante refinamento
-- **SEMPRE** focar APENAS no valor mínimo necessário
-- **NUNCA** "já que estamos fazendo isso" - cada story é independente
-- **SEMPRE** documentar ideias extras para backlog futuro
-
-### **4. OBJETIVIDADE OBRIGATÓRIA**
-
-- **SEMPRE** usar critérios objetivos da DEFINICOES_OBJETIVAS.md
-- **NUNCA** usar termos subjetivos como "melhor", "robusto", "escalável"
-- **SEMPRE** usar escala 1-10 para avaliar complexidade e valor
-- **SEMPRE** aplicar thresholds: >= 7 crítico, 5-6 médio, <= 4 baixo
-
----
-
-## 📋 **REGRAS INEGOCIÁVEIS DE REFINAMENTO - METODOLOGIA V4.1**
-
-### **1. VERTICAL SLICE Obrigatório**
-
-- **NUNCA** story que não entrega valor completo ao usuário
-- **NUNCA** implementação apenas horizontal (só UI, só API, só DB)
-- **SEMPRE** atravessar Frontend → API → Business Logic → Database
-- **SEMPRE** testável end-to-end pelo usuário final
-- **SEMPRE** deployável independentemente
-
-### **2. SIMPLICIDADE FORÇADA - Next.js Stack**
-
-- **NUNCA** story > 5 pontos (máximo 80h = 2 semanas)
-- **NUNCA** múltiplas funcionalidades em uma story
-- **NUNCA** linguagem vaga ("sistema robusto", "flexível", "escalável")
-- **SEMPRE** solução mais simples que funciona
-- **SEMPRE** aproveitar Next.js App Router + shadcn/ui
-
-### **3. VALIDAÇÃO RÁPIDA - DevSolo Docs**
-
-- **NUNCA** stories com feedback > 14 dias (1 sprint)
-- **NUNCA** perfectionism antes da validação
-- **SEMPRE** critérios de aceite testáveis em 1-2 dias
-- **SEMPRE** falha rápida se não atende critérios objetivos
-
-### **4. INTEGRAÇÃO REAL - Stack Completa**
-
-- **NUNCA** stories que precisam de mocks para funcionar
-- **NUNCA** simular APIs externas na story (usar real)
-- **SEMPRE** integração real com Stripe, Prisma, Supabase
-- **SOMENTE** mocks em testes unitários (.test.ts)
+#### **📁 FASE 5: AUTO-SAVE OBRIGATÓRIO**
+- ✅ **DEVE**: Salvar automaticamente em `docs/refined/[ID]-[title].md`
+- ✅ **DEVE**: Confirmar salvamento com path completo
+- ✅ **DEVE**: Preparar para integração com `/exec-story`
 
 ---
 
-## 🧠 **FASE 1: ANÁLISE CRÍTICA DA STORY - METODOLOGIA V4.1**
+## 📋 **TEMPLATE DE OUTPUT OBRIGATÓRIO**
 
-### **ETAPA 1: DETECÇÃO DE RED FLAGS**
-
-**Story fornecida para análise:**
-$ARGUMENTS
-
-#### **🚨 Red Flags Automáticos - DevSolo Docs:**
-
-- [ ] **Palavras anti-clareza**: "robusto", "escalável", "flexível", "completo", "framework"
-- [ ] **Escopo aberto**: "sistema de", "plataforma de", "módulo de"
-- [ ] **Múltiplas funcionalidades**: múltiplos "E" nos critérios
-- [ ] **Linguagem vaga**: "todos os casos", "diferentes tipos"
-- [ ] **Mock dependency**: "simular", "mockear", "stub"
-
-#### **⚠️ Sinais Anti-VERTICAL SLICE:**
-
-- [ ] **Só uma camada**: apenas UI, apenas API, apenas DB
-- [ ] **Sem valor end-to-end**: usuário não consegue usar
-- [ ] **Dependência de outras stories**: não funciona sozinha
-- [ ] **Setup/configuração apenas**: sem funcionalidade real
-
-#### **⚠️ Sinais Anti-Metodologia V4.1:**
-
-- [ ] **Estimativa > 14 dias**: muito grande para sprint completo
-- [ ] **Critérios vagos**: não testável imediatamente
-- [ ] **Múltiplas validações**: tentativa de fazer muita coisa
-- [ ] **Violação 95% clareza**: ambiguidades não resolvidas
-
-### **ETAPA 2: ANÁLISE DE VERTICAL SLICE (Obrigatória)**
-
-#### **Validação End-to-End - VERTICAL SLICE:**
-
-```
-CAMADAS OBRIGATÓRIAS (todas devem estar presentes):
-□ Frontend/UI: [Interface específica que usuário interage]
-□ Backend/API: [Endpoint específico que recebe requests]
-□ Business Logic: [Regra específica processada]
-□ Persistência: [Dados específicos salvos/lidos]
-□ Integração: [Fluxo completo funcionando]
-
-VALOR ENTREGUE AO USUÁRIO:
-□ Usuário consegue executar ação completa
-□ Resultado visível e utilizável
-□ Não depende de outras stories
-□ Deployável independentemente
-
-ANTI-PADRÕES VERTICAL SLICE (REJEITADOS):
-□ Apenas setup/configuração (horizontal)
-□ Apenas refatoração técnica (horizontal)
-□ Apenas uma camada (horizontal)
-□ Apenas research/spike (não entrega valor)
-□ Requer mock para funcionar (não é real)
-```
-
-### **ETAPA 3: ANÁLISE KISS + FAIL-FAST**
-
-#### **Questões Eliminatórias KISS:**
-
-1. **MVP Real**: Qual a solução MAIS SIMPLES que funciona?
-2. **Hardcode First**: Posso começar com valores fixos/hardcoded?
-3. **Anti-Abstração**: Preciso realmente de patterns complexos?
-4. **50% Rule**: Como fazer em metade do tempo com metade da complexidade?
-
-#### **Questões Eliminatórias FAIL-FAST:**
-
-1. **Teste Imediato**: Usuário consegue testar em máximo 1 dia?
-2. **Feedback Rápido**: Consigo saber se funciona em 24h?
-3. **Falha Clara**: Se der erro, vai falhar rapidamente com mensagem clara?
-4. **Validação Cedo**: Posso validar critérios antes de implementar tudo?
-
----
-
-## 🔪 **FASE 2: ESTRATÉGIAS DE REFINAMENTO**
-
-### **DECISÃO 1: AÇÃO NECESSÁRIA**
-
-#### **✅ Story Aprovada (≤ 5 pontos)**
-
-```yaml
-Critérios Atendidos:
-  - Escopo específico e claro
-  - Valor mensurável definido
-  - Implementação vertical
-  - Estimativa realista
-  - Critérios testáveis
-
-Ação: Melhorar critérios de aceite e Definition of Done
-```
-
-#### **⚡ Story para Simplificação KISS**
-
-```yaml
-Problemas Identificados:
-  - Linguagem de over-engineering
-  - Múltiplas funcionalidades
-  - Abstrações desnecessárias
-  - "Preparação para futuro"
-
-Ação: Aplicar técnicas de simplificação
-```
-
-#### **🔪 Story para Quebra Vertical**
-
-```yaml
-Complexidade Detectada:
-  - Múltiplos fluxos de usuário
-  - Diferentes conjuntos de dados
-  - Várias interfaces/telas
-  - Estimativa > 8 pontos
-
-Ação: Quebrar em stories menores mantendo verticalidade
-```
-
-### **DECISÃO 2: TÉCNICAS ESPECÍFICAS**
-
-#### **Para Simplificação KISS:**
-
-**Técnica 1: Eliminar Abstrações**
-
-```
-❌ ANTES: "Sistema flexível de notificações"
-✅ DEPOIS: "Envio de email simples para usuário"
-
-❌ ANTES: "Framework de relatórios customizável"
-✅ DEPOIS: "Relatório fixo de vendas mensais"
-```
-
-**Técnica 2: Hardcode First**
-
-```
-❌ ANTES: "Configuração dinâmica de dashboards"
-✅ DEPOIS: "Dashboard fixo com 3 métricas básicas"
-
-❌ ANTES: "Sistema de templates flexível"
-✅ DEPOIS: "Template único de email"
-```
-
-**Técnica 3: MVP Forçado**
-
-```
-❌ ANTES: "Carrinho completo com múltiplas opções"
-✅ DEPOIS: "Adicionar/remover item do carrinho"
-
-❌ ANTES: "Sistema de autenticação robusto"
-✅ DEPOIS: "Login com email/senha básico"
-```
-
-#### **Para Quebra Vertical:**
-
-**Padrão 1: Por Cenário de Uso**
-
-```
-Epic: Gerenciar Usuários
-
-Story 1: Visualizar lista de usuários
-- GET /api/users
-- Tabela simples
-- Paginação básica
-
-Story 2: Criar usuário básico
-- POST /api/users
-- Form mínimo (nome, email)
-- Validação simples
-
-Story 3: Editar dados do usuário
-- PUT /api/users/:id
-- Form de edição
-- Update em tempo real
-```
-
-**Padrão 2: Por Progressive Enhancement**
-
-```
-Epic: Sistema de Busca
-
-Story 1: Busca simples por texto
-- Input básico
-- LIKE no banco
-- Lista de resultados
-
-Story 2: Busca com filtro por categoria
-- Dropdown de categorias
-- Filtro funcional
-- Resultados filtrados
-
-Story 3: Busca com ordenação
-- Botões de ordenação
-- Sort no backend
-- UI de feedback
-```
-
-**Padrão 3: Por Dados/Entidades**
-
-```
-Epic: Dashboard de Métricas
-
-Story 1: Métrica de usuários ativos
-- Query específica
-- Card visual simples
-- Número grande e claro
-
-Story 2: Métrica de vendas mensais
-- Query de vendas
-- Gráfico básico
-- Período fixo (30 dias)
-
-Story 3: Métrica de conversão
-- Cálculo simples
-- Percentual visual
-- Tooltip explicativo
-```
-
----
-
-## 🎯 **FASE 3: RESULTADO DO REFINAMENTO**
-
-### **TEMPLATE DE STORY REFINADA**
-
-#### **Para Stories Aprovadas (Melhoradas):**
+### **Estrutura do Refinement: COMPLETE TECHNICAL REFINEMENT**
 
 ```markdown
-## História: [Título Específico e Claro]
+# REFINAMENTO TÉCNICO: [ID] - [TÍTULO]
 
-**Como** [persona específica]
-**Eu quero** [ação específica e mensurável]
-**Para que** [valor específico e claro]
+## 📊 Status do Refinamento
+- **História Analisada**: ✅ [ID] - [Título completo]
+- **Pesquisa Web**: ✅ [X] soluções pesquisadas e comparadas
+- **Codebase Analisado**: ✅ [X] arquivos relevantes mapeados
+- **Riscos Mapeados**: ✅ [X] riscos identificados com mitigações
+- **Certeza Técnica**: ✅ 99% - Refinamento completo
+- **Timeline Estimado**: ⏱️ [X] horas (com buffer de confiança)
 
-### 🎯 Valor de Negócio
+---
 
-- **Impacto**: [Métrica específica que melhora]
-- **Usuário**: [Quem se beneficia exatamente]
-- **Urgência**: [Por que fazer agora]
+## 🏗️ **ANÁLISE DO ESTADO ATUAL DO PROJETO**
 
-### 📋 Critérios de Aceite Específicos
+### **🚨 CHECKLIST OBRIGATÓRIO - EVIDÊNCIAS DE LEITURA REAL**
+```yaml
+Leitura de Arquivos Realizada:
+  ✅ requirements.txt: [LER E COLAR conteúdo aqui]
+  ✅ package.json dependencies: [LER E COLAR versões principais aqui]  
+  ✅ Migration status: [EXECUTAR ./migrate status e colar resultado]
+  ✅ api/models/: [LISTAR todos .py files encontrados]
+  ✅ api/services/: [LISTAR todos .py files encontrados]
+  ✅ api/routers/: [LISTAR todos .py files encontrados]
+  ✅ components/ui/: [LISTAR componentes shadcn disponíveis]
+  ✅ app/[locale]/admin/: [LISTAR estrutura de rotas encontrada]
+  ✅ .env.example: [IDENTIFICAR configurações principais]
 
-**Cenário 1: Happy Path**
-
-- **Dado que** [contexto específico e testável]
-- **Quando** [ação específica do usuário]
-- **Então** [resultado específico e observável]
-
-**Cenário 2: [Caso Edge Importante]**
-
-- **Dado que** [contexto de erro/edge case]
-- **Quando** [ação que gera o caso]
-- **Então** [comportamento esperado específico]
-
-### 🏗️ Implementação Vertical Mínima
-
-**Camadas Envolvidas:**
-
-- **UI**: [Componente/página específica]
-- **API**: [Endpoint específico - método e rota]
-- **Logic**: [Regra de negócio específica]
-- **Data**: [Tabela/modelo específico]
-
-**Arquivos Estimados:**
-
-- `components/[nome-especifico].tsx`
-- `app/api/[endpoint-especifico]/route.ts`
-- `lib/[logica-especifica].ts`
-
-### ⚡ Implementação KISS
-
-**Decisões de Simplicidade:**
-
-- **Hardcode inicial**: [O que pode ser fixo primeiro]
-- **Sem abstrações**: [O que NÃO vai ser genérico]
-- **MVP apenas**: [O que fica fora desta versão]
-
-### ✅ Definition of Done Específica
-
-**Funcional:**
-
-- [ ] [Critério específico 1]
-- [ ] [Critério específico 2]
-- [ ] [Critério específico 3]
-
-**Técnico:**
-
-- [ ] Testes unitários > 80% cobertura
-- [ ] Performance < 500ms
-- [ ] TypeScript strict sem erros
-- [ ] Mobile responsivo
-
-### 📊 Estimativa Final
-
-- **Story Points**: [1, 2, 3, ou 5 apenas]
-- **Tempo**: [1-5 dias máximo]
-- **Confiança**: [Alta = bem definida, Média = algumas dúvidas]
-- **Riscos**: [Lista específica de possíveis problemas]
+❌ FALHA CRÍTICA se qualquer item acima não tiver evidência REAL de leitura
 ```
 
-#### **Para Stories Quebradas:**
+### **Dependencies e Versões REAIS (Baseadas na Leitura)**
+```yaml
+Backend (requirements.txt LIDO):
+  - FastAPI: [versão EXATA encontrada no arquivo]
+  - SQLAlchemy: [versão EXATA encontrada no arquivo]  
+  - [outras dependências REAIS listadas]
 
-```markdown
-## Epic Original: [Título do Epic]
+Frontend (package.json LIDO):
+  - Next.js: [versão EXATA encontrada no arquivo]
+  - React: [versão EXATA encontrada no arquivo]
+  - [outras dependências REAIS listadas]
+```
 
-**Problema**: Story muito complexa (estimativa original: X pontos)
-**Solução**: Quebra em Y stories verticais menores
+### **Estrutura Atual Mapeada**
+```yaml
+Backend Structure:
+  - api/models/: [models existentes relacionados]
+  - api/services/: [services disponíveis para extensão]  
+  - api/routers/: [endpoints atuais relacionados]
 
-### Story 1: [Título Específico] - [2-3 pontos]
+Frontend Structure:
+  - components/ui/: [componentes shadcn/ui catalogados]
+  - app/[locale]/admin/: [rotas existentes]
+  - services/: [services disponíveis]
+```
 
-**Como** [persona]
-**Eu quero** [funcionalidade mínima 1]
-**Para que** [valor específico 1]
-
-**Implementação**:
-
-- [Lista específica do que inclui]
-- [End-to-end mínimo funcional]
-
-### Story 2: [Título Específico] - [2-3 pontos]
-
-**Como** [persona]
-**Eu quero** [funcionalidade mínima 2]
-**Para que** [valor específico 2]
-
-**Implementação**:
-
-- [Lista específica do que inclui]
-- [Builds sobre Story 1]
-
-### Story 3: [Título Específico] - [2-3 pontos]
-
-**Como** [persona]
-**Eu quero** [funcionalidade mínima 3]
-**Para que** [valor específico 3]
-
-**Implementação**:
-
-- [Lista específica do que inclui]
-- [Completa a funcionalidade desejada]
-
-### 🔗 Ordem de Implementação:
-
-1. **Story 1**: Base funcional (walking skeleton)
-2. **Story 2**: Incremento de valor
-3. **Story 3**: Funcionalidade completa
-
-### 📊 Resultado da Quebra:
-
-- **Antes**: 1 story de X pontos (Y dias)
-- **Depois**: 3 stories de 2-3 pontos cada (2-3 dias cada)
-- **Benefício**: Entrega incremental + feedback mais rápido
+### **Database Schema Atual**
+```yaml  
+Migration Status: [versão atual identificada]
+Related Tables: [tabelas existentes que se relacionam]
+Constraints: [constraints atuais identificados]
 ```
 
 ---
 
-## ✅ **VALIDAÇÃO FINAL DE QUALIDADE**
+## 🎯 **ANÁLISE DA HISTÓRIA (ROADMAP)**
 
-### **Checklist Obrigatório:**
+### **História Original**
+**Fonte**: docs/project/11-roadmap.md - História [ID]
 
-#### **📏 Tamanho e Complexidade:**
+#### **User Story**
+- **Como**: [Persona específica]
+- **Eu quero**: [Ação desejada]
+- **Para que**: [Valor de negócio]
 
-- [ ] **≤ 5 pontos** por story (máximo 5 dias)
-- [ ] **Uma funcionalidade principal** por story
-- [ ] **Escopo específico** sem ambiguidade
-- [ ] **Estimativa confiável** (alta confiança)
-
-#### **🎯 Clareza e Valor:**
-
-- [ ] **Persona específica** (não genérica)
-- [ ] **Ação mensurável** (não vaga)
-- [ ] **Valor claro** (usuário entende o porquê)
-- [ ] **Critérios testáveis** (sem interpretação)
-
-#### **🏗️ Vertical Slice:**
-
-- [ ] **End-to-end completo** (UI + API + Data)
-- [ ] **Valor independente** (funciona sozinha)
-- [ ] **Demonstrável** (usuário pode testar)
-- [ ] **Deployável** (pode ir para produção)
-
-#### **⚡ Princípios KISS:**
-
-- [ ] **Solução mais simples** escolhida
-- [ ] **Sem over-engineering** detectado
-- [ ] **Hardcode quando apropriado**
-- [ ] **Abstrações mínimas** necessárias
-
-#### **🚀 Implementação Prática:**
-
-- [ ] **Arquivos específicos** identificados
-- [ ] **APIs específicas** definidas
-- [ ] **Testes específicos** planejados
-- [ ] **Dependências mínimas**
+#### **Acceptance Criteria (Business)**
+- [Critério 1 exato do roadmap]
+- [Critério 2 exato do roadmap]
+- [Todos os critérios preservados]
 
 ---
 
-## 🎯 **RESULTADO FINAL**
+## 🔍 **PESQUISA TÉCNICA EXAUSTIVA**
 
-### **Stories Refinadas:**
+### **Soluções Open Source Pesquisadas**
+```yaml
+Top 5 Bibliotecas Analisadas:
+  1. [Biblioteca A] v[X.X.X]:
+     Stars: [X]k | Updated: [X] days ago
+     Pros: [Lista específica]
+     Cons: [Lista específica]
+     Bundle: [X]KB | TypeScript: [Yes/No]
+     
+Decision Matrix:
+  [Biblioteca Winner]: 43/50 ⭐ ESCOLHIDA
+  [Justificativa técnica específica]
+```
 
-[Apresentar a(s) story(ies) refinada(s) seguindo o template acima]
+### **Provedores/SaaS Analisados**
+```yaml
+Build vs Buy Analysis:
+  DECISION: [Build/Buy]
+  JUSTIFICATION: [Análise custo-benefício específica]
+```
 
-### **Métricas de Sucesso:**
-
-- **Velocity**: Stories menores = entrega mais rápida
-- **Quality**: Escopo claro = menos bugs e retrabalho
-- **Predictability**: Estimativas mais precisas
-- **Value**: Feedback e validação mais rápidos
-
-### **Próximos Passos:**
-
-1. **Review com PO**: Validar valor e prioridade
-2. **Planning**: Estimar definitivamente
-3. **Sprint**: Adicionar ao backlog da sprint
-4. **Implementação**: Usar `/project:exec-storie` para execução
-
----
-
-## 🛠 **COMANDOS RELACIONADOS**
-
-```bash
-# Para análise específica de complexidade:
-/project:refinement:complexity [story]
-
-# Para quebra de stories grandes:
-/project:refinement:split [story]
-
-# Para aplicar KISS a stories:
-/project:refinement:kiss [story]
-
-# Para validar vertical slice:
-/project:refinement:vertical-slice [story]
-
-# Após refinamento, para implementar:
-/project:exec-storie [story-refinada]
+### **Melhores Práticas 2024/2025 Aplicadas**
+```yaml
+Current Best Practices Integrated:
+  - [Prática 1]: [Como será implementada]
+  - [Prática 2]: [Adaptação ao contexto]
 ```
 
 ---
 
-## 📚 **EXEMPLOS PRÁTICOS**
+## 🏗️ **ANÁLISE DO CODEBASE ATUAL**
 
-### **Exemplo 1: Story Over-Engineered**
+### **Arquivos Relevantes Mapeados**
+```yaml
+Backend Files:
+  - api/models/[model].py: [Status e padrões]
+  - api/services/[service].py: [Pontos de integração]
 
-**❌ ANTES:**
-
-```
-"Como usuário eu quero um sistema robusto e escalável de
-notificações que suporte múltiplos canais (email, SMS, push)
-com templates customizáveis e sistema de retry inteligente"
-```
-
-**✅ DEPOIS (KISS aplicado):**
-
-```
-História: Envio de email de boas-vindas
-
-Como novo usuário
-Eu quero receber email de boas-vindas após cadastro
-Para que eu saiba que minha conta foi criada com sucesso
-
-Implementação KISS:
-- Template fixo de email
-- Trigger automático no signup
-- SMTP simples
-- Sem retry (por enquanto)
+Frontend Files:
+  - components/ui/: [Componentes shadcn disponíveis]
+  - app/[locale]/admin/: [Estrutura de rotas]
 ```
 
-### **Exemplo 2: Story Muito Grande**
+---
 
-**❌ ANTES:**
+## ⚖️ **ESPECIFICAÇÃO TÉCNICA DETALHADA**
 
-```
-"Como admin eu quero gerenciar usuários completo com CRUD,
-permissões, grupos, auditoria e relatórios"
-Estimativa: 15 pontos
-```
+### **Arquitetura Escolhida**
+**Decisão**: [Biblioteca/Provedor escolhido]
+**Versão**: [Versão específica]
+**Justificativa**: [Razões técnicas específicas]
 
-**✅ DEPOIS (Quebra Vertical):**
-
-```
-Story 1: Listar usuários básico (3 pontos)
-- GET /api/users
-- Tabela simples
-- Paginação básica
-
-Story 2: Criar usuário (2 pontos)
-- POST /api/users
-- Form nome/email
-- Validação básica
-
-Story 3: Editar usuário (3 pontos)
-- PUT /api/users/:id
-- Form de edição
-- Update em tempo real
-
-Story 4: Desativar usuário (2 pontos)
-- PATCH /api/users/:id/disable
-- Soft delete
-- Confirmação
+### **🚨 VALIDAÇÃO DOS PRINCÍPIOS FUNDAMENTAIS**
+```yaml
+KISS Validation:
+  ✅ Solução Escolhida: [A mais simples que atende requisitos]
+  ✅ Alternativas Complexas: [Rejeitadas por complexidade desnecessária]
+  
+YAGNI Validation:
+  ✅ Escopo Limitado: [Implementa APENAS história atual]
+  ✅ Future-Proofing: [Evitado - não especifica para futuro]
+  
+DRY Validation:
+  ✅ Reutilização: [Estende funcionalidades existentes]
+  ✅ Duplicação: [Evitada - não reinventa código atual]
 ```
 
-### **Exemplo 3: Story Horizontal**
-
-**❌ ANTES:**
-
-```
-"Criar API de produtos"
-(apenas backend, sem valor para usuário)
+### **Implementação Detalhada**
+```python
+# Backend specification
+# Detailed code templates
 ```
 
-**✅ DEPOIS (Vertical Slice):**
-
+```tsx
+// Frontend specification  
+// Detailed component templates
 ```
-História: Visualizar produtos na loja
 
-Como cliente
-Eu quero ver lista de produtos disponíveis
-Para que eu possa escolher o que comprar
+---
 
-Implementação Vertical:
-- UI: Página /produtos com grid
-- API: GET /api/products
-- Data: Tabela products básica
-- End-to-end: Cliente vê produtos reais
+## ⚠️ **ANÁLISE COMPLETA DE RISCOS**
+
+### **Riscos Alto (Críticos)**
+```yaml
+Risk 1: [Descrição específica]
+  Impact: [Impacto específico]
+  Mitigation: [Como prevenir/mitigar]
+  Contingency: [Plano B]
 ```
+
+---
+
+## ⏱️ **TIMELINE DETALHADO**
+
+### **Estimativa por Fase**
+```yaml
+Total Estimate: [X] hours
+Confidence Level: 99% (com buffer)
+```
+
+---
+
+## 📋 **CRITÉRIOS DE ACEITE TÉCNICOS**
+
+### **Do Roadmap (Business) - PRESERVADOS**
+- [ ] [Critério 1 EXATO do roadmap]
+- [ ] [Critério 2 EXATO do roadmap]
+
+### **Técnicos (Baseados na Pesquisa)**
+- [ ] Organization isolation 100% implementado
+- [ ] Library integration completa
+- [ ] Performance requirements atendidos
+
+---
+
+**🚨 REFINEMENT COMPLETO**: 99% certeza técnica. Execute `/exec-story "[ID]"` para gerar plano de implementação step-by-step.
+
+### **📁 AUTO-SAVE CONFIRMADO**
+- **Arquivo**: docs/refined/ID-[title-kebab-case].md
+- **Status**: ✅ Refinement técnico salvo com sucesso
+- **Próximo**: Executar `/exec-story "[ID]"` para plano de implementação
+```
+
+---
+
+## 💾 **CONFIRMAÇÃO DE SALVAMENTO**
+
+### **✅ REFINEMENT PERSISTIDO COM SUCESSO**
+```yaml
+Arquivo Salvo: docs/refined/STORY-ID-story-title-kebab-case.md
+Path Completo: /projeto/docs/refined/[filename]
+Status: ✅ Refinement técnico completo salvo
+Próximo: Execute /exec-story "[ID]" para plano de implementação
+```
+
+---
+
+---
+
+## 🚫 **VALIDAÇÕES FINAIS OBRIGATÓRIAS**
+
+### **🚨 QUALITY GATES - REJEIÇÃO AUTOMÁTICA**
+- ❌ **FALHA CRÍTICA se não usar ferramentas Read/LS/Bash na Fase 0**
+- ❌ **FALHA CRÍTICA se template não mostrar evidências REAIS de leitura**
+- ❌ **FALHA CRÍTICA se basear refinement em suposições sobre o projeto**
+- ❌ **REJEIÇÃO se quebrar princípios KISS/YAGNI/DRY**
+- ❌ **REJEIÇÃO se especificar funcionalidades não solicitadas na história**
+- ❌ **REJEIÇÃO se propor soluções complexas quando simples funcionam**
+- ❌ **REJEIÇÃO se não reutilizar código/padrões existentes**
+- ❌ **REJEIÇÃO se adicionar over-engineering para problemas futuros**
+
+### **✅ CHECKLIST DE APROVAÇÃO**
+- [ ] **KISS**: Solução mais simples que funciona escolhida
+- [ ] **YAGNI**: Escopo limitado aos requisitos atuais da história  
+- [ ] **DRY**: Máxima reutilização de código/padrões existentes
+- [ ] **99% Certeza**: Pesquisa exaustiva + análise contextual completa
+- [ ] **Estado Atual**: Baseado em análise real do projeto atual
+
+---
+
+---
+
+## 🚨 **LEMBRETES CRÍTICOS FINAIS**
+
+### **OBRIGATÓRIO - NÃO É OPCIONAL**
+1. **PRIMEIRO**: Use Read/LS/Bash para analisar codebase REAL
+2. **TEMPLATE**: Mostre evidências concretas de leitura no output
+3. **CHECKLIST**: Preencha com dados REAIS encontrados nos arquivos
+4. **VALIDAÇÃO**: KISS/YAGNI/DRY aplicados em todas as fases
+5. **RESULTADO**: Refinement baseado em estado REAL do projeto
+
+### **FALHAS CRÍTICAS QUE CAUSAM REJEIÇÃO**
+- ❌ Não usar ferramentas para ler arquivos
+- ❌ Template sem evidências reais de leitura  
+- ❌ Refinement baseado em suposições
+- ❌ Não seguir princípios KISS/YAGNI/DRY
+
+---
+
+**LEMBRETE CRÍTICO**: Este agente gera REFINEMENTS TÉCNICOS COMPLETOS com 99% de certeza através de **LEITURA REAL DO CODEBASE** + pesquisa exaustiva + análise contextual + validação KISS/YAGNI/DRY. Use `/exec-story "[ID]"` após este refinement para gerar plano de execução step-by-step.
