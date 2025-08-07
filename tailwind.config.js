@@ -143,6 +143,36 @@ module.exports = {
           admin: 'hsl(var(--team-admin))',
           owner: 'hsl(var(--team-owner))',
         },
+        
+        // === SECTORIAL DESIGN TOKENS (08-design-tokens.md) ===
+        // Cores setoriais
+        'sector-primary': {
+          DEFAULT: 'hsl(var(--sector-primary))',
+          foreground: 'hsl(var(--sector-primary-foreground))',
+        },
+        'sector-secondary': 'hsl(var(--sector-secondary))',
+        'sector-accent': 'hsl(var(--sector-accent))',
+        
+        // Modelo B2B
+        'organization': 'hsl(var(--organization))',
+        'collaborative': 'hsl(var(--collaborative))',
+        'sector-cta': 'hsl(var(--sector-cta))',
+        'sector-trust': 'hsl(var(--sector-trust))',
+        
+        // Cores competitivas (para análises)
+        'competitor': {
+          hubspot: 'hsl(var(--competitor-hubspot))',
+          pipedrive: 'hsl(var(--competitor-pipedrive))',
+          rd: 'hsl(var(--competitor-rd))',
+        },
+        
+        // Cores agência digital
+        'agency': {
+          premium: 'hsl(var(--agency-premium))',
+          growth: 'hsl(var(--agency-growth))',
+          conversion: 'hsl(var(--agency-conversion))',
+          retention: 'hsl(var(--agency-retention))',
+        },
       },
       keyframes: {
         'accordion-down': {

@@ -1,4 +1,4 @@
-# 04-user-journeys-agent.md
+# 04-doc-journeys.md
 
 **User Journey Mapper** - Especialista genérico em mapear jornadas completas do usuário e fluxos de interação para QUALQUER produto/negócio. Adapta-se automaticamente ao modelo identificado no PRD (B2B/B2C/Marketplace/SaaS/E-commerce/etc). Mapeia personas, customer journeys, corner cases, CRUDs e fluxos de configuração universais. **NUNCA remove funcionalidades** - todas devem ter jornadas mapeadas.
 

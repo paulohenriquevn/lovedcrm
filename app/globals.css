@@ -151,6 +151,29 @@
     /* Organization context transitions */
     --org-switch: 300ms cubic-bezier(0.4, 0, 0.2, 1);
     --tier-upgrade: 250ms ease-out;
+    
+    /* === SECTORIAL DESIGN TOKENS (08-design-tokens.md) === */
+    --sector-primary: 262 83% 58%;              /* Loved CRM Violet - diferenciação */
+    --sector-primary-foreground: 210 40% 98%;   /* Branco para contraste */
+    --sector-secondary: 217 59% 40%;            /* RD Station Blue - autoridade */
+    --sector-accent: 12 100% 67%;               /* HubSpot Orange - energia */
+    
+    /* Modelo B2B */
+    --organization: 262 83% 58%;                /* Primary violet para contexto organizacional */
+    --collaborative: 217 91% 60%;               /* Azul para features colaborativas */
+    --sector-cta: 12 100% 67%;                  /* Orange forte para CTAs importantes */
+    --sector-trust: 160 84% 39%;                /* Verde para indicar confiança/segurança */
+    
+    /* Cores Competitivas */
+    --competitor-hubspot: 12 100% 67%;          /* HubSpot Orange referência */
+    --competitor-pipedrive: 213 74% 59%;        /* Pipedrive Blue referência */
+    --competitor-rd: 217 59% 40%;               /* RD Station Blue referência */
+    
+    /* Cores Agência Digital */
+    --agency-premium: 262 83% 65%;              /* Violeta claro para tier premium */
+    --agency-growth: 160 84% 45%;               /* Verde crescimento */
+    --agency-conversion: 25 95% 55%;            /* Laranja conversão */
+    --agency-retention: 217 91% 60%;            /* Azul retenção */
   }
 
   .dark {
@@ -200,6 +223,26 @@
     --chart-3: 217 91% 70%;            /* Blue lighter */
     --chart-4: 43 96% 66%;             /* Yellow lighter */
     --chart-5: 25 95% 63%;             /* Orange lighter */
+    
+    /* === SECTORIAL DESIGN TOKENS - DARK MODE === */
+    --sector-primary: 262 83% 67%;              /* Violeta mais claro no dark */
+    --sector-primary-foreground: 224 71% 4%;   /* Escuro para contraste */
+    --sector-secondary: 217 59% 50%;            /* Azul mais claro no dark */
+    --sector-accent: 12 100% 72%;               /* Orange mais claro no dark */
+    
+    --organization: 262 83% 67%;                /* Violeta claro para org context */
+    --collaborative: 217 91% 70%;               /* Azul claro para colaboração */
+    --sector-cta: 12 100% 72%;                  /* Orange claro para CTAs */
+    --sector-trust: 160 84% 49%;                /* Verde claro para confiança */
+    
+    --competitor-hubspot: 12 100% 72%;          /* HubSpot Orange dark mode */
+    --competitor-pipedrive: 213 74% 69%;        /* Pipedrive Blue dark mode */
+    --competitor-rd: 217 59% 50%;               /* RD Station Blue dark mode */
+    
+    --agency-premium: 262 83% 72%;              /* Violeta premium dark */
+    --agency-growth: 160 84% 52%;               /* Verde growth dark */
+    --agency-conversion: 25 95% 62%;            /* Laranja conversion dark */
+    --agency-retention: 217 91% 70%;            /* Azul retention dark */
   }
 }
 

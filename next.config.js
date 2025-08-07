@@ -53,8 +53,20 @@ const nextConfig = withNextIntl({
         destination: `${backendUrl}/billing/:path*`,
       },
       {
-        source: '/api/crm/leads:path*',
-        destination: `${backendUrl}/crm/leads/`,
+        source: '/api/crm/leads/:path*',
+        destination: `${backendUrl}/crm/leads/:path*`,
+      },
+      {
+        source: '/api/crm/communications/:path*',
+        destination: `${backendUrl}/crm/communications/:path*`,
+      },
+      {
+        source: '/api/crm/ai-summaries/:path*',
+        destination: `${backendUrl}/crm/ai-summaries/:path*`,
+      },
+      {
+        source: '/api/integrations/:path*',
+        destination: `${backendUrl}/integrations/:path*`,
       },
       {
         source: '/api/admin/:path*',

@@ -112,13 +112,18 @@ lovedcrm/
 
 ### Quick Start
 ```bash
-# Complete setup
+# Complete setup (recommended for first time)
 make setup
 
 # Start development servers
 npm run dev
 # Frontend: http://localhost:3000
 # Backend: http://localhost:8000/docs
+
+# Alternative: Docker development
+make dev-start              # Start in background
+make dev-logs               # View logs
+make dev-stop               # Stop services
 ```
 
 ### Database Management
@@ -213,6 +218,14 @@ make ci-quick              # Quick CI checks (linting + unit tests)
 make dev-start              # Start in background
 make dev-logs               # View logs
 make dev-stop               # Stop services
+make dev-docker-reset       # Reset environment completely
+```
+
+### Development Status & Verification
+```bash
+make status                 # Show project status
+./check-saas-mode.sh        # Verify B2B/B2C configuration
+make test-verify            # Verify test environment health
 ```
 
 ## SAAS Mode Configuration
@@ -411,6 +424,15 @@ def test_crm_leads_organization_isolation(client, auth_headers, other_org):
 
 ## Configuration & Environment
 
+### Environment Verification
+```bash
+# Check current SAAS mode configuration
+./check-saas-mode.sh
+
+# Verify environment variables
+make status
+```
+
 ### Required Environment Variables
 ```bash
 # Database
@@ -492,6 +514,67 @@ make db-prod-migration-apply
 
 This architecture ensures complete data isolation between organizations while providing a rich CRM experience for digital agencies.
 
+## File Structure & Key Locations
+
+### Frontend Architecture
+```
+app/[locale]/               # Internationalized routing
+├── admin/                  # Protected admin routes
+│   ├── crm/               # CRM main interface
+│   ├── settings/          # Organization settings
+│   ├── team/              # Team management with detailed components
+│   └── billing/           # Subscription management
+├── auth/                   # Authentication flows
+└── invites/[token]/        # Public invitation acceptance
+
+components/                 # React components library
+├── ui/                    # shadcn/ui base components
+├── crm/                   # CRM-specific components
+├── admin/                 # Admin dashboard components
+├── settings/              # Settings with comprehensive tab system
+├── organizations/         # Organization management
+└── providers/             # Context providers
+```
+
+### Backend Architecture
+```
+api/                        # FastAPI backend
+├── core/                  # Infrastructure & middleware
+│   ├── deps.py            # Dependency injection patterns
+│   ├── organization_middleware.py  # Multi-tenancy enforcement
+│   └── security.py        # Authentication & authorization
+├── models/                # SQLAlchemy data models
+├── schemas/               # Pydantic validation schemas
+├── repositories/          # Data access layer
+├── services/              # Business logic layer
+└── routers/               # API endpoint definitions
+```
+
+### Critical Files for Multi-Tenancy
+- `api/core/organization_middleware.py`: Enforces organization context
+- `api/core/deps.py`: `get_current_organization()` dependency
+- `hooks/use-org-context.ts`: Frontend organization context
+- All models in `api/models/`: Must include `organization_id` FK
+
+### Testing Infrastructure
+```
+tests/
+├── frontend/              # Vitest frontend tests
+├── e2e/api/              # API integration tests
+│   ├── test_multi_tenant_isolation.py  # Critical isolation tests
+│   └── test_saas_mode_*.py            # B2B/B2C mode tests
+├── unit/                 # Backend unit tests
+└── e2e/mocks/            # WireMock configurations for external services
+```
+
+### Development Tools
+- `Makefile`: 50+ automation commands for development workflow
+- `check-saas-mode.sh`: Validates B2B/B2C configuration
+- `migrations/migrate`: Database migration tool
+- `docker-compose*.yml`: Different environments (dev, test, prod)
+- `requirements.txt`: Python dependencies
+- `package.json`: Node.js dependencies with comprehensive scripts
+
 ## Development Rules & Guidelines
 
 ### 95% Confidence Rule
@@ -531,3 +614,48 @@ This architecture ensures complete data isolation between organizations while pr
 - ✅ shadcn/ui + Tailwind CSS + Lucide icons
 - ✅ Leverage existing 55+ production endpoints
 - ❌ **NEVER** suggest alternative technologies or frameworks
+
+## Common Development Patterns
+
+### Adding New Features (Step-by-Step)
+1. **Database**: Add migration in `migrations/` with `organization_id` FK
+2. **Backend**: Create model → schema → repository → service → router
+3. **Frontend**: Create types → service → store → components → pages
+4. **Tests**: Add isolation tests in `tests/e2e/api/`
+5. **Integration**: Update relevant containers and hooks
+
+### Quick Development Commands for Daily Use
+```bash
+# Development workflow
+make setup                     # First-time setup
+npm run dev                    # Start development
+make test-hot-migrate         # Apply schema changes (2s)
+make test-hot-data           # Reload test data (3s)
+
+# Code quality (run before commits)
+npm run lint                  # Frontend + backend linting
+npm run typecheck            # TypeScript validation
+make backend-security        # Security scan
+
+# Database operations
+cd migrations && ./migrate apply    # Apply migrations
+cd migrations && ./migrate status   # Check status
+make connect-db-prod               # Production access
+
+# Testing during development
+make test-frontend-watch     # Frontend tests (watch mode)
+make test-backend-unit-quick # Backend tests (quick)
+make test-hot-all           # Apply all updates
+```
+
+### Debugging Multi-Tenancy Issues
+```bash
+# Check organization context
+grep -r "X-Org-Id" .                    # Find header usage
+grep -r "organization_id" api/models/    # Check model filtering
+grep -r "get_current_organization" .     # Find dependency usage
+
+# Verify data isolation
+make test-run-api-auth                   # Run isolation tests
+PGPASSWORD=... psql ... -c "SELECT COUNT(*) FROM users;"  # Direct DB check
+```

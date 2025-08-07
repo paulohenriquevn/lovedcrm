@@ -213,7 +213,29 @@ Estas regras são **INEGOCIÁVEIS** para aprovar uma história:
 
 ---
 
-## 🔍 **PROCESSO DE REVIEW ESTRUTURADO EM FASES**
+## 🔍 **PROCESSO DE REVIEW ESTRUTURADO EM 6 FASES**
+
+### **🚨 FASE 0: ANÁLISE OBRIGATÓRIA DO ESTADO ATUAL DO PROJETO**
+
+**REGRA ABSOLUTA: DEVE LER FISICAMENTE ARQUIVOS ANTES DE QUALQUER REVIEW**
+
+#### **📁 LEITURA OBRIGATÓRIA DE ARQUIVOS CRÍTICOS**
+- ✅ **DEVE**: `Read docs/project/11-roadmap.md` - LOCALIZAR história sendo revisada
+- ✅ **DEVE**: `Bash git log --oneline -10` - VERIFICAR commits recentes relacionados
+- ✅ **DEVE**: `Bash git status` - ANALISAR estado atual do branch
+- ✅ **DEVE**: `LS api/models/` - MAPEAR models implementados/modificados
+- ✅ **DEVE**: `LS api/services/` - MAPEAR services implementados/modificados
+- ✅ **DEVE**: `LS api/routers/` - MAPEAR routers implementados/modificados
+- ✅ **DEVE**: `LS components/ui/` - VERIFICAR componentes shadcn/ui utilizados
+- ✅ **DEVE**: `LS app/[locale]/admin/` - MAPEAR páginas implementadas
+- ✅ **DEVE**: `Bash npm run test` - EXECUTAR todos os testes (BLOQUEADOR se falhar)
+- ✅ **DEVE**: `Bash npm run typecheck` - VERIFICAR erros TypeScript
+
+#### **🚨 VALIDAÇÃO OBRIGATÓRIA**
+- ❌ **FALHA CRÍTICA**: Não usar ferramentas Read/LS/Bash para análise real
+- ❌ **FALHA CRÍTICA**: Assumir estado da implementação sem verificação direta
+- ❌ **FALHA CRÍTICA**: Review baseado em suposições sobre código
+- ✅ **OBRIGATÓRIO**: Cada item acima DEVE ter evidência de leitura/execução real
 
 ### **FASE 1: LOCALIZAR E ANALISAR A HISTÓRIA**
 
@@ -236,23 +258,48 @@ Estas regras são **INEGOCIÁVEIS** para aprovar uma história:
 3. **Validar performance** - Sem degradação
 4. **Testar funcionalidades** - Casos principais e edge cases
 
-### **FASE 4: APROVAÇÃO FINAL**
+### **FASE 4: VALIDAÇÃO DE CRITÉRIOS DE ACEITE**
 
 1. **Confirmar critérios 100%** atendidos
 2. **Validar Definition of Done** completa
-3. **Documentar conclusões** do review
-4. **Decidir status** final (Aprovado/Ressalvas/Rejeitado)
+3. **Verificar organization isolation** implementado
+4. **Testar fluxos end-to-end** funcionais
 
-### **IDENTIFICAÇÃO DA HISTÓRIA**
+### **FASE 5: APROVAÇÃO FINAL**
+
+1. **Documentar conclusões** do review
+2. **Decidir status** final (Aprovado/Ressalvas/Rejeitado)
+3. **Gerar relatório** detalhado de review
+4. **Atualizar roadmap** se aprovado
+
+### **📋 CHECKLIST OBRIGATÓRIO - EVIDÊNCIAS DE LEITURA REAL**
 
 ```yaml
-ID: [Extrair do user-stories.md]
-Título: [Título completo da história]
-Sprint: [Sprint associada]
-Épico: [Nome do Épico]
-Pontos: [Story points atribuídos]
-Implementador: [Verificar commits git]
-Data: [Data da implementação]
+Leitura de Arquivos Realizada (FASE 0):
+  ✅ roadmap.md: [ENCONTRAR e COLAR história sendo revisada]
+  ✅ git log: [COLAR últimos commits relacionados]
+  ✅ git status: [COLAR estado atual do branch]
+  ✅ api/models/: [LISTAR arquivos implementados/modificados]
+  ✅ api/services/: [LISTAR arquivos implementados/modificados]
+  ✅ api/routers/: [LISTAR arquivos implementados/modificados]
+  ✅ components/ui/: [LISTAR componentes utilizados]
+  ✅ app/[locale]/admin/: [LISTAR páginas implementadas]
+  ✅ npm run test: [RESULTADO - PASSOU/FALHOU com detalhes]
+  ✅ npm run typecheck: [RESULTADO - erros encontrados]
+
+❌ FALHA CRÍTICA se qualquer item acima não tiver evidência REAL de leitura
+```
+
+### **IDENTIFICAÇÃO DA HISTÓRIA (Baseada na Leitura)**
+
+```yaml
+ID: [Extrair do roadmap.md LIDO]
+Título: [Título completo encontrado no roadmap]
+Sprint: [Sprint associada encontrada]
+Épico: [Nome do Épico identificado]
+Pontos: [Story points encontrados]
+Implementador: [Verificar commits git EXECUTADOS]
+Data: [Data da implementação dos commits]
 ```
 
 ---

@@ -1,7 +1,7 @@
 /**
- * Homepage - Loved CRM Landing Page V2
+ * Landing Page V2 - Loved CRM
  * Implementação completa baseada na especificação 09-landing-page.md
- * Preserva headline exata do vision.md + todas as 15 funcionalidades PRD + diferenciação competitiva
+ * Inclui todas as 15 funcionalidades PRD + diferenciação competitiva + tokens setoriais
  */
 
 'use client'
@@ -20,7 +20,7 @@ import {
 import { SocialProofSectorial } from '@/components/landing/social-proof-sectorial'
 import { ScrollToTop } from '@/components/ui/scroll-to-top'
 
-export default function HomePage() {
+export default function LandingPageV2() {
   return (
     <main className="min-h-screen">
       {/* Hero Section - Exact headline from vision.md */}
