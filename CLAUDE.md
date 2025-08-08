@@ -132,6 +132,19 @@ make dev-logs               # View logs
 make dev-stop               # Stop services
 ```
 
+### Single Test Execution
+
+```bash
+# Run specific test files
+npm run test:frontend tests/frontend/components/ui/button.test.tsx
+python3 -m pytest tests/unit/test_auth.py -v
+python3 -m pytest tests/e2e/api/test_crm_leads.py::test_create_lead -v
+
+# Run tests with specific patterns
+python3 -m pytest -k "test_organization" -v
+npm run test:frontend -- --run --reporter=verbose components
+```
+
 ### Database Management
 
 ```bash
@@ -687,7 +700,7 @@ tests/
 - `requirements.txt`: Python dependencies
 - `package.json`: Node.js dependencies with comprehensive scripts
 
-### Recent Architectural Enhancements (2025)
+#### Recent Architectural Enhancements (2025)
 
 - **Component decomposition pattern**: Many components now split into `-components.tsx` files for better maintainability
 - **WebSocket infrastructure**: Complete real-time system with organization isolation and polling fallback via `use-pipeline-websocket.ts`
@@ -697,6 +710,17 @@ tests/
 - **Design tokens demo**: Complete showcase of CRM UI components and design system
 - **Proxy integration testing**: Complete E2E test suite for Next.js → Backend proxy validation
 - **Database schema evolution**: 38-table complete CRM schema with multi-tenant isolation
+
+### Development Environment Verification
+
+```bash
+# Check environment health
+make status                           # Overall project status
+./check-saas-mode.sh                 # B2B/B2C mode verification
+make test-verify                     # E2E test environment health
+curl http://localhost:3000           # Frontend availability
+curl http://localhost:8000/health    # Backend health check
+```
 
 ## Development Rules & Guidelines
 
