@@ -29,12 +29,8 @@ export default function AcceptInvitePage(): JSX.Element | null {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-2xl mx-auto px-4">
         <div className="space-y-6">
-          <InviteInfo
-            inviteInfo={inviteInfo}
-            formatDate={formatDate}
-            formatRole={formatRole}
-          />
-          
+          <InviteInfo inviteInfo={inviteInfo} formatDate={formatDate} formatRole={formatRole} />
+
           <InviteActions token={token} inviteInfo={inviteInfo} />
         </div>
       </div>

@@ -28,7 +28,11 @@ interface LeadDeleteDialogProps {
 }
 
 function LeadValueWarning({ lead }: { lead: Lead }): React.ReactElement | null {
-  if (lead.estimated_value === null || lead.estimated_value === undefined || lead.estimated_value <= 0) {
+  if (
+    lead.estimated_value === null ||
+    lead.estimated_value === undefined ||
+    lead.estimated_value <= 0
+  ) {
     return null
   }
 
@@ -39,7 +43,7 @@ function LeadValueWarning({ lead }: { lead: Lead }): React.ReactElement | null {
         <strong>
           {new Intl.NumberFormat('pt-BR', {
             style: 'currency',
-            currency: 'BRL'
+            currency: 'BRL',
           }).format(lead.estimated_value)}
         </strong>
       </p>
@@ -47,11 +51,11 @@ function LeadValueWarning({ lead }: { lead: Lead }): React.ReactElement | null {
   )
 }
 
-export function LeadDeleteDialog({ 
-  isOpen, 
-  onClose, 
-  onSuccess, 
-  lead 
+export function LeadDeleteDialog({
+  isOpen,
+  onClose,
+  onSuccess,
+  lead,
 }: LeadDeleteDialogProps): React.ReactElement {
   const [isDeleting, setIsDeleting] = useState(false)
   const { toast } = useToast()
@@ -63,14 +67,14 @@ export function LeadDeleteDialog({
 
     try {
       setIsDeleting(true)
-      
+
       await crmLeadsService.deleteLead(lead.id)
-      
+
       toast({
         title: 'Lead removido com sucesso',
-        description: `${lead.name} foi removido do pipeline.`
+        description: `${lead.name} foi removido do pipeline.`,
       })
-      
+
       onClose()
       onSuccess()
     } catch {
@@ -78,7 +82,7 @@ export function LeadDeleteDialog({
       toast({
         title: 'Erro ao remover lead',
         description: 'Não foi possível remover o lead. Tente novamente.',
-        variant: 'destructive'
+        variant: 'destructive',
       })
     } finally {
       setIsDeleting(false)
@@ -103,25 +107,18 @@ export function LeadDeleteDialog({
                 Tem certeza que deseja remover o lead <strong>&ldquo;{lead.name}&rdquo;</strong>?
               </p>
               <p className="text-sm text-muted-foreground">
-                Esta ação não pode ser desfeita. Todas as informações do lead serão perdidas permanentemente.
+                Esta ação não pode ser desfeita. Todas as informações do lead serão perdidas
+                permanentemente.
               </p>
               <LeadValueWarning lead={lead} />
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <Button
-            variant="outline"
-            onClick={onClose}
-            disabled={isDeleting}
-          >
+          <Button variant="outline" onClick={onClose} disabled={isDeleting}>
             Cancelar
           </Button>
-          <Button
-            variant="destructive"
-            onClick={() => void handleDelete()}
-            disabled={isDeleting}
-          >
+          <Button variant="destructive" onClick={() => void handleDelete()} disabled={isDeleting}>
             {isDeleting ? 'Removendo...' : 'Sim, remover lead'}
           </Button>
         </AlertDialogFooter>

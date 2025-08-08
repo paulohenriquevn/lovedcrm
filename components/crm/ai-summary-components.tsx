@@ -3,15 +3,19 @@
  * Componentes internos extraídos para reduzir complexidade
  */
 
-import { Sparkles, ChevronDown, ChevronUp, Copy, RefreshCw, CheckCircle } from "lucide-react"
+import { Sparkles, ChevronDown, ChevronUp, Copy, RefreshCw, CheckCircle } from 'lucide-react'
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 const getConfidenceColor = (conf: number): string => {
-  if (conf >= 80) {return 'text-emerald-600 bg-emerald-50'}
-  if (conf >= 60) {return 'text-yellow-600 bg-yellow-50'}
+  if (conf >= 80) {
+    return 'text-emerald-600 bg-emerald-50'
+  }
+  if (conf >= 60) {
+    return 'text-yellow-600 bg-yellow-50'
+  }
   return 'text-red-600 bg-red-50'
 }
 
@@ -32,29 +36,29 @@ const sentimentConfig = {
     color: 'text-emerald-600',
     bgColor: 'bg-emerald-50',
     borderColor: 'border-emerald-200',
-    label: 'Positivo'
+    label: 'Positivo',
   },
   negative: {
     icon: CheckCircle,
     color: 'text-red-600',
     bgColor: 'bg-red-50',
     borderColor: 'border-red-200',
-    label: 'Negativo'
+    label: 'Negativo',
   },
   neutral: {
     icon: CheckCircle,
     color: 'text-gray-600',
     bgColor: 'bg-gray-50',
     borderColor: 'border-gray-200',
-    label: 'Neutro'
+    label: 'Neutro',
   },
   mixed: {
     icon: CheckCircle,
     color: 'text-yellow-600',
     bgColor: 'bg-yellow-50',
     borderColor: 'border-yellow-200',
-    label: 'Misto'
-  }
+    label: 'Misto',
+  },
 }
 
 // Helper to render sentiment badge
@@ -62,16 +66,19 @@ function SentimentBadge({ sentiment }: { sentiment?: string }): React.ReactEleme
   if (sentiment === null || sentiment === undefined || sentiment === '') {
     return null
   }
-  
+
   const sentimentInfo = sentimentConfig[sentiment as keyof typeof sentimentConfig]
   if (sentimentInfo === null || sentimentInfo === undefined) {
     return null
   }
-  
+
   const SentimentIcon = sentimentInfo.icon
-  
+
   return (
-    <Badge variant="secondary" className={cn("text-xs", sentimentInfo.color, sentimentInfo.bgColor)}>
+    <Badge
+      variant="secondary"
+      className={cn('text-xs', sentimentInfo.color, sentimentInfo.bgColor)}
+    >
       <SentimentIcon className="h-3 w-3 mr-1" />
       {sentimentInfo.label}
     </Badge>
@@ -83,11 +90,11 @@ function ConfidenceBadge({ confidence }: { confidence?: number }): React.ReactEl
   if (confidence === null || confidence === undefined || confidence <= 0) {
     return null
   }
-  
+
   return (
-    <Badge 
-      variant="secondary" 
-      className={cn("text-xs", getConfidenceColor(confidence))}
+    <Badge
+      variant="secondary"
+      className={cn('text-xs', getConfidenceColor(confidence))}
       title={`Confiança: ${confidence}%`}
     >
       {confidence}%
@@ -102,15 +109,13 @@ export function AISummaryHeader({
   onRegenerate,
   expandable,
   isExpanded,
-  setIsExpanded
+  setIsExpanded,
 }: AISummaryHeaderProps): React.ReactElement {
   return (
     <div className="flex items-center justify-between mb-3">
       <div className="flex items-center gap-2">
         <Sparkles className="h-4 w-4 text-violet-600 animate-pulse" />
-        <span className="text-sm font-semibold text-violet-700">
-          Resumo com IA
-        </span>
+        <span className="text-sm font-semibold text-violet-700">Resumo com IA</span>
         <SentimentBadge sentiment={sentiment} />
       </div>
 
@@ -141,7 +146,7 @@ function CopyButton({ onCopy }: { onCopy?: () => void }): React.ReactElement | n
   if (onCopy === null || onCopy === undefined) {
     return null
   }
-  
+
   return (
     <Button
       type="button"
@@ -156,11 +161,15 @@ function CopyButton({ onCopy }: { onCopy?: () => void }): React.ReactElement | n
   )
 }
 
-function RegenerateButton({ onRegenerate }: { onRegenerate?: () => void }): React.ReactElement | null {
+function RegenerateButton({
+  onRegenerate,
+}: {
+  onRegenerate?: () => void
+}): React.ReactElement | null {
   if (onRegenerate === null || onRegenerate === undefined) {
     return null
   }
-  
+
   return (
     <Button
       type="button"
@@ -175,11 +184,11 @@ function RegenerateButton({ onRegenerate }: { onRegenerate?: () => void }): Reac
   )
 }
 
-function ExpandButton({ 
-  expandable, 
-  isExpanded, 
-  setIsExpanded 
-}: { 
+function ExpandButton({
+  expandable,
+  isExpanded,
+  setIsExpanded,
+}: {
   expandable: boolean
   isExpanded: boolean
   setIsExpanded: (expanded: boolean) => void
@@ -187,7 +196,7 @@ function ExpandButton({
   if (expandable === false) {
     return null
   }
-  
+
   return (
     <Button
       type="button"
@@ -195,13 +204,9 @@ function ExpandButton({
       size="sm"
       className="h-6 w-6 p-0"
       onClick={() => setIsExpanded(!isExpanded)}
-      title={isExpanded ? "Recolher" : "Expandir"}
+      title={isExpanded ? 'Recolher' : 'Expandir'}
     >
-      {isExpanded ? (
-        <ChevronUp className="h-3 w-3" />
-      ) : (
-        <ChevronDown className="h-3 w-3" />
-      )}
+      {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
     </Button>
   )
 }
@@ -211,29 +216,30 @@ function AISummaryActions({
   onRegenerate,
   expandable,
   isExpanded,
-  setIsExpanded
+  setIsExpanded,
 }: AISummaryActionsProps): React.ReactElement {
   return (
     <div className="flex items-center gap-1">
       <CopyButton onCopy={onCopy} />
       <RegenerateButton onRegenerate={onRegenerate} />
-      <ExpandButton 
-        expandable={expandable}
-        isExpanded={isExpanded}
-        setIsExpanded={setIsExpanded}
-      />
+      <ExpandButton expandable={expandable} isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
     </div>
   )
 }
 
-export function NextActionsSection({ 
-  nextActions, 
-  isExpanded 
-}: { 
+export function NextActionsSection({
+  nextActions,
+  isExpanded,
+}: {
   nextActions?: string[]
-  isExpanded: boolean 
+  isExpanded: boolean
 }): React.ReactElement | null {
-  if (nextActions === null || nextActions === undefined || nextActions.length === 0 || !isExpanded) {
+  if (
+    nextActions === null ||
+    nextActions === undefined ||
+    nextActions.length === 0 ||
+    !isExpanded
+  ) {
     return null
   }
 
@@ -243,8 +249,11 @@ export function NextActionsSection({
         Próximas Ações Sugeridas
       </h4>
       <ul className="space-y-1">
-        {nextActions.map((action) => (
-          <li key={`action-${action.slice(0, 20)}`} className="flex items-start gap-2 text-xs text-violet-800">
+        {nextActions.map(action => (
+          <li
+            key={`action-${action.slice(0, 20)}`}
+            className="flex items-start gap-2 text-xs text-violet-800"
+          >
             <span className="text-violet-400 mt-0.5">•</span>
             {action}
           </li>
@@ -255,21 +264,27 @@ export function NextActionsSection({
 }
 
 // Helper to check if metadata should be shown
-function shouldShowMetadata(modelUsed?: string, tokensUsed?: number, isExpanded?: boolean): boolean {
+function shouldShowMetadata(
+  modelUsed?: string,
+  tokensUsed?: number,
+  isExpanded?: boolean
+): boolean {
   if (isExpanded === false) {
     return false
   }
-  return Boolean(modelUsed) || Boolean(tokensUsed !== null && tokensUsed !== undefined && tokensUsed > 0)
+  return (
+    Boolean(modelUsed) || Boolean(tokensUsed !== null && tokensUsed !== undefined && tokensUsed > 0)
+  )
 }
 
-export function MetadataFooter({ 
-  modelUsed, 
-  tokensUsed, 
-  isExpanded 
-}: { 
+export function MetadataFooter({
+  modelUsed,
+  tokensUsed,
+  isExpanded,
+}: {
   modelUsed?: string
   tokensUsed?: number
-  isExpanded: boolean 
+  isExpanded: boolean
 }): React.ReactElement | null {
   if (!shouldShowMetadata(modelUsed, tokensUsed, isExpanded)) {
     return null

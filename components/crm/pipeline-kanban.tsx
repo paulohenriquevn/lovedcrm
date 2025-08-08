@@ -11,12 +11,12 @@ import { useAuthStore } from '@/stores/auth'
 
 import { usePipelineDataHandlers } from './pipeline-data-handlers'
 import { usePipelineHandlers } from './pipeline-handlers'
-import { 
-  LoadingState, 
-  ErrorState, 
-  StageColumn, 
+import {
+  LoadingState,
+  ErrorState,
+  StageColumn,
   ConnectionStatusHeader,
-  PipelineModals 
+  PipelineModals,
 } from './pipeline-kanban-helpers'
 import { usePipelineWebSocketHandlers } from './pipeline-websocket-handlers'
 
@@ -25,49 +25,36 @@ interface PipelineKanbanProps {
 }
 
 export function PipelineKanban({ className }: PipelineKanbanProps): React.ReactElement {
-  console.log('📋 PipelineKanban wrapper rendering')
-  
-  return (
-    <PipelineKanbanInner className={className} />
-  )
+  return <PipelineKanbanInner className={className} />
 }
 
 function PipelineKanbanInner({ className }: PipelineKanbanProps): React.ReactElement {
-  console.log('📊 PipelineKanbanInner rendering')
-  
   const { user, organization } = useAuthStore()
-  console.log('👤 Auth state:', { user: !!user, org: !!organization })
-  
+
   // Use extracted data handlers
   const { stages, loading, error, reloadLeadsData, setStages, setError } = usePipelineDataHandlers()
-  
+
   // Use extracted WebSocket handlers
-  const { isConnected, isPolling, activeUsers, sendMessage } = usePipelineWebSocketHandlers(reloadLeadsData)
-  
+  const { isConnected, isPolling, activeUsers, sendMessage } =
+    usePipelineWebSocketHandlers(reloadLeadsData)
+
   // Use extracted pipeline handlers
   const pipelineHandlers = usePipelineHandlers(reloadLeadsData)
-  
+
   const handleDragDrop = async (targetStageId: string): Promise<void> => {
-    console.log('🎯 handleDragDrop called:', { 
-      targetStageId, 
-      draggedLead: !!pipelineHandlers.draggedLead,
-      isConnected 
-    })
-    
     if (pipelineHandlers.draggedLead) {
-      console.log('📤 Sending lead_drag_start message')
       sendMessage({
         type: 'lead_drag_start',
         leadId: pipelineHandlers.draggedLead.id,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       })
     }
-    
+
     await pipelineHandlers.handleDrop({
       targetStageId,
       sendMessage,
       setStages,
-      setError
+      setError,
     })
   }
 
@@ -75,22 +62,22 @@ function PipelineKanbanInner({ className }: PipelineKanbanProps): React.ReactEle
   if (!user || !organization || loading) {
     return <LoadingState className={className} />
   }
-  
+
   // Show error state
   if (error !== null && error !== undefined) {
     return <ErrorState error={error} className={className} />
   }
 
   return (
-    <div className={cn("h-full", className)}>
-      <ConnectionStatusHeader 
+    <div className={cn('h-full', className)}>
+      <ConnectionStatusHeader
         isConnected={isConnected}
         isPolling={isPolling}
         activeUsers={activeUsers}
       />
-      
+
       <div className="flex gap-6 h-full overflow-x-auto">
-        {stages.map((stage) => (
+        {stages.map(stage => (
           <StageColumn
             key={stage.id}
             stage={stage}
@@ -108,7 +95,7 @@ function PipelineKanbanInner({ className }: PipelineKanbanProps): React.ReactEle
           />
         ))}
       </div>
-      
+
       <PipelineModals
         isCreateModalOpen={pipelineHandlers.isCreateModalOpen}
         onCreateModalClose={pipelineHandlers.handleCreateModalClose}

@@ -22,92 +22,90 @@ const handleDragOver = (e: React.DragEvent): void => {
 }
 
 export function LoadingState({ className }: { className?: string }): React.ReactElement {
-  return <div className={cn("h-full flex items-center justify-center", className)}>
-    <div className="text-center">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4" />
-      <p className="text-muted-foreground">Carregando pipeline...</p>
+  return (
+    <div className={cn('h-full flex items-center justify-center', className)}>
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4" />
+        <p className="text-muted-foreground">Carregando pipeline...</p>
+      </div>
     </div>
-  </div>
+  )
 }
 
-export function ErrorState({ 
-  error, 
-  className 
-}: { 
+export function ErrorState({
+  error,
+  className,
+}: {
   error: string
-  className?: string 
+  className?: string
 }): React.ReactElement {
-  return <div className={cn("h-full flex items-center justify-center", className)}>
-    <div className="text-center">
-      <AlertCircle className="h-8 w-8 text-red-500 mx-auto mb-4" />
-      <p className="text-red-600 mb-4">{error}</p>
-      <Button 
-        type="button"
-        variant="outline" 
-        onClick={() => window.location.reload()}
-      >
-        Tentar novamente
-      </Button>
-    </div>
-  </div>
-}
-
-export function StageHeader({ 
-  stage, 
-  onAddLead 
-}: { 
-  stage: PipelineStageDisplay
-  onAddLead: () => void 
-}): React.ReactElement {
-  return <Card className={cn("mb-4", stage.color)}>
-    <CardHeader className="pb-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <CardTitle className="text-sm font-medium">
-            {stage.name}
-          </CardTitle>
-          <Badge variant="secondary" className="text-xs">
-            {stage.count}
-          </Badge>
-        </div>
-        <Button 
-          type="button" 
-          variant="ghost" 
-          size="sm" 
-          className="h-8 w-8 p-0"
-          onClick={onAddLead}
-        >
-          <Plus className="h-4 w-4" />
-          <span className="sr-only">Adicionar lead</span>
+  return (
+    <div className={cn('h-full flex items-center justify-center', className)}>
+      <div className="text-center">
+        <AlertCircle className="h-8 w-8 text-red-500 mx-auto mb-4" />
+        <p className="text-red-600 mb-4">{error}</p>
+        <Button type="button" variant="outline" onClick={() => window.location.reload()}>
+          Tentar novamente
         </Button>
       </div>
-    </CardHeader>
-  </Card>
+    </div>
+  )
 }
 
-export function AddLeadCard({ 
-  onAddLead 
-}: { 
-  onAddLead: () => void 
+export function StageHeader({
+  stage,
+  onAddLead,
+}: {
+  stage: PipelineStageDisplay
+  onAddLead: () => void
 }): React.ReactElement {
-  return <Card className="border-dashed border-2 border-muted-foreground/25 hover:border-primary/50 transition-colors">
-    <CardContent className="p-6 text-center">
-      <Button 
-        type="button" 
-        variant="ghost" 
-        className="h-auto p-2 text-muted-foreground hover:text-primary"
-        onClick={onAddLead}
-      >
-        <Plus className="h-4 w-4 mr-2" />
-        Adicionar Lead
-      </Button>
-    </CardContent>
-  </Card>
+  return (
+    <Card className={cn('mb-4', stage.color)}>
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CardTitle className="text-sm font-medium">{stage.name}</CardTitle>
+            <Badge variant="secondary" className="text-xs">
+              {stage.count}
+            </Badge>
+          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={onAddLead}
+          >
+            <Plus className="h-4 w-4" />
+            <span className="sr-only">Adicionar lead</span>
+          </Button>
+        </div>
+      </CardHeader>
+    </Card>
+  )
 }
 
-export function StageColumn({ 
-  stage, 
-  onDragStart, 
+export function AddLeadCard({ onAddLead }: { onAddLead: () => void }): React.ReactElement {
+  return (
+    <Card className="border-dashed border-2 border-muted-foreground/25 hover:border-primary/50 transition-colors">
+      <CardContent className="p-6 text-center">
+        <Button
+          type="button"
+          variant="ghost"
+          className="h-auto p-2 text-muted-foreground hover:text-primary"
+          onClick={onAddLead}
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Adicionar Lead
+        </Button>
+      </CardContent>
+    </Card>
+  )
+}
+
+export function StageColumn({
+  stage,
+  onDragStart,
   onDrop,
   onAddLead,
   onViewDetails,
@@ -115,8 +113,8 @@ export function StageColumn({
   onSendEmail,
   onRemoveLead,
   onCall,
-  onWhatsApp
-}: { 
+  onWhatsApp,
+}: {
   stage: PipelineStageDisplay
   onDragStart: (lead: Lead) => void
   onDrop: (stageId: string) => void
@@ -128,62 +126,64 @@ export function StageColumn({
   onCall: (lead: Lead) => void
   onWhatsApp: (lead: Lead) => void
 }): React.ReactElement {
-  return <div
-    className="w-[320px] flex-shrink-0"
-    onDragOver={handleDragOver}
-    onDrop={() => onDrop(stage.id)}
-  >
-    <StageHeader 
-      stage={stage} 
-      onAddLead={() => onAddLead(stage.id)} 
-    />
-    <div className="space-y-3 min-h-[600px]">
-      {stage.leads.map((lead) => (
-        <LeadCard 
-          key={lead.id} 
-          lead={lead} 
-          onDragStart={onDragStart}
-          onViewDetails={onViewDetails}
-          onEditLead={onEditLead}
-          onSendEmail={onSendEmail}
-          onRemoveLead={onRemoveLead}
-          onCall={onCall}
-          onWhatsApp={onWhatsApp}
-        />
-      ))}
-      <AddLeadCard onAddLead={() => onAddLead(stage.id)} />
+  return (
+    <div
+      className="w-[320px] flex-shrink-0"
+      onDragOver={handleDragOver}
+      onDrop={() => onDrop(stage.id)}
+    >
+      <StageHeader stage={stage} onAddLead={() => onAddLead(stage.id)} />
+      <div className="space-y-3 min-h-[600px]">
+        {stage.leads.map(lead => (
+          <LeadCard
+            key={lead.id}
+            lead={lead}
+            onDragStart={onDragStart}
+            onViewDetails={onViewDetails}
+            onEditLead={onEditLead}
+            onSendEmail={onSendEmail}
+            onRemoveLead={onRemoveLead}
+            onCall={onCall}
+            onWhatsApp={onWhatsApp}
+          />
+        ))}
+        <AddLeadCard onAddLead={() => onAddLead(stage.id)} />
+      </div>
     </div>
-  </div>
+  )
 }
 
 // Helper component for connection status indicator
-export function ConnectionStatusIndicator({ 
-  isConnected, 
-  isPolling 
-}: { 
+export function ConnectionStatusIndicator({
+  isConnected,
+  isPolling,
+}: {
   isConnected: boolean
-  isPolling: boolean 
+  isPolling: boolean
 }): React.ReactElement {
   return (
     <div className="flex items-center gap-2">
-      <div className={cn(
-        "h-2 w-2 rounded-full",
-        isConnected ? "bg-emerald-500" : 
-        isPolling ? "bg-amber-500" : "bg-red-500"
-      )} />
+      <div
+        className={cn(
+          'h-2 w-2 rounded-full',
+          isConnected ? 'bg-emerald-500' : isPolling ? 'bg-amber-500' : 'bg-red-500'
+        )}
+      />
       <span className="text-xs text-muted-foreground">
-        {isConnected ? 'Conectado - Updates em tempo real' : 
-         isPolling ? 'Modo Fallback - Updates via polling' :
-         'Desconectado - Sem updates automáticos'}
+        {isConnected
+          ? 'Conectado - Updates em tempo real'
+          : isPolling
+            ? 'Modo Fallback - Updates via polling'
+            : 'Desconectado - Sem updates automáticos'}
       </span>
     </div>
   )
 }
 
 // Helper component for active users display
-export function ActiveUsersDisplay({ 
-  activeUsers 
-}: { 
+export function ActiveUsersDisplay({
+  activeUsers,
+}: {
   activeUsers: { user_id?: string; full_name?: string }[]
 }): React.ReactElement | null {
   if (activeUsers.length === 0) {
@@ -218,21 +218,18 @@ export function ActiveUsersDisplay({
 }
 
 // Helper component for connection status header
-export function ConnectionStatusHeader({ 
-  isConnected, 
-  isPolling, 
-  activeUsers 
-}: { 
+export function ConnectionStatusHeader({
+  isConnected,
+  isPolling,
+  activeUsers,
+}: {
   isConnected: boolean
   isPolling: boolean
   activeUsers: { user_id?: string; full_name?: string }[]
 }): React.ReactElement {
   return (
     <div className="flex items-center justify-between mb-4 p-2 bg-muted/30 rounded-lg">
-      <ConnectionStatusIndicator 
-        isConnected={isConnected} 
-        isPolling={isPolling} 
-      />
+      <ConnectionStatusIndicator isConnected={isConnected} isPolling={isPolling} />
       <ActiveUsersDisplay activeUsers={activeUsers} />
     </div>
   )
@@ -253,7 +250,7 @@ export function PipelineModals({
   isEditModalOpen,
   onEditSuccess,
   isDeleteDialogOpen,
-  onDeleteSuccess
+  onDeleteSuccess,
 }: {
   isCreateModalOpen: boolean
   onCreateModalClose: () => void
@@ -272,31 +269,31 @@ export function PipelineModals({
 }): React.ReactElement {
   return (
     <>
-      <LeadCreateModal 
-        isOpen={isCreateModalOpen} 
-        onClose={onCreateModalClose} 
-        onSuccess={onCreateSuccess} 
-        initialStage={createModalStage} 
+      <LeadCreateModal
+        isOpen={isCreateModalOpen}
+        onClose={onCreateModalClose}
+        onSuccess={onCreateSuccess}
+        initialStage={createModalStage}
       />
-      <LeadDetailsModal 
-        isOpen={isDetailsModalOpen} 
-        onClose={onModalClose} 
-        lead={selectedLead} 
-        onEdit={onEditFromDetails} 
-        onDelete={onDeleteFromDetails} 
-        onFavoriteToggle={onFavoriteToggle} 
+      <LeadDetailsModal
+        isOpen={isDetailsModalOpen}
+        onClose={onModalClose}
+        lead={selectedLead}
+        onEdit={onEditFromDetails}
+        onDelete={onDeleteFromDetails}
+        onFavoriteToggle={onFavoriteToggle}
       />
-      <LeadEditModal 
-        isOpen={isEditModalOpen} 
-        onClose={onModalClose} 
-        onSuccess={onEditSuccess} 
-        lead={selectedLead} 
+      <LeadEditModal
+        isOpen={isEditModalOpen}
+        onClose={onModalClose}
+        onSuccess={onEditSuccess}
+        lead={selectedLead}
       />
-      <LeadDeleteDialog 
-        isOpen={isDeleteDialogOpen} 
-        onClose={onModalClose} 
-        onSuccess={onDeleteSuccess} 
-        lead={selectedLead} 
+      <LeadDeleteDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={onModalClose}
+        onSuccess={onDeleteSuccess}
+        lead={selectedLead}
       />
     </>
   )

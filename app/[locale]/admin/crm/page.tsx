@@ -7,8 +7,6 @@
 import { PipelineKanban } from '@/components/crm/pipeline-kanban'
 
 export default function CRMPage() {
-  console.log('🎯 CRM Page component rendering')
-  
   return (
     <div className="space-y-6">
       {/* Header */}

@@ -43,7 +43,13 @@ export function LoadingState(): JSX.Element {
   )
 }
 
-export function ErrorState({ error, onGoHome }: { error: string; onGoHome: () => void }): JSX.Element {
+export function ErrorState({
+  error,
+  onGoHome,
+}: {
+  error: string
+  onGoHome: () => void
+}): JSX.Element {
   return (
     <StateCard
       icon={<XCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />}
@@ -58,7 +64,11 @@ export function ErrorState({ error, onGoHome }: { error: string; onGoHome: () =>
   )
 }
 
-export function ResultState({ result }: { result: { type: 'success' | 'error'; message: string } }): JSX.Element {
+export function ResultState({
+  result,
+}: {
+  result: { type: 'success' | 'error'; message: string }
+}): JSX.Element {
   const isSuccess = result.type === 'success'
   return (
     <StateCard

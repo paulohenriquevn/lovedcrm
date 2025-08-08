@@ -7,12 +7,7 @@
 
 import { useState } from 'react'
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { useToast } from '@/hooks/use-toast'
 import { default as crmLeadsService, Lead } from '@/services/crm-leads'
 
@@ -22,9 +17,8 @@ import {
   LeadValueCard,
   TimelineCard,
   TagsSection,
-  NotesSection
+  NotesSection,
 } from './lead-details-components'
-
 
 interface LeadDetailsModalProps {
   isOpen: boolean
@@ -35,7 +29,10 @@ interface LeadDetailsModalProps {
   onFavoriteToggle: () => void
 }
 
-function useFavoriteToggle(lead: Lead, onFavoriteToggle: () => void): { isToggleLoading: boolean; handleFavoriteToggle: () => Promise<void> } {
+function useFavoriteToggle(
+  lead: Lead,
+  onFavoriteToggle: () => void
+): { isToggleLoading: boolean; handleFavoriteToggle: () => Promise<void> } {
   const [isToggleLoading, setIsToggleLoading] = useState(false)
   const { toast } = useToast()
 
@@ -43,18 +40,18 @@ function useFavoriteToggle(lead: Lead, onFavoriteToggle: () => void): { isToggle
     try {
       setIsToggleLoading(true)
       await crmLeadsService.toggleLeadFavorite(lead.id, !lead.is_favorite)
-      
+
       toast({
         title: lead.is_favorite ? 'Lead removido dos favoritos' : 'Lead adicionado aos favoritos',
-        description: `${lead.name} foi ${lead.is_favorite ? 'removido dos' : 'adicionado aos'} favoritos.`
+        description: `${lead.name} foi ${lead.is_favorite ? 'removido dos' : 'adicionado aos'} favoritos.`,
       })
-      
+
       onFavoriteToggle()
     } catch {
       toast({
         title: 'Erro ao alterar favorito',
         description: 'Não foi possível alterar o status de favorito. Tente novamente.',
-        variant: 'destructive'
+        variant: 'destructive',
       })
     } finally {
       setIsToggleLoading(false)
@@ -63,22 +60,24 @@ function useFavoriteToggle(lead: Lead, onFavoriteToggle: () => void): { isToggle
 
   return {
     isToggleLoading,
-    handleFavoriteToggle
+    handleFavoriteToggle,
   }
 }
 
-
-export function LeadDetailsModal({ 
-  isOpen, 
-  onClose, 
-  lead, 
-  onEdit, 
+export function LeadDetailsModal({
+  isOpen,
+  onClose,
+  lead,
+  onEdit,
   onDelete,
-  onFavoriteToggle
+  onFavoriteToggle,
 }: LeadDetailsModalProps): React.ReactElement | null {
   // eslint-disable-next-line camelcase
   const defaultLead = { id: '', name: '', is_favorite: false } as Lead
-  const { isToggleLoading, handleFavoriteToggle } = useFavoriteToggle(lead ?? defaultLead, onFavoriteToggle)
+  const { isToggleLoading, handleFavoriteToggle } = useFavoriteToggle(
+    lead ?? defaultLead,
+    onFavoriteToggle
+  )
 
   if (!lead) {
     return null
@@ -100,7 +99,7 @@ export function LeadDetailsModal({
             onDelete={onDelete}
             onClose={onClose}
           />
-          
+
           <div className="grid gap-6 md:grid-cols-2">
             <ContactInfoCard lead={lead} />
             <LeadValueCard lead={lead} />

@@ -29,12 +29,12 @@ export function createDefaultFormValues(): LeadEditForm {
     estimatedValue: undefined,
     tags: [],
     notes: '',
-    isFavorite: false
+    isFavorite: false,
   }
 }
 
 export function populateFormWithLeadData(
-  form: UseFormReturn<LeadEditForm>, 
+  form: UseFormReturn<LeadEditForm>,
   lead: Lead,
   setCurrentTags: (tags: string[]) => void
 ): void {
@@ -47,9 +47,9 @@ export function populateFormWithLeadData(
     estimatedValue: lead.estimated_value ?? undefined,
     tags: lead.tags ?? [],
     notes: lead.notes ?? '',
-    isFavorite: lead.is_favorite
+    isFavorite: lead.is_favorite,
   }
-  
+
   form.reset(formData)
   setCurrentTags(lead.tags ?? [])
 }
@@ -72,9 +72,7 @@ export interface TagOperationsConfig {
   form: UseFormReturn<LeadEditForm>
 }
 
-export function handleTagOperations(
-  config: TagOperationsConfig
-): {
+export function handleTagOperations(config: TagOperationsConfig): {
   addTag: (tag: string) => void
   removeTag: (tagToRemove: string) => void
   handleTagKeyPress: (e: React.KeyboardEvent) => void

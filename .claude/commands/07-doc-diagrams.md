@@ -2,7 +2,8 @@
 
 **Technical Diagram Generator** - Especialista em gerar diagramas técnicos completos baseados nas especificações anteriores. Transforma PRD + Tech Blueprint + Database Schema + API Specification em visualizações técnicas precisas. Mantém multi-tenancy com organization_id e preserva 100% das especificações. **NUNCA omite** componentes ou fluxos - todos devem ter representação visual.
 
-**Entrada**: 
+**Entrada**:
+
 - @docs/project/02-prd.md (funcionalidades a visualizar)
 - @docs/project/03-tech.md (soluções técnicas a diagramar)
 - @docs/project/04-journeys.md (fluxos a representar)
@@ -14,22 +15,26 @@
 ## **🔒 REGRAS CRÍTICAS NÃO-NEGOCIÁVEIS**
 
 ### **95% Confidence Rule**
+
 - ✅ **DEVE**: Ter 95%+ certeza sobre representação visual de cada componente
 - ✅ **DEVE**: Mapear TODOS elementos especificados nos documentos anteriores
 - ❌ **NUNCA**: Assumir que componente não precisa visualização sem validar
 
 ### **Preservação Total do Escopo**
+
 - ✅ **DEVE**: Representar visualmente 100% das especificações anteriores
 - ✅ **DEVE**: Se elemento existe nos documentos, DEVE ter representação visual
 - ❌ **NUNCA**: Omitir componentes por complexidade visual
 - ❌ **NUNCA**: Remover elementos para "simplificar" diagramas
 
 ### **Multi-Tenancy Compliance**
+
 - ✅ **OBRIGATÓRIO**: Todos diagramas DEVEM mostrar `organization_id` filtering
 - ✅ **OBRIGATÓRIO**: Visualizações devem representar isolamento organizacional
 - ✅ **OBRIGATÓRIO**: Fluxos devem incluir contexto organizacional
 
 ### **Chain of Preservation**
+
 - ✅ **DEVE**: Consumir TODAS funcionalidades do PRD (Agente 02)
 - ✅ **DEVE**: Visualizar soluções técnicas do Tech Blueprint (Agente 03)
 - ✅ **DEVE**: Representar fluxos das User Journeys (Agente 04)
@@ -44,18 +49,20 @@
 
 1. **Read CLAUDE.md** - Ver arquitetura geral do template
 2. **Read api/main.py** - Ver estrutura de routers e middleware
-3. **Glob components/ui/*.tsx** - Ver componentes shadcn/ui disponíveis
+3. **Glob components/ui/\*.tsx** - Ver componentes shadcn/ui disponíveis
 4. **Read tailwind.config.js** - Ver configuração de design atual
 5. **Read next.config.js** - Ver configuração de proxies e redirecionamentos
 
 ### **✅ ARQUITETURA IDENTIFICADA NO TEMPLATE:**
-- **Frontend**: Next.js 14 + App Router (/[locale]/admin/*) ✅
+
+- **Frontend**: Next.js 14 + App Router (/[locale]/admin/\*) ✅
 - **Backend**: FastAPI sem versionamento global (/auth, /organizations) ✅
 - **Database**: PostgreSQL com organization_id filtering ✅
 - **Multi-tenancy**: X-Org-Id header + middleware validation ✅
 - **UI**: shadcn/ui + Tailwind CSS (31 componentes) ✅
 
 ### **🔒 NUNCA FAZER:**
+
 - Assumir arquitetura sem verificar template ❌
 - Inventar componentes não existentes no codebase ❌
 - Ignorar estrutura atual do sistema ❌
@@ -66,18 +73,21 @@
 ### **Etapa 1: Análise de Documentos (30min)**
 
 **1.1 Mapeamento de Componentes (do PRD)**
+
 - Ler cada funcionalidade do PRD
 - Identificar componentes que precisam visualização
 - Mapear relacionamentos entre funcionalidades
 - Validar escopo completo das representações
 
 **1.2 Integração de Soluções Técnicas (do Tech Blueprint)**
+
 - **"Como resolvemos?"** → Influencia arquitetura dos diagramas
 - **"Quais ferramentas?"** → Define componentes de integração
 - **Technical constraints** → Impacta visualização de fluxos
 - **Implementation notes** → Adiciona detalhes aos diagramas
 
 **1.3 Representação de Fluxos (das User Journeys)**
+
 - Visualizar jornadas principais em diagramas de sequência
 - Mapear touchpoints em diagramas de componentes
 - Representar CRUD operations em fluxos de dados
@@ -86,18 +96,21 @@
 ### **Etapa 2: Diagramação de Estruturas (45min)**
 
 **2.1 Database Schema Diagrams**
+
 - Diagrama ER baseado no schema identificado
 - Visualizar relacionamentos com organization_id
 - Representar índices e constraints
 - Mostrar isolamento multi-tenant
 
 **2.2 API Architecture Diagrams**
+
 - Mapear endpoints e relacionamentos
 - Visualizar middleware e dependências
 - Representar fluxos de autenticação
 - Mostrar integração entre serviços
 
 **2.3 System Architecture Overview**
+
 - Diagrama de alto nível da arquitetura
 - Representar frontend + backend + database
 - Visualizar deployment e infraestrutura
@@ -106,12 +119,14 @@
 ### **Etapa 3: Validação e Documentação (25min)**
 
 **3.1 Coverage Validation**
+
 - Todos elementos dos documentos anteriores representados?
 - Diagramas cobrem funcionalidades, fluxos e estruturas?
 - Multi-tenancy visível em todas visualizações?
 - Integrações técnicas adequadamente diagramadas?
 
 **3.2 Documentation Standards**
+
 - Legendas claras para cada diagrama
 - Convenções consistentes
 - Guias de leitura e interpretação
@@ -129,6 +144,7 @@
 #### **Diagram Specifications**
 
 ##### **[DIAGRAM_TYPE] - [Nome do Diagrama]**
+
 - **Purpose**: [Por que este diagrama é necessário]
 - **Scope**: [Componentes/fluxos/estruturas incluídos]
 - **Multi-Tenant Representation**: [Como organization_id é visualizado]
@@ -139,7 +155,9 @@
 
 #### **ASCII Diagram**
 ```
+
 [Representação ASCII do diagrama com legendas claras]
+
 ```
 
 #### **Technical Implementation Notes**
@@ -152,7 +170,9 @@
 ## **🔍 CATEGORIAS DE DIAGRAMAS UNIVERSAIS**
 
 ### **1. System Architecture Diagrams (Baseado no Template)**
+
 Para representar arquitetura geral do template atual:
+
 ```
 ┌─────────────────────────┐    ┌──────────────────────┐    ┌─────────────────┐
 │   Frontend Next.js 14   │────│   Backend FastAPI    │────│   Database      │
@@ -163,7 +183,9 @@ Para representar arquitetura geral do template atual:
 ```
 
 ### **2. Database Entity-Relationship**
+
 Para schema e relacionamentos:
+
 ```
 ┌──────────────────┐       ┌──────────────────┐
 │   organizations  │  1  N │   business_table │
@@ -174,7 +196,9 @@ Para schema e relacionamentos:
 ```
 
 ### **3. API Flow Diagrams (Baseado no Template)**
+
 Para endpoints e fluxos do template:
+
 ```
 Frontend ──[X-Org-Id]──▶ OrganizationMiddleware ──[validate]──▶ /auth /users
    │                            │                                    │
@@ -183,7 +207,9 @@ Frontend ──[X-Org-Id]──▶ OrganizationMiddleware ──[validate]──
 ```
 
 ### **4. User Journey Sequence**
+
 Para fluxos de usuário:
+
 ```
 User → Frontend → API → Service → Repository → Database
  │       │         │      │         │           │
@@ -220,66 +246,82 @@ Gerar documento estruturado em @docs/project/07-diagrams.md:
 # Solution Diagrams - [Nome do Produto]
 
 ## 1. Architecture Overview
+
 **System Stack**: Next.js 14 + FastAPI + PostgreSQL + Railway
 **Multi-Tenancy**: organization_id isolation across all layers
 **Integration Pattern**: [Baseado no tech blueprint]
 **Total Diagrams**: [Número de diagramas gerados]
 
 ## 2. System Architecture Diagram
+
 ### [Representação visual da arquitetura completa]
+
 - Frontend + Backend + Database + Infrastructure
 - Multi-tenant data flow
 - Authentication and authorization
 - External integrations
 
 ## 3. Database Schema Diagrams
+
 ### [Para cada conjunto de tabelas do schema]
+
 - Entity-relationship diagrams with organization_id
 - Index and constraint visualization
 - Data isolation representation
 - Table relationships and foreign keys
 
-## 4. API Architecture Diagrams  
+## 4. API Architecture Diagrams
+
 ### [Para cada grupo de endpoints]
+
 - API endpoint mapping
 - Request/response flow with org context
 - Middleware and authentication flow
 - Integration endpoints and webhooks
 
 ## 5. User Journey Flow Diagrams
+
 ### [Para cada jornada principal]
+
 - Sequence diagrams for major user flows
 - Component interaction during journeys
 - Data flow through multi-tenant system
 - Error handling and edge cases
 
 ## 6. Integration Architecture
+
 ### [Para cada integração técnica]
+
 - Third-party service connections
-- Data synchronization flows  
+- Data synchronization flows
 - Webhook processing
 - Configuration and setup flows
 
 ## 7. Component Interaction Diagrams
+
 - Frontend component relationships
 - Backend service dependencies
 - Cross-layer communication patterns
 - State management and data flow
 
 ## 8. Deployment Architecture
+
 ### [Baseado na infraestrutura Railway]
+
 - Container and service deployment
 - Database and Redis setup
 - Environment configuration
 - Monitoring and logging setup
 
 ## 9. Security and Multi-Tenancy
+
 - Organization isolation patterns
 - Authentication flow diagrams
 - Data access control visualization
 - Security boundary representation
 
 ## 10. Diagram Conventions and Legends
+
 - Symbol definitions and meanings
 - Relationship notation standards
 - Color coding and visual patterns
@@ -313,4 +355,3 @@ echo "- Multi-tenancy do template?"
 - **Integration Completeness**: Todas soluções técnicas e integrações representadas
 
 **EXECUTAR ANÁLISE DE CODEBASE + PROCESSO DE GERAÇÃO E GERAR @docs/project/07-diagrams.md**
-

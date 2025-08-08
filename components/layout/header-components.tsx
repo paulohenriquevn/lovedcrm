@@ -5,7 +5,19 @@
 
 'use client'
 
-import { Search, Bell, Settings, User, LogOut, Moon, Sun, ChevronDown, Building2, Shield, Users } from 'lucide-react'
+import {
+  Search,
+  Bell,
+  Settings,
+  User,
+  LogOut,
+  Moon,
+  Sun,
+  ChevronDown,
+  Building2,
+  Shield,
+  Users,
+} from 'lucide-react'
 
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -86,11 +98,7 @@ interface ThemeToggleProps {
 export function ThemeToggle({ theme, onToggle }: ThemeToggleProps): JSX.Element {
   return (
     <Button variant="ghost" size="sm" onClick={onToggle}>
-      {theme === 'dark' ? (
-        <Sun className="h-4 w-4" />
-      ) : (
-        <Moon className="h-4 w-4" />
-      )}
+      {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
       <span className="sr-only">Alternar tema</span>
     </Button>
   )
@@ -109,14 +117,13 @@ const formatCount = (count: number, loading: boolean): string => {
   return loading ? '...' : count.toString()
 }
 
-export function OrgSwitcher({ 
-  organizations, 
-  currentOrg, 
-  memberCount, 
-  memberLoading, 
-  onOrgSwitch 
+export function OrgSwitcher({
+  organizations,
+  currentOrg,
+  memberCount,
+  memberLoading,
+  onOrgSwitch,
 }: OrgSwitcherProps): JSX.Element {
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -125,10 +132,8 @@ export function OrgSwitcher({
             <Building2 className="h-4 w-4 shrink-0" />
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <span className="truncate font-medium text-sm">
-                  {currentOrg.name}
-                </span>
-                <Badge 
+                <span className="truncate font-medium text-sm">{currentOrg.name}</span>
+                <Badge
                   className={`text-xs ${getTierBadgeStyle(currentOrg.tier)}`}
                   variant="secondary"
                 >
@@ -146,10 +151,10 @@ export function OrgSwitcher({
       <DropdownMenuContent align="start" className="w-80">
         <DropdownMenuLabel>Organização Atual</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        
-        {organizations.map((org) => (
-          <DropdownMenuItem 
-            key={org.id} 
+
+        {organizations.map(org => (
+          <DropdownMenuItem
+            key={org.id}
             onClick={() => onOrgSwitch(org.id)}
             className={org.id === currentOrg.id ? 'bg-muted' : ''}
           >
@@ -158,17 +163,12 @@ export function OrgSwitcher({
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className="truncate font-medium">{org.name}</span>
-                  <Badge 
-                    className={getTierBadgeStyle(org.tier)}
-                    variant="secondary"
-                  >
+                  <Badge className={getTierBadgeStyle(org.tier)} variant="secondary">
                     {org.tier.toUpperCase()}
                   </Badge>
                 </div>
               </div>
-              {org.id === currentOrg.id && (
-                <Shield className="h-4 w-4 text-green-600" />
-              )}
+              {org.id === currentOrg.id && <Shield className="h-4 w-4 text-green-600" />}
             </div>
           </DropdownMenuItem>
         ))}
@@ -184,23 +184,24 @@ interface UserMenuProps {
   onLogout: () => void
 }
 
-export function UserMenu({ user, displayName, userInitials, onLogout }: UserMenuProps): JSX.Element {
+export function UserMenu({
+  user,
+  displayName,
+  userInitials,
+  onLogout,
+}: UserMenuProps): JSX.Element {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-10 gap-2 px-3">
           <Avatar className="h-7 w-7">
             <AvatarImage src={user?.email} alt={displayName} />
-            <AvatarFallback className="text-xs">
-              {userInitials}
-            </AvatarFallback>
+            <AvatarFallback className="text-xs">{userInitials}</AvatarFallback>
           </Avatar>
           <div className="hidden md:flex flex-col items-start">
-            <span className="text-sm font-medium truncate max-w-32">
-              {displayName}
-            </span>
-{Boolean(user?.role) && (
-              <Badge 
+            <span className="text-sm font-medium truncate max-w-32">{displayName}</span>
+            {Boolean(user?.role) && (
+              <Badge
                 className={`${getRoleBadgeStyle(user.role ?? '')} text-xs`}
                 variant="secondary"
               >

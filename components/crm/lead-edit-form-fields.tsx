@@ -7,13 +7,7 @@
 
 import { UseFormReturn } from 'react-hook-form'
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PipelineStage } from '@/services/crm-leads'
 
@@ -22,7 +16,7 @@ import {
   EstimatedValueField,
   NotesField,
   StageSourceFields,
-  TagsField
+  TagsField,
 } from './lead-form-components'
 
 interface LeadEditForm {
@@ -56,7 +50,7 @@ export function LeadEditFormFields({
   onTagInputChange,
   onAddTag,
   onRemoveTag,
-  onTagKeyPress
+  onTagKeyPress,
 }: LeadEditFormFieldsProps): React.ReactElement {
   return (
     <div className="space-y-4">
@@ -68,11 +62,7 @@ export function LeadEditFormFields({
           <FormItem>
             <FormLabel>Nome *</FormLabel>
             <FormControl>
-              <Input
-                {...field}
-                placeholder="Nome do lead"
-                disabled={isLoading}
-              />
+              <Input {...field} placeholder="Nome do lead" disabled={isLoading} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -98,14 +88,12 @@ export function LeadEditFormFields({
                 <input
                   type="checkbox"
                   checked={field.value}
-                  onChange={(e) => field.onChange(e.target.checked)}
+                  onChange={e => field.onChange(e.target.checked)}
                   disabled={isLoading}
                   className="rounded"
                 />
               </FormControl>
-              <FormLabel className="!mt-0">
-                Marcar como favorito
-              </FormLabel>
+              <FormLabel className="!mt-0">Marcar como favorito</FormLabel>
             </FormItem>
           )}
         />

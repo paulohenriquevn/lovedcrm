@@ -1,5 +1,9 @@
-import { CommunicationChannelBadge, MessageBubble, WhatsAppMessage } from "@/components/crm/communication-channel"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  CommunicationChannelBadge,
+  MessageBubble,
+  WhatsAppMessage,
+} from '@/components/crm/communication-channel'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export function CommunicationDemo(): JSX.Element {
   return (

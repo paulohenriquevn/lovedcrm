@@ -26,21 +26,25 @@
 **PROCESSO OBRIGATÓRIO DE REFLEXÃO (2-3 minutos)**:
 
 #### **🎯 ETAPA 1: COMPREENDER O PEDIDO (30s)**
+
 - ❓ **Pergunta**: "O que exatamente o usuário está pedindo?"
 - 📝 **Resposta**: [Analisar e criar plano de evolução para feature específica]
 - ✅ **Validação**: "Tenho 95% de certeza sobre o que preciso fazer?"
 
 #### **🔍 ETAPA 2: ANALISAR PRÉ-REQUISITOS (60s)**
+
 - 📋 **Pergunta**: "Que informações preciso coletar ANTES de agir?"
 - 🔎 **Resposta**: [Estado atual da feature, objetivo da evolução, impactos]
 - ⚠️ **Validação**: "Posso prosseguir com o que tenho ou preciso de mais informações?"
 
 #### **⚙️ ETAPA 3: PLANEJAR ABORDAGEM (60s)**
+
 - 🛣️ **Pergunta**: "Qual é o melhor caminho para resolver isso?"
 - 📈 **Resposta**: [Analisar estado -> definir objetivos -> planejar evolução -> validar org-centric]
 - 🎯 **Validação**: "Este plano leva ao resultado desejado?"
 
 #### **🚨 ETAPA 4: VALIDAR PRINCÍPIOS (30s)**
+
 - 🔴 **KISS**: Esta abordagem é a mais simples possível?
 - 🔴 **YAGNI**: Estou implementando apenas o necessário AGORA?
 - 🔴 **DRY**: Estou reutilizando o que já existe?

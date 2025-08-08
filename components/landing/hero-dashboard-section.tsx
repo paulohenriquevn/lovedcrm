@@ -41,7 +41,7 @@ function DashboardHeader(): JSX.Element {
 
 function PipelineCards(): JSX.Element {
   const pipelineStages = ['Lead', 'Contato', 'Proposta', 'Negociação', 'Fechado']
-  
+
   return (
     <div className="grid grid-cols-5 gap-4 mb-6">
       {pipelineStages.map((stage, index) => (
@@ -49,7 +49,10 @@ function PipelineCards(): JSX.Element {
           <h4 className="text-xs font-medium mb-2">{stage}</h4>
           <div className="space-y-2">
             {Array.from({ length: index + 1 }, (_, i) => (
-              <div key={`${stage}-lead-item-${i + 1}`} className="bg-white rounded border h-12 flex items-center px-2">
+              <div
+                key={`${stage}-lead-item-${i + 1}`}
+                className="bg-white rounded border h-12 flex items-center px-2"
+              >
                 <div className="h-2 w-2 bg-primary rounded-full mr-2" />
                 <div className="text-xs text-muted-foreground">Lead {i + 1}</div>
               </div>
@@ -92,7 +95,7 @@ function TimelineSection(): JSX.Element {
 function FeatureOverlays(): JSX.Element {
   return (
     <>
-      <motion.div 
+      <motion.div
         className="absolute top-20 left-4 bg-primary text-primary-foreground px-3 py-1 rounded-lg text-sm font-medium"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -100,7 +103,7 @@ function FeatureOverlays(): JSX.Element {
       >
         Pipeline Kanban
       </motion.div>
-      <motion.div 
+      <motion.div
         className="absolute top-20 right-4 bg-whatsapp text-white px-3 py-1 rounded-lg text-sm font-medium"
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -108,7 +111,7 @@ function FeatureOverlays(): JSX.Element {
       >
         WhatsApp Integrado
       </motion.div>
-      <motion.div 
+      <motion.div
         className="absolute bottom-20 left-1/2 -translate-x-1/2 bg-ai-summary text-white px-3 py-1 rounded-lg text-sm font-medium"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -120,9 +123,12 @@ function FeatureOverlays(): JSX.Element {
   )
 }
 
-export function HeroDashboardSection({ imageLoading, handleImageLoad }: HeroSectionProps): JSX.Element {
+export function HeroDashboardSection({
+  imageLoading,
+  handleImageLoad,
+}: HeroSectionProps): JSX.Element {
   return (
-    <motion.div 
+    <motion.div
       className="mt-12 relative"
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
@@ -144,7 +150,7 @@ export function HeroDashboardSection({ imageLoading, handleImageLoad }: HeroSect
               alt="Dashboard do Loved CRM mostrando pipeline Kanban"
             />
           </div>
-          
+
           <DashboardHeader />
 
           <div className="p-6">
@@ -152,7 +158,7 @@ export function HeroDashboardSection({ imageLoading, handleImageLoad }: HeroSect
             <TimelineSection />
           </div>
         </div>
-        
+
         <FeatureOverlays />
       </div>
     </motion.div>

@@ -78,10 +78,7 @@ const nextConfig = withNextIntl({
 
   // Image domains configuration for external images
   images: {
-    domains: [
-      'images.unsplash.com',
-      'upload.wikimedia.org',
-    ],
+    domains: ['images.unsplash.com', 'upload.wikimedia.org'],
     remotePatterns: [
       {
         protocol: 'https',

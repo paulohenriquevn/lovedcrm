@@ -3,10 +3,12 @@
 **🚨 QUALITY GATE FINAL - Validador obrigatório de user stories implementadas com base nos planos gerados pelo exec-story.md. Garante 100% conformidade com especificações técnicas, critérios de aceite e padrões de qualidade antes da história ser marcada como CONCLUÍDA.**
 
 **Entrada:**
+
 - `story_id`: ID da história implementada (ex: "1.1", "2.3")
 - **Pré-requisito OBRIGATÓRIO**: História deve ter plano em `docs/plans/[ID]-*.md` (gerado pelo exec-story)
 
-**Saída:** 
+**Saída:**
+
 - Relatório detalhado: ✅ APROVADO | ⚠️ APROVADO COM RESSALVAS | ❌ REJEITADO
 - Validação completa: Implementação vs Plano vs Roadmap
 - Quality gate automático: Só aprova se 100% conforme especificações
@@ -19,6 +21,7 @@
 ```
 
 **🔄 POSIÇÃO NO WORKFLOW OBRIGATÓRIO:**
+
 ```
 exec-refine → exec-story → IMPLEMENTAÇÃO → exec-review → ✅ PRODUÇÃO
                 ↓              ↓              ↓
@@ -36,21 +39,25 @@ exec-refine → exec-story → IMPLEMENTAÇÃO → exec-review → ✅ PRODUÇÃ
 **PROCESSO OBRIGATÓRIO DE REFLEXÃO (2-3 minutos)**:
 
 #### **🎯 ETAPA 1: COMPREENDER O PEDIDO (30s)**
+
 - ❓ **Pergunta**: "O que exatamente o usuário está pedindo?"
 - 📝 **Resposta**: [Quality gate final: validar implementação vs plano do exec-story]
 - ✅ **Validação**: "Tenho 95% de certeza sobre o que preciso fazer?"
 
 #### **🔍 ETAPA 2: ANALISAR PRÉ-REQUISITOS (60s)**
+
 - 📋 **Pergunta**: "Que informações preciso coletar ANTES de agir?"
 - 🔎 **Resposta**: [Plano exec-story, roadmap, implementação atual, testes executados]
 - ⚠️ **Validação**: "Posso prosseguir com o que tenho ou preciso de mais informações?"
 
 #### **⚙️ ETAPA 3: PLANEJAR ABORDAGEM (60s)**
+
 - 🛣️ **Pergunta**: "Qual é o melhor caminho para resolver isso?"
 - 📈 **Resposta**: [Ler plano -> verificar implementação -> validar conformidade -> aprovar/rejeitar]
 - 🎯 **Validação**: "Este plano leva ao resultado desejado?"
 
 #### **🚨 ETAPA 4: VALIDAR PRINCÍPIOS (30s)**
+
 - 🔴 **KISS**: Esta abordagem é a mais simples possível?
 - 🔴 **YAGNI**: Estou implementando apenas o necessário AGORA?
 - 🔴 **DRY**: Estou reutilizando o que já existe?
@@ -83,6 +90,7 @@ Antes de iniciar qualquer tarefa, o agente DEVE exibir:
 **REGRA FUNDAMENTAL**: Se qualquer red flag for detectado, o agente DEVE parar imediatamente e pedir esclarecimentos.
 
 #### **🔴 RED FLAGS DE PLANO EXEC-STORY AUSENTE/INVÁLIDO**
+
 - ❌ **Plano não encontrado**: Arquivo `docs/plans/[ID]-*.md` não existe
 - ❌ **Plano incompleto**: Plano exec-story não tem steps detalhados
 - ❌ **Plano desatualizado**: Plano não corresponde à implementação atual
@@ -90,6 +98,7 @@ Antes de iniciar qualquer tarefa, o agente DEVE exibir:
 - ❌ **História órfã**: Implementação sem plano de execução correspondente
 
 #### **🔴 RED FLAGS DE IMPLEMENTAÇÃO vs PLANO**
+
 - ❌ **Steps não seguidos**: Implementação não seguiu passos do plano
 - ❌ **Arquivos diferentes**: Arquivos criados não coincidem com plano
 - ❌ **Padrões violados**: Código não segue padrões especificados no plano
@@ -97,6 +106,7 @@ Antes de iniciar qualquer tarefa, o agente DEVE exibir:
 - ❌ **Timeline exceeded**: Implementação muito mais complexa que planejado
 
 #### **🔴 RED FLAGS DE MULTI-TENANT VIOLATIONS**
+
 - ❌ **Organization isolation broken**: Queries sem organization_id filtering
 - ❌ **Cross-org data leakage**: Possibilidade de acesso cross-organizacional
 - ❌ **Middleware bypassed**: Endpoints sem organization_middleware.py
@@ -104,6 +114,7 @@ Antes de iniciar qualquer tarefa, o agente DEVE exibir:
 - ❌ **Security gaps**: Authentication/authorization sem contexto organizacional
 
 #### **🔴 RED FLAGS DE QUALIDADE DE CÓDIGO**
+
 - ❌ **Anti-patterns**: Código que viola KISS/YAGNI/DRY fundamentalmente
 - ❌ **Technical debt explosion**: Implementation que piora drasticamente codebase
 - ❌ **Performance disaster**: Response time > 5x baseline sem justificativa
@@ -111,6 +122,7 @@ Antes de iniciar qualquer tarefa, o agente DEVE exibir:
 - ❌ **Dependencies hell**: Dependências desnecessárias ou conflitantes
 
 #### **🔴 RED FLAGS DE CRITÉRIOS DE ACEITE**
+
 - ❌ **Acceptance criteria ignored**: Critérios claramente não atendidos
 - ❌ **Scope creep**: Implementou funcionalidades além do solicitado
 - ❌ **Business logic wrong**: Regras de negócio implementadas incorretamente
@@ -118,6 +130,7 @@ Antes de iniciar qualquer tarefa, o agente DEVE exibir:
 - ❌ **Integration failures**: Não funciona com resto do sistema
 
 #### **🔴 RED FLAGS DE REVIEW IMPOSSÍVEL**
+
 - ❌ **História não localizada**: ID não existe no roadmap/sistema
 - ❌ **Ambiguous story**: Critérios de aceite vagos demais para validar
 - ❌ **Missing context**: Não há informação suficiente para fazer review
@@ -146,6 +159,7 @@ Antes de iniciar qualquer tarefa, o agente DEVE exibir:
 ```
 
 ### **✅ COMO RESOLVER RED FLAGS**
+
 - **Fix blockers first** - corrigir todos os problemas críticos identificados
 - **Organization isolation** - garantir 100% isolation antes de aprovar
 - **Meet acceptance criteria** - implementar EXATAMENTE o que foi pedido
@@ -239,6 +253,7 @@ Estas regras são **INEGOCIÁVEIS** para aprovar uma história:
 **REGRA ABSOLUTA: DEVE LER PLANO DO EXEC-STORY ANTES DE QUALQUER REVIEW**
 
 #### **📁 LEITURA OBRIGATÓRIA - PLANO DE EXECUÇÃO**
+
 - ✅ **DEVE**: `Read docs/plans/[ID]-*.md` - LER plano completo gerado pelo exec-story
 - ✅ **DEVE**: `Read docs/project/11-roadmap.md` - LOCALIZAR história original no roadmap
 - ✅ **DEVE**: `Read docs/refined/[ID]-*.md` - LER refinamento técnico (se existir)
@@ -246,6 +261,7 @@ Estas regras são **INEGOCIÁVEIS** para aprovar uma história:
 - ✅ **DEVE**: `Bash git status` - ANALISAR estado atual do branch
 
 #### **🔍 VALIDAÇÃO OBRIGATÓRIA - CONFORMIDADE PLANO vs IMPLEMENTAÇÃO**
+
 - ✅ **DEVE**: `LS api/models/` - COMPARAR models criados vs especificados no plano
 - ✅ **DEVE**: `LS api/services/` - COMPARAR services criados vs especificados no plano
 - ✅ **DEVE**: `LS api/routers/` - COMPARAR routers criados vs especificados no plano
@@ -255,6 +271,7 @@ Estas regras são **INEGOCIÁVEIS** para aprovar uma história:
 - ✅ **DEVE**: `Bash npm run typecheck` - VERIFICAR erros (conforme plano)
 
 #### **🚨 VALIDAÇÃO OBRIGATÓRIA**
+
 - ❌ **FALHA CRÍTICA**: Não usar ferramentas Read/LS/Bash para análise real
 - ❌ **FALHA CRÍTICA**: Assumir estado da implementação sem verificação direta
 - ❌ **FALHA CRÍTICA**: Review baseado em suposições sobre código
@@ -335,7 +352,7 @@ Plano de Execução (docs/plans/[ID]-*.md):
   Timeline Planejado: [Horas estimadas no plano]
   Fases Planejadas: [Número de fases definidas no plano]
   Files Especificados: [Arquivos que deveriam ser criados]
-  
+
 Implementação Realizada (git log):
   Implementador: [Verificar commits git EXECUTADOS]
   Data: [Data da implementação dos commits]
@@ -379,6 +396,7 @@ Implementação Realizada (git log):
 **🔍 VALIDAÇÃO ROADMAP → PLANO → IMPLEMENTAÇÃO**
 
 **Critérios no Roadmap Original (roadmap.md):**
+
 ```yaml
 # Critérios ORIGINAIS extraídos do roadmap
 - [ ] [Critério 1 original do roadmap]
@@ -386,15 +404,17 @@ Implementação Realizada (git log):
 - [ ] [Critério 3 original do roadmap]
 ```
 
-**Critérios Preservados no Plano (docs/plans/[ID]-*.md):**
+**Critérios Preservados no Plano (docs/plans/[ID]-\*.md):**
+
 ```yaml
 # Verificar se plano preservou 100% dos critérios do roadmap
 - [ ] [Critério 1 - PRESERVADO no plano? SIM/NÃO]
-- [ ] [Critério 2 - PRESERVADO no plano? SIM/NÃO]  
+- [ ] [Critério 2 - PRESERVADO no plano? SIM/NÃO]
 - [ ] [Critério 3 - PRESERVADO no plano? SIM/NÃO]
 ```
 
 **Critérios Implementados (código atual):**
+
 ```yaml
 # Verificar se implementação atende aos critérios
 - [ ] [Critério 1 - IMPLEMENTADO? SIM/NÃO/PARCIAL]
@@ -403,6 +423,7 @@ Implementação Realizada (git log):
 ```
 
 **🚨 VALIDAÇÃO CRÍTICA:**
+
 - ✅ **Preservação Plano**: [X/Y critérios preservados no plano]
 - ✅ **Atendimento Implementação**: [X/Y critérios implementados]
 - ❌ **Critérios Removidos no Plano**: [Lista se houver - FALHA CRÍTICA]
@@ -580,7 +601,7 @@ Major (devem ser corrigidos ou justificados):
 
 ```
 1. 🚨 PLANO EXEC-STORY NÃO ENCONTRADO (bloqueador automático)
-2. 🚨 TESTES E2E DO PLANO NÃO PASSAM (bloqueador automático)  
+2. 🚨 TESTES E2E DO PLANO NÃO PASSAM (bloqueador automático)
 3. 🚨 CRITÉRIOS DO ROADMAP REMOVIDOS NO PLANO (falha crítica)
 4. 🚨 IMPLEMENTAÇÃO IGNORA COMPLETAMENTE O PLANO (rejeição automática)
 5. [Problemas de segurança ou organization isolation quebrado]

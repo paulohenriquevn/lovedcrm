@@ -7,12 +7,14 @@
 Quando criar uma nova API route no backend:
 
 ### 1. Criar a rota no backend
+
 - [ ] Router em `api/routers/your_new_router.py`
 - [ ] Service em `api/services/your_new_service.py`
 - [ ] Schemas em `api/schemas/your_new_schema.py`
 - [ ] Registrar router em `api/main.py`
 
 ### 2. 🔴 CRÍTICO: Adicionar no next.config.js (Routing Padronizado)
+
 - [ ] **ANTES da regra genérica** `/api/:path*`
 - [ ] **SEMPRE usar `:path*`** (nunca `:endpoint*` ou variações)
 - [ ] **Escolher padrão correto**:
@@ -20,11 +22,13 @@ Quando criar uma nova API route no backend:
   - **PADRÃO B** (endpoints específicos): `'/api/your-endpoint:path*' → '${backendUrl}/your-endpoint/'`
 
 ### 3. 🔴 CRÍTICO: Adicionar no BaseService (Headers Multi-tenant)
+
 - [ ] Abrir `services/base.ts`
 - [ ] Adicionar `/api/your-api/` em `ORG_REQUIRED_ENDPOINTS`
 - [ ] **CRUCIAL para X-Org-Id header automático**
 
 ### 4. Testar a integração
+
 - [ ] Backend funcionando: `curl http://localhost:8000/api/your-api/endpoint`
 - [ ] Frontend funcionando: testar via browser/Postman
 - [ ] **Verificar X-Org-Id sendo enviado automaticamente**
@@ -52,12 +56,14 @@ Se você vir estes erros, provavelmente esqueceu de adicionar a rota:
 ## 🔍 Como Verificar se Rota Está Funcionando
 
 1. **Verificar logs do Next.js**:
+
    ```bash
    npm run dev
    # Procurar por: "🚂 Rewrite rules:"
    ```
 
 2. **Testar endpoint diretamente**:
+
    ```bash
    curl http://localhost:3000/api/your-api/test-endpoint
    ```
@@ -69,7 +75,7 @@ Se você vir estes erros, provavelmente esqueceu de adicionar a rota:
 Mantenha este histórico atualizado:
 
 - `/api/auth` - Autenticação (original)
-- `/api/users` - Usuários (original) 
+- `/api/users` - Usuários (original)
 - `/api/organizations` - Organizações (original)
 - `/api/members` - Membros (original)
 - `/api/billing` - Billing (original)
@@ -80,9 +86,11 @@ Mantenha este histórico atualizado:
 ## 🔧 Histórico de Correções de Configuração
 
 ### 2025-08-06: CRM Endpoints Fix
+
 **Problema**: `Missing X-Org-Id header for organization context`
 **Causa Raiz**: `/api/crm/` não estava em BaseService `ORG_REQUIRED_ENDPOINTS`
 **Solução Aplicada**:
+
 1. ✅ Adicionado `/api/crm/` em `services/base.ts` → `ORG_REQUIRED_ENDPOINTS`
 2. ✅ Verificado next.config.js routing: `/api/crm/:path*` → `${backendUrl}/api/crm/:path*`
 3. ✅ Testado: Backend responde corretamente, headers enviados automaticamente

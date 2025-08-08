@@ -1,5 +1,5 @@
-import { AISummary, AISummaryCompact } from "@/components/crm/ai-summary"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { AISummary, AISummaryCompact } from '@/components/crm/ai-summary'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export function AIDemo(): JSX.Element {
   return (
@@ -16,9 +16,9 @@ export function AIDemo(): JSX.Element {
           confidence={92}
           sentiment="positive"
           nextActions={[
-            "Agendar call para entender melhor as necessidades",
-            "Preparar proposta customizada para agências",
-            "Enviar cases similares de sucesso"
+            'Agendar call para entender melhor as necessidades',
+            'Preparar proposta customizada para agências',
+            'Enviar cases similares de sucesso',
           ]}
           modelUsed="gpt-4"
           tokensUsed={1247}
@@ -29,7 +29,7 @@ export function AIDemo(): JSX.Element {
 
         <div className="space-y-4">
           <p className="text-sm font-medium">Versão Compacta:</p>
-          <AISummaryCompact 
+          <AISummaryCompact
             summary="Cliente interessado em parceria. Budget R$ 5-10k/mês, urgência alta."
             confidence={85}
           />

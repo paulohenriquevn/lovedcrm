@@ -19,13 +19,13 @@ interface CompetitorProps {
   highlight?: boolean
 }
 
-function CompetitorCard({ 
-  title, 
-  subtitle, 
-  features, 
-  borderColor, 
-  titleColor, 
-  highlight = false 
+function CompetitorCard({
+  title,
+  subtitle,
+  features,
+  borderColor,
+  titleColor,
+  highlight = false,
 }: CompetitorProps): React.ReactElement {
   return (
     <Card className={`${borderColor} ${highlight ? 'shadow-lg' : ''}`}>
@@ -35,8 +35,8 @@ function CompetitorCard({
           <p className="text-sm text-muted-foreground">{subtitle}</p>
         </div>
         <div className="space-y-2 text-sm">
-          {features.map((feature) => (
-            <div 
+          {features.map(feature => (
+            <div
               key={`${title}-feature-${feature.text.slice(0, 15)}`}
               className={`flex items-center gap-2 ${feature.available ? '' : 'text-red-600'}`}
             >
@@ -57,9 +57,7 @@ function CompetitorCard({
 function CompetitionHeader(): React.ReactElement {
   return (
     <div className="text-center mb-12">
-      <h2 className="mb-4 text-3xl font-bold">
-        Por Que Escolher Loved CRM vs Concorrentes?
-      </h2>
+      <h2 className="mb-4 text-3xl font-bold">Por Que Escolher Loved CRM vs Concorrentes?</h2>
       <p className="text-lg text-muted-foreground">
         Comparação honesta com RD Station, HubSpot e Pipedrive
       </p>
@@ -77,8 +75,8 @@ const competitors: CompetitorProps[] = [
       { text: 'Empresa brasileira', available: true },
       { text: 'Integração WhatsApp', available: true },
       { text: 'Sem multi-tenancy real', available: false },
-      { text: 'Sem IA conversacional', available: false }
-    ]
+      { text: 'Sem IA conversacional', available: false },
+    ],
   },
   {
     title: 'HubSpot',
@@ -89,8 +87,8 @@ const competitors: CompetitorProps[] = [
       { text: 'Plataforma completa', available: true },
       { text: 'Landing pages avançadas', available: true },
       { text: 'WhatsApp via terceiros', available: false },
-      { text: 'Preço premium (USD)', available: false }
-    ]
+      { text: 'Preço premium (USD)', available: false },
+    ],
   },
   {
     title: 'Loved CRM',
@@ -102,9 +100,9 @@ const competitors: CompetitorProps[] = [
       { text: 'WhatsApp nativo dual', available: true },
       { text: 'IA conversacional BR', available: true },
       { text: 'Multi-tenancy real', available: true },
-      { text: 'Preço justo (BRL)', available: true }
-    ]
-  }
+      { text: 'Preço justo (BRL)', available: true },
+    ],
+  },
 ]
 
 export function CompetitiveDifferentiationSection(): React.ReactElement {
@@ -121,7 +119,7 @@ export function CompetitiveDifferentiationSection(): React.ReactElement {
 function CompetitorsGrid(): React.ReactElement {
   return (
     <div className="grid gap-8 md:grid-cols-3">
-      {competitors.map((competitor) => (
+      {competitors.map(competitor => (
         <CompetitorCard key={competitor.title} {...competitor} />
       ))}
     </div>

@@ -6,9 +6,9 @@
 
 'use client'
 
-import { 
-  TrendingUp, 
-  Users, 
+import {
+  TrendingUp,
+  Users,
   Target,
   Calendar,
   DollarSign,
@@ -16,7 +16,7 @@ import {
   Clock,
   ArrowUp,
   ArrowDown,
-  Plus
+  Plus,
 } from 'lucide-react'
 
 import { AISummaryCompact } from '@/components/crm/ai-summary'
@@ -31,26 +31,26 @@ const dashboardMetrics = {
     value: 247,
     change: +12,
     changeType: 'increase' as const,
-    period: 'this month'
+    period: 'this month',
   },
   activeDeals: {
     value: 23,
     change: +3,
     changeType: 'increase' as const,
-    period: 'this week'
+    period: 'this week',
   },
   revenue: {
     value: 89_500,
     change: -2.5,
     changeType: 'decrease' as const,
-    period: 'this month'
+    period: 'this month',
   },
   conversionRate: {
     value: 24.8,
     change: +1.2,
     changeType: 'increase' as const,
-    period: 'vs last month'
-  }
+    period: 'vs last month',
+  },
 }
 
 const pipelineStats = [
@@ -58,7 +58,7 @@ const pipelineStats = [
   { stage: 'contact', count: 23, value: 156_000 },
   { stage: 'proposal', count: 12, value: 98_000 },
   { stage: 'negotiation', count: 8, value: 67_000 },
-  { stage: 'closed', count: 159, value: 892_000 }
+  { stage: 'closed', count: 159, value: 892_000 },
 ] as const
 
 const recentActivity = [
@@ -68,7 +68,7 @@ const recentActivity = [
     title: 'Novo lead: Maria Silva',
     description: 'Via WhatsApp • Interessada em marketing digital',
     time: '5 min atrás',
-    channel: 'whatsapp' as const
+    channel: 'whatsapp' as const,
   },
   {
     id: '2',
@@ -76,7 +76,7 @@ const recentActivity = [
     title: 'Carlos Oliveira → Proposta',
     description: 'Movido por Ana Costa • Valor: R$ 12.500',
     time: '15 min atrás',
-    channel: 'note' as const
+    channel: 'note' as const,
   },
   {
     id: '3',
@@ -84,7 +84,7 @@ const recentActivity = [
     title: 'Resumo IA gerado',
     description: 'Conversa com TechStart analisada',
     time: '30 min atrás',
-    channel: 'note' as const
+    channel: 'note' as const,
   },
   {
     id: '4',
@@ -92,8 +92,8 @@ const recentActivity = [
     title: 'Proposta enviada',
     description: 'Para Creative Studio • Por Pedro Santos',
     time: '1 hora atrás',
-    channel: 'email' as const
-  }
+    channel: 'email' as const,
+  },
 ]
 
 const upcomingTasks = [
@@ -102,29 +102,29 @@ const upcomingTasks = [
     title: 'Call com Maria Silva',
     description: 'Primeira apresentação da agência',
     time: 'Hoje, 15:30',
-    priority: 'high' as const
+    priority: 'high' as const,
   },
   {
     id: '2',
     title: 'Enviar proposta TechStart',
     description: 'Proposta de marketing digital completo',
     time: 'Hoje, 16:00',
-    priority: 'high' as const
+    priority: 'high' as const,
   },
   {
     id: '3',
     title: 'Follow-up Creative Studio',
     description: 'Retorno sobre proposta de branding',
     time: 'Amanhã, 10:00',
-    priority: 'medium' as const
+    priority: 'medium' as const,
   },
   {
     id: '4',
     title: 'Reunião de alinhamento',
     description: 'Review semanal da equipe',
     time: 'Amanhã, 14:00',
-    priority: 'low' as const
-  }
+    priority: 'low' as const,
+  },
 ]
 
 // Helper functions extracted for better maintainability
@@ -132,7 +132,7 @@ const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-    minimumFractionDigits: 0
+    minimumFractionDigits: 0,
   }).format(value)
 }
 
@@ -154,8 +154,13 @@ const getPriorityColor = (priority: string): string => {
 }
 
 // Extracted components for better structure
-function MetricsCard({ metric, icon, title, formatValue }: {
-  metric: typeof dashboardMetrics[keyof typeof dashboardMetrics]
+function MetricsCard({
+  metric,
+  icon,
+  title,
+  formatValue,
+}: {
+  metric: (typeof dashboardMetrics)[keyof typeof dashboardMetrics]
   icon: React.ComponentType<{ className?: string }>
   title: string
   formatValue?: (value: number) => string
@@ -165,7 +170,7 @@ function MetricsCard({ metric, icon, title, formatValue }: {
   const changeValue = Math.abs(metric.change)
   const changeSign = metric.changeType === 'increase' ? '+' : ''
   const showPercent = typeof metric.change === 'number' && title.includes('Taxa')
-  
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -180,8 +185,16 @@ function MetricsCard({ metric, icon, title, formatValue }: {
           ) : (
             <ArrowDown className="mr-1 h-3 w-3 text-red-600 dark:text-red-400" />
           )}
-          <span className={metric.changeType === 'increase' ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}>
-            {changeSign}{changeValue}{showPercent ? '%' : ''}
+          <span
+            className={
+              metric.changeType === 'increase'
+                ? 'text-emerald-600 dark:text-emerald-400'
+                : 'text-red-600 dark:text-red-400'
+            }
+          >
+            {changeSign}
+            {changeValue}
+            {showPercent ? '%' : ''}
           </span>
           <span className="ml-1">{metric.period}</span>
         </div>
@@ -190,10 +203,12 @@ function MetricsCard({ metric, icon, title, formatValue }: {
   )
 }
 
-function TaskItem({ task }: { task: typeof upcomingTasks[0] }): JSX.Element {
+function TaskItem({ task }: { task: (typeof upcomingTasks)[0] }): JSX.Element {
   return (
     <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-muted/50">
-      <div className={`h-2 w-2 rounded-full mt-2 ${getPriorityColor(task.priority).split(' ')[2]}`} />
+      <div
+        className={`h-2 w-2 rounded-full mt-2 ${getPriorityColor(task.priority).split(' ')[2]}`}
+      />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium truncate">{task.title}</p>
         <p className="text-xs text-muted-foreground">{task.description}</p>
@@ -208,40 +223,34 @@ function TaskItem({ task }: { task: typeof upcomingTasks[0] }): JSX.Element {
 
 function PipelineOverview(): JSX.Element {
   return (
-  <div className="md:col-span-2">
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Target className="h-5 w-5" />
-          Pipeline de Vendas
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-4 md:grid-cols-5">
-          {pipelineStats.map((stat) => (
-            <div key={stat.stage} className="text-center">
-              <PipelineStage 
-                stage={stat.stage}
-                count={stat.count}
-                variant="compact"
-              />
-              <div className="mt-2">
-                <p className="text-xs text-muted-foreground">
-                  {formatCurrency(stat.value)}
-                </p>
+    <div className="md:col-span-2">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Target className="h-5 w-5" />
+            Pipeline de Vendas
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4 md:grid-cols-5">
+            {pipelineStats.map(stat => (
+              <div key={stat.stage} className="text-center">
+                <PipelineStage stage={stat.stage} count={stat.count} variant="compact" />
+                <div className="mt-2">
+                  <p className="text-xs text-muted-foreground">{formatCurrency(stat.value)}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-        
-        <div className="mt-6 pt-4 border-t border-border">
-          <Button variant="outline" className="w-full">
-            Ver Pipeline Completo
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  </div>
+            ))}
+          </div>
+
+          <div className="mt-6 pt-4 border-t border-border">
+            <Button variant="outline" className="w-full">
+              Ver Pipeline Completo
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
 
@@ -250,11 +259,9 @@ function DashboardHeader(): JSX.Element {
     <div className="flex items-center justify-between">
       <div>
         <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-        <p className="text-muted-foreground">
-          Visão geral da Silva Digital Agency
-        </p>
+        <p className="text-muted-foreground">Visão geral da Silva Digital Agency</p>
       </div>
-      
+
       <div className="flex gap-2">
         <Button size="sm" variant="outline">
           <Calendar className="mr-2 h-4 w-4" />
@@ -272,26 +279,18 @@ function DashboardHeader(): JSX.Element {
 function MetricsGrid(): JSX.Element {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <MetricsCard 
-        metric={dashboardMetrics.totalLeads} 
-        icon={Users} 
-        title="Total de Leads" 
-      />
-      <MetricsCard 
-        metric={dashboardMetrics.activeDeals} 
-        icon={Target} 
-        title="Negócios Ativos" 
-      />
-      <MetricsCard 
-        metric={dashboardMetrics.revenue} 
-        icon={DollarSign} 
-        title="Receita do Mês" 
+      <MetricsCard metric={dashboardMetrics.totalLeads} icon={Users} title="Total de Leads" />
+      <MetricsCard metric={dashboardMetrics.activeDeals} icon={Target} title="Negócios Ativos" />
+      <MetricsCard
+        metric={dashboardMetrics.revenue}
+        icon={DollarSign}
+        title="Receita do Mês"
         formatValue={formatCurrency}
       />
-      <MetricsCard 
-        metric={dashboardMetrics.conversionRate} 
-        icon={TrendingUp} 
-        title="Taxa de Conversão" 
+      <MetricsCard
+        metric={dashboardMetrics.conversionRate}
+        icon={TrendingUp}
+        title="Taxa de Conversão"
         formatValue={(value): string => `${value}%`}
       />
     </div>
@@ -306,7 +305,7 @@ function QuickActionsSection(): JSX.Element {
           <CardTitle className="text-base">Insights Recentes</CardTitle>
         </CardHeader>
         <CardContent>
-          <AISummaryCompact 
+          <AISummaryCompact
             summary="12 leads qualificados esta semana. Maria Silva e Carlos Oliveira com alta probabilidade de conversão. Foco em marketing digital crescendo 40%."
             confidence={94}
           />
@@ -319,7 +318,7 @@ function QuickActionsSection(): JSX.Element {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {upcomingTasks.map((task) => (
+            {upcomingTasks.map(task => (
               <TaskItem key={task.id} task={task} />
             ))}
           </div>
@@ -340,18 +339,19 @@ function RecentActivitySection(): JSX.Element {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {recentActivity.map((activity) => (
-            <div key={activity.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/50">
+          {recentActivity.map(activity => (
+            <div
+              key={activity.id}
+              className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/50"
+            >
               <CommunicationChannelBadge channel={activity.channel} />
-              
+
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium">{activity.title}</p>
                 <p className="text-xs text-muted-foreground">{activity.description}</p>
               </div>
-              
-              <div className="text-xs text-muted-foreground">
-                {activity.time}
-              </div>
+
+              <div className="text-xs text-muted-foreground">{activity.time}</div>
             </div>
           ))}
         </div>
@@ -365,7 +365,7 @@ export default function AdminDashboard(): JSX.Element {
     <div className="space-y-6">
       <DashboardHeader />
       <MetricsGrid />
-      
+
       <div className="grid gap-6 md:grid-cols-3">
         <PipelineOverview />
         <QuickActionsSection />

@@ -32,7 +32,7 @@ export enum PipelineStage {
   CONTATO = 'contato',
   PROPOSTA = 'proposta',
   NEGOCIACAO = 'negociacao',
-  FECHADO = 'fechado'
+  FECHADO = 'fechado',
 }
 
 export interface LeadCreate {
@@ -103,9 +103,9 @@ class CRMLeadsService extends BaseService {
   ): Promise<LeadListResponse> {
     const params = new URLSearchParams({
       page: page.toString(),
-      page_size: pageSize.toString()
+      page_size: pageSize.toString(),
     })
-    
+
     if (stage) {
       params.append('stage', stage)
     }
@@ -163,7 +163,7 @@ class CRMLeadsService extends BaseService {
     const stageLeads: Record<PipelineStage, Lead[]> = {} as Record<PipelineStage, Lead[]>
 
     // Get leads for each stage in parallel
-    const stagePromises = stages.map(async (stage) => {
+    const stagePromises = stages.map(async stage => {
       const response = await this.getLeads(1, 100, stage) // Get up to 100 leads per stage
       return { stage, leads: response.leads }
     })
@@ -217,9 +217,9 @@ class CRMLeadsService extends BaseService {
     // For now, get all leads and filter client-side
     // In production, add server-side filtering
     const response = await this.getLeads(1, 100)
-    
+
     if (!userId) return response.leads
-    
+
     return response.leads.filter(lead => lead.assigned_user_id === userId)
   }
 }

@@ -1,13 +1,13 @@
-import { BarChart3, Layers, MessageCircle, Palette, Smartphone, Sparkles } from "lucide-react"
+import { BarChart3, Layers, MessageCircle, Palette, Smartphone, Sparkles } from 'lucide-react'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import { AIDemo } from "./AIDemo"
-import { ColorPalette } from "./ColorPalette"
-import { CommunicationDemo } from "./CommunicationDemo"
-import { OrganizationDemo } from "./OrganizationDemo"
-import { PipelineDemo } from "./PipelineDemo"
-import { TimelineDemo } from "./TimelineDemo"
+import { AIDemo } from './AIDemo'
+import { ColorPalette } from './ColorPalette'
+import { CommunicationDemo } from './CommunicationDemo'
+import { OrganizationDemo } from './OrganizationDemo'
+import { PipelineDemo } from './PipelineDemo'
+import { TimelineDemo } from './TimelineDemo'
 
 interface DemoTabsProps {
   selectedTier: 'free' | 'pro' | 'enterprise'
@@ -22,7 +22,7 @@ export function DemoTabs({
   selectedStage,
   onTierChange,
   onStageChange,
-  demoTimelineEntries
+  demoTimelineEntries,
 }: DemoTabsProps): JSX.Element {
   return (
     <Tabs defaultValue="colors" className="space-y-6">

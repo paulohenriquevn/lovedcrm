@@ -61,7 +61,7 @@ def nextjs_server():
     env.update({
         "NODE_ENV": "development",
         "PORT": str(NEXTJS_DEV_PORT),
-        # Usar o mesmo backend de teste que os testes API
+        # Usar o mesmo backend de teste que os testes API (porta 8001)
         "NEXT_PUBLIC_API_URL": "http://localhost:8001",
         # Outras variáveis necessárias
         "NEXT_PUBLIC_SAAS_MODE": "B2B",

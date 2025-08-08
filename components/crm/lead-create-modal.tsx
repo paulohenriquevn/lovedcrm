@@ -11,12 +11,7 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Form } from '@/components/ui/form'
 import { PipelineStage } from '@/services/crm-leads'
 
@@ -38,7 +33,7 @@ const leadCreateSchema = z.object({
   source: z.string().max(100, 'Source muito longo').optional().or(z.literal('')),
   estimatedValue: z.coerce.number().min(0, 'Valor deve ser positivo').optional(),
   tags: z.array(z.string()).optional(),
-  notes: z.string().optional().or(z.literal(''))
+  notes: z.string().optional().or(z.literal('')),
 })
 
 type LeadCreateForm = z.infer<typeof leadCreateSchema>
@@ -74,7 +69,7 @@ function useLeadCreateModalLogic(
   const { handleSubmit } = useLeadCreateLogic({
     currentTags,
     onClose: handleClose,
-    onSuccess
+    onSuccess,
   })
 
   const addTag = (tag: string): void => {
@@ -116,15 +111,15 @@ function useLeadCreateModalLogic(
     addTag,
     removeTag,
     handleTagKeyPress,
-    handleFormSubmit
+    handleFormSubmit,
   }
 }
 
-export function LeadCreateModal({ 
-  isOpen, 
-  onClose, 
-  onSuccess, 
-  initialStage = PipelineStage.LEAD 
+export function LeadCreateModal({
+  isOpen,
+  onClose,
+  onSuccess,
+  initialStage = PipelineStage.LEAD,
 }: LeadCreateModalProps): React.ReactElement {
   const form = useForm<LeadCreateForm>({
     resolver: zodResolver(leadCreateSchema),
@@ -136,8 +131,8 @@ export function LeadCreateModal({
       source: 'Website',
       estimatedValue: undefined,
       tags: [],
-      notes: ''
-    }
+      notes: '',
+    },
   })
 
   const {
@@ -149,7 +144,7 @@ export function LeadCreateModal({
     addTag,
     removeTag,
     handleTagKeyPress,
-    handleFormSubmit
+    handleFormSubmit,
   } = useLeadCreateModalLogic(form, onClose, onSuccess)
 
   return (
@@ -174,12 +169,7 @@ export function LeadCreateModal({
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-2 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleClose}
-                disabled={isLoading}
-              >
+              <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
                 Cancelar
               </Button>
               <Button type="submit" disabled={isLoading}>

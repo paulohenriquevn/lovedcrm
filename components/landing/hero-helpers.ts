@@ -11,10 +11,10 @@ declare global {
 // Event handlers moved to outer scope
 export const handleCreateOrganizationClick = (): void => {
   if (typeof gtag !== 'undefined') {
-    gtag('event', 'cta_click', { 
-      ctaPosition: 'hero', 
+    gtag('event', 'cta_click', {
+      ctaPosition: 'hero',
       ctaText: 'criar_organizacao_gratis',
-      sector: 'agencias_digitais' 
+      sector: 'agencias_digitais',
     })
   }
 }

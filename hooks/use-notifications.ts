@@ -40,23 +40,23 @@ export function useNotifications(): UseNotificationsReturn {
       title: 'Novo lead capturado',
       description: 'Maria Santos interessada em marketing digital',
       time: '5 min atrás',
-      unread: true
+      unread: true,
     },
     {
-      id: '2', 
+      id: '2',
       type: 'team',
       title: 'Pedro adicionou nova proposta',
       description: 'Proposta para ClienteCorp - R$ 8.500/mês',
       time: '15 min atrás',
-      unread: true
+      unread: true,
     },
     {
       id: '3',
       type: 'ai',
       title: 'Resumo IA disponível',
-      description: 'Análise completa da conversa com TechStart', 
+      description: 'Análise completa da conversa com TechStart',
       time: '30 min atrás',
-      unread: false
+      unread: false,
     },
     {
       id: '4',
@@ -64,8 +64,8 @@ export function useNotifications(): UseNotificationsReturn {
       title: 'Backup realizado',
       description: 'Backup automático dos dados concluído com sucesso',
       time: '2 horas atrás',
-      unread: false
-    }
+      unread: false,
+    },
   ]
 
   // Buscar notificações
@@ -78,14 +78,14 @@ export function useNotifications(): UseNotificationsReturn {
     try {
       // TODO: Implementar API call real
       // const response = await notificationsService.getNotifications()
-      
+
       // Por enquanto, usar mock com contexto organizacional
       const orgNotifications = mockNotifications.map(notification => ({
         ...notification,
         // Simular que notificações são específicas da org
-        description: `${notification.description} (${organization.name})`
+        description: `${notification.description} (${organization.name})`,
       }))
-      
+
       setNotifications(orgNotifications)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao buscar notificações')
@@ -100,12 +100,10 @@ export function useNotifications(): UseNotificationsReturn {
     try {
       // TODO: API call para marcar como lida
       // await notificationsService.markAsRead(notificationId)
-      
-      setNotifications(prev => 
-        prev.map(notification => 
-          notification.id === notificationId 
-            ? { ...notification, unread: false }
-            : notification
+
+      setNotifications(prev =>
+        prev.map(notification =>
+          notification.id === notificationId ? { ...notification, unread: false } : notification
         )
       )
     } catch (err) {
@@ -118,12 +116,12 @@ export function useNotifications(): UseNotificationsReturn {
     try {
       // TODO: API call para marcar todas como lidas
       // await notificationsService.markAllAsRead()
-      
-      setNotifications(prev => 
-        prev.map(notification => ({ ...notification, unread: false }))
-      )
+
+      setNotifications(prev => prev.map(notification => ({ ...notification, unread: false })))
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao marcar todas as notificações como lidas')
+      setError(
+        err instanceof Error ? err.message : 'Erro ao marcar todas as notificações como lidas'
+      )
     }
   }, [])
 

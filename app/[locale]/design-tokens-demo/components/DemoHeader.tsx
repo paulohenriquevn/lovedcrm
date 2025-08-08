@@ -1,6 +1,6 @@
-import { Sparkles } from "lucide-react"
+import { Sparkles } from 'lucide-react'
 
-import { CurrentOrganizationBadge } from "@/components/ui/organization-badge"
+import { CurrentOrganizationBadge } from '@/components/ui/organization-badge'
 
 interface DemoHeaderProps {
   selectedTier: 'free' | 'pro' | 'enterprise'
@@ -17,7 +17,8 @@ export function DemoHeader({ selectedTier, demoOrgName }: DemoHeaderProps): JSX.
         </h1>
       </div>
       <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-        Sistema completo de design tokens para CRM B2B brasileiro com paleta Loved Purple e componentes específicos para agências digitais.
+        Sistema completo de design tokens para CRM B2B brasileiro com paleta Loved Purple e
+        componentes específicos para agências digitais.
       </p>
       <div className="flex items-center justify-center gap-2">
         <CurrentOrganizationBadge orgName={demoOrgName} tier={selectedTier} />

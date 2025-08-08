@@ -4,12 +4,12 @@
  * Baseado na especificação do agente 07-design-tokens.md
  */
 
-import { format } from "date-fns"
+import { format } from 'date-fns'
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
-import { TimelineEntry } from "./timeline-entry-components"
-import { TimelineEntryList, DateGroupHeader } from "./timeline-utils"
+import { TimelineEntry } from './timeline-entry-components'
+import { TimelineEntryList, DateGroupHeader } from './timeline-utils'
 
 interface TimelineProps {
   entries: TimelineEntry[]
@@ -19,21 +19,19 @@ interface TimelineProps {
   onEntryClick?: (entry: TimelineEntry) => void
 }
 
-export function Timeline({ 
-  entries, 
-  className, 
-  groupByDate = true, 
+export function Timeline({
+  entries,
+  className,
+  groupByDate = true,
   showLeadContext = false,
-  onEntryClick 
+  onEntryClick,
 }: TimelineProps): React.ReactElement {
-  const sortedEntries = [...entries].sort((a, b) => 
-    b.timestamp.getTime() - a.timestamp.getTime()
-  )
+  const sortedEntries = [...entries].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
 
   if (!groupByDate) {
     return (
-      <div className={cn("space-y-1", className)}>
-        <TimelineEntryList 
+      <div className={cn('space-y-1', className)}>
+        <TimelineEntryList
           entries={sortedEntries}
           showLeadContext={showLeadContext}
           onEntryClick={onEntryClick}
@@ -53,15 +51,12 @@ export function Timeline({
   }
 
   return (
-    <div className={cn("space-y-6", className)}>
+    <div className={cn('space-y-6', className)}>
       {Object.entries(entriesByDate).map(([dateKey, dateEntries]) => (
         <div key={dateKey}>
-          <DateGroupHeader 
-            dateKey={dateKey} 
-            entriesCount={dateEntries.length} 
-          />
+          <DateGroupHeader dateKey={dateKey} entriesCount={dateEntries.length} />
 
-          <TimelineEntryList 
+          <TimelineEntryList
             entries={dateEntries}
             showLeadContext={showLeadContext}
             onEntryClick={onEntryClick}
@@ -72,11 +67,11 @@ export function Timeline({
   )
 }
 
-export { TimelineStats } from "./timeline-utils"
-export type { 
-  TimelineEntry, 
-  CommunicationEntry, 
-  AISummaryEntry, 
-  LeadUpdateEntry, 
-  MeetingEntry 
-} from "./timeline-entry-components"
+export { TimelineStats } from './timeline-utils'
+export type {
+  TimelineEntry,
+  CommunicationEntry,
+  AISummaryEntry,
+  LeadUpdateEntry,
+  MeetingEntry,
+} from './timeline-entry-components'

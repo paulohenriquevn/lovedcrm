@@ -30,7 +30,7 @@ const STAGE_LABELS: Record<PipelineStage, string> = {
   [PipelineStage.CONTATO]: 'Contato',
   [PipelineStage.PROPOSTA]: 'Proposta',
   [PipelineStage.NEGOCIACAO]: 'Negociação',
-  [PipelineStage.FECHADO]: 'Fechado'
+  [PipelineStage.FECHADO]: 'Fechado',
 }
 
 // Helper functions to reduce complexity
@@ -47,7 +47,7 @@ function prepareLeadData(data: LeadCreateForm, currentTags: string[]): LeadCreat
     source: normalizeStringValue(data.source) ?? 'Website',
     estimatedValue: data.estimatedValue ?? undefined,
     tags: currentTags.length > 0 ? currentTags : undefined,
-    notes: normalizeStringValue(data.notes)
+    notes: normalizeStringValue(data.notes),
   }
 }
 
@@ -68,7 +68,7 @@ export function useLeadCreateLogic({ currentTags, onClose, onSuccess }: UseLeadC
 
       toast({
         title: 'Lead criado com sucesso!',
-        description: `${leadData.name} foi adicionado ao pipeline no estágio ${STAGE_LABELS[data.stage]}.`
+        description: `${leadData.name} foi adicionado ao pipeline no estágio ${STAGE_LABELS[data.stage]}.`,
       })
 
       onClose()
@@ -77,7 +77,7 @@ export function useLeadCreateLogic({ currentTags, onClose, onSuccess }: UseLeadC
       toast({
         title: 'Erro ao criar lead',
         description: 'Não foi possível criar o lead. Tente novamente.',
-        variant: 'destructive'
+        variant: 'destructive',
       })
     } finally {
       setIsLoading(false)

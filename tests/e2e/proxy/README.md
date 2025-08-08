@@ -52,12 +52,12 @@ make test-proxy-compare
 
 ## Diferenças dos Testes API
 
-| Aspecto | Testes API | Testes Proxy |
-|---------|------------|--------------|
-| **Target** | `localhost:8001` | `localhost:3000/api/*` |
-| **Valida** | Backend isolado | Integração completa |
-| **Headers** | Direto ao FastAPI | Via Next.js rewrites |
-| **Objetivo** | Funcionalidade | Integração real |
+| Aspecto      | Testes API        | Testes Proxy           |
+| ------------ | ----------------- | ---------------------- |
+| **Target**   | `localhost:8001`  | `localhost:3000/api/*` |
+| **Valida**   | Backend isolado   | Integração completa    |
+| **Headers**  | Direto ao FastAPI | Via Next.js rewrites   |
+| **Objetivo** | Funcionalidade    | Integração real        |
 
 ## Ambiente
 

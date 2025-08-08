@@ -84,12 +84,14 @@ export function InviteInfo({ inviteInfo, formatDate, formatRole }: InviteInfoPro
           </div>
         </div>
 
-        {inviteInfo.message !== null && inviteInfo.message !== undefined && inviteInfo.message.length > 0 && (
-          <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-            <p className="text-sm font-medium mb-1">Mensagem:</p>
-            <p className="text-sm text-gray-600">{inviteInfo.message}</p>
-          </div>
-        )}
+        {inviteInfo.message !== null &&
+          inviteInfo.message !== undefined &&
+          inviteInfo.message.length > 0 && (
+            <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm font-medium mb-1">Mensagem:</p>
+              <p className="text-sm text-gray-600">{inviteInfo.message}</p>
+            </div>
+          )}
       </CardContent>
     </Card>
   )

@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export function ColorPalette(): JSX.Element {
   return (
@@ -37,9 +37,7 @@ export function ColorPalette(): JSX.Element {
       <Card>
         <CardHeader>
           <CardTitle>Cores de Contexto</CardTitle>
-          <CardDescription>
-            Cores específicas para diferentes contextos do CRM
-          </CardDescription>
+          <CardDescription>Cores específicas para diferentes contextos do CRM</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

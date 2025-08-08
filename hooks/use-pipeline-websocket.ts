@@ -45,7 +45,7 @@ export function usePipelineWebSocket(
   options: UsePipelineWebSocketOptions = {}
 ): UsePipelineWebSocketReturn {
   console.log('🎣 usePipelineWebSocket hook called')
-  
+
   const {
     onLeadStageChanged,
     onLeadCreated,
@@ -57,7 +57,7 @@ export function usePipelineWebSocket(
     autoReconnect = true,
     reconnectInterval = 5000,
     enablePollingFallback = true,
-    pollingInterval = 10000
+    pollingInterval = 10000,
   } = options
 
   const { user, organization, token } = useAuthStore()
@@ -66,18 +66,21 @@ export function usePipelineWebSocket(
   const pollingIntervalRef = useRef<NodeJS.Timeout>()
   const [isConnected, setIsConnected] = useState(false)
   const [isPolling, setIsPolling] = useState(false)
-  const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected' | 'error' | 'polling'>('disconnected')
+  const [connectionStatus, setConnectionStatus] = useState<
+    'connecting' | 'connected' | 'disconnected' | 'error' | 'polling'
+  >('disconnected')
   const [activeUsers, setActiveUsers] = useState<any[]>([])
   const [lastMessage, setLastMessage] = useState<PipelineWebSocketMessage | null>(null)
 
   // WebSocket URL construction
   const getWebSocketURL = useCallback(() => {
     if (!token || !organization?.id) return null
-    
+
     // Use dedicated WebSocket URL for browser compatibility (localhost for Docker)
-    const wsURL = process.env.NEXT_PUBLIC_WS_URL || 
-                  process.env.NEXT_PUBLIC_API_URL?.replace('http', 'ws') || 
-                  'ws://localhost:8000'
+    const wsURL =
+      process.env.NEXT_PUBLIC_WS_URL ||
+      process.env.NEXT_PUBLIC_API_URL?.replace('http', 'ws') ||
+      'ws://localhost:8000'
     const url = `${wsURL}/ws/pipeline?token=${token}&org_id=${organization.id}`
     return url
   }, [token, organization?.id])
@@ -90,10 +93,10 @@ export function usePipelineWebSocket(
       // Use Next.js rewritten routes instead of direct backend calls
       const response = await fetch(`/api/crm/leads`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'X-Org-Id': organization.id,
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
 
       if (response.ok) {
@@ -102,7 +105,7 @@ export function usePipelineWebSocket(
         const simulatedMessage: PipelineWebSocketMessage = {
           type: 'pipeline_data_updated',
           data,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         }
         setLastMessage(simulatedMessage)
       }
@@ -114,22 +117,22 @@ export function usePipelineWebSocket(
   // Start polling fallback
   const startPolling = useCallback(() => {
     if (!enablePollingFallback) return
-    
+
     // Check current polling status without depending on it
     setIsPolling(prevIsPolling => {
       if (prevIsPolling) return prevIsPolling // Already polling
-      
+
       console.log('Starting polling fallback for pipeline data')
       setConnectionStatus('polling')
-      
+
       // Initial poll
       pollPipelineData()
-      
+
       // Set up polling interval
       pollingIntervalRef.current = setInterval(() => {
         pollPipelineData()
       }, pollingInterval)
-      
+
       return true
     })
   }, [enablePollingFallback, pollPipelineData, pollingInterval])
@@ -141,9 +144,7 @@ export function usePipelineWebSocket(
       pollingIntervalRef.current = undefined
     }
     setIsPolling(false)
-    setConnectionStatus(prevStatus => 
-      prevStatus === 'polling' ? 'disconnected' : prevStatus
-    )
+    setConnectionStatus(prevStatus => (prevStatus === 'polling' ? 'disconnected' : prevStatus))
   }, [])
 
   // Send message to WebSocket
@@ -156,69 +157,80 @@ export function usePipelineWebSocket(
   }, [])
 
   // Handle incoming messages
-  const handleMessage = useCallback((event: MessageEvent) => {
-    try {
-      const data: PipelineWebSocketMessage = JSON.parse(event.data)
-      setLastMessage(data)
+  const handleMessage = useCallback(
+    (event: MessageEvent) => {
+      try {
+        const data: PipelineWebSocketMessage = JSON.parse(event.data)
+        setLastMessage(data)
 
-      console.log('Pipeline WebSocket message received:', data.type, data)
+        console.log('Pipeline WebSocket message received:', data.type, data)
 
-      switch (data.type) {
-        case 'pipeline_connection_established':
-          setConnectionStatus('connected')
-          setIsConnected(true)
-          if (data.active_users) {
-            setActiveUsers(data.active_users)
-          }
-          onConnectionEstablished?.(data)
-          break
+        switch (data.type) {
+          case 'pipeline_connection_established':
+            setConnectionStatus('connected')
+            setIsConnected(true)
+            if (data.active_users) {
+              setActiveUsers(data.active_users)
+            }
+            onConnectionEstablished?.(data)
+            break
 
-        case 'lead_stage_changed':
-          onLeadStageChanged?.(data)
-          break
+          case 'lead_stage_changed':
+            onLeadStageChanged?.(data)
+            break
 
-        case 'stage_change':
-          // Handle stage_change messages from backend
-          console.log('📩 Received stage_change:', data)
-          onLeadStageChanged?.(data)
-          break
+          case 'stage_change':
+            // Handle stage_change messages from backend
+            console.log('📩 Received stage_change:', data)
+            onLeadStageChanged?.(data)
+            break
 
-        case 'lead_created':
-          onLeadCreated?.(data)
-          break
+          case 'lead_created':
+            onLeadCreated?.(data)
+            break
 
-        case 'lead_updated':
-          onLeadUpdated?.(data)
-          break
+          case 'lead_updated':
+            onLeadUpdated?.(data)
+            break
 
-        case 'lead_deleted':
-          onLeadDeleted?.(data)
-          break
+          case 'lead_deleted':
+            onLeadDeleted?.(data)
+            break
 
-        case 'pipeline_user_activity_update':
-          onUserActivity?.(data)
-          break
+          case 'pipeline_user_activity_update':
+            onUserActivity?.(data)
+            break
 
-        case 'user_dragging_lead':
-          onUserDragging?.(data)
-          break
+          case 'user_dragging_lead':
+            onUserDragging?.(data)
+            break
 
-        case 'error':
-          console.error('Pipeline WebSocket error:', data.message)
-          setConnectionStatus('error')
-          break
+          case 'error':
+            console.error('Pipeline WebSocket error:', data.message)
+            setConnectionStatus('error')
+            break
 
-        case 'pong':
-          // Handle keepalive pong
-          break
+          case 'pong':
+            // Handle keepalive pong
+            break
 
-        default:
-          console.log('Unknown pipeline message type:', data.type, data)
+          default:
+            console.log('Unknown pipeline message type:', data.type, data)
+        }
+      } catch (error) {
+        console.error('Failed to parse pipeline WebSocket message:', error, event.data)
       }
-    } catch (error) {
-      console.error('Failed to parse pipeline WebSocket message:', error, event.data)
-    }
-  }, [onLeadStageChanged, onLeadCreated, onLeadUpdated, onLeadDeleted, onUserActivity, onUserDragging, onConnectionEstablished])
+    },
+    [
+      onLeadStageChanged,
+      onLeadCreated,
+      onLeadUpdated,
+      onLeadDeleted,
+      onUserActivity,
+      onUserDragging,
+      onConnectionEstablished,
+    ]
+  )
 
   // Connect to WebSocket
   const connect = useCallback(() => {
@@ -228,17 +240,22 @@ export function usePipelineWebSocket(
       hasToken: !!token,
       hasOrg: !!organization?.id,
       wsUrl: process.env.NEXT_PUBLIC_WS_URL,
-      apiUrl: process.env.NEXT_PUBLIC_API_URL
+      apiUrl: process.env.NEXT_PUBLIC_API_URL,
     })
-    
+
     if (!url) {
-      console.warn('❌ Cannot connect to pipeline WebSocket: missing authentication or organization')
+      console.warn(
+        '❌ Cannot connect to pipeline WebSocket: missing authentication or organization'
+      )
       console.log('🔄 Starting polling fallback')
       startPolling()
       return
     }
 
-    if (wsRef.current?.readyState === WebSocket.CONNECTING || wsRef.current?.readyState === WebSocket.OPEN) {
+    if (
+      wsRef.current?.readyState === WebSocket.CONNECTING ||
+      wsRef.current?.readyState === WebSocket.OPEN
+    ) {
       console.log('✅ Pipeline WebSocket is already connecting or connected')
       return
     }
@@ -246,7 +263,7 @@ export function usePipelineWebSocket(
     try {
       console.log('🚀 Connecting to pipeline WebSocket:', url.replace(token || '', '[TOKEN]'))
       setConnectionStatus('connecting')
-      
+
       const ws = new WebSocket(url)
       wsRef.current = ws
 
@@ -254,10 +271,10 @@ export function usePipelineWebSocket(
         console.log('✅ Pipeline WebSocket connected successfully')
         setConnectionStatus('connected')
         setIsConnected(true)
-        
+
         // Stop polling fallback when WebSocket reconnects
         stopPolling()
-        
+
         // Clear any existing reconnect timeout
         if (reconnectTimeoutRef.current) {
           clearTimeout(reconnectTimeoutRef.current)
@@ -266,15 +283,19 @@ export function usePipelineWebSocket(
 
       ws.onmessage = handleMessage
 
-      ws.onclose = (event) => {
-        console.log('❌ Pipeline WebSocket disconnected:', { code: event.code, reason: event.reason })
+      ws.onclose = event => {
+        console.log('❌ Pipeline WebSocket disconnected:', {
+          code: event.code,
+          reason: event.reason,
+        })
         setConnectionStatus('disconnected')
         setIsConnected(false)
         setActiveUsers([])
         wsRef.current = null
 
         // Auto-reconnect if enabled
-        if (autoReconnect && event.code !== 1000) { // Don't reconnect on normal closure
+        if (autoReconnect && event.code !== 1000) {
+          // Don't reconnect on normal closure
           console.log(`🔄 Pipeline WebSocket reconnecting in ${reconnectInterval}ms...`)
           reconnectTimeoutRef.current = setTimeout(() => {
             connect()
@@ -288,14 +309,14 @@ export function usePipelineWebSocket(
         }
       }
 
-      ws.onerror = (error) => {
+      ws.onerror = error => {
         console.error('❌ Pipeline WebSocket error:', error)
-        console.log('❌ WebSocket error details:', { 
-          readyState: ws.readyState, 
-          url: ws.url?.replace(token || '', '[TOKEN]') 
+        console.log('❌ WebSocket error details:', {
+          readyState: ws.readyState,
+          url: ws.url?.replace(token || '', '[TOKEN]'),
         })
         setConnectionStatus('error')
-        
+
         // Start polling fallback on persistent errors
         if (enablePollingFallback) {
           console.log('🔄 Starting polling fallback after WebSocket error')
@@ -304,11 +325,10 @@ export function usePipelineWebSocket(
           }, 2000)
         }
       }
-
     } catch (error) {
       console.error('Failed to create pipeline WebSocket connection:', error)
       setConnectionStatus('error')
-      
+
       // Start polling fallback if WebSocket creation fails
       if (enablePollingFallback) {
         setTimeout(() => {
@@ -316,22 +336,31 @@ export function usePipelineWebSocket(
         }, 1000)
       }
     }
-  }, [getWebSocketURL, token, autoReconnect, reconnectInterval, handleMessage, enablePollingFallback, startPolling, stopPolling])
+  }, [
+    getWebSocketURL,
+    token,
+    autoReconnect,
+    reconnectInterval,
+    handleMessage,
+    enablePollingFallback,
+    startPolling,
+    stopPolling,
+  ])
 
   // Disconnect WebSocket
   const disconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current)
     }
-    
+
     if (wsRef.current) {
       wsRef.current.close(1000, 'Component unmounting')
       wsRef.current = null
     }
-    
+
     // Also stop polling
     stopPolling()
-    
+
     setConnectionStatus('disconnected')
     setIsConnected(false)
     setActiveUsers([])
@@ -350,7 +379,7 @@ export function usePipelineWebSocket(
     if (isConnected) {
       sendMessage({
         type: 'ping',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       })
     }
   }, [isConnected, sendMessage])
@@ -359,11 +388,11 @@ export function usePipelineWebSocket(
   useEffect(() => {
     console.log('🔍 WebSocket useEffect check:', {
       user: !!user,
-      organization: !!organization, 
+      organization: !!organization,
       token: !!token,
-      shouldConnect: !!(user && organization && token)
+      shouldConnect: !!(user && organization && token),
     })
-    
+
     if (user && organization && token) {
       console.log('✅ Conditions met, calling connect()')
       connect()
@@ -392,6 +421,6 @@ export function usePipelineWebSocket(
     activeUsers,
     lastMessage,
     reconnect,
-    isPolling
+    isPolling,
   }
 }

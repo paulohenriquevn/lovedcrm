@@ -34,7 +34,7 @@ interface SkeletonProps {
 
 function HeroLoadingSkeleton({ className, variants, itemVariants }: SkeletonProps): JSX.Element {
   return (
-    <motion.div 
+    <motion.div
       className={`py-20 px-4 text-center ${className}`}
       variants={variants}
       initial="hidden"
@@ -44,20 +44,20 @@ function HeroLoadingSkeleton({ className, variants, itemVariants }: SkeletonProp
         <motion.div variants={itemVariants}>
           <Skeleton className="h-8 w-96 mx-auto mb-6" />
         </motion.div>
-        
+
         <motion.div variants={itemVariants}>
           <Skeleton className="h-16 w-full max-w-4xl mx-auto mb-6" />
         </motion.div>
-        
+
         <motion.div variants={itemVariants}>
           <Skeleton className="h-6 w-full max-w-3xl mx-auto mb-8" />
         </motion.div>
-        
+
         <motion.div variants={itemVariants} className="flex gap-4 justify-center mb-12">
           <Skeleton className="h-14 w-48" />
           <Skeleton className="h-14 w-44" />
         </motion.div>
-        
+
         <motion.div variants={itemVariants}>
           <Skeleton className="w-full max-w-5xl mx-auto aspect-[16/10]" />
         </motion.div>
@@ -66,9 +66,13 @@ function HeroLoadingSkeleton({ className, variants, itemVariants }: SkeletonProp
   )
 }
 
-function FeaturesLoadingSkeleton({ className, variants, itemVariants }: SkeletonProps): JSX.Element {
+function FeaturesLoadingSkeleton({
+  className,
+  variants,
+  itemVariants,
+}: SkeletonProps): JSX.Element {
   return (
-    <motion.div 
+    <motion.div
       className={`py-20 px-4 ${className}`}
       variants={variants}
       initial="hidden"
@@ -80,12 +84,9 @@ function FeaturesLoadingSkeleton({ className, variants, itemVariants }: Skeleton
           <Skeleton className="h-12 w-96 mx-auto mb-6" />
           <Skeleton className="h-6 w-full max-w-3xl mx-auto" />
         </motion.div>
-        
-        <motion.div 
-          variants={variants}
-          className="grid md:grid-cols-3 gap-8"
-        >
-          {[1, 2, 3].map((i) => (
+
+        <motion.div variants={variants} className="grid md:grid-cols-3 gap-8">
+          {[1, 2, 3].map(i => (
             <motion.div key={i} variants={itemVariants}>
               <Skeleton className="h-80 w-full" />
             </motion.div>
@@ -96,9 +97,13 @@ function FeaturesLoadingSkeleton({ className, variants, itemVariants }: Skeleton
   )
 }
 
-function TestimonialsLoadingSkeleton({ className, variants, itemVariants }: SkeletonProps): JSX.Element {
+function TestimonialsLoadingSkeleton({
+  className,
+  variants,
+  itemVariants,
+}: SkeletonProps): JSX.Element {
   return (
-    <motion.div 
+    <motion.div
       className={`py-20 px-4 ${className}`}
       variants={variants}
       initial="hidden"
@@ -109,12 +114,9 @@ function TestimonialsLoadingSkeleton({ className, variants, itemVariants }: Skel
           <Skeleton className="h-6 w-48 mx-auto mb-4" />
           <Skeleton className="h-12 w-96 mx-auto mb-6" />
         </motion.div>
-        
-        <motion.div 
-          variants={variants}
-          className="grid md:grid-cols-3 gap-8"
-        >
-          {[1, 2, 3].map((i) => (
+
+        <motion.div variants={variants} className="grid md:grid-cols-3 gap-8">
+          {[1, 2, 3].map(i => (
             <motion.div key={i} variants={itemVariants}>
               <div className="p-6 space-y-4">
                 <Skeleton className="h-4 w-full" />
@@ -138,7 +140,7 @@ function TestimonialsLoadingSkeleton({ className, variants, itemVariants }: Skel
 
 function PricingLoadingSkeleton({ className, variants, itemVariants }: SkeletonProps): JSX.Element {
   return (
-    <motion.div 
+    <motion.div
       className={`py-20 px-4 ${className}`}
       variants={variants}
       initial="hidden"
@@ -149,12 +151,9 @@ function PricingLoadingSkeleton({ className, variants, itemVariants }: SkeletonP
           <Skeleton className="h-6 w-48 mx-auto mb-4" />
           <Skeleton className="h-12 w-96 mx-auto mb-6" />
         </motion.div>
-        
-        <motion.div 
-          variants={variants}
-          className="grid md:grid-cols-3 gap-8"
-        >
-          {[1, 2, 3].map((i) => (
+
+        <motion.div variants={variants} className="grid md:grid-cols-3 gap-8">
+          {[1, 2, 3].map(i => (
             <motion.div key={i} variants={itemVariants}>
               <div className="p-8 space-y-4 border rounded-lg">
                 <Skeleton className="h-12 w-12 mx-auto" />
@@ -162,7 +161,7 @@ function PricingLoadingSkeleton({ className, variants, itemVariants }: SkeletonP
                 <Skeleton className="h-16 w-24 mx-auto" />
                 <Skeleton className="h-12 w-full" />
                 <div className="space-y-2">
-                  {[1, 2, 3, 4, 5].map((j) => (
+                  {[1, 2, 3, 4, 5].map(j => (
                     <Skeleton key={j} className="h-4 w-full" />
                   ))}
                 </div>
@@ -177,7 +176,7 @@ function PricingLoadingSkeleton({ className, variants, itemVariants }: SkeletonP
 
 function DefaultLoadingSkeleton({ className, variants, itemVariants }: SkeletonProps): JSX.Element {
   return (
-    <motion.div 
+    <motion.div
       className={`py-20 px-4 ${className}`}
       variants={variants}
       initial="hidden"
@@ -199,14 +198,14 @@ export function SectionLoading({ type = 'features', className }: SectionLoadingP
       opacity: 1,
       transition: {
         duration: 0.3,
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   }
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+    visible: { opacity: 1, y: 0 },
   }
 
   const commonProps = { className, variants, itemVariants }

@@ -23,65 +23,48 @@ function updateStageLeads(
 ): PipelineStageDisplay {
   const leadsWithoutDragged = stage.leads.filter(l => l.id !== lead.id)
   const isTargetStage = stage.id === targetStage.toString()
-  
+
   return {
     ...stage,
-    leads: isTargetStage 
+    leads: isTargetStage
       ? [...leadsWithoutDragged, { ...lead, stage: targetStage }]
       : leadsWithoutDragged,
-    count: isTargetStage 
-      ? leadsWithoutDragged.length + 1
-      : leadsWithoutDragged.length
+    count: isTargetStage ? leadsWithoutDragged.length + 1 : leadsWithoutDragged.length,
   }
 }
 
-export function usePipelineDragLogic(reloadLeadsData: () => Promise<void>): DragLogicReturn {
-  const [draggedLead, setDraggedLead] = useState<Lead | null>(null)
+// Individual helper functions for drag operations
+function updateStageOptimistically(
+  targetStage: PipelineStage,
+  lead: Lead,
+  setStages: React.Dispatch<React.SetStateAction<PipelineStageDisplay[]>>
+): void {
+  setStages(prevStages => prevStages.map(stage => updateStageLeads(stage, targetStage, lead)))
+}
 
-  const handleDragStart = (lead: Lead): void => {
-    setDraggedLead(lead)
-  }
+function notifyStageChange(
+  lead: Lead,
+  targetStage: PipelineStage,
+  sendMessage: (msg: Record<string, unknown>) => void
+): void {
+  sendMessage({
+    type: 'stage_change',
+    // eslint-disable-next-line camelcase
+    lead_id: lead.id,
+    // eslint-disable-next-line camelcase
+    old_stage: lead.stage,
+    // eslint-disable-next-line camelcase
+    new_stage: targetStage,
+    // eslint-disable-next-line camelcase
+    lead_name: lead.name,
+    timestamp: new Date().toISOString(),
+  })
+}
 
-  const updateStageOptimistically = (
-    targetStage: PipelineStage,
-    lead: Lead,
-    setStages: React.Dispatch<React.SetStateAction<PipelineStageDisplay[]>>
-  ): void => {
-    setStages(prevStages => 
-      prevStages.map(stage => updateStageLeads(stage, targetStage, lead))
-    )
-  }
-
-  const notifyStageChange = (
-    lead: Lead,
-    targetStage: PipelineStage,
-    sendMessage: (msg: Record<string, unknown>) => void
-  ): void => {
-    console.log('📤 Sending stage_change message:', {
-      leadId: lead.id,
-      leadName: lead.name,
-      oldStage: lead.stage,
-      newStage: targetStage
-    })
-    
-    sendMessage({
-      type: 'stage_change',
-      // eslint-disable-next-line camelcase
-      lead_id: lead.id,
-      // eslint-disable-next-line camelcase
-      old_stage: lead.stage,
-      // eslint-disable-next-line camelcase
-      new_stage: targetStage,
-      // eslint-disable-next-line camelcase
-      lead_name: lead.name,
-      timestamp: new Date().toISOString()
-    })
-  }
-
-  const handleDropError = (
-    error: unknown,
-    setError: React.Dispatch<React.SetStateAction<string | null>>
-  ): void => {
+function createErrorHandler(
+  reloadLeadsData: () => Promise<void>
+): (error: unknown, setError: React.Dispatch<React.SetStateAction<string | null>>) => void {
+  return (error: unknown, setError: React.Dispatch<React.SetStateAction<string | null>>): void => {
     // eslint-disable-next-line no-console
     console.error('Erro ao mover lead:', error)
     setError('Erro ao mover lead. A página será recarregada.')
@@ -90,12 +73,54 @@ export function usePipelineDragLogic(reloadLeadsData: () => Promise<void>): Drag
       setError(null)
     }, 2000)
   }
+}
+
+async function performLeadMove(params: {
+  lead: Lead
+  targetStage: PipelineStage
+  currentStage: PipelineStage
+  setStages: React.Dispatch<React.SetStateAction<PipelineStageDisplay[]>>
+  sendMessage: (msg: Record<string, unknown>) => void
+}): Promise<void> {
+  const { lead, targetStage, currentStage, setStages, sendMessage } = params
+  updateStageOptimistically(targetStage, lead, setStages)
+  notifyStageChange(lead, targetStage, sendMessage)
+
+  await crmLeadsService.moveLeadToStage(
+    lead.id,
+    targetStage,
+    `Movido de ${currentStage} para ${targetStage}`
+  )
+}
+
+// Helper functions for drag logic (extracted from main hook)
+function createDragHelpers(reloadLeadsData: () => Promise<void>): {
+  updateStageOptimistically: typeof updateStageOptimistically
+  notifyStageChange: typeof notifyStageChange
+  handleDropError: ReturnType<typeof createErrorHandler>
+  performLeadMove: typeof performLeadMove
+} {
+  return {
+    updateStageOptimistically,
+    notifyStageChange,
+    handleDropError: createErrorHandler(reloadLeadsData),
+    performLeadMove,
+  }
+}
+
+export function usePipelineDragLogic(reloadLeadsData: () => Promise<void>): DragLogicReturn {
+  const [draggedLead, setDraggedLead] = useState<Lead | null>(null)
+  const helpers = createDragHelpers(reloadLeadsData)
+
+  const handleDragStart = (lead: Lead): void => {
+    setDraggedLead(lead)
+  }
 
   const handleDrop = async ({
     targetStageId,
     sendMessage,
     setStages,
-    setError
+    setError,
   }: DragParams): Promise<void> => {
     if (draggedLead === null || draggedLead === undefined) {
       return
@@ -110,27 +135,16 @@ export function usePipelineDragLogic(reloadLeadsData: () => Promise<void>): Drag
     }
 
     try {
-      console.log('🔄 Starting lead move process:', {
-        leadId: draggedLead.id,
-        from: currentStage,
-        to: targetStage
-      })
-      
-      updateStageOptimistically(targetStage, draggedLead, setStages)
-      notifyStageChange(draggedLead, targetStage, sendMessage)
-      
-      console.log('📞 Calling API to move lead...')
-      await crmLeadsService.moveLeadToStage(
-        draggedLead.id,
+      await helpers.performLeadMove({
+        lead: draggedLead,
         targetStage,
-        `Movido de ${currentStage} para ${targetStage}`
-      )
-      console.log('✅ API call completed successfully')
-
-      console.log('🔄 Reloading leads data...')
+        currentStage,
+        setStages,
+        sendMessage,
+      })
       void reloadLeadsData()
     } catch (error) {
-      handleDropError(error, setError)
+      helpers.handleDropError(error, setError)
     } finally {
       setDraggedLead(null)
     }
@@ -139,6 +153,6 @@ export function usePipelineDragLogic(reloadLeadsData: () => Promise<void>): Drag
   return {
     draggedLead,
     handleDragStart,
-    handleDrop
+    handleDrop,
   }
 }

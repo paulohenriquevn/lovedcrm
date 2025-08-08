@@ -161,7 +161,7 @@ EMAIL_ENABLED=false  # Mocked via MailHog
 
 ## Test Categories & Coverage
 
-## 🆕 **NEXT.JS PROXY TESTS (NEW!)** 
+## 🆕 **NEXT.JS PROXY TESTS (NEW!)**
 
 **Complete E2E integration testing between Next.js frontend and FastAPI backend via proxy rewrites.**
 
@@ -174,16 +174,16 @@ EMAIL_ENABLED=false  # Mocked via MailHog
 
 ### **Proxy Test Coverage by Module**
 
-| Module | Tests | Coverage | Purpose |
-|--------|-------|----------|----------|
-| **test_proxy_auth.py** | 13 | Authentication | Login, register, JWT refresh via proxy |
-| **test_proxy_users.py** | 15 | User Management | Profile, preferences, 2FA via proxy |
-| **test_proxy_organizations.py** | 19 | Organizations | CRUD, members, roles via proxy |
-| **test_proxy_user_preferences.py** | 13 | User Preferences | Settings, notifications, themes via proxy |
-| **test_proxy_billing.py** | 7 | Billing & Stripe | Plans, subscriptions, payments via proxy |
-| **test_proxy_roles.py** | 3 | Role Management | Permissions, hierarchy via proxy |
-| **test_proxy_invites.py** | 3 | Team Invites | Member invitations via proxy |
-| **Total** | **73** | **100%** | **Complete API coverage** |
+| Module                             | Tests  | Coverage         | Purpose                                   |
+| ---------------------------------- | ------ | ---------------- | ----------------------------------------- |
+| **test_proxy_auth.py**             | 13     | Authentication   | Login, register, JWT refresh via proxy    |
+| **test_proxy_users.py**            | 15     | User Management  | Profile, preferences, 2FA via proxy       |
+| **test_proxy_organizations.py**    | 19     | Organizations    | CRUD, members, roles via proxy            |
+| **test_proxy_user_preferences.py** | 13     | User Preferences | Settings, notifications, themes via proxy |
+| **test_proxy_billing.py**          | 7      | Billing & Stripe | Plans, subscriptions, payments via proxy  |
+| **test_proxy_roles.py**            | 3      | Role Management  | Permissions, hierarchy via proxy          |
+| **test_proxy_invites.py**          | 3      | Team Invites     | Member invitations via proxy              |
+| **Total**                          | **73** | **100%**         | **Complete API coverage**                 |
 
 ### **Key Proxy Test Features**
 
@@ -191,16 +191,17 @@ EMAIL_ENABLED=false  # Mocked via MailHog
 # Example proxy test pattern
 def test_login_via_proxy(self, proxy_client):
     """✅ Test: Login via Next.js proxy returns 200."""
-    
+
     # Request goes: Test → Next.js:3000 → FastAPI:8000
     response = proxy_client.post("/api/auth/login", json=login_data)
-    
+
     # Validates complete integration chain
     assert_successful_response(response, 200)
     assert "access_token" in response.json()
 ```
 
 **Critical Validation Rules**:
+
 - ✅ **Specific Status Codes**: Never ranges, always exact codes (`200`, `404`, `422`)
 - ✅ **Proxy-Only**: All tests use ONLY proxy, no direct backend calls
 - ✅ **Organization Headers**: X-Org-Id included automatically where needed
@@ -590,6 +591,7 @@ MIGRATE_DEBUG=1 make test-hot-migrate
 ### **Current Test Statistics**
 
 #### **Complete Test Suite**
+
 - **Total E2E Tests**: ~175 comprehensive tests
 - **API Tests**: ~100 tests (direct backend testing)
 - **🆕 Proxy Tests**: **73 tests** (Next.js → FastAPI integration)
@@ -599,6 +601,7 @@ MIGRATE_DEBUG=1 make test-hot-migrate
 - **Performance & Security**: ~15 tests (non-functional)
 
 #### **Proxy Test Breakdown**
+
 - **Authentication Proxy**: 13 tests (login, register, JWT via proxy)
 - **Users Proxy**: 15 tests (profiles, preferences, 2FA via proxy)
 - **Organizations Proxy**: 19 tests (CRUD, members, roles via proxy)
@@ -610,6 +613,7 @@ MIGRATE_DEBUG=1 make test-hot-migrate
 ### **Coverage by Module**
 
 #### **API Tests (Direct Backend)**
+
 - **Authentication**: 22 tests (registration, login, tokens, security)
 - **Users**: 21 tests (CRUD, profiles, preferences, validation)
 - **Organizations**: 24 tests (multi-tenancy, roles, permissions)
@@ -618,6 +622,7 @@ MIGRATE_DEBUG=1 make test-hot-migrate
 - **Roles**: 6 tests (permission system validation)
 
 #### **🆕 Proxy Tests (Next.js → FastAPI Integration)**
+
 - **Proxy Authentication**: 13 tests (auth flow via proxy)
 - **Proxy Users**: 15 tests (user management via proxy)
 - **Proxy Organizations**: 19 tests (org operations via proxy)
@@ -639,6 +644,7 @@ MIGRATE_DEBUG=1 make test-hot-migrate
 ### **Test Development Guidelines**
 
 #### **General Testing Principles**
+
 1. **Follow GOLDEN RULE**: Test success scenarios first
 2. **Multi-tenant by default**: Always include org_id context
 3. **Use unique test data**: Avoid conflicts with UUIDs
@@ -647,6 +653,7 @@ MIGRATE_DEBUG=1 make test-hot-migrate
 6. **Test real workflows**: Simulate actual user interactions
 
 #### **🆕 Proxy Testing Guidelines**
+
 1. **Specific Status Codes**: NEVER use ranges (`assert response.status_code == 200`)
 2. **Proxy-Only Testing**: NO direct backend calls in proxy tests
 3. **Organization Headers**: Use `X-Org-Id` for multi-tenant endpoints

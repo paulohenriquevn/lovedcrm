@@ -48,7 +48,7 @@ function DashboardHeader(): JSX.Element {
 
 function PipelineCards(): JSX.Element {
   const pipelineStages = ['Lead', 'Contato', 'Proposta', 'Negociação', 'Fechado']
-  
+
   return (
     <div className="grid grid-cols-5 gap-4 mb-6">
       {pipelineStages.map((stage, index) => (
@@ -56,7 +56,10 @@ function PipelineCards(): JSX.Element {
           <h4 className="text-xs font-medium mb-2">{stage}</h4>
           <div className="space-y-2">
             {Array.from({ length: index + 1 }, (_, i) => (
-              <div key={`${stage}-lead-item-${i + 1}`} className="bg-white rounded border h-12 flex items-center px-2">
+              <div
+                key={`${stage}-lead-item-${i + 1}`}
+                className="bg-white rounded border h-12 flex items-center px-2"
+              >
                 <div className="h-2 w-2 bg-primary rounded-full mr-2" />
                 <div className="text-xs text-muted-foreground">Lead {i + 1}</div>
               </div>
@@ -99,7 +102,7 @@ function TimelineMockup(): JSX.Element {
 function FeatureOverlays(): JSX.Element {
   return (
     <>
-      <motion.div 
+      <motion.div
         className="absolute top-20 left-4 bg-primary text-primary-foreground px-3 py-1 rounded-lg text-sm font-medium"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -107,7 +110,7 @@ function FeatureOverlays(): JSX.Element {
       >
         Pipeline Kanban
       </motion.div>
-      <motion.div 
+      <motion.div
         className="absolute top-20 right-4 bg-whatsapp text-white px-3 py-1 rounded-lg text-sm font-medium"
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -115,7 +118,7 @@ function FeatureOverlays(): JSX.Element {
       >
         WhatsApp Integrado
       </motion.div>
-      <motion.div 
+      <motion.div
         className="absolute bottom-20 left-1/2 -translate-x-1/2 bg-ai-summary text-white px-3 py-1 rounded-lg text-sm font-medium"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -127,17 +130,14 @@ function FeatureOverlays(): JSX.Element {
   )
 }
 
-export function HeroDashboardMockup({ 
-  heroAnimations, 
-  imageLoading, 
-  handleImageLoad 
+export function HeroDashboardMockup({
+  heroAnimations,
+  imageLoading,
+  handleImageLoad,
 }: DashboardMockupProps): JSX.Element {
   const mockupVariants = heroAnimations.mockup
   return (
-    <motion.div 
-      className="mt-12 relative"
-      variants={mockupVariants}
-    >
+    <motion.div className="mt-12 relative" variants={mockupVariants}>
       <div className="relative max-w-5xl mx-auto">
         <div className="relative bg-white rounded-2xl shadow-2xl border border-border w-full aspect-[16/10] overflow-hidden">
           <div className="absolute inset-0 opacity-5">
@@ -154,7 +154,7 @@ export function HeroDashboardMockup({
               alt="Dashboard do Loved CRM mostrando pipeline Kanban"
             />
           </div>
-          
+
           <DashboardHeader />
 
           <div className="p-6">
@@ -162,7 +162,7 @@ export function HeroDashboardMockup({
             <TimelineMockup />
           </div>
         </div>
-        
+
         <FeatureOverlays />
       </div>
     </motion.div>

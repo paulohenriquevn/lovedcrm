@@ -11,21 +11,16 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Form } from '@/components/ui/form'
 import { PipelineStage, type Lead } from '@/services/crm-leads'
 
 import { LeadEditFormFields } from './lead-edit-form-fields'
-import { 
-  type LeadEditForm, 
-  initializeFormWithLead, 
-  resetForm, 
-  getDefaultFormValues 
+import {
+  type LeadEditForm,
+  initializeFormWithLead,
+  resetForm,
+  getDefaultFormValues,
 } from './lead-edit-form-helpers'
 import { useLeadEditLogic } from './lead-edit-logic'
 import { useTagManager } from './lead-edit-tags-manager'
@@ -46,27 +41,27 @@ const leadEditSchema = z.object({
   estimatedValue: z.coerce.number().min(0, 'Valor deve ser positivo').optional(),
   tags: z.array(z.string()).optional(),
   notes: z.string().optional().or(z.literal('')),
-  isFavorite: z.boolean().optional()
+  isFavorite: z.boolean().optional(),
 })
 
-export function LeadEditModal({ 
-  isOpen, 
-  onClose, 
-  onSuccess, 
-  lead 
+export function LeadEditModal({
+  isOpen,
+  onClose,
+  onSuccess,
+  lead,
 }: LeadEditModalProps): React.ReactElement | null {
   const form = useForm<LeadEditForm>({
     resolver: zodResolver(leadEditSchema),
-    defaultValues: getDefaultFormValues()
+    defaultValues: getDefaultFormValues(),
   })
 
   const tagManager = useTagManager(form)
-  
+
   const { isLoading, onSubmit } = useLeadEditLogic({
     lead,
     currentTags: tagManager.currentTags,
     onClose,
-    onSuccess
+    onSuccess,
   })
 
   useEffect(() => {
@@ -92,10 +87,13 @@ export function LeadEditModal({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={(e) => { 
-            e.preventDefault(); 
-            void form.handleSubmit(onSubmit)(e); 
-          }} className="space-y-4">
+          <form
+            onSubmit={e => {
+              e.preventDefault()
+              void form.handleSubmit(onSubmit)(e)
+            }}
+            className="space-y-4"
+          >
             <LeadEditFormFields
               form={form}
               isLoading={isLoading}
@@ -108,12 +106,7 @@ export function LeadEditModal({
             />
 
             <div className="flex justify-end gap-2 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleClose}
-                disabled={isLoading}
-              >
+              <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
                 Cancelar
               </Button>
               <Button type="submit" disabled={isLoading}>

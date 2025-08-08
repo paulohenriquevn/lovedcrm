@@ -19,7 +19,7 @@ interface PipelineHandlersReturn {
   isDetailsModalOpen: boolean
   isEditModalOpen: boolean
   isDeleteDialogOpen: boolean
-  
+
   // Handlers
   handleDragStart: (lead: Lead) => void
   handleDrop: (params: DragParams) => Promise<void>
@@ -120,7 +120,7 @@ function useModalStates(): {
       isDetailsModalOpen,
       isEditModalOpen,
       isDeleteDialogOpen,
-      selectedLead
+      selectedLead,
     },
     modalActions: {
       setIsCreateModalOpen,
@@ -129,8 +129,8 @@ function useModalStates(): {
       setIsEditModalOpen,
       setIsDeleteDialogOpen,
       setSelectedLead,
-      closeAllModals
-    }
+      closeAllModals,
+    },
   }
 }
 
@@ -139,7 +139,8 @@ export function usePipelineHandlers(reloadLeadsData: () => Promise<void>): Pipel
   const { draggedLead, handleDragStart, handleDrop } = usePipelineDragLogic(reloadLeadsData)
 
   const handleAddLead = (stageId?: string): void => {
-    const targetStage = (stageId !== null && stageId !== undefined) ? stageId as PipelineStage : PipelineStage.LEAD
+    const targetStage =
+      stageId !== null && stageId !== undefined ? (stageId as PipelineStage) : PipelineStage.LEAD
     modalActions.setCreateModalStage(targetStage)
     modalActions.setIsCreateModalOpen(true)
   }
@@ -204,7 +205,7 @@ export function usePipelineHandlers(reloadLeadsData: () => Promise<void>): Pipel
     isDetailsModalOpen: modalState.isDetailsModalOpen,
     isEditModalOpen: modalState.isEditModalOpen,
     isDeleteDialogOpen: modalState.isDeleteDialogOpen,
-    
+
     // Handlers
     handleDragStart,
     handleDrop,
@@ -222,6 +223,6 @@ export function usePipelineHandlers(reloadLeadsData: () => Promise<void>): Pipel
     handleSendEmail: openEmailClient,
     handleRemoveLead,
     handleCall: initiatePhoneCall,
-    handleWhatsApp: openWhatsApp
+    handleWhatsApp: openWhatsApp,
   }
 }

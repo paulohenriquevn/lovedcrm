@@ -21,20 +21,15 @@ export function MainLayout({ children, className }: MainLayoutProps): JSX.Elemen
     <div className="h-screen flex flex-col">
       {/* Header */}
       <Header />
-      
+
       {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden">
         {/* Sidebar */}
         <Sidebar />
-        
+
         {/* Main Content */}
-        <main className={cn(
-          "flex-1 overflow-auto bg-background",
-          className
-        )}>
-          <div className="h-full p-6">
-            {children}
-          </div>
+        <main className={cn('flex-1 overflow-auto bg-background', className)}>
+          <div className="h-full p-6">{children}</div>
         </main>
       </div>
     </div>

@@ -13,16 +13,14 @@ interface AuthGuardProps {
 const PUBLIC_ROUTES = [
   '/auth/login',
   '/auth/register',
-  '/auth/forgot-password', 
+  '/auth/forgot-password',
   '/auth/reset-password',
   '/auth/verify-email',
   // Add other public routes like landing page, pricing, etc.
 ]
 
 // Routes that require authentication
-const PROTECTED_ROUTES = [
-  '/admin',
-]
+const PROTECTED_ROUTES = ['/admin']
 
 // Helper function to check if route is public
 function isPublicRoute(pathname: string): boolean {
@@ -68,7 +66,7 @@ export function AuthGuard({ children }: AuthGuardProps): JSX.Element {
     }
 
     const pathWithoutLocale = getPathWithoutLocale(pathname)
-    
+
     // If user is not authenticated and trying to access protected route
     if (!isAuthenticated && !user && isProtectedRoute(pathWithoutLocale)) {
       handleUnauthorizedAccess(pathname, router)

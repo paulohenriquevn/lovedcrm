@@ -11,15 +11,8 @@ export function FullNameInput({
 }): JSX.Element {
   return (
     <div>
-      <Label htmlFor="fullName">
-        Nome completo
-      </Label>
-      <Input
-        id="fullName"
-        type="text"
-        value={value}
-        onChange={e => onChange(e.target.value)}
-      />
+      <Label htmlFor="fullName">Nome completo</Label>
+      <Input id="fullName" type="text" value={value} onChange={e => onChange(e.target.value)} />
     </div>
   )
 }
@@ -34,15 +27,8 @@ export function PhoneInput({
 }): JSX.Element {
   return (
     <div>
-      <Label htmlFor="phone">
-        Telefone
-      </Label>
-      <Input
-        id="phone"
-        type="tel"
-        value={value}
-        onChange={e => onChange(e.target.value)}
-      />
+      <Label htmlFor="phone">Telefone</Label>
+      <Input id="phone" type="tel" value={value} onChange={e => onChange(e.target.value)} />
     </div>
   )
 }

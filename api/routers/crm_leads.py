@@ -1,6 +1,6 @@
-"""
-CRM Leads Router
-FastAPI router for Lead management endpoints with organizational isolation
+"""CRM Leads Router.
+
+FastAPI router for Lead management endpoints with organizational isolation.
 """
 
 from typing import Optional
@@ -35,10 +35,9 @@ async def create_lead(
     current_user: User = Depends(get_current_active_user),
     db: Session = Depends(get_db),
 ):
-    """
-    Create new lead for organization.
+    """Create new lead for organization.
 
-    **Required**: X-Org-Id header with valid organization ID
+    **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
     lead = await service.create_lead(organization, lead_data, UUID(str(current_user.id)))
@@ -59,10 +58,9 @@ async def get_leads(
     organization: Organization = Depends(get_current_organization),
     db: Session = Depends(get_db),
 ):
-    """
-    Get leads for organization with pagination and optional stage filter.
+    """Get leads for organization with pagination and optional stage filter.
 
-    **Required**: X-Org-Id header with valid organization ID
+    **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
     return service.get_organization_leads(organization, page, page_size, stage)
@@ -72,12 +70,11 @@ async def get_leads(
 async def get_pipeline_statistics(
     organization: Organization = Depends(get_current_organization), db: Session = Depends(get_db)
 ):
-    """
-    Get pipeline statistics for organization.
+    """Get pipeline statistics for organization.
 
     Returns count of leads per stage and conversion metrics.
 
-    **Required**: X-Org-Id header with valid organization ID
+    **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
     return service.get_pipeline_statistics(organization)
@@ -89,10 +86,9 @@ async def search_leads(
     organization: Organization = Depends(get_current_organization),
     db: Session = Depends(get_db),
 ):
-    """
-    Search leads by name, email or phone in organization.
+    """Search leads by name, email or phone in organization.
 
-    **Required**: X-Org-Id header with valid organization ID
+    **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
     return service.search_leads(
@@ -109,10 +105,9 @@ async def get_lead(
     organization: Organization = Depends(get_current_organization),
     db: Session = Depends(get_db),
 ):
-    """
-    Get single lead by ID.
+    """Get single lead by ID.
 
-    **Required**: X-Org-Id header with valid organization ID
+    **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
     lead = service.get_lead_by_id(organization, lead_id)
@@ -132,10 +127,9 @@ async def update_lead(
     organization: Organization = Depends(get_current_organization),
     db: Session = Depends(get_db),
 ):
-    """
-    Update existing lead.
+    """Update existing lead.
 
-    **Required**: X-Org-Id header with valid organization ID
+    **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
     lead = service.update_lead(organization, lead_id, lead_data)
@@ -156,13 +150,12 @@ async def update_lead_stage(
     current_user: User = Depends(get_current_active_user),
     db: Session = Depends(get_db),
 ):
-    """
-    Update lead pipeline stage.
+    """Update lead pipeline stage.
 
     This endpoint is specifically for pipeline stage transitions,
     including optional notes about the stage change.
 
-    **Required**: X-Org-Id header with valid organization ID
+    **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
     lead = await service.update_lead_stage(
@@ -184,10 +177,9 @@ async def toggle_lead_favorite(
     organization: Organization = Depends(get_current_organization),
     db: Session = Depends(get_db),
 ):
-    """
-    Toggle lead favorite status.
+    """Toggle lead favorite status.
 
-    **Required**: X-Org-Id header with valid organization ID
+    **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
     lead = service.toggle_lead_favorite(organization, lead_id, favorite_data)
@@ -206,10 +198,9 @@ async def delete_lead(
     organization: Organization = Depends(get_current_organization),
     db: Session = Depends(get_db),
 ):
-    """
-    Delete lead.
+    """Delete lead.
 
-    **Required**: X-Org-Id header with valid organization ID
+    **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
     service.delete_lead(organization, lead_id)

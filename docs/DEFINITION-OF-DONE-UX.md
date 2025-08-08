@@ -11,6 +11,7 @@
 **Uma feature só está COMPLETA quando TODAS as validações abaixo passam:**
 
 #### **✅ 1. VALIDAÇÃO TÉCNICA (Tradicional)**
+
 - [ ] Testes unitários passando (>90% cobertura)
 - [ ] Testes integração passando (API + DB)
 - [ ] Testes E2E passando (fluxos backend)
@@ -19,6 +20,7 @@
 - [ ] Performance dentro dos SLAs (<200ms visualization)
 
 #### **✅ 2. VALIDAÇÃO UX (NOVA - OBRIGATÓRIA)**
+
 - [ ] **TODOS OS BOTÕES SÃO CLICÁVEIS** e executam ação
 - [ ] **TODOS OS FORMULÁRIOS SÃO SUBMETÍVEIS** e processam dados
 - [ ] **TODOS OS LINKS NAVEGAM** para destino correto
@@ -30,6 +32,7 @@
 - [ ] **SUCCESS FEEDBACK É VISÍVEL** após ações
 
 #### **✅ 3. VALIDAÇÃO INTERATIVA (CRÍTICA)**
+
 - [ ] **WALKTHROUGH COMPLETO**: Cada fluxo de usuário testado manualmente
 - [ ] **CENÁRIO REAL**: Dados de teste realistas, não apenas mocks
 - [ ] **MULTI-BROWSER**: Testado no Chrome + Firefox mínimo
@@ -38,6 +41,7 @@
 - [ ] **ERROR HANDLING**: Comportamento correto em cenários de erro
 
 #### **✅ 4. VALIDAÇÃO DE INTEGRAÇÃO (HOLÍSTICA)**
+
 - [ ] **FLUXOS COMPLETOS**: From landing → action → result
 - [ ] **INTEGRAÇÕES REAIS**: Email, telefone, WhatsApp funcionam
 - [ ] **CONTEXTO ORGANIZACIONAL**: Dados isolados corretamente
@@ -51,6 +55,7 @@
 
 ```markdown
 ## Developer Self-Check (A cada commit)
+
 - [ ] Cliquei em TODOS os botões implementados hoje?
 - [ ] Testei TODOS os formulários implementados hoje?
 - [ ] Verifiquei TODOS os estados (loading, error, success) implementados hoje?
@@ -60,34 +65,39 @@
 
 ```markdown
 ## Mandatory UX Review Checklist
-Data: _______ | Feature: _____________ | Reviewer: _______
+
+Data: **\_\_\_** | Feature: **\*\***\_**\*\*** | Reviewer: **\_\_\_**
 
 ### Interactive Elements Validation
-- [ ] Button count: ____ | All clickable: ____
-- [ ] Form count: ____ | All submittable: ____
-- [ ] Modal count: ____ | All open/close: ____
-- [ ] Link count: ____ | All navigate: ____
 
-### User Journey Validation  
-- [ ] Happy path tested end-to-end: ____
-- [ ] Error scenarios tested: ____
-- [ ] Edge cases tested: ____
-- [ ] Mobile experience tested: ____
+- [ ] Button count: \_**\_ | All clickable: \_\_**
+- [ ] Form count: \_**\_ | All submittable: \_\_**
+- [ ] Modal count: \_**\_ | All open/close: \_\_**
+- [ ] Link count: \_**\_ | All navigate: \_\_**
+
+### User Journey Validation
+
+- [ ] Happy path tested end-to-end: \_\_\_\_
+- [ ] Error scenarios tested: \_\_\_\_
+- [ ] Edge cases tested: \_\_\_\_
+- [ ] Mobile experience tested: \_\_\_\_
 
 ### Integration Validation
-- [ ] External integrations tested: ____  
-- [ ] Data persistence verified: ____
-- [ ] Multi-user scenarios tested: ____
-- [ ] Organization isolation verified: ____
+
+- [ ] External integrations tested: \_\_\_\_
+- [ ] Data persistence verified: \_\_\_\_
+- [ ] Multi-user scenarios tested: \_\_\_\_
+- [ ] Organization isolation verified: \_\_\_\_
 
 **RESULTADO**: □ APROVADO | □ REPROVADO
-**OBSERVAÇÕES**: _________________________
+**OBSERVAÇÕES**: \***\*\*\*\*\*\*\***\_\***\*\*\*\*\*\*\***
 ```
 
 ### **FASE 3: USER ACCEPTANCE (Final validation)**
 
 ```markdown
 ## Final User Experience Test
+
 - [ ] Usuário consegue completar TODOS os fluxos principais?
 - [ ] Usuário entende TODOS os feedbacks do sistema?
 - [ ] Usuário consegue recuperar de TODOS os erros?
@@ -101,6 +111,7 @@ Data: _______ | Feature: _____________ | Reviewer: _______
 Se encontrar qualquer item abaixo, feature está **INCOMPLETA**:
 
 ### **🔴 UI Red Flags**
+
 - Botão que não responde ao click
 - Formulário que não submete
 - Loading infinito sem feedback
@@ -108,7 +119,8 @@ Se encontrar qualquer item abaixo, feature está **INCOMPLETA**:
 - Modal que não abre/fecha
 - Link que não navega
 
-### **🔴 UX Red Flags** 
+### **🔴 UX Red Flags**
+
 - Usuário precisa adivinhar como usar
 - Ação sem confirmação visual
 - Erro sem possibilidade de recuperação
@@ -116,6 +128,7 @@ Se encontrar qualquer item abaixo, feature está **INCOMPLETA**:
 - Dados perdidos entre telas
 
 ### **🔴 Integration Red Flags**
+
 - Integração externa não funciona (email, telefone, etc.)
 - Dados não persistem corretamente
 - Contexto organizacional quebrado
@@ -126,6 +139,7 @@ Se encontrar qualquer item abaixo, feature está **INCOMPLETA**:
 ## 🎯 **FERRAMENTAS DE VALIDAÇÃO**
 
 ### **Manual Testing Tools**
+
 ```bash
 # Browser DevTools
 - Console: Verificar erros JavaScript
@@ -134,11 +148,12 @@ Se encontrar qualquer item abaixo, feature está **INCOMPLETA**:
 
 # Multi-browser Testing
 - Chrome (primary)
-- Firefox (secondary)  
+- Firefox (secondary)
 - Mobile viewport (responsive)
 ```
 
 ### **Automated UX Testing (Futuro)**
+
 ```bash
 # Playwright E2E com foco em UX
 npm run test:e2e:ux
@@ -155,29 +170,35 @@ npm run test:a11y
 ## 📚 **TEMPLATES REUTILIZÁVEIS**
 
 ### **Feature UX Test Template**
+
 ```markdown
 # UX Test Report: [Feature Name]
-Date: _______ | Tester: _______
+
+Date: **\_\_\_** | Tester: **\_\_\_**
 
 ## Interactive Elements
-| Element Type | Count | Working | Issues |
-|--------------|-------|---------|---------|
-| Buttons      | ___   | ___     | ___     |
-| Forms        | ___   | ___     | ___     |
-| Modals       | ___   | ___     | ___     |
-| Links        | ___   | ___     | ___     |
+
+| Element Type | Count  | Working | Issues |
+| ------------ | ------ | ------- | ------ |
+| Buttons      | \_\_\_ | \_\_\_  | \_\_\_ |
+| Forms        | \_\_\_ | \_\_\_  | \_\_\_ |
+| Modals       | \_\_\_ | \_\_\_  | \_\_\_ |
+| Links        | \_\_\_ | \_\_\_  | \_\_\_ |
 
 ## User Journeys Tested
-- [ ] Journey 1: _________________ ✅/❌
-- [ ] Journey 2: _________________ ✅/❌  
-- [ ] Journey 3: _________________ ✅/❌
+
+- [ ] Journey 1: **\*\*\*\***\_**\*\*\*\*** ✅/❌
+- [ ] Journey 2: **\*\*\*\***\_**\*\*\*\*** ✅/❌
+- [ ] Journey 3: **\*\*\*\***\_**\*\*\*\*** ✅/❌
 
 ## Issues Found
-1. _________________ (Priority: High/Med/Low)
-2. _________________ (Priority: High/Med/Low)
-3. _________________ (Priority: High/Med/Low)
+
+1. **\*\*\*\***\_**\*\*\*\*** (Priority: High/Med/Low)
+2. **\*\*\*\***\_**\*\*\*\*** (Priority: High/Med/Low)
+3. **\*\*\*\***\_**\*\*\*\*** (Priority: High/Med/Low)
 
 ## Final Verdict
+
 □ READY FOR PRODUCTION
 □ NEEDS FIXES BEFORE RELEASE
 ```
@@ -194,11 +215,12 @@ Cada story do roadmap agora DEVE incluir:
 ### Story X.X: [Feature Name]
 
 #### MicroTasks (ORDEM OBRIGATÓRIA)
+
 - [ ] Backend implementation
-- [ ] Frontend implementation  
+- [ ] Frontend implementation
 - [ ] **UX VALIDATION (NOVO - OBRIGATÓRIO)**
   - [ ] All buttons clickable and functional
-  - [ ] All forms submittable and processing  
+  - [ ] All forms submittable and processing
   - [ ] All interactions provide feedback
   - [ ] Error states handle gracefully
   - [ ] Loading states show appropriately
@@ -206,9 +228,10 @@ Cada story do roadmap agora DEVE incluir:
   - [ ] User can complete all intended journeys
 
 #### Validation Final (EXPANDIDA)
+
 - [ ] Technical tests pass
 - [ ] **Manual UX walkthrough passes** ← NOVO
-- [ ] **All interactive elements functional** ← NOVO  
+- [ ] **All interactive elements functional** ← NOVO
 - [ ] **User can achieve intended outcomes** ← NOVO
 ```
 
@@ -219,12 +242,14 @@ Cada story do roadmap agora DEVE incluir:
 ### **Mindset Changes**
 
 **❌ OLD MINDSET:**
+
 - "Tests pass = Feature complete"
 - "Code works = User can use it"
 - "Architecture correct = Experience good"
 
 **✅ NEW MINDSET:**
-- "User can complete journey = Feature complete"  
+
+- "User can complete journey = Feature complete"
 - "Interactive elements work = Code works"
 - "Experience validates architecture = Architecture correct"
 
@@ -232,8 +257,9 @@ Cada story do roadmap agora DEVE incluir:
 
 ```markdown
 ## Developer Daily Habits
+
 - [ ] Click every button I implement TODAY
-- [ ] Test every form I create TODAY  
+- [ ] Test every form I create TODAY
 - [ ] Verify every integration I build TODAY
 - [ ] Walk through user journey I enable TODAY
 ```
@@ -254,12 +280,14 @@ Track these to ensure process is working:
 ## 🚀 **ENFORCEMENT**
 
 ### **Process Integration**
+
 - [ ] Add UX validation to PR templates
 - [ ] Include UX checklist in Definition of Done
 - [ ] Make UX walkthrough mandatory before "Complete" status
 - [ ] Train all developers on manual UX validation
 
-### **Tool Integration** 
+### **Tool Integration**
+
 - [ ] Add UX validation step to CI/CD pipeline
 - [ ] Create automated interaction tests
 - [ ] Implement UX regression detection
@@ -275,4 +303,4 @@ Track these to ensure process is working:
 
 ---
 
-*"A feature só está pronta quando o usuário consegue usar. Tudo mais é trabalho em progresso."*
+_"A feature só está pronta quando o usuário consegue usar. Tudo mais é trabalho em progresso."_

@@ -30,7 +30,7 @@ export const getDefaultFormValues = (): LeadEditForm => ({
   estimatedValue: undefined,
   tags: [],
   notes: '',
-  isFavorite: false
+  isFavorite: false,
 })
 
 export const getLeadFormValues = (lead: Lead): LeadEditForm => ({
@@ -42,18 +42,18 @@ export const getLeadFormValues = (lead: Lead): LeadEditForm => ({
   estimatedValue: lead.estimated_value ?? undefined,
   tags: lead.tags ?? [],
   notes: lead.notes ?? '',
-  isFavorite: lead.is_favorite
+  isFavorite: lead.is_favorite,
 })
 
 export const initializeFormWithLead = (
-  form: UseFormReturn<LeadEditForm>, 
+  form: UseFormReturn<LeadEditForm>,
   lead: Lead | null,
   setCurrentTags: (tags: string[]) => void
 ): void => {
   if (!lead) {
     return
   }
-  
+
   const formValues = getLeadFormValues(lead)
   form.reset(formValues)
   setCurrentTags(lead.tags ?? [])

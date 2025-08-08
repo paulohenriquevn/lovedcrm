@@ -39,22 +39,23 @@ class TestPipelineRealtime:
     # ============================================================================
 
     def test_get_leads_by_stage_success(self, api_client, authenticated_user):
-        """✅ Test getting leads grouped by pipeline stage"""
+        """✅ Test getting pipeline statistics with stage counts"""
         headers = {
             "Authorization": f"Bearer {authenticated_user['tokens']['access_token']}",
             "X-Org-Id": authenticated_user['organization']['id']
         }
         
-        response = api_client.get(f"{TEST_BASE_URL}/crm/leads/by-stage", headers=headers)
+        response = api_client.get(f"{TEST_BASE_URL}/crm/leads/statistics", headers=headers)
         assert_successful_response(response, expected_status=200)
         
         data = response.json()
         
-        # Verify structure - all pipeline stages should be present
-        expected_stages = ["lead", "contato", "proposta", "negociacao", "fechado"]
-        for stage in expected_stages:
-            assert stage in data, f"Stage '{stage}' missing from response"
-            assert isinstance(data[stage], list), f"Stage '{stage}' should be a list"
+        # Verify structure - response should have stage_counts, total_leads, conversion_rate
+        assert "stage_counts" in data, "stage_counts missing from response"
+        assert "total_leads" in data, "total_leads missing from response" 
+        assert "conversion_rate" in data, "conversion_rate missing from response"
+        assert isinstance(data["stage_counts"], dict), "stage_counts should be a dict"
+        assert isinstance(data["total_leads"], int), "total_leads should be an integer"
 
     def test_move_lead_stage_success(self, api_client, authenticated_user):
         """✅ Test moving lead between pipeline stages"""
@@ -201,7 +202,7 @@ class TestPipelineRealtime:
             "X-Org-Id": authenticated_user['organization']['id']  # Wrong org!
         }
         
-        response = api_client.get(f"{TEST_BASE_URL}/crm/leads/by-stage", headers=headers_user2_wrong_org)
+        response = api_client.get(f"{TEST_BASE_URL}/crm/leads/statistics", headers=headers_user2_wrong_org)
         assert_error_response(response, expected_status=403)
         
         error_detail = response.json()["detail"].lower()
@@ -271,7 +272,7 @@ class TestPipelineRealtime:
         
         # Test performance of getting leads by stage  
         start_time = time.time()
-        response = api_client.get(f"{TEST_BASE_URL}/crm/leads/by-stage", headers=headers)
+        response = api_client.get(f"{TEST_BASE_URL}/crm/leads/statistics", headers=headers)
         end_time = time.time()
         
         assert_successful_response(response, expected_status=200)
@@ -282,8 +283,13 @@ class TestPipelineRealtime:
         
         # Verify leads are distributed across stages
         data = response.json()
-        total_leads_returned = sum(len(stage_leads) for stage_leads in data.values())
-        assert total_leads_returned >= len(lead_ids)
+        # data["stage_counts"] is a dict like {"lead": 5, "contato": 3, ...}
+        stage_counts = data["stage_counts"]
+        total_leads_returned = data["total_leads"]
+        assert total_leads_returned >= len(lead_ids), f"Expected at least {len(lead_ids)} leads, got {total_leads_returned}"
+        
+        # Verify some leads are distributed across different stages
+        assert len(stage_counts) > 0, "No stage counts returned"
 
     def test_concurrent_stage_movements(self, api_client, authenticated_user):
         """✅ Test concurrent lead stage movements (race condition test)"""

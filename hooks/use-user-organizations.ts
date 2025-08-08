@@ -44,7 +44,7 @@ export function useUserOrganizations(): UseUserOrganizationsReturn {
           ...organization,
           role: organization.owner_id === user.id ? 'owner' : 'member',
           last_activity: 'Agora',
-          member_count: 0 // Será atualizado pelo useMemberCount
+          member_count: 0, // Será atualizado pelo useMemberCount
         }
         setOrganizations([orgWithRole])
       } else {
@@ -63,13 +63,13 @@ export function useUserOrganizations(): UseUserOrganizationsReturn {
     try {
       setIsLoading(true)
       setError(null)
-      
+
       // TODO: Implementar switching real quando API estiver disponível
       // await organizationsService.switchOrganization(orgId)
-      
+
       // Por enquanto, apenas log
       console.log('Switching to organization:', orgId)
-      
+
       // Recarregar página para atualizar contexto
       window.location.reload()
     } catch (err) {

@@ -13,12 +13,15 @@
 ## 2. Jobs-to-be-Done
 
 ### Job 1: Pipeline Unificado
+
 "Quando estou perdendo leads por desorganização, eu como founder de agência digital quero um pipeline visual centralizado com WhatsApp integrado para recuperar os 40% de leads perdidos e aumentar conversão em 300%."
 
-### Job 2: Comunicação Centralizada  
+### Job 2: Comunicação Centralizada
+
 "Quando minha equipe perde contexto das conversas entre WhatsApp e planilhas, eu como gestor comercial quero um histórico unificado de comunicação com automações inteligentes para reduzir 60% o tempo de resposta."
 
 ### Job 3: Multi-Client Management
+
 "Quando preciso gerenciar múltiplos clientes da agência com isolamento completo, eu como founder quero um sistema multi-tenant nativo para garantir separação absoluta de dados e faturamento independente por organização."
 
 ## 3. FUNCIONALIDADES COMPLETAS
@@ -26,6 +29,7 @@
 ### 3.1 MVP Features (MUST-HAVE - Prioridade Máxima)
 
 #### Pipeline Visual Kanban
+
 - **Story**: Como gestor comercial quero arrastar leads entre estágios customizáveis para visualizar e gerenciar meu funil de vendas
 - **Priority**: MVP
 - **Acceptance Criteria**:
@@ -34,14 +38,15 @@
   - Métricas de conversão por estágio em tempo real
 - **Definition of Ready**: UI/UX aprovados, API endpoints definidos
 - **Definition of Done**: Testes E2E passando, multi-tenant validado
-- **Technical Requirements**: 
+- **Technical Requirements**:
   - Middleware: `get_current_organization`
   - SQLRepository: `PipelineRepository.get_organization_deals(org_id)`
   - BaseService: `DealsService` com `X-Org-Id` headers
 
 #### WhatsApp Business Integrado
+
 - **Story**: Como vendedor quero conversar com leads diretamente no CRM sem alternar ferramentas para manter contexto completo
-- **Priority**: MVP  
+- **Priority**: MVP
 - **Acceptance Criteria**:
   - Chat integrado com histórico completo
   - Anexos (imagens, documentos, áudios)
@@ -54,12 +59,13 @@
 #### **WhatsApp Integration Options (Duas Opções Suportadas)**
 
 ##### **Opção 1: WhatsApp Business API (Oficial)**
-- **Prós**: 
+
+- **Prós**:
   - ✅ API oficial aprovada pelo WhatsApp
   - ✅ Sem risco de ban de contas
   - ✅ SLA e suporte oficial
   - ✅ Recursos enterprise (templates aprovados, broadcasting)
-- **Contras**: 
+- **Contras**:
   - ❌ Custo alto (conversas baseadas em pricing)
   - ❌ Processo de aprovação demorado
   - ❌ Rate limits rigorosos inicialmente
@@ -70,12 +76,13 @@
   - Provider: WhatsApp Business Platform ou Twilio WhatsApp API
 
 ##### **Opção 2: WhatsApp Web API (Não-Oficial)**
-- **Prós**: 
+
+- **Prós**:
   - ✅ Setup imediato (QR Code scan)
   - ✅ Custo quase zero (apenas infraestrutura)
   - ✅ Sem process de aprovação
   - ✅ Acesso completo às funcionalidades WhatsApp Web
-- **Contras**: 
+- **Contras**:
   - ⚠️ Risco de ban por violar ToS do WhatsApp
   - ⚠️ Menos estável (dependente de mudanças WhatsApp Web)
   - ⚠️ Sem SLA ou suporte oficial
@@ -88,6 +95,7 @@
   - Session Storage: Redis para manter sessões ativas
 
 ##### **Implementation Strategy**
+
 ```python
 # Dual provider service architecture
 class WhatsAppService(BaseService):
@@ -96,7 +104,7 @@ class WhatsAppService(BaseService):
             return await self.business_api.send_message(org_id, **kwargs)
         elif provider_type == WhatsAppProvider.WEB_UNOFFICIAL:
             return await self.web_service.send_message(org_id, **kwargs)
-            
+
 # Organization WhatsApp config
 class OrganizationWhatsAppConfig:
     organization_id: UUID
@@ -106,6 +114,7 @@ class OrganizationWhatsAppConfig:
 ```
 
 #### Gestão de Leads
+
 - **Story**: Como equipe comercial quero capturar e qualificar leads automaticamente para focar apenas nos qualificados
 - **Priority**: MVP
 - **Acceptance Criteria**:
@@ -123,6 +132,7 @@ class OrganizationWhatsAppConfig:
 ### 3.2 Supporting Features (Alta Prioridade)
 
 #### VoIP Integrado
+
 - **Story**: Como vendedor quero fazer chamadas diretamente no CRM para manter histórico unificado
 - **Priority**: Supporting
 - **Acceptance Criteria**:
@@ -134,12 +144,13 @@ class OrganizationWhatsAppConfig:
 #### **VoIP Integration Options (Duas Opções Suportadas)**
 
 ##### **Opção 1: Twilio Voice (Premium)**
-- **Prós**: 
+
+- **Prós**:
   - ✅ Padrão da indústria com 99.95% uptime
   - ✅ SDK robusto e documentação excelente
   - ✅ Recursos avançados (call recording, conferencing, TTS/STT)
   - ✅ Suporte global em 180+ países
-- **Contras**: 
+- **Contras**:
   - ❌ Custo premium ($0.0085/min nos EUA)
   - ❌ Cobrança por features extras
 - **Technical Stack**:
@@ -149,13 +160,14 @@ class OrganizationWhatsAppConfig:
   - BaseService: `TwilioVoiceService` com call management
 
 ##### **Opção 2: Telnyx Voice (Economy)**
-- **Prós**: 
+
+- **Prós**:
   - ✅ 30-70% mais barato que Twilio
   - ✅ TwiML compatible (migração em 5 minutos)
   - ✅ Documentação robusta + Developer Center redesigned
   - ✅ Python SDK oficial para FastAPI integration
   - ✅ Cobertura global similar ao Twilio
-- **Contras**: 
+- **Contras**:
   - ❌ Menos recursos advanced que Twilio
   - ❌ Comunidade menor comparado ao Twilio
 - **Technical Stack**:
@@ -165,6 +177,7 @@ class OrganizationWhatsAppConfig:
   - BaseService: `TelnyxVoiceService` com call management
 
 ##### **Implementation Strategy**
+
 ```python
 # Dual VoIP provider service architecture
 class VoIPService(BaseService):
@@ -173,7 +186,7 @@ class VoIPService(BaseService):
             return await self.twilio_service.initiate_call(org_id, **kwargs)
         elif provider_type == VoIPProvider.TELNYX:
             return await self.telnyx_service.initiate_call(org_id, **kwargs)
-            
+
 # Organization VoIP config
 class OrganizationVoIPConfig:
     organization_id: UUID
@@ -184,8 +197,9 @@ class OrganizationVoIPConfig:
 ```
 
 #### Gestão de Contatos
+
 - **Story**: Como gestor quero uma base unificada de contatos enriquecida para ter visão 360° dos leads
-- **Priority**: Supporting  
+- **Priority**: Supporting
 - **Acceptance Criteria**:
   - Perfil completo com dados sociais
   - Histórico de interações
@@ -193,6 +207,7 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: Contact enrichment APIs via BaseService
 
 #### Templates de Mensagem
+
 - **Story**: Como vendedor quero biblioteca de respostas padronizadas para agilizar comunicação
 - **Priority**: Supporting
 - **Acceptance Criteria**:
@@ -201,7 +216,8 @@ class OrganizationVoIPConfig:
   - Métricas de performance por template
 - **Technical Requirements**: Template engine com org isolation
 
-#### Calendário Integrado  
+#### Calendário Integrado
+
 - **Story**: Como vendedor quero agendar reuniões automaticamente para não perder oportunidades
 - **Priority**: Supporting
 - **Acceptance Criteria**:
@@ -211,6 +227,7 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: Calendar API integration per organization
 
 #### Relatórios Avançados
+
 - **Story**: Como gestor quero relatórios de performance por usuário e período para otimizar processo comercial
 - **Priority**: Supporting
 - **Acceptance Criteria**:
@@ -222,6 +239,7 @@ class OrganizationVoIPConfig:
 ### 3.3 Advanced Features (Diferenciação)
 
 #### IA Conversacional
+
 - **Story**: Como agência quero chatbot que qualifica leads automaticamente para focar apenas nos qualificados
 - **Priority**: Advanced
 - **Acceptance Criteria**:
@@ -231,6 +249,7 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: AI/ML integration via FastAPI + org context
 
 #### Análise de Sentimento
+
 - **Story**: Como vendedor quero detectar urgência nas mensagens para priorizar atendimento
 - **Priority**: Advanced
 - **Acceptance Criteria**:
@@ -240,6 +259,7 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: NLP service com org data filtering
 
 #### Integração CRM+Marketing
+
 - **Story**: Como agência quero sync com Facebook/Google Ads para rastrear ROI completo
 - **Priority**: Advanced
 - **Acceptance Criteria**:
@@ -249,6 +269,7 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: Marketing APIs integration per org
 
 #### API Pública
+
 - **Story**: Como agência quero integrar com sistemas customizados para workflow completo
 - **Priority**: Advanced
 - **Acceptance Criteria**:
@@ -257,10 +278,10 @@ class OrganizationVoIPConfig:
   - Rate limiting por organização
 - **Technical Requirements**: Public API with org-scoped authentication
 
-
 ### 3.4 Multi-Tenancy Features (Obrigatórias)
 
 #### Organization Management
+
 - **Story**: Como founder de agência quero isolamento completo entre meus clientes para garantir segurança de dados
 - **Priority**: MVP
 - **Acceptance Criteria**:
@@ -269,7 +290,8 @@ class OrganizationVoIPConfig:
   - Prevenção de acesso cross-organizacional
 - **Technical Requirements**: Core multi-tenancy com organization middleware
 
-#### User Roles & Permissions  
+#### User Roles & Permissions
+
 - **Story**: Como admin de organização quero controle granular de permissões para gerenciar acesso da equipe
 - **Priority**: MVP
 - **Acceptance Criteria**:
@@ -279,6 +301,7 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: RBAC system com org-scoped roles
 
 #### Data Isolation
+
 - **Story**: Como responsável pela agência quero separação absoluta de dados para compliance e segurança
 - **Priority**: MVP
 - **Acceptance Criteria**:
@@ -288,6 +311,7 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: Database row-level security + audit logging
 
 #### Billing Per Organization
+
 - **Story**: Como founder quero faturamento independente por cliente da agência para gestão financeira separada
 - **Priority**: Supporting
 - **Acceptance Criteria**:
@@ -297,6 +321,7 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: Multi-tenant billing via Stripe per organization
 
 #### Custom Branding
+
 - **Story**: Como agência quero personalizar visual por cliente para manter identidade da marca
 - **Priority**: Advanced
 - **Acceptance Criteria**:
@@ -308,6 +333,7 @@ class OrganizationVoIPConfig:
 ### 3.5 AI-Powered Features (Diferencial Competitivo)
 
 #### Lead Scoring Automático
+
 - **Story**: Como gestor comercial quero pontuação automática de leads para focar nos mais promissores
 - **Priority**: Advanced
 - **Acceptance Criteria**:
@@ -317,6 +343,7 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: ML pipeline com org-specific training
 
 #### Resposta Sugerida
+
 - **Story**: Como vendedor quero IA sugerindo replies contextuais para agilizar atendimento
 - **Priority**: Advanced
 - **Acceptance Criteria**:
@@ -326,6 +353,7 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: NLP service com org context learning
 
 #### Previsão de Conversão
+
 - **Story**: Como gestor quero algoritmo prevendo probabilidade de fechamento para forecast preciso
 - **Priority**: Advanced
 - **Acceptance Criteria**:
@@ -335,8 +363,9 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: ML prediction model per organization
 
 #### Otimização de Pipeline
+
 - **Story**: Como founder quero IA identificando gargalos no pipeline para otimizar processo
-- **Priority**: Advanced  
+- **Priority**: Advanced
 - **Acceptance Criteria**:
   - Detecção de gargalos por estágio
   - Sugestões de otimização
@@ -344,6 +373,7 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: Analytics AI com org pipeline analysis
 
 #### Análise Preditiva
+
 - **Story**: Como gestor quero forecasting de receita baseado em padrões para planejamento financeiro
 - **Priority**: Advanced
 - **Acceptance Criteria**:
@@ -355,6 +385,7 @@ class OrganizationVoIPConfig:
 ### 3.6 Communication Features
 
 #### WhatsApp Web Sync
+
 - **Story**: Como vendedor quero sincronização bidirecional com WhatsApp Web para flexibilidade
 - **Priority**: MVP
 - **Acceptance Criteria**:
@@ -364,6 +395,7 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: WhatsApp Business API bidirectional sync
 
 #### Email Marketing
+
 - **Story**: Como agência quero enviar campanhas de email direto do CRM para nurturing
 - **Priority**: Supporting
 - **Acceptance Criteria**:
@@ -373,6 +405,7 @@ class OrganizationVoIPConfig:
 - **Technical Requirements**: Email service integration com org segmentation
 
 #### Video Conferencing (Futuro)
+
 - **Story**: Como vendedor quero reuniões integradas para demo/apresentações sem trocar ferramenta
 - **Priority**: Supporting
 - **Acceptance Criteria**:
@@ -384,22 +417,26 @@ class OrganizationVoIPConfig:
 ## 4. Success Metrics
 
 ### Security Metrics
+
 - **Cross-Org Prevention**: ≥99.9% (0 vazamentos de dados entre organizações)
 - **Data Isolation**: 100% queries filtradas por organization_id
 - **Authentication**: <0.1% falhas de autenticação org-scoped
 
-### Performance Metrics  
+### Performance Metrics
+
 - **API Response Time**: ≤500ms (95th percentile)
 - **Database Query Time**: ≤200ms (org-filtered queries)
 - **WhatsApp Message Delivery**: ≤3 segundos
 
 ### Business Metrics (B2B Model)
+
 - **Team Adoption Rate**: >80% (usuários ativos por organização)
 - **Feature Utilization**: >60% (features usadas por org)
 - **Customer Satisfaction**: >4.8/5.0 (NPS >70)
 - **Pipeline Conversion**: +300% vs ferramentas fragmentadas
 
 ### Technical Metrics
+
 - **Uptime**: 99.9% (SLA para agências)
 - **Scalability**: Suporte para 1000+ organizações simultâneas
 - **Multi-Tenancy**: 100% isolation entre organizações
@@ -409,13 +446,15 @@ class OrganizationVoIPConfig:
 ### Estimativas de Desenvolvimento
 
 **Fase 1 - MVP Core (3 meses)**
+
 - Pipeline Visual Kanban: 4 semanas
-- WhatsApp Business Integration: 6 semanas  
+- WhatsApp Business Integration: 6 semanas
 - Gestão de Leads: 3 semanas
 - Multi-Tenancy Foundation: 2 semanas
 - **Risk**: WhatsApp API limits e compliance
 
 **Fase 2 - Supporting Features (3 meses)**
+
 - VoIP Integration: 4 semanas
 - Mobile App: 6 semanas
 - Templates & Automation: 3 semanas
@@ -423,18 +462,21 @@ class OrganizationVoIPConfig:
 - **Risk**: Mobile app store approval
 
 **Fase 3 - Advanced Features (6 meses)**
+
 - IA Conversational: 8 semanas
 - Predictive Analytics: 6 semanas
 - API Pública: 4 semanas
 - **Risk**: AI model training e precisão
 
 ### Dependencies
+
 - WhatsApp Business API approval (crítico para MVP)
 - Stripe Connect para multi-org billing
 - iOS/Android store approval para mobile
 - AI/ML infrastructure para features avançadas
 
 ### Risk Mitigation
+
 - **WhatsApp API**: Backup com providers alternativos (Twilio)
 - **Performance**: Caching Redis + database indexing
 - **Security**: Penetration testing regular + audit logs
@@ -443,24 +485,28 @@ class OrganizationVoIPConfig:
 ## 6. Wireframes/Mockups (Descrição Visual)
 
 ### Pipeline Dashboard
+
 - **Layout**: Kanban horizontal com 5+ colunas customizáveis
 - **Cards**: Lead name, value, WhatsApp último contato, probability score
 - **Sidebar**: Filtros por período, responsável, origem, score
 - **Top Bar**: Métricas conversão por estágio, valor total pipeline
 
-### WhatsApp Chat Interface  
+### WhatsApp Chat Interface
+
 - **Layout**: Similar WhatsApp Web integrado na sidebar direita
 - **Features**: Anexos, emojis, status de entrega, histórico completo
 - **Integration**: Botão "Mover para próximo estágio" no chat
 - **Context**: Perfil do lead visível durante conversa
 
 ### Mobile App (React Native)
+
 - **Navigation**: Bottom tabs (Pipeline, WhatsApp, Contacts, Reports)
 - **Responsive**: Design adaptativo para iOS/Android
 - **Offline**: Pipeline básico disponível offline
 - **Push**: Notificações para mensagens WhatsApp e deals movidos
 
 ### Organization Settings
+
 - **Multi-Tenant UI**: Seletor de organização no header
 - **Branding**: Upload de logo, cores primária/secundária
 - **Team**: Lista de usuários com roles per organization
@@ -468,6 +514,7 @@ class OrganizationVoIPConfig:
 - **Communication Settings**: Escolha de provedores WhatsApp/VoIP por organização
 
 ### Provider Selection Interface
+
 - **WhatsApp Provider**: Toggle entre Business API vs Web API
 - **VoIP Provider**: Toggle entre Twilio vs Telnyx
 - **Configuration Wizards**: Setup guiado para cada provider
@@ -476,6 +523,7 @@ class OrganizationVoIPConfig:
 ## 6.5. Dual-Provider Architecture Considerations
 
 ### **WhatsApp Provider Selection Criteria**
+
 ```typescript
 // Frontend provider selection logic
 interface WhatsAppProviderDecision {
@@ -483,40 +531,41 @@ interface WhatsAppProviderDecision {
     recommended_when: [
       "budget > $500/month for WhatsApp",
       "need_compliance_guarantees: true",
-      "business_messaging_templates: true", 
-      "enterprise_support_required: true"
+      "business_messaging_templates: true",
+      "enterprise_support_required: true",
     ]
-  },
+  }
   webAPI: {
     recommended_when: [
       "startup_budget < $100/month",
       "quick_mvp_launch: true",
       "risk_tolerance: medium_to_high",
-      "technical_team_available: true"
+      "technical_team_available: true",
     ]
   }
 }
 ```
 
 ### **VoIP Provider Selection Criteria**
+
 ```typescript
-// Frontend provider selection logic  
+// Frontend provider selection logic
 interface VoIPProviderDecision {
   twilio: {
     recommended_when: [
       "enterprise_requirements: true",
       "advanced_features_needed: true",
       "high_reliability_critical: true",
-      "budget_flexible: true"
+      "budget_flexible: true",
     ]
-  },
+  }
   telnyx: {
     recommended_when: [
-      "cost_optimization_priority: true", 
+      "cost_optimization_priority: true",
       "easy_migration_from_twilio: true",
       "developer_friendly_docs: true",
       "startup_or_growth_stage: true",
-      "twilio_compatible_code: true"
+      "twilio_compatible_code: true",
     ]
   }
 }
@@ -525,6 +574,7 @@ interface VoIPProviderDecision {
 ### **Risk Mitigation Strategies**
 
 #### **WhatsApp Web API (Não-Oficial)**
+
 - **Account Protection**: Uso de números secundários/virtuais
 - **Session Management**: Auto-reconnect em caso de desconexão
 - **Monitoring**: Alertas para ban de conta ou instabilidade
@@ -532,6 +582,7 @@ interface VoIPProviderDecision {
 - **Legal Compliance**: Terms clarificando uso experimental
 
 #### **Provider Migration Strategy**
+
 - **Database Schema**: Provider-agnostic message/call storage
 - **API Abstraction**: Interface comum independente de provider
 - **Configuration Hot-Swap**: Troca de provider sem downtime
@@ -542,14 +593,16 @@ interface VoIPProviderDecision {
 ### B2B Tier Structure
 
 #### Starter (R$ 49/usuário/mês)
+
 - Pipeline básico (5 estágios)
 - **WhatsApp**: Web API apenas (não-oficial, QR code)
 - **VoIP**: Telnyx básico (gravação de chamadas)
 - 3 usuários por organização
 - Relatórios básicos
-- **Implementation**: `<FeatureGate tier="starter">` 
+- **Implementation**: `<FeatureGate tier="starter">`
 
-#### Pro (R$ 99/usuário/mês)  
+#### Pro (R$ 99/usuário/mês)
+
 - Pipeline customizável (estágios ilimitados)
 - **WhatsApp**: Escolha entre Business API ou Web API
 - **VoIP**: Escolha entre Twilio premium ou Telnyx
@@ -559,6 +612,7 @@ interface VoIPProviderDecision {
 - **Implementation**: `<FeatureGate tier="pro">`
 
 #### Enterprise (R$ 199/usuário/mês)
+
 - Todos os recursos
 - **WhatsApp**: Ambos providers disponíveis simultaneamente
 - **VoIP**: Ambos providers com hot-swap capability
@@ -569,6 +623,7 @@ interface VoIPProviderDecision {
 - **Implementation**: `<FeatureGate tier="enterprise">`
 
 ### Feature Gating Implementation
+
 ```typescript
 // Frontend feature gates
 <FeatureGate tier="pro" organization={org}>
@@ -584,6 +639,7 @@ async def create_webhook(org: Organization):
 ## 8. Acceptance Tests (Given-When-Then)
 
 ### Test 1: Cross-Organization Data Prevention
+
 ```
 Given: Usuario A da Organização 1 autenticado
 When: Tenta acessar leads da Organização 2 via API
@@ -592,7 +648,8 @@ And: Nenhum dado da Org 2 é retornado
 And: Event de tentativa é logado para auditoria
 ```
 
-### Test 2: WhatsApp Multi-Tenant Isolation  
+### Test 2: WhatsApp Multi-Tenant Isolation
+
 ```
 Given: Duas organizações com WhatsApp configurado
 When: Organização 1 recebe mensagem destinada à Organização 2
@@ -602,6 +659,7 @@ And: Webhook é enviado apenas para Org 2
 ```
 
 ### Test 3: Performance com Multi-Tenancy
+
 ```
 Given: 100 organizações com 1000 leads cada
 When: Organização X solicita pipeline dashboard
@@ -611,6 +669,7 @@ And: Query usa índices otimizados com org_id
 ```
 
 ### Test 4: Feature Gate Enforcement
+
 ```
 Given: Organização no plano Starter
 When: Tenta usar Lead Scoring AI (feature Pro)
@@ -620,6 +679,7 @@ And: Usage é logado para análise
 ```
 
 ### Test 5: WhatsApp Business API Integration
+
 ```
 Given: Organização com WhatsApp Business configurado
 When: Lead envia mensagem via WhatsApp
@@ -629,6 +689,7 @@ And: Notificação é enviada ao responsável
 ```
 
 ### Test 6: WhatsApp Provider Switching
+
 ```
 Given: Organização usando WhatsApp Web API (não-oficial)
 When: Admin switch para WhatsApp Business API
@@ -639,6 +700,7 @@ And: UI mostra provider ativo corretamente
 ```
 
 ### Test 7: VoIP Provider Cost Optimization
+
 ```
 Given: Organização no plano Pro com Twilio ativo
 When: Admin calcula custos e switch para Telnyx
@@ -649,6 +711,7 @@ And: Provider switch completa em <30 segundos (TwiML compatibility)
 ```
 
 ### Test 8: Dual Provider Enterprise Setup
+
 ```
 Given: Organização Enterprise
 When: Admin configura WhatsApp Business + Web API simultâneamente
@@ -666,7 +729,7 @@ And: Billing tracking funciona para ambos
 - [x] **Modelo Definido**: B2B identificado (agências digitais)
 - [x] **Dual Provider Support**: WhatsApp (Business API + Web API) + VoIP (Twilio + Plivo)
 - [x] **Isolamento organization_id**: Todas funcionalidades com filtragem
-- [x] **BaseService Pattern**: Chamadas API usam X-Org-Id headers  
+- [x] **BaseService Pattern**: Chamadas API usam X-Org-Id headers
 - [x] **SQLRepository Pattern**: CRUD com organization filtering
 - [x] **Organization Middleware**: Endpoints usam get_current_organization
 - [x] **Query Filtering**: organization_id em todas tabelas negócio

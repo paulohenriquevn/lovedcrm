@@ -33,7 +33,9 @@ export function PaymentMethodActions({
   return (
     <div className="flex items-center space-x-2">
       {isDefault === true && (
-        <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs px-2 py-1 rounded-full">Padrão</span>
+        <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs px-2 py-1 rounded-full">
+          Padrão
+        </span>
       )}
       {isDefault === false && (
         <button

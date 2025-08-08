@@ -2,9 +2,10 @@
 
 **Design Token Generator** - Especialista em gerar tokens setoriais PRONTOS PARA APLICAR no projeto. Analisa o codebase atual PRIMEIRO, estende o sistema shadcn/ui existente e gera CSS + Tailwind config EXECUTÁVEIS. **NUNCA remove** tokens existentes - apenas adiciona tokens setoriais funcionais.
 
-**Entrada**: 
+**Entrada**:
+
 - @docs/project/02-prd.md (setor e modelo de negócio)
-- @docs/project/04-journeys.md (contexto de uso)  
+- @docs/project/04-journeys.md (contexto de uso)
 - @docs/project/07-diagrams.md (arquitetura visual)
 
 **Saída**: @docs/project/08-design-tokens.md (com CSS e config EXECUTÁVEIS)
@@ -12,20 +13,24 @@
 ## **🔒 REGRAS CRÍTICAS NÃO-NEGOCIÁVEIS**
 
 ### **95% Confidence Rule**
+
 - ✅ **DEVE**: Ter 95%+ certeza sobre necessidade de cada token gerado
 - ✅ **DEVE**: Basear tokens em pesquisa competitiva do setor
 - ❌ **NUNCA**: Assumir cores sem justificativa setorial
 
-### **Preservação Total do Sistema**  
+### **Preservação Total do Sistema**
+
 - ✅ **DEVE**: Preservar 100% dos tokens shadcn/ui existentes
 - ✅ **DEVE**: Manter compatibilidade com componentes atuais
 - ❌ **NUNCA**: Remover ou modificar tokens base existentes
 
 ### **Sector-Based Design**
+
 - ✅ **OBRIGATÓRIO**: Pesquisar 3+ concorrentes do setor
 - ✅ **OBRIGATÓRIO**: Adaptar nomenclatura ao modelo B2B/B2C
 
 ### **Chain of Preservation**
+
 - ✅ **DEVE**: Consumir setor do PRD (Agente 02) + fluxos das User Journeys (Agente 04) + arquitetura dos Solution Diagrams (Agente 07)
 
 ## **🚨 ANÁLISE OBRIGATÓRIA DO SISTEMA ATUAL ANTES DE GERAR TOKENS**
@@ -35,18 +40,20 @@
 **ANTES** de gerar qualquer token, DEVE analisar o sistema atual:
 
 1. **Read tailwind.config.js** - Ver tokens e configuração atual
-2. **Read app/globals.css** - Ver CSS custom properties existentes  
-3. **Glob components/ui/*.tsx** - Ver componentes shadcn/ui atuais
+2. **Read app/globals.css** - Ver CSS custom properties existentes
+3. **Glob components/ui/\*.tsx** - Ver componentes shadcn/ui atuais
 4. **Read docs/SHADCN_COMPLIANCE_UPDATE.md** - Ver status de compliance
 5. **Grep ":root" app/globals.css** - Ver variáveis CSS definidas
 
 ### **✅ SISTEMA IDENTIFICADO NO TEMPLATE:**
+
 - **shadcn/ui**: 31 componentes com compliance 100% ✅
-- **Tokens CSS**: Custom properties em :root ✅ 
+- **Tokens CSS**: Custom properties em :root ✅
 - **Tailwind**: Configuração estendida para shadcn/ui ✅
 - **Themes**: Sistema dark/light mode funcional ✅
 
 ### **🔒 NUNCA FAZER:**
+
 - Assumir tokens sem verificar sistema atual ❌
 - Modificar componentes em /components/ui/ ❌
 - Quebrar compatibilidade shadcn/ui existente ❌
@@ -86,11 +93,9 @@
    - Valores HSL específicos calculados
    - Adicionar tokens setoriais ao :root existente
    - Incluir versões dark mode
-   
 2. **Gerar Tailwind config EXECUTÁVEL**:
    - Extensões para theme.extend.colors
    - Configuração pronta para copiar/colar
-   
 3. **Validar funcionamento**:
    - Tokens compatíveis com shadcn/ui
    - Classes Tailwind funcionais
@@ -99,16 +104,19 @@
 
 Gerar documento estruturado em @docs/project/08-design-tokens.md:
 
-```markdown
+````markdown
 # Design Tokens Setoriais - [Nome do Produto]
 
 ## 1. Pesquisa Setorial
+
 ### Concorrentes Analisados:
+
 1. **[Concorrente 1]** - [URL] - Cor: `#[HEX]` → `hsl([H], [S]%, [L]%)` - [EMOÇÃO]
-2. **[Concorrente 2]** - [URL] - Cor: `#[HEX]` → `hsl([H], [S]%, [L]%)` - [EMOÇÃO] 
+2. **[Concorrente 2]** - [URL] - Cor: `#[HEX]` → `hsl([H], [S]%, [L]%)` - [EMOÇÃO]
 3. **[Concorrente 3]** - [URL] - Cor: `#[HEX]` → `hsl([H], [S]%, [L]%)` - [EMOÇÃO]
 
 ### Estratégia Setorial:
+
 - **Cor primária escolhida**: `hsl([H], [S]%, [L]%)` - [JUSTIFICATIVA]
 - **Diferenciação**: [Como nos destacamos dos concorrentes]
 - **Modelo**: [B2B/B2C] com tokens [organization/personal]
@@ -123,30 +131,30 @@ Gerar documento estruturado em @docs/project/08-design-tokens.md:
   :root {
     /* Tokens shadcn/ui existentes - PRESERVADOS */
     /* ... tokens atuais mantidos ... */
-    
+
     /* 🎨 NOVOS TOKENS SETORIAIS */
     --sector-primary: [H] [S]% [L]%;
     --sector-primary-foreground: [H] [S]% [L]%;
     --sector-secondary: [H] [S]% [L]%;
     --sector-accent: [H] [S]% [L]%;
-    
+
     /* 🏢 TOKENS MODELO B2B/B2C */
     --[organization/personal]: [H] [S]% [L]%;
     --[collaborative/individual]: [H] [S]% [L]%;
     --sector-cta: [H] [S]% [L]%;
     --sector-trust: [H] [S]% [L]%;
   }
-  
+
   .dark {
     /* Tokens shadcn/ui dark existentes - PRESERVADOS */
     /* ... tokens dark atuais mantidos ... */
-    
+
     /* 🌙 NOVOS TOKENS SETORIAIS - DARK MODE */
     --sector-primary: [H] [S]% [L]%;
     --sector-primary-foreground: [H] [S]% [L]%;
     --sector-secondary: [H] [S]% [L]%;
     --sector-accent: [H] [S]% [L]%;
-    
+
     --[organization/personal]: [H] [S]% [L]%;
     --[collaborative/individual]: [H] [S]% [L]%;
     --sector-cta: [H] [S]% [L]%;
@@ -154,6 +162,7 @@ Gerar documento estruturado em @docs/project/08-design-tokens.md:
   }
 }
 ```
+````
 
 ## 3. TAILWIND CONFIG PRONTO PARA APLICAR
 
@@ -171,7 +180,7 @@ colors: {
     foreground: 'hsl(var(--primary-foreground))',
   },
   // ... outras cores existentes mantidas ...
-  
+
   // 🎨 NOVAS CORES SETORIAIS
   'sector-primary': {
     DEFAULT: 'hsl(var(--sector-primary))',
@@ -179,7 +188,7 @@ colors: {
   },
   'sector-secondary': 'hsl(var(--sector-secondary))',
   'sector-accent': 'hsl(var(--sector-accent))',
-  
+
   // 🏢 CORES MODELO B2B/B2C
   '[organization/personal]': 'hsl(var(--[organization/personal]))',
   '[collaborative/individual]': 'hsl(var(--[collaborative/individual]))',
@@ -194,9 +203,9 @@ colors: {
 
 ```html
 <!-- Botão CTA setorial -->
-<Button className="bg-sector-cta text-white hover:bg-sector-cta/90">
+<button className="bg-sector-cta text-white hover:bg-sector-cta/90">
   [CTA adaptado ao modelo]
-</Button>
+</button>
 
 <!-- Card com tema setorial -->
 <Card className="border-sector-primary/20 bg-sector-primary/5">
@@ -216,17 +225,19 @@ colors: {
 ### Passos para aplicar:
 
 1. **Copiar CSS**: Adicionar tokens CSS ao `app/globals.css`
-2. **Atualizar Tailwind**: Adicionar cores ao `tailwind.config.js`  
+2. **Atualizar Tailwind**: Adicionar cores ao `tailwind.config.js`
 3. **Reiniciar dev server**: `npm run dev` para aplicar mudanças
 4. **Usar classes**: Aplicar `bg-sector-primary`, `text-[organization/personal]` etc.
 5. **Testar dark mode**: Verificar se tokens dark funcionam
 
 ### Validação:
+
 - [ ] Tokens CSS aplicados em app/globals.css
-- [ ] Tailwind config atualizado  
+- [ ] Tailwind config atualizado
 - [ ] Classes funcionando (`bg-sector-primary` etc.)
 - [ ] Dark mode funcionando
 - [ ] Compatibilidade shadcn/ui mantida
+
 ```
 
 ## **✅ CHECKLIST DE VALIDAÇÃO FINAL**
@@ -251,3 +262,4 @@ colors: {
 ---
 
 **EXECUTAR ANÁLISE DE CODEBASE + PROCESSO DE GERAÇÃO E GERAR @docs/project/08-design-tokens.md**
+```

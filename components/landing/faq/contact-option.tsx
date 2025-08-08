@@ -4,10 +4,10 @@ interface ContactOptionProps {
   description: string
 }
 
-export function ContactOption({ 
-  icon: Icon, 
-  title, 
-  description 
+export function ContactOption({
+  icon: Icon,
+  title,
+  description,
 }: ContactOptionProps): React.ReactElement {
   return (
     <div className="text-center">

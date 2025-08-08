@@ -17,7 +17,7 @@ export class BaseService {
     '/api/invites/',
     '/api/billing/',
     '/api/admin/',
-    '/api/crm/',        // CRM endpoints require organization context
+    '/api/crm/', // CRM endpoints require organization context
   ]
 
   // Endpoints que podem funcionar sem organização

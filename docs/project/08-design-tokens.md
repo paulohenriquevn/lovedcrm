@@ -9,7 +9,7 @@
    - Combinação com cinza carvão para profissionalismo
    - Sistema Canvas Design focado em clareza e hierarquia visual
 
-2. **Pipedrive** - https://www.pipedrive.com - Cor: `#4A90E2` → `hsl(213, 74%, 59%)` - **CONFIANÇA & EFICIÊNCIA** 
+2. **Pipedrive** - https://www.pipedrive.com - Cor: `#4A90E2` → `hsl(213, 74%, 59%)` - **CONFIANÇA & EFICIÊNCIA**
    - Azul institucional transmite confiabilidade e organização
    - Interface Kanban com foco na jornada do cliente
    - Sistema visual otimizado para vendedores
@@ -43,57 +43,57 @@
     --primary: 262 83% 58%;
     --primary-foreground: 210 40% 98%;
     /* ... outros tokens existentes mantidos ... */
-    
+
     /* 🎨 NOVOS TOKENS SETORIAIS */
-    --sector-primary: 262 83% 58%;              /* Loved CRM Violet - diferenciação */
-    --sector-primary-foreground: 210 40% 98%;   /* Branco para contraste */
-    --sector-secondary: 217 59% 40%;            /* RD Station Blue - autoridade */
-    --sector-accent: 12 100% 67%;               /* HubSpot Orange - energia */
-    
+    --sector-primary: 262 83% 58%; /* Loved CRM Violet - diferenciação */
+    --sector-primary-foreground: 210 40% 98%; /* Branco para contraste */
+    --sector-secondary: 217 59% 40%; /* RD Station Blue - autoridade */
+    --sector-accent: 12 100% 67%; /* HubSpot Orange - energia */
+
     /* 🏢 TOKENS MODELO B2B */
-    --organization: 262 83% 58%;                /* Primary violet para contexto organizacional */
-    --collaborative: 217 91% 60%;               /* Azul para features colaborativas */
-    --sector-cta: 12 100% 67%;                  /* Orange forte para CTAs importantes */
-    --sector-trust: 160 84% 39%;                /* Verde para indicar confiança/segurança */
-    
+    --organization: 262 83% 58%; /* Primary violet para contexto organizacional */
+    --collaborative: 217 91% 60%; /* Azul para features colaborativas */
+    --sector-cta: 12 100% 67%; /* Orange forte para CTAs importantes */
+    --sector-trust: 160 84% 39%; /* Verde para indicar confiança/segurança */
+
     /* 🔄 TOKENS COMPETITIVOS */
-    --competitor-hubspot: 12 100% 67%;          /* HubSpot Orange referência */
-    --competitor-pipedrive: 213 74% 59%;        /* Pipedrive Blue referência */
-    --competitor-rd: 217 59% 40%;               /* RD Station Blue referência */
-    
+    --competitor-hubspot: 12 100% 67%; /* HubSpot Orange referência */
+    --competitor-pipedrive: 213 74% 59%; /* Pipedrive Blue referência */
+    --competitor-rd: 217 59% 40%; /* RD Station Blue referência */
+
     /* 🎯 TOKENS SETORIAIS ESPECÍFICOS */
-    --agency-premium: 262 83% 65%;              /* Violeta claro para tier premium */
-    --agency-growth: 160 84% 45%;               /* Verde crescimento */
-    --agency-conversion: 25 95% 55%;            /* Laranja conversão */
-    --agency-retention: 217 91% 60%;            /* Azul retenção */
+    --agency-premium: 262 83% 65%; /* Violeta claro para tier premium */
+    --agency-growth: 160 84% 45%; /* Verde crescimento */
+    --agency-conversion: 25 95% 55%; /* Laranja conversão */
+    --agency-retention: 217 91% 60%; /* Azul retenção */
   }
-  
+
   .dark {
     /* Tokens shadcn/ui dark existentes - PRESERVADOS */
     --background: 224 71% 4%;
     --foreground: 210 40% 98%;
     --primary: 262 83% 67%;
     /* ... outros tokens dark existentes mantidos ... */
-    
+
     /* 🌙 NOVOS TOKENS SETORIAIS - DARK MODE */
-    --sector-primary: 262 83% 67%;              /* Violeta mais claro no dark */
-    --sector-primary-foreground: 224 71% 4%;   /* Escuro para contraste */
-    --sector-secondary: 217 59% 50%;            /* Azul mais claro no dark */
-    --sector-accent: 12 100% 72%;               /* Orange mais claro no dark */
-    
-    --organization: 262 83% 67%;                /* Violeta claro para org context */
-    --collaborative: 217 91% 70%;               /* Azul claro para colaboração */
-    --sector-cta: 12 100% 72%;                  /* Orange claro para CTAs */
-    --sector-trust: 160 84% 49%;                /* Verde claro para confiança */
-    
-    --competitor-hubspot: 12 100% 72%;          /* HubSpot Orange dark mode */
-    --competitor-pipedrive: 213 74% 69%;        /* Pipedrive Blue dark mode */
-    --competitor-rd: 217 59% 50%;               /* RD Station Blue dark mode */
-    
-    --agency-premium: 262 83% 72%;              /* Violeta premium dark */
-    --agency-growth: 160 84% 52%;               /* Verde growth dark */
-    --agency-conversion: 25 95% 62%;            /* Laranja conversion dark */
-    --agency-retention: 217 91% 70%;            /* Azul retention dark */
+    --sector-primary: 262 83% 67%; /* Violeta mais claro no dark */
+    --sector-primary-foreground: 224 71% 4%; /* Escuro para contraste */
+    --sector-secondary: 217 59% 50%; /* Azul mais claro no dark */
+    --sector-accent: 12 100% 72%; /* Orange mais claro no dark */
+
+    --organization: 262 83% 67%; /* Violeta claro para org context */
+    --collaborative: 217 91% 70%; /* Azul claro para colaboração */
+    --sector-cta: 12 100% 72%; /* Orange claro para CTAs */
+    --sector-trust: 160 84% 49%; /* Verde claro para confiança */
+
+    --competitor-hubspot: 12 100% 72%; /* HubSpot Orange dark mode */
+    --competitor-pipedrive: 213 74% 69%; /* Pipedrive Blue dark mode */
+    --competitor-rd: 217 59% 50%; /* RD Station Blue dark mode */
+
+    --agency-premium: 262 83% 72%; /* Violeta premium dark */
+    --agency-growth: 160 84% 52%; /* Verde growth dark */
+    --agency-conversion: 25 95% 62%; /* Laranja conversion dark */
+    --agency-retention: 217 91% 70%; /* Azul retention dark */
   }
 }
 ```
@@ -118,7 +118,7 @@ colors: {
     foreground: 'hsl(var(--secondary-foreground))',
   },
   // ... outras cores existentes mantidas ...
-  
+
   // 🎨 NOVAS CORES SETORIAIS
   'sector-primary': {
     DEFAULT: 'hsl(var(--sector-primary))',
@@ -126,20 +126,20 @@ colors: {
   },
   'sector-secondary': 'hsl(var(--sector-secondary))',
   'sector-accent': 'hsl(var(--sector-accent))',
-  
+
   // 🏢 CORES MODELO B2B
   'organization': 'hsl(var(--organization))',
   'collaborative': 'hsl(var(--collaborative))',
   'sector-cta': 'hsl(var(--sector-cta))',
   'sector-trust': 'hsl(var(--sector-trust))',
-  
+
   // 🔄 CORES COMPETITIVAS (para análises)
   'competitor': {
     hubspot: 'hsl(var(--competitor-hubspot))',
     pipedrive: 'hsl(var(--competitor-pipedrive))',
     rd: 'hsl(var(--competitor-rd))',
   },
-  
+
   // 🎯 CORES AGÊNCIA DIGITAL
   'agency': {
     premium: 'hsl(var(--agency-premium))',
@@ -156,9 +156,11 @@ colors: {
 
 ```html
 <!-- Botão CTA setorial diferenciado -->
-<Button className="bg-sector-cta text-white hover:bg-sector-cta/90 font-semibold">
+<button
+  className="bg-sector-cta text-white hover:bg-sector-cta/90 font-semibold"
+>
   Experimente o Loved CRM Grátis
-</Button>
+</button>
 
 <!-- Card com tema organizacional B2B -->
 <Card className="border-organization/20 bg-organization/5">
@@ -196,12 +198,13 @@ colors: {
 ### Passos para aplicar:
 
 1. **Copiar CSS**: Adicionar tokens CSS ao `app/globals.css` (preservando existentes)
-2. **Atualizar Tailwind**: Adicionar cores ao `tailwind.config.js` (estendendo existentes)  
+2. **Atualizar Tailwind**: Adicionar cores ao `tailwind.config.js` (estendendo existentes)
 3. **Reiniciar dev server**: `npm run dev` para aplicar mudanças
 4. **Usar classes**: Aplicar `bg-sector-primary`, `text-organization` etc.
 5. **Testar dark mode**: Verificar se tokens dark funcionam corretamente
 
 ### Validação:
+
 - [ ] Tokens CSS aplicados em app/globals.css
 - [ ] Tailwind config atualizado sem quebrar existentes
 - [ ] Classes funcionando (`bg-sector-primary` etc.)
@@ -213,8 +216,9 @@ colors: {
 ### Posicionamento Competitivo:
 
 **Loved CRM vs Concorrentes:**
+
 - **HubSpot**: Orange energético → **Loved**: Violeta inovador
-- **Pipedrive**: Azul confiável → **Loved**: Violeta + Azul (autoridade + inovação)  
+- **Pipedrive**: Azul confiável → **Loved**: Violeta + Azul (autoridade + inovação)
 - **RD Station**: Azul institucional → **Loved**: Sistema híbrido diferenciado
 
 ### Benefícios da Estratégia Violeta:
@@ -234,12 +238,14 @@ colors: {
 ## 7. MÉTRICAS DE SUCESSO
 
 ### KPIs Visuais:
+
 - **Diferenciação**: 100% único no setor (violeta vs azul/laranja)
 - **Reconhecimento**: Identidade visual memorável
 - **Conversão**: CTAs laranjas com alta performance (baseado em HubSpot)
 - **Confiança**: Verde para elementos de segurança/isolamento
 
 ### Teste A/B Sugerido:
+
 - Landing Page com tokens violetas vs azuis tradicionais
 - CTAs laranjas vs CTAs violetas para conversão
 - Badges de confiança verdes vs azuis convencionais

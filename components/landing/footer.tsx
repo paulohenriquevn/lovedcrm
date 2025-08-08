@@ -8,11 +8,11 @@
 
 import { Separator } from '@/components/ui/separator'
 
-import { 
+import {
   FooterBrandSection,
   FooterLinksGrid,
   NewsletterSection,
-  FooterBottomSection
+  FooterBottomSection,
 } from './footer-components'
 import { footerSections, socialLinks } from './footer-data'
 
@@ -26,7 +26,7 @@ export function Footer(): JSX.Element {
         <div className="grid lg:grid-cols-6 gap-8 mb-12">
           {/* Brand Section */}
           <FooterBrandSection socialLinks={socialLinks} />
-          
+
           {/* Footer Links */}
           <FooterLinksGrid sections={footerSections} />
         </div>

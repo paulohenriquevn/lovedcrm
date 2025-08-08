@@ -4,8 +4,14 @@
  */
 
 import { useState } from 'react'
+
 import { useToast } from '@/hooks/use-toast'
-import { default as crmLeadsService, PipelineStage, type Lead, type LeadUpdate } from '@/services/crm-leads'
+import {
+  default as crmLeadsService,
+  PipelineStage,
+  type Lead,
+  type LeadUpdate,
+} from '@/services/crm-leads'
 
 interface LeadEditForm {
   name: string
@@ -35,60 +41,70 @@ function hasChanged(newValue: string | undefined, oldValue: string | undefined):
 }
 
 function shouldUpdateField(newValue: string | undefined): string | undefined {
-  return newValue !== null && newValue !== undefined && newValue.trim() !== '' ? newValue : undefined
+  return newValue !== null && newValue !== undefined && newValue.trim() !== ''
+    ? newValue
+    : undefined
 }
 
 function buildBasicFields(data: LeadEditForm, lead: Lead): Partial<LeadUpdate> {
   const updates: Partial<LeadUpdate> = {}
-  
+
   if (data.name !== lead.name) {
     updates.name = data.name
   }
-  
+
   if (hasChanged(data.email, lead.email)) {
     updates.email = shouldUpdateField(data.email)
   }
-  
+
   if (hasChanged(data.phone, lead.phone)) {
     updates.phone = shouldUpdateField(data.phone)
   }
-  
+
   return updates
 }
 
-function buildMetadataFields(data: LeadEditForm, lead: Lead, currentTags: string[]): Partial<LeadUpdate> {
+function buildMetadataFields(
+  data: LeadEditForm,
+  lead: Lead,
+  currentTags: string[]
+): Partial<LeadUpdate> {
   const updates: Partial<LeadUpdate> = {}
-  
+
   if (hasChanged(data.source, lead.source)) {
     updates.source = shouldUpdateField(data.source)
   }
-  
+
   if (data.estimatedValue !== lead.estimated_value) {
     updates.estimatedValue = data.estimatedValue
   }
-  
+
   if (JSON.stringify(currentTags) !== JSON.stringify(lead.tags ?? [])) {
     updates.tags = currentTags.length > 0 ? currentTags : undefined
   }
-  
+
   if (hasChanged(data.notes, lead.notes)) {
     updates.notes = shouldUpdateField(data.notes)
   }
-  
+
   return updates
 }
 
-export function useLeadEditLogic({ lead, currentTags, onClose, onSuccess }: UseLeadEditLogicProps): EditLogicReturn {
+export function useLeadEditLogic({
+  lead,
+  currentTags,
+  onClose,
+  onSuccess,
+}: UseLeadEditLogicProps): EditLogicReturn {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
 
   const buildUpdateData = (data: LeadEditForm, lead: Lead): LeadUpdate => {
     const basicFields = buildBasicFields(data, lead)
     const metadataFields = buildMetadataFields(data, lead, currentTags)
-    
+
     return { ...basicFields, ...metadataFields }
   }
-
 
   const onSubmit = async (data: LeadEditForm): Promise<void> => {
     if (!lead) {
@@ -98,17 +114,17 @@ export function useLeadEditLogic({ lead, currentTags, onClose, onSuccess }: UseL
     try {
       setIsLoading(true)
       const updateData = buildUpdateData(data, lead)
-      
+
       // Update basic lead data
       if (Object.keys(updateData).length > 0) {
         await crmLeadsService.updateLead(lead.id, updateData)
       }
-      
+
       // Update favorite status if changed
       if (data.isFavorite !== lead.is_favorite) {
         await crmLeadsService.toggleLeadFavorite(lead.id, data.isFavorite ?? false)
       }
-      
+
       // Update stage if changed
       if (data.stage !== lead.stage) {
         await crmLeadsService.moveLeadToStage(lead.id, data.stage, 'Estágio alterado via edição')
@@ -116,16 +132,16 @@ export function useLeadEditLogic({ lead, currentTags, onClose, onSuccess }: UseL
 
       toast({
         title: 'Lead atualizado com sucesso',
-        description: `${data.name} foi atualizado no pipeline.`
+        description: `${data.name} foi atualizado no pipeline.`,
       })
-      
+
       onClose()
       onSuccess()
     } catch {
       toast({
         title: 'Erro ao atualizar lead',
         description: 'Não foi possível atualizar o lead. Tente novamente.',
-        variant: 'destructive'
+        variant: 'destructive',
       })
     } finally {
       setIsLoading(false)
@@ -134,6 +150,6 @@ export function useLeadEditLogic({ lead, currentTags, onClose, onSuccess }: UseL
 
   return {
     isLoading,
-    onSubmit
+    onSubmit,
   }
 }

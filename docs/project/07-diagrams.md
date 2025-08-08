@@ -5,9 +5,10 @@
 **System Stack**: Next.js 14 + FastAPI + PostgreSQL + Railway  
 **Multi-Tenancy**: organization_id isolation across all layers  
 **Integration Pattern**: Dual provider architecture para WhatsApp + VoIP  
-**Total Diagrams**: 10 comprehensive technical diagrams  
+**Total Diagrams**: 10 comprehensive technical diagrams
 
 **Template Foundation Verified:**
+
 - ✅ 32 componentes shadcn/ui disponíveis no sistema atual
 - ✅ FastAPI com 8 routers principais já implementados
 - ✅ Multi-tenant organization middleware já ativo
@@ -529,7 +530,7 @@ User Story: "Como gestor comercial quero arrastar leads entre estágios customiz
 
 Edge Cases Handled:
 • Concurrent movement: Optimistic locking + conflict resolution
-• Network failure: Rollback + retry mechanism  
+• Network failure: Rollback + retry mechanism
 • Cross-org attempt: 403 Forbidden + audit log
 • Invalid stage: Validation + user feedback
 ```
@@ -848,7 +849,7 @@ app/
 │   │   ├── crm/                  ← CRM feature modules
 │   │   │   ├── page.tsx          → CRM Dashboard Container
 │   │   │   ├── leads/
-│   │   │   │   ├── page.tsx      → Leads List Container  
+│   │   │   │   ├── page.tsx      → Leads List Container
 │   │   │   │   └── [id]/
 │   │   │   │       └── page.tsx  → Lead Detail Container
 │   │   │   ├── pipeline/
@@ -858,7 +859,7 @@ app/
 │   │   ├── settings/             ← Organization settings
 │   │   │   ├── page.tsx          → Org Settings Container
 │   │   │   ├── team/
-│   │   │   │   └── page.tsx      → Team Management Container  
+│   │   │   │   └── page.tsx      → Team Management Container
 │   │   │   └── integrations/
 │   │   │       └── page.tsx      → Integrations Container
 │   │   └── billing/              ← Billing & subscriptions
@@ -874,7 +875,7 @@ COMPONENT INTERACTION FLOW:
 
 ┌─────────────────────┐    ┌─────────────────────┐    ┌─────────────────────┐
 │   Page Container    │───▶│   Business Logic    │───▶│   API Services      │
-│ ─────────────────── │    │ ─────────────────── │    │ ─────────────────── │  
+│ ─────────────────── │    │ ─────────────────── │    │ ─────────────────── │
 │ • useOrgContext()   │    │ • useCRMStore()     │    │ • leadService.get() │
 │ • Data fetching     │    │ • useLeadData()     │    │ • X-Org-Id headers  │
 │ • State management  │    │ • Business rules    │    │ • Error handling    │
@@ -926,7 +927,7 @@ STATE MANAGEMENT ARCHITECTURE:
 
 Real-time Updates via TanStack Query + WebSocket:
 • Pipeline changes broadcast to all org members
-• New messages appear instantly in conversations  
+• New messages appear instantly in conversations
 • AI summaries update in real-time
 • Lead score changes reflect immediately
 ```
@@ -1394,7 +1395,7 @@ RELATIONSHIP NOTATION:
 
 COMPONENT TYPES:
 ┌─────────────────┐ : Service/Component        [USER ACTION] : User Interaction
-│     Service     │                            {Business}   : Business Logic  
+│     Service     │                            {Business}   : Business Logic
 │ ─────────────── │                            (Database)   : Data Storage
 │ • Function 1    │                            <External>   : External Service
 │ • Function 2    │                            |Internal|   : Internal Process
@@ -1409,7 +1410,7 @@ SECURITY & ISOLATION:
 
 STATUS INDICATORS:
 ✅ : Implemented/Working                      🆕 : New/To Be Built
-⚠️ : Alternative/Risky                       🔄 : In Progress  
+⚠️ : Alternative/Risky                       🔄 : In Progress
 ❌ : Not Recommended                         📋 : Documentation
 🚀 : Performance Optimized                   🧪 : Testing Required
 ```
@@ -1458,7 +1459,7 @@ HOW TO READ THESE DIAGRAMS
 
 MULTI-TENANCY VISUAL PATTERNS:
 • 🏢 Organization context always present in business operations
-• 🔒 Security validation at each layer boundary  
+• 🔒 Security validation at each layer boundary
 • ═══ Org-isolated data flow vs ──── general data flow
 • All business tables include organization_id relationships
 • Cross-org access prevention marked with ❌ symbols

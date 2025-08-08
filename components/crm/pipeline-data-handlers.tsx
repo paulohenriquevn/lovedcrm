@@ -1,5 +1,5 @@
 /**
- * Pipeline Data Handlers  
+ * Pipeline Data Handlers
  * Extracted data loading and manipulation logic
  */
 
@@ -29,7 +29,7 @@ export function usePipelineDataHandlers(): DataHandlersReturn {
     if (!user || !organization) {
       return
     }
-    
+
     try {
       setLoading(true)
       setError(null)
@@ -57,6 +57,6 @@ export function usePipelineDataHandlers(): DataHandlersReturn {
     error,
     reloadLeadsData,
     setStages,
-    setError
+    setError,
   }
 }

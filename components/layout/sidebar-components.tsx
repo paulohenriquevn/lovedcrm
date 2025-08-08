@@ -29,7 +29,12 @@ interface SidebarFooterProps {
   memberLoading: boolean
 }
 
-export function SidebarFooter({ collapsed, currentOrg, memberCount, memberLoading }: SidebarFooterProps): JSX.Element {
+export function SidebarFooter({
+  collapsed,
+  currentOrg,
+  memberCount,
+  memberLoading,
+}: SidebarFooterProps): JSX.Element {
   if (collapsed) {
     return (
       <div className="p-4 border-t border-border">
@@ -49,13 +54,9 @@ export function SidebarFooter({ collapsed, currentOrg, memberCount, memberLoadin
         <div className="bg-violet-50 rounded-lg p-3 border border-violet-200">
           <div className="flex items-center gap-2 mb-1">
             <div className="h-2 w-2 bg-violet-500 rounded-full animate-pulse" />
-            <span className="text-xs font-medium text-violet-700">
-              Organização Ativa
-            </span>
+            <span className="text-xs font-medium text-violet-700">Organização Ativa</span>
           </div>
-          <p className="text-xs text-violet-600 truncate">
-            {currentOrg.name}
-          </p>
+          <p className="text-xs text-violet-600 truncate">{currentOrg.name}</p>
           <p className="text-xs text-violet-500">
             {memberLoading ? '...' : memberCount} membros conectados
           </p>
@@ -71,9 +72,7 @@ export function SidebarFooter({ collapsed, currentOrg, memberCount, memberLoadin
           <div className="w-full bg-muted rounded-full h-2 mb-1">
             <div className="bg-primary h-2 rounded-full w-3/4" />
           </div>
-          <p className="text-xs text-muted-foreground">
-            Funcionalidades disponíveis
-          </p>
+          <p className="text-xs text-muted-foreground">Funcionalidades disponíveis</p>
         </div>
       </div>
     </div>

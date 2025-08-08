@@ -7,13 +7,7 @@
 
 import { UseFormReturn } from 'react-hook-form'
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PipelineStage } from '@/services/crm-leads'
 
@@ -22,7 +16,7 @@ import {
   EstimatedValueField,
   NotesField,
   StageSourceFields,
-  TagsField
+  TagsField,
 } from './lead-form-components'
 
 interface LeadCreateForm {
@@ -55,7 +49,7 @@ export function LeadCreateFormFields({
   onTagInputChange,
   onAddTag,
   onRemoveTag,
-  onTagKeyPress
+  onTagKeyPress,
 }: LeadCreateFormFieldsProps): React.ReactElement {
   return (
     <div className="space-y-4">
@@ -67,11 +61,7 @@ export function LeadCreateFormFields({
           <FormItem>
             <FormLabel>Nome *</FormLabel>
             <FormControl>
-              <Input
-                {...field}
-                placeholder="Nome do lead"
-                disabled={isLoading}
-              />
+              <Input {...field} placeholder="Nome do lead" disabled={isLoading} />
             </FormControl>
             <FormMessage />
           </FormItem>

@@ -13,24 +13,19 @@ import {
   DollarSign,
   Edit,
   Trash,
-  ExternalLink
+  ExternalLink,
 } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Lead, PipelineStage } from '@/services/crm-leads'
 
 // Helper functions
 export const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
-    currency: 'BRL'
+    currency: 'BRL',
   }).format(value)
 }
 
@@ -43,7 +38,7 @@ export const STAGE_LABELS: Record<PipelineStage, string> = {
   [PipelineStage.CONTATO]: 'Contato',
   [PipelineStage.PROPOSTA]: 'Proposta',
   [PipelineStage.NEGOCIACAO]: 'Negociação',
-  [PipelineStage.FECHADO]: 'Fechado'
+  [PipelineStage.FECHADO]: 'Fechado',
 }
 
 export const STAGE_COLORS: Record<PipelineStage, string> = {
@@ -51,7 +46,7 @@ export const STAGE_COLORS: Record<PipelineStage, string> = {
   [PipelineStage.CONTATO]: 'bg-blue-100 text-blue-800',
   [PipelineStage.PROPOSTA]: 'bg-yellow-100 text-yellow-800',
   [PipelineStage.NEGOCIACAO]: 'bg-orange-100 text-orange-800',
-  [PipelineStage.FECHADO]: 'bg-green-100 text-green-800'
+  [PipelineStage.FECHADO]: 'bg-green-100 text-green-800',
 }
 
 // Header Components
@@ -61,7 +56,7 @@ export function LeadDetailsHeader({
   onFavoriteToggle,
   onEdit,
   onDelete,
-  onClose
+  onClose,
 }: {
   lead: Lead
   isToggleLoading: boolean
@@ -193,7 +188,9 @@ export function LeadValueCard({ lead }: { lead: Lead }): React.ReactElement {
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold text-green-600">
-          {lead.estimated_value !== null && lead.estimated_value !== undefined && lead.estimated_value > 0
+          {lead.estimated_value !== null &&
+          lead.estimated_value !== undefined &&
+          lead.estimated_value > 0
             ? formatCurrency(lead.estimated_value)
             : 'Não informado'}
         </div>
@@ -250,7 +247,7 @@ export function TagsSection({ lead }: { lead: Lead }): React.ReactElement | null
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-2">
-          {lead.tags.map((tag) => (
+          {lead.tags.map(tag => (
             <Badge key={tag} variant="outline">
               {tag}
             </Badge>

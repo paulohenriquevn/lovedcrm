@@ -18,30 +18,35 @@ export function HeroSectionV2(): React.ReactElement {
         <Badge className="mb-6 bg-sector-primary/10 text-sector-primary border-sector-primary/20 px-4 py-2">
           Agências Digitais • 5-20 Colaboradores • Brasil
         </Badge>
-        
+
         <h1 className="mb-6 text-4xl font-bold tracking-tight lg:text-6xl leading-tight">
-          O primeiro CRM que elimina a fragmentação de ferramentas para{" "}
+          O primeiro CRM que elimina a fragmentação de ferramentas para{' '}
           <span className="bg-gradient-to-r from-sector-primary to-purple-600 bg-clip-text text-transparent">
             agências digitais
-          </span>, integrando pipeline visual + WhatsApp + IA em uma única plataforma
+          </span>
+          , integrando pipeline visual + WhatsApp + IA em uma única plataforma
         </h1>
-        
+
         <p className="mb-8 text-xl text-muted-foreground lg:text-2xl max-w-4xl mx-auto">
-          Loved CRM é o único CRM brasileiro que integra nativamente: Pipeline Visual Avançado, 
+          Loved CRM é o único CRM brasileiro que integra nativamente: Pipeline Visual Avançado,
           WhatsApp/VoIP Unificado, Inteligência Artificial e Multi-Tenant Architecture
         </p>
-        
+
         <div className="flex flex-col gap-4 sm:flex-row sm:justify-center mb-8">
           <Button size="lg" className="h-14 px-8 text-lg bg-sector-cta hover:bg-sector-cta/90">
             Criar Organização Grátis
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
-          
-          <Button variant="outline" size="lg" className="h-14 px-8 text-lg border-sector-primary text-sector-primary hover:bg-sector-primary/10">
+
+          <Button
+            variant="outline"
+            size="lg"
+            className="h-14 px-8 text-lg border-sector-primary text-sector-primary hover:bg-sector-primary/10"
+          >
             Solicitar Demo B2B
           </Button>
         </div>
-        
+
         <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4 text-sector-trust" />

@@ -24,7 +24,7 @@ function handleCTAClick(action: string): void {
 
 function NavbarBrand(): JSX.Element {
   return (
-    <motion.div 
+    <motion.div
       className="flex items-center gap-2"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -35,9 +35,7 @@ function NavbarBrand(): JSX.Element {
           <Zap className="h-4 w-4 text-white" />
         </div>
         <span className="font-bold text-lg text-foreground">Loved CRM</span>
-        <Badge className="bg-violet-100 text-violet-700 border-violet-200 text-xs">
-          BETA
-        </Badge>
+        <Badge className="bg-violet-100 text-violet-700 border-violet-200 text-xs">BETA</Badge>
       </Link>
     </motion.div>
   )
@@ -46,16 +44,28 @@ function NavbarBrand(): JSX.Element {
 function NavigationLinks(): JSX.Element {
   return (
     <nav className="hidden md:flex items-center space-x-6">
-      <Link href="#funcionalidades" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+      <Link
+        href="#funcionalidades"
+        className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+      >
         Funcionalidades
       </Link>
-      <Link href="#precos" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+      <Link
+        href="#precos"
+        className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+      >
         Preços
       </Link>
-      <Link href="#depoimentos" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+      <Link
+        href="#depoimentos"
+        className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+      >
         Depoimentos
       </Link>
-      <Link href="#faq" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+      <Link
+        href="#faq"
+        className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+      >
         FAQ
       </Link>
     </nav>
@@ -64,12 +74,12 @@ function NavigationLinks(): JSX.Element {
 
 function CTAButtons(): JSX.Element {
   const tAuth = useTranslations('auth')
-  
+
   return (
     <nav className="flex items-center space-x-3">
       <Link href="/auth/login">
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           size="sm"
           className="text-muted-foreground hover:text-primary hover:bg-muted"
           onClick={() => handleCTAClick('login')}
@@ -77,13 +87,10 @@ function CTAButtons(): JSX.Element {
           {tAuth('login.title')}
         </Button>
       </Link>
-      
+
       <Link href="/auth/register">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Button 
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Button
             size="sm"
             className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
             onClick={() => handleCTAClick('register')}
@@ -93,7 +100,7 @@ function CTAButtons(): JSX.Element {
           </Button>
         </motion.div>
       </Link>
-      
+
       <div className="hidden sm:flex items-center space-x-2 ml-2 pl-2 border-l border-border">
         <LanguageSelector showFlag={false} showName={false} size="sm" />
         <ThemeToggle />
@@ -104,16 +111,16 @@ function CTAButtons(): JSX.Element {
 
 export function Navbar(): JSX.Element {
   return (
-    <motion.header 
+    <motion.header
       className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 shadow-sm"
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
     >
       <div className="container mx-auto px-4 flex h-16 items-center">
         <MainNav />
         <MobileNav />
-        
+
         <NavbarBrand />
 
         <div className="flex flex-1 items-center justify-between space-x-4 md:justify-end">

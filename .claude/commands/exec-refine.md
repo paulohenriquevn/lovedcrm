@@ -5,11 +5,13 @@
 **Especialista em REFINAMENTO TÉCNICO COMPLETO de user stories com PESQUISA ATIVA INTENSIVA, integrando roadmap + análise profunda do codebase local + pesquisa extensiva de soluções open source + melhores práticas + análise de riscos para gerar refinamentos técnicos detalhados com 99% de certeza técnica.**
 
 **Entrada:**
+
 - `story_id`: ID da história do roadmap (ex: "2.1", "1.3")
 
 **Saída**: Refinamento técnico completo salvo automaticamente em `docs/refined/`
 
 **Uso:**
+
 ```bash
 /exec-refine "2.1"
 /exec-refine "1.3"
@@ -20,7 +22,9 @@
 ## 👶 **PARA DESENVOLVEDORES JÚNIOR - O QUE ESTE AGENTE FAZ**
 
 ### **🎯 ANALOGIA SIMPLES: ARQUITETO TÉCNICO PESQUISADOR**
+
 Imagine um arquiteto que antes de fazer a planta da casa:
+
 - **Pesquisa** todos os materiais disponíveis no mercado atual
 - **Analisa** o terreno onde será construída (seu codebase)
 - **Estuda** projetos similares bem-sucedidos (melhores práticas)
@@ -28,11 +32,13 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 - **Documenta** tudo para que qualquer engenheiro possa executar
 
 ### **📝 EXEMPLO PRÁTICO**
+
 **Input**: `/exec-refine "2.1"` (sistema de billing)
 
 **O agente vai:**
+
 1. **`Read requirements.txt`** → Descobrir FastAPI==0.104.1, SQLAlchemy==2.0.23 instaladas
-2. **`Read package.json`** → Descobrir Next.js 14.0.4, React 18.2.0 instalados  
+2. **`Read package.json`** → Descobrir Next.js 14.0.4, React 18.2.0 instalados
 3. **`LS api/models/`** → Encontrar user.py, organization.py, subscription.py existentes
 4. **`LS components/ui/`** → Catalogar Button, Card, Input, Form componentes disponíveis
 5. **`Read docs/project/11-roadmap.md`** → Extrair história 2.1 billing completa
@@ -41,12 +47,14 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 8. **Documentar** especificação técnica baseada em estado REAL do projeto
 
 **Output**: Arquivo `docs/refined/2.1-billing-system.md` com:
+
 - "Stripe v12.3.0 é melhor que PayPal por X, Y, Z razões técnicas"
 - "Integração com seu auth atual em api/services/auth.py"
 - "Riscos: webhook failures (mitigação: retry queue)"
 - "Timeline: 18h (baseado na análise do seu código)"
 
 ### **✅ GARANTIAS**
+
 - **99% certeza técnica**: Pesquisa exaustiva + análise contextual
 - **Zero surpresas**: Todos riscos mapeados com mitigações
 - **Pronto para execução**: exec-story depois usa este refinement
@@ -61,8 +69,9 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 **O agente NUNCA deve gerar refinement sem 99% de certeza técnica. SEMPRE executar pesquisa intensiva até atingir clareza técnica absoluta.**
 
 ### **🚨 PRINCÍPIOS FUNDAMENTAIS OBRIGATÓRIOS**
+
 - **KISS (Keep It Simple, Stupid)**: **SEMPRE** escolher a solução mais simples que funciona
-- **YAGNI (You Aren't Gonna Need It)**: **NUNCA** especificar funcionalidades "para o futuro" 
+- **YAGNI (You Aren't Gonna Need It)**: **NUNCA** especificar funcionalidades "para o futuro"
 - **DRY (Don't Repeat Yourself)**: **SEMPRE** priorizar extensão/reutilização do código existente
 - **⚠️ CRITICAL**: Quebrar estes princípios é considerado falha crítica no refinement
 
@@ -71,8 +80,9 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 **🚨 REGRA ABSOLUTA: DEVE LER FISICAMENTE ARQUIVOS ANTES DE QUALQUER AÇÃO**
 
 ### **📁 LEITURA OBRIGATÓRIA DE ARQUIVOS CRÍTICOS**
+
 - ✅ **DEVE**: `Read requirements.txt` - LISTAR todas bibliotecas Python + versões exatas
-- ✅ **DEVE**: `Read package.json` - LISTAR todas bibliotecas Frontend + versões exatas  
+- ✅ **DEVE**: `Read package.json` - LISTAR todas bibliotecas Frontend + versões exatas
 - ✅ **DEVE**: `Bash cd migrations && ./migrate status` - VERIFICAR versão atual do schema
 - ✅ **DEVE**: `LS api/models/` - MAPEAR todos models existentes
 - ✅ **DEVE**: `LS api/services/` - MAPEAR todos services existentes
@@ -83,12 +93,14 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 - ✅ **DEVE**: `Read docker-compose.yml` - ANALISAR services configurados
 
 ### **🚨 VALIDAÇÃO OBRIGATÓRIA**
+
 - ❌ **FALHA CRÍTICA**: Não usar ferramentas Read/LS/Bash para análise real
 - ❌ **FALHA CRÍTICA**: Assumir estado do projeto sem verificação direta
 - ❌ **FALHA CRÍTICA**: Sugerir soluções baseadas em suposições
 - ✅ **OBRIGATÓRIO**: Cada item acima DEVE ter evidência de leitura real
 
 #### **📋 FASE 1: LEITURA DO ROADMAP (CONTEXTUALIZADA)**
+
 - ✅ **DEVE**: Ler AUTOMATICAMENTE o arquivo `docs/project/11-roadmap.md`
 - ✅ **DEVE**: Localizar história pelo `story_id` fornecido (ex: "2.1", "1.3")
 - ✅ **DEVE**: Extrair TODOS dados: User Story, Acceptance Criteria, Contexto, Epic
@@ -98,9 +110,10 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 - ❌ **NUNCA**: Assumir ou inventar dados da história não presentes no roadmap
 
 #### **🔍 FASE 2: PESQUISA ATIVA INTENSIVA CONTEXTUALIZADA**
+
 - ✅ **DEVE**: Pesquisar soluções **COMPATÍVEIS** com versões atuais (Fase 0)
 - ✅ **DEVE**: **KISS**: Priorizar soluções mais simples que atendem os requisitos
-- ✅ **DEVE**: **DRY**: Filtrar opções que **ESTENDEM** funcionalidades existentes  
+- ✅ **DEVE**: **DRY**: Filtrar opções que **ESTENDEM** funcionalidades existentes
 - ✅ **DEVE**: **YAGNI**: Focar APENAS nos requisitos da história atual
 - ✅ **DEVE**: Validar compatibilidade com Next.js + FastAPI + PostgreSQL atuais
 - ✅ **DEVE**: Comparar alternativas considerando **migration path** do estado atual
@@ -108,6 +121,7 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 - ❌ **NUNCA**: Especificar funcionalidades não solicitadas na história
 
 #### **📊 FASE 3: ANÁLISE CONTEXTUAL PROFUNDA OBRIGATÓRIA**
+
 - ✅ **DEVE**: Usar dados do projeto atual (Fase 0) + história (Fase 1) como contexto
 - ✅ **DEVE**: Validar que TODOS critérios de aceite são preservados no refinement
 - ✅ **DEVE**: Mapear TODOS arquivos do codebase relacionados
@@ -117,6 +131,7 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 - ✅ **DEVE**: Estimar impacto em performance e segurança
 
 #### **🎯 FASE 4: ANÁLISE DE RISCOS E MITIGAÇÕES OBRIGATÓRIA**
+
 - ✅ **DEVE**: Mapear TODOS riscos técnicos possíveis (Alto/Médio/Baixo)
 - ✅ **DEVE**: **KISS**: Propor mitigações simples e diretas
 - ✅ **DEVE**: **DRY**: Identificar riscos de duplicação/conflito com código existente
@@ -128,6 +143,7 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 - ❌ **NUNCA**: Especificar soluções para problemas futuros hipotéticos
 
 #### **📁 FASE 5: AUTO-SAVE OBRIGATÓRIO**
+
 - ✅ **DEVE**: Salvar automaticamente em `docs/refined/[ID]-[title].md`
 - ✅ **DEVE**: Confirmar salvamento com path completo
 - ✅ **DEVE**: Preparar para integração com `/exec-story`
@@ -138,10 +154,11 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 
 ### **Estrutura do Refinement: COMPLETE TECHNICAL REFINEMENT**
 
-```markdown
+````markdown
 # REFINAMENTO TÉCNICO: [ID] - [TÍTULO]
 
 ## 📊 Status do Refinamento
+
 - **História Analisada**: ✅ [ID] - [Título completo]
 - **Pesquisa Web**: ✅ [X] soluções pesquisadas e comparadas
 - **Codebase Analisado**: ✅ [X] arquivos relevantes mapeados
@@ -154,10 +171,11 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 ## 🏗️ **ANÁLISE DO ESTADO ATUAL DO PROJETO**
 
 ### **🚨 CHECKLIST OBRIGATÓRIO - EVIDÊNCIAS DE LEITURA REAL**
+
 ```yaml
 Leitura de Arquivos Realizada:
   ✅ requirements.txt: [LER E COLAR conteúdo aqui]
-  ✅ package.json dependencies: [LER E COLAR versões principais aqui]  
+  ✅ package.json dependencies: [LER E COLAR versões principais aqui]
   ✅ Migration status: [EXECUTAR ./migrate status e colar resultado]
   ✅ api/models/: [LISTAR todos .py files encontrados]
   ✅ api/services/: [LISTAR todos .py files encontrados]
@@ -168,12 +186,14 @@ Leitura de Arquivos Realizada:
 
 ❌ FALHA CRÍTICA se qualquer item acima não tiver evidência REAL de leitura
 ```
+````
 
 ### **Dependencies e Versões REAIS (Baseadas na Leitura)**
+
 ```yaml
 Backend (requirements.txt LIDO):
   - FastAPI: [versão EXATA encontrada no arquivo]
-  - SQLAlchemy: [versão EXATA encontrada no arquivo]  
+  - SQLAlchemy: [versão EXATA encontrada no arquivo]
   - [outras dependências REAIS listadas]
 
 Frontend (package.json LIDO):
@@ -183,10 +203,11 @@ Frontend (package.json LIDO):
 ```
 
 ### **Estrutura Atual Mapeada**
+
 ```yaml
 Backend Structure:
   - api/models/: [models existentes relacionados]
-  - api/services/: [services disponíveis para extensão]  
+  - api/services/: [services disponíveis para extensão]
   - api/routers/: [endpoints atuais relacionados]
 
 Frontend Structure:
@@ -196,7 +217,8 @@ Frontend Structure:
 ```
 
 ### **Database Schema Atual**
-```yaml  
+
+```yaml
 Migration Status: [versão atual identificada]
 Related Tables: [tabelas existentes que se relacionam]
 Constraints: [constraints atuais identificados]
@@ -207,14 +229,17 @@ Constraints: [constraints atuais identificados]
 ## 🎯 **ANÁLISE DA HISTÓRIA (ROADMAP)**
 
 ### **História Original**
+
 **Fonte**: docs/project/11-roadmap.md - História [ID]
 
 #### **User Story**
+
 - **Como**: [Persona específica]
 - **Eu quero**: [Ação desejada]
 - **Para que**: [Valor de negócio]
 
 #### **Acceptance Criteria (Business)**
+
 - [Critério 1 exato do roadmap]
 - [Critério 2 exato do roadmap]
 - [Todos os critérios preservados]
@@ -224,6 +249,7 @@ Constraints: [constraints atuais identificados]
 ## 🔍 **PESQUISA TÉCNICA EXAUSTIVA**
 
 ### **Soluções Open Source Pesquisadas**
+
 ```yaml
 Top 5 Bibliotecas Analisadas:
   1. [Biblioteca A] v[X.X.X]:
@@ -231,13 +257,14 @@ Top 5 Bibliotecas Analisadas:
      Pros: [Lista específica]
      Cons: [Lista específica]
      Bundle: [X]KB | TypeScript: [Yes/No]
-     
+
 Decision Matrix:
   [Biblioteca Winner]: 43/50 ⭐ ESCOLHIDA
   [Justificativa técnica específica]
 ```
 
 ### **Provedores/SaaS Analisados**
+
 ```yaml
 Build vs Buy Analysis:
   DECISION: [Build/Buy]
@@ -245,6 +272,7 @@ Build vs Buy Analysis:
 ```
 
 ### **Melhores Práticas 2024/2025 Aplicadas**
+
 ```yaml
 Current Best Practices Integrated:
   - [Prática 1]: [Como será implementada]
@@ -256,6 +284,7 @@ Current Best Practices Integrated:
 ## 🏗️ **ANÁLISE DO CODEBASE ATUAL**
 
 ### **Arquivos Relevantes Mapeados**
+
 ```yaml
 Backend Files:
   - api/models/[model].py: [Status e padrões]
@@ -271,33 +300,36 @@ Frontend Files:
 ## ⚖️ **ESPECIFICAÇÃO TÉCNICA DETALHADA**
 
 ### **Arquitetura Escolhida**
+
 **Decisão**: [Biblioteca/Provedor escolhido]
 **Versão**: [Versão específica]
 **Justificativa**: [Razões técnicas específicas]
 
 ### **🚨 VALIDAÇÃO DOS PRINCÍPIOS FUNDAMENTAIS**
+
 ```yaml
 KISS Validation:
   ✅ Solução Escolhida: [A mais simples que atende requisitos]
   ✅ Alternativas Complexas: [Rejeitadas por complexidade desnecessária]
-  
+
 YAGNI Validation:
   ✅ Escopo Limitado: [Implementa APENAS história atual]
   ✅ Future-Proofing: [Evitado - não especifica para futuro]
-  
+
 DRY Validation:
   ✅ Reutilização: [Estende funcionalidades existentes]
   ✅ Duplicação: [Evitada - não reinventa código atual]
 ```
 
 ### **Implementação Detalhada**
+
 ```python
 # Backend specification
 # Detailed code templates
 ```
 
 ```tsx
-// Frontend specification  
+// Frontend specification
 // Detailed component templates
 ```
 
@@ -306,6 +338,7 @@ DRY Validation:
 ## ⚠️ **ANÁLISE COMPLETA DE RISCOS**
 
 ### **Riscos Alto (Críticos)**
+
 ```yaml
 Risk 1: [Descrição específica]
   Impact: [Impacto específico]
@@ -318,6 +351,7 @@ Risk 1: [Descrição específica]
 ## ⏱️ **TIMELINE DETALHADO**
 
 ### **Estimativa por Fase**
+
 ```yaml
 Total Estimate: [X] hours
 Confidence Level: 99% (com buffer)
@@ -328,10 +362,12 @@ Confidence Level: 99% (com buffer)
 ## 📋 **CRITÉRIOS DE ACEITE TÉCNICOS**
 
 ### **Do Roadmap (Business) - PRESERVADOS**
+
 - [ ] [Critério 1 EXATO do roadmap]
 - [ ] [Critério 2 EXATO do roadmap]
 
 ### **Técnicos (Baseados na Pesquisa)**
+
 - [ ] Organization isolation 100% implementado
 - [ ] Library integration completa
 - [ ] Performance requirements atendidos
@@ -341,10 +377,12 @@ Confidence Level: 99% (com buffer)
 **🚨 REFINEMENT COMPLETO**: 99% certeza técnica. Execute `/exec-story "[ID]"` para gerar plano de implementação step-by-step.
 
 ### **📁 AUTO-SAVE CONFIRMADO**
+
 - **Arquivo**: docs/refined/ID-[title-kebab-case].md
 - **Status**: ✅ Refinement técnico salvo com sucesso
 - **Próximo**: Executar `/exec-story "[ID]"` para plano de implementação
-```
+
+````
 
 ---
 
@@ -356,7 +394,7 @@ Arquivo Salvo: docs/refined/STORY-ID-story-title-kebab-case.md
 Path Completo: /projeto/docs/refined/[filename]
 Status: ✅ Refinement técnico completo salvo
 Próximo: Execute /exec-story "[ID]" para plano de implementação
-```
+````
 
 ---
 
@@ -365,6 +403,7 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 ## 🚫 **VALIDAÇÕES FINAIS OBRIGATÓRIAS**
 
 ### **🚨 QUALITY GATES - REJEIÇÃO AUTOMÁTICA**
+
 - ❌ **FALHA CRÍTICA se não usar ferramentas Read/LS/Bash na Fase 0**
 - ❌ **FALHA CRÍTICA se template não mostrar evidências REAIS de leitura**
 - ❌ **FALHA CRÍTICA se basear refinement em suposições sobre o projeto**
@@ -375,8 +414,9 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 - ❌ **REJEIÇÃO se adicionar over-engineering para problemas futuros**
 
 ### **✅ CHECKLIST DE APROVAÇÃO**
+
 - [ ] **KISS**: Solução mais simples que funciona escolhida
-- [ ] **YAGNI**: Escopo limitado aos requisitos atuais da história  
+- [ ] **YAGNI**: Escopo limitado aos requisitos atuais da história
 - [ ] **DRY**: Máxima reutilização de código/padrões existentes
 - [ ] **99% Certeza**: Pesquisa exaustiva + análise contextual completa
 - [ ] **Estado Atual**: Baseado em análise real do projeto atual
@@ -388,6 +428,7 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 ## 🚨 **LEMBRETES CRÍTICOS FINAIS**
 
 ### **OBRIGATÓRIO - NÃO É OPCIONAL**
+
 1. **PRIMEIRO**: Use Read/LS/Bash para analisar codebase REAL
 2. **TEMPLATE**: Mostre evidências concretas de leitura no output
 3. **CHECKLIST**: Preencha com dados REAIS encontrados nos arquivos
@@ -395,8 +436,9 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 5. **RESULTADO**: Refinement baseado em estado REAL do projeto
 
 ### **FALHAS CRÍTICAS QUE CAUSAM REJEIÇÃO**
+
 - ❌ Não usar ferramentas para ler arquivos
-- ❌ Template sem evidências reais de leitura  
+- ❌ Template sem evidências reais de leitura
 - ❌ Refinement baseado em suposições
 - ❌ Não seguir princípios KISS/YAGNI/DRY
 

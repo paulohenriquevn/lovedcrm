@@ -4,12 +4,12 @@
  * Baseado na especificação do agente 07-design-tokens.md
  */
 
-import { Sparkles } from "lucide-react"
-import { useState } from "react"
+import { Sparkles } from 'lucide-react'
+import { useState } from 'react'
 
-import { Badge } from "@/components/ui/badge"
+import { Badge } from '@/components/ui/badge'
 
-import { AISummaryHeader, NextActionsSection, MetadataFooter } from "./ai-summary-components"
+import { AISummaryHeader, NextActionsSection, MetadataFooter } from './ai-summary-components'
 
 interface AISummaryProps {
   summary: string
@@ -24,16 +24,16 @@ interface AISummaryProps {
   onCopy?: () => void
 }
 
-export function AISummary({ 
-  summary, 
-  confidence, 
+export function AISummary({
+  summary,
+  confidence,
   sentiment,
   nextActions = [],
   modelUsed = 'gpt-4',
   tokensUsed,
   expandable = false,
   onRegenerate,
-  onCopy
+  onCopy,
 }: AISummaryProps): React.ReactElement {
   const [isExpanded, setIsExpanded] = useState(!expandable)
 
@@ -57,19 +57,13 @@ export function AISummary({
           isExpanded={isExpanded}
           setIsExpanded={setIsExpanded}
         />
-        
-        <div className="text-sm text-gray-800 leading-relaxed mb-3">
-          {summary}
-        </div>
+
+        <div className="text-sm text-gray-800 leading-relaxed mb-3">{summary}</div>
 
         <NextActionsSection nextActions={nextActions} isExpanded={isExpanded} />
       </div>
 
-      <MetadataFooter
-        modelUsed={modelUsed}
-        tokensUsed={tokensUsed}
-        isExpanded={isExpanded}
-      />
+      <MetadataFooter modelUsed={modelUsed} tokensUsed={tokensUsed} isExpanded={isExpanded} />
     </div>
   )
 }
@@ -81,7 +75,10 @@ interface AISummaryCompactProps {
   className?: string
 }
 
-export function AISummaryCompact({ summary, confidence }: AISummaryCompactProps): React.ReactElement {
+export function AISummaryCompact({
+  summary,
+  confidence,
+}: AISummaryCompactProps): React.ReactElement {
   const [showFull, setShowFull] = useState(false)
   const shouldTruncate = summary.length > 120
   const displaySummary = shouldTruncate && !showFull ? `${summary.slice(0, 120)}...` : summary
@@ -94,11 +91,9 @@ export function AISummaryCompact({ summary, confidence }: AISummaryCompactProps)
             <Sparkles className="h-3 w-3 text-violet-600 animate-pulse flex-shrink-0" />
             <span className="text-xs font-medium text-violet-700">IA</span>
           </div>
-          
-          <p className="text-xs text-violet-800 leading-relaxed">
-            {displaySummary}
-          </p>
-          
+
+          <p className="text-xs text-violet-800 leading-relaxed">{displaySummary}</p>
+
           {shouldTruncate === true && (
             <button
               type="button"

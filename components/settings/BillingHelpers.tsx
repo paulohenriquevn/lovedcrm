@@ -1,5 +1,8 @@
 // Status config helper function using shadcn Badge variants
-export function getInvoiceStatusConfig(status: string): { variant: 'default' | 'secondary' | 'destructive'; label: string } {
+export function getInvoiceStatusConfig(status: string): {
+  variant: 'default' | 'secondary' | 'destructive'
+  label: string
+} {
   switch (status) {
     case 'paid': {
       return { variant: 'default', label: 'Pago' }

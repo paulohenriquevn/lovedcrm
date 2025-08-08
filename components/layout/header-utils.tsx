@@ -50,12 +50,16 @@ export function getUserInitials(user: { fullName?: string; email?: string } | nu
   if (!user) {
     return 'U'
   }
-  
+
   if (Boolean(user.fullName) && user.fullName.length > 0) {
-    return user.fullName.split(' ').map(n => n[0]).join('').slice(0, 2)
+    return user.fullName
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .slice(0, 2)
   }
-  
-  return (Boolean(user.email) && user.email.length > 0) ? user.email[0].toUpperCase() : 'U'
+
+  return Boolean(user.email) && user.email.length > 0 ? user.email[0].toUpperCase() : 'U'
 }
 
 export function formatMemberCount(count: number, isLoading: boolean): string {
@@ -97,12 +101,12 @@ const DEFAULT_ORG: SafeOrganization = {
   ownerId: '',
   createdAt: '',
   updatedAt: '',
-  tier: 'free'
+  tier: 'free',
 }
 
 // Helper functions to get field values with fallbacks
 const getId = (org: OrganizationInput): string => org.id ?? ''
-const getName = (org: OrganizationInput): string => org.name ?? 'Selecione organização' 
+const getName = (org: OrganizationInput): string => org.name ?? 'Selecione organização'
 const getOwnerId = (org: OrganizationInput): string => org.ownerId ?? org.owner_id ?? ''
 const getCreatedAt = (org: OrganizationInput): string => org.createdAt ?? org.created_at ?? ''
 const getUpdatedAt = (org: OrganizationInput): string => org.updatedAt ?? org.updated_at ?? ''
@@ -115,14 +119,19 @@ const normalizeOrgInput = (org: OrganizationInput): SafeOrganization => ({
   ownerId: getOwnerId(org),
   createdAt: getCreatedAt(org),
   updatedAt: getUpdatedAt(org),
-  tier: getTier(org)
+  tier: getTier(org),
 })
 
-export function createSafeOrganization(org: OrganizationInput | null | undefined): SafeOrganization {
+export function createSafeOrganization(
+  org: OrganizationInput | null | undefined
+): SafeOrganization {
   return org ? normalizeOrgInput(org) : DEFAULT_ORG
 }
 
-export function handleThemeToggle(theme: string | undefined, setTheme: (theme: string) => void): void {
+export function handleThemeToggle(
+  theme: string | undefined,
+  setTheme: (theme: string) => void
+): void {
   setTheme(theme === 'dark' ? 'light' : 'dark')
 }
 

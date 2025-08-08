@@ -2,7 +2,14 @@ import { FileText } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import { Invoice } from '@/types/billing'
 
 import { getInvoiceStatusConfig } from './BillingHelpers'
@@ -10,11 +17,7 @@ import { getInvoiceStatusConfig } from './BillingHelpers'
 // Invoice status badge component
 export function InvoiceStatusBadge({ status }: { status: string }): JSX.Element {
   const { variant, label } = getInvoiceStatusConfig(status)
-  return (
-    <Badge variant={variant}>
-      {label}
-    </Badge>
-  )
+  return <Badge variant={variant}>{label}</Badge>
 }
 
 // Invoice table header component - using shadcn Table
@@ -35,22 +38,14 @@ function InvoiceTableHeader(): JSX.Element {
 function InvoiceRow({ invoice }: { invoice: Invoice }): JSX.Element {
   return (
     <TableRow>
-      <TableCell>
-        {new Date(String(invoice.created_at)).toLocaleDateString('pt-BR')}
-      </TableCell>
-      <TableCell>
-        R$ {(Number(invoice.amount) / 100).toFixed(2)}
-      </TableCell>
+      <TableCell>{new Date(String(invoice.created_at)).toLocaleDateString('pt-BR')}</TableCell>
+      <TableCell>R$ {(Number(invoice.amount) / 100).toFixed(2)}</TableCell>
       <TableCell>
         <InvoiceStatusBadge status={invoice.status} />
       </TableCell>
       <TableCell>
         <Button variant="ghost" size="sm" asChild>
-          <a
-            href={String(invoice.invoice_pdf)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={String(invoice.invoice_pdf)} target="_blank" rel="noopener noreferrer">
             <FileText className="h-4 w-4 mr-1" />
             Download
           </a>

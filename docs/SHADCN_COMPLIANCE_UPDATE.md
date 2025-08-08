@@ -3,6 +3,7 @@
 ## **STATUS: SISTEMA 100% COMPLIANCE ALCANÇADO**
 
 ### **✅ VALIDAÇÃO COMPLETA**
+
 - **31 componentes shadcn/ui oficiais** em `/components/ui/`
 - **Zero customizações CSS** em componentes shadcn
 - **Build funcional** sem erros
@@ -14,21 +15,25 @@
 ## **🔄 ATUALIZAÇÕES NOS AGENTES**
 
 ### **1. design-tokens-agent.md**
+
 ✅ Atualizado com diretrizes de compliance
 ✅ Adicionada seção "100% SHADCN/UI COMPLIANCE"
 ✅ Especificadas restrições e permissões
 
 ### **2. ui-ux-designer.md**
+
 ✅ Adicionado status de compliance na seção de sistema atual
 ✅ Listados os 31 componentes disponíveis
 ✅ Definidas regras de uso
 
 ### **3. exec-story.md**
+
 ✅ Atualizada seção de projeto com status shadcn/ui
 ✅ Expandidas restrições de UI/UX com compliance rules
 ✅ Adicionadas diretrizes específicas de components
 
 ### **4. docs/project/07-design-tokens.md**
+
 ✅ Adicionada seção de compliance no topo
 ✅ Mantido conteúdo setorial existente
 ✅ Incluídas diretrizes de uso
@@ -38,12 +43,14 @@
 ## **📋 DIRETRIZES PARA TODOS OS AGENTES**
 
 ### **🔒 PROIBIÇÕES ABSOLUTAS**
+
 ❌ **NUNCA alterar arquivos em `/components/ui/`**
 ❌ **NUNCA adicionar CSS customizado em componentes shadcn**  
 ❌ **NUNCA usar classes `bg-*`, `text-*` customizadas em componentes shadcn**
 ❌ **NUNCA criar variações customizadas de componentes oficiais**
 
 ### **✅ PERMISSÕES**
+
 ✅ **Usar variants padrão**: `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`
 ✅ **Alterar CSS custom properties em `globals.css`**
 ✅ **Criar componentes customizados em `/components/common/`**
@@ -93,11 +100,12 @@ toaster, tooltip, use-toast
 ## **🧪 VALIDAÇÃO CONTÍNUA**
 
 ### **Comandos de Verificação**
+
 ```bash
 # Build deve passar
 npm run build
 
-# Linting deve estar limpo  
+# Linting deve estar limpo
 npm run lint
 
 # TypeScript deve validar
@@ -109,6 +117,7 @@ ls components/common/ # Componentes customizados
 ```
 
 ### **Checklist de Compliance**
+
 - [ ] Componente existe em shadcn/ui? → Use o oficial
 - [ ] Precisa customizar? → Crie em `/components/common/`
 - [ ] Quer alterar cor? → Use variant ou CSS custom property
@@ -128,6 +137,7 @@ ls components/common/ # Componentes customizados
 ## **⚠️ RESPONSABILIDADE DOS AGENTES**
 
 Todos os agentes devem:
+
 1. **Verificar compliance** antes de sugerir alterações
 2. **Usar apenas componentes oficiais** listados
 3. **Respeitar variants padrão** sem customizações

@@ -32,7 +32,9 @@ interface InviteContext {
 }
 
 function useInviteActions(
-  setResult: React.Dispatch<React.SetStateAction<{ type: 'success' | 'error'; message: string } | null>>,
+  setResult: React.Dispatch<
+    React.SetStateAction<{ type: 'success' | 'error'; message: string } | null>
+  >,
   router: ReturnType<typeof useRouter>,
   context: InviteContext
 ) {

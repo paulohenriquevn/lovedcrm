@@ -48,36 +48,46 @@ export function TestimonialCard({ testimonial }: TestimonialCardProps): JSX.Elem
           <div className="flex items-center gap-4 mb-4">
             <Avatar className="h-12 w-12">
               <AvatarImage src={testimonial.avatar.src} alt={testimonial.avatar.alt} />
-              <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+              <AvatarFallback>
+                {testimonial.name
+                  .split(' ')
+                  .map(n => n[0])
+                  .join('')}
+              </AvatarFallback>
             </Avatar>
-            
+
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
                 <h4 className="font-semibold">{testimonial.name}</h4>
-                <Badge variant="secondary" className="text-xs">{testimonial.tier}</Badge>
+                <Badge variant="secondary" className="text-xs">
+                  {testimonial.tier}
+                </Badge>
               </div>
               <p className="text-sm text-muted-foreground">{testimonial.role}</p>
               <p className="text-sm text-muted-foreground font-medium">{testimonial.company}</p>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-1 mb-3">
             {Array.from({ length: testimonial.rating }, (_, starIndex) => (
-              <Star key={`star-${testimonial.id}-rating-${starIndex + 1}`} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              <Star
+                key={`star-${testimonial.id}-rating-${starIndex + 1}`}
+                className="h-4 w-4 fill-yellow-400 text-yellow-400"
+              />
             ))}
           </div>
-          
+
           <blockquote className="text-muted-foreground mb-4 italic relative">
             <Quote className="h-4 w-4 absolute -top-1 -left-1 text-muted-foreground/30" />
             <span className="pl-3">&ldquo;{testimonial.quote}&rdquo;</span>
           </blockquote>
-          
+
           <div className="space-y-2 text-sm">
             <div className="flex items-center gap-2 text-green-600">
               <TrendingUp className="h-4 w-4" />
               <span className="font-medium">{testimonial.results}</span>
             </div>
-            
+
             <div className="flex items-center gap-4 text-muted-foreground">
               <div className="flex items-center gap-1">
                 <MapPin className="h-3 w-3" />
@@ -102,7 +112,12 @@ interface MetricCardProps {
   color: string
 }
 
-export function MetricCard({ icon: Icon, value, description, color }: MetricCardProps): JSX.Element {
+export function MetricCard({
+  icon: Icon,
+  value,
+  description,
+  color,
+}: MetricCardProps): JSX.Element {
   return (
     <motion.div variants={staggerItem}>
       <Card className="text-center hover:shadow-md transition-shadow duration-300">
@@ -130,9 +145,9 @@ export function CompanyLogos({ imageLoading, handleImageLoad }: CompanyLogosProp
     companyLogos.digitalFirst,
     companyLogos.creativeLab,
     companyLogos.scaleAgency,
-    companyLogos.brandBoost
+    companyLogos.brandBoost,
   ]
-  
+
   return (
     <div className="grid grid-cols-2 md:grid-cols-6 gap-8 items-center opacity-60">
       {logos.map((logo, logoIndex) => (
@@ -162,16 +177,16 @@ export function SocialProofHeader(): JSX.Element {
       <Badge className="mb-6 bg-emerald-50 text-emerald-700 border-emerald-200 px-4 py-2 text-sm font-medium">
         Prova Social • Resultados Reais
       </Badge>
-      
+
       <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
-        Agências que 
+        Agências que
         <span className="text-emerald-600"> Triplicaram </span>
         seus Resultados
       </h2>
-      
+
       <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-        Mais de 500+ agências digitais brasileiras já transformaram seus processos 
-        e aumentaram significativamente suas conversões com o Loved CRM.
+        Mais de 500+ agências digitais brasileiras já transformaram seus processos e aumentaram
+        significativamente suas conversões com o Loved CRM.
       </p>
     </div>
   )
@@ -189,7 +204,7 @@ interface SocialProofMetricsProps {
 export function SocialProofMetrics({ metrics }: SocialProofMetricsProps): JSX.Element {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
-      {metrics.map((metric) => (
+      {metrics.map(metric => (
         <MetricCard
           key={metric.description}
           icon={metric.icon}
@@ -207,24 +222,25 @@ interface SocialProofFooterProps {
   handleImageLoad: (index: number) => void
 }
 
-export function SocialProofFooter({ imageLoading, handleImageLoad }: SocialProofFooterProps): JSX.Element {
+export function SocialProofFooter({
+  imageLoading,
+  handleImageLoad,
+}: SocialProofFooterProps): JSX.Element {
   const [showMore, setShowMore] = useState(false)
 
   const toggleShowMore = (): void => {
     setShowMore(!showMore)
   }
-  
+
   return (
     <div className="mt-16">
       <div className="text-center mb-12">
-        <h3 className="text-2xl font-bold mb-4">
-          Confiado pelas Melhores Agências do Brasil
-        </h3>
+        <h3 className="text-2xl font-bold mb-4">Confiado pelas Melhores Agências do Brasil</h3>
         <p className="text-muted-foreground mb-8">
           Agências de todos os tamanhos escolhem o Loved CRM
         </p>
       </div>
-      
+
       <AnimatePresence>
         {showMore === true ? (
           <motion.div
@@ -237,13 +253,13 @@ export function SocialProofFooter({ imageLoading, handleImageLoad }: SocialProof
           </motion.div>
         ) : null}
       </AnimatePresence>
-      
+
       <div className="text-center">
         <Button variant="outline" onClick={toggleShowMore}>
           {showMore ? 'Ver Menos' : 'Ver Todas as Empresas'}
         </Button>
       </div>
-      
+
       <div className="mt-12 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-muted/50 rounded-full">
           <Award className="h-4 w-4 text-yellow-500" />

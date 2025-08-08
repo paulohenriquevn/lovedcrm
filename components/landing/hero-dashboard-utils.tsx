@@ -38,7 +38,7 @@ function TimelineSection(): JSX.Element {
 function FeatureHighlights(): JSX.Element {
   return (
     <>
-      <motion.div 
+      <motion.div
         className="absolute top-20 left-4 bg-primary text-primary-foreground px-3 py-1 rounded-lg text-sm font-medium"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -46,7 +46,7 @@ function FeatureHighlights(): JSX.Element {
       >
         Pipeline Kanban
       </motion.div>
-      <motion.div 
+      <motion.div
         className="absolute top-20 right-4 bg-whatsapp text-white px-3 py-1 rounded-lg text-sm font-medium"
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -54,7 +54,7 @@ function FeatureHighlights(): JSX.Element {
       >
         WhatsApp Integrado
       </motion.div>
-      <motion.div 
+      <motion.div
         className="absolute bottom-20 left-1/2 -translate-x-1/2 bg-ai-summary text-white px-3 py-1 rounded-lg text-sm font-medium"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

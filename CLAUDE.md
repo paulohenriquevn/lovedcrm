@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Loved CRM** is a complete multi-tenant CRM system designed specifically for Brazilian digital agencies. It features a modern full-stack architecture with Next.js 14 frontend, FastAPI backend, and comprehensive multi-tenancy support.
 
 ### Key Features
+
 - 📊 **Fixed Kanban Pipeline**: Lead → Contact → Proposal → Negotiation → Closed
 - 🔗 **Unified Communication**: WhatsApp Business, VoIP, Email integration
 - 🤖 **AI Features**: Automatic conversation summaries, sentiment analysis
@@ -45,6 +46,7 @@ PASSO 4: Se a resposta for SIM → Prossigo com a nova task
 ### Technology Stack
 
 **Frontend:**
+
 - Next.js 14 with App Router
 - TypeScript with strict configuration
 - shadcn/ui + Tailwind CSS (CRM-themed colors)
@@ -53,6 +55,7 @@ PASSO 4: Se a resposta for SIM → Prossigo com a nova task
 - next-intl for internationalization
 
 **Backend:**
+
 - FastAPI with Python 3.11+
 - SQLAlchemy 2.0 with PostgreSQL
 - Pydantic for validation
@@ -60,12 +63,14 @@ PASSO 4: Se a resposta for SIM → Prossigo com a nova task
 - Redis for caching and sessions
 
 **Multi-Tenancy:**
+
 - Header-based isolation (`X-Org-Id`)
 - Organization middleware validation
 - All queries filtered by `organization_id`
 - Automatic organization creation on user registration
 
 **Infrastructure:**
+
 - Docker & Docker Compose for development
 - Railway for production deployment
 - PostgreSQL 16 with SSL
@@ -111,6 +116,7 @@ lovedcrm/
 ## Development Commands
 
 ### Quick Start
+
 ```bash
 # Complete setup (recommended for first time)
 make setup
@@ -127,6 +133,7 @@ make dev-stop               # Stop services
 ```
 
 ### Database Management
+
 ```bash
 # Start databases
 make db-up
@@ -150,6 +157,7 @@ make check-db-prod                   # Complete health check
 ### Testing Commands
 
 **Frontend Testing:**
+
 ```bash
 npm run test:frontend          # Unit tests
 npm run test:frontend:watch    # Watch mode
@@ -158,6 +166,7 @@ npm run test:ui               # Visual test runner
 ```
 
 **Backend Testing:**
+
 ```bash
 npm run test:backend          # Python unit tests
 npm run test:e2e:api         # API E2E tests
@@ -165,12 +174,14 @@ make test-backend-unit       # Detailed backend tests
 ```
 
 **Full Test Suite:**
+
 ```bash
 npm run test:all             # All tests
 make test                    # All tests via Makefile
 ```
 
 **E2E Testing Environment:**
+
 ```bash
 make test-start              # Start complete E2E test environment
 make test-run                # Run all E2E tests
@@ -180,7 +191,7 @@ make test-rebuild            # Rebuild test API image (after dependency changes)
 
 # Hot updates (no restart required)
 make test-hot-migrate        # Hot schema updates (2s vs 45s)
-make test-hot-data          # Reload test data (3s vs 45s)  
+make test-hot-data          # Reload test data (3s vs 45s)
 make test-hot-reset         # Reset data keeping schema (5s vs 45s)
 make test-hot-all           # Apply all hot updates
 
@@ -198,6 +209,7 @@ make test-proxy-compare     # Proxy vs direct API comparison
 ```
 
 ### Code Quality
+
 ```bash
 # Linting and formatting
 npm run lint                 # All linters (frontend + backend)
@@ -220,6 +232,7 @@ make ci-quick              # Quick CI checks (linting + unit tests)
 ```
 
 ### Docker Development
+
 ```bash
 # Complete Docker environment
 make dev-start              # Start in background
@@ -229,6 +242,7 @@ make dev-docker-reset       # Reset environment completely
 ```
 
 ### Development Status & Verification
+
 ```bash
 make status                 # Show project status
 ./check-saas-mode.sh        # Verify B2B/B2C configuration
@@ -240,18 +254,21 @@ make test-verify            # Verify test environment health
 **CRITICAL:** This template supports two distinct operating modes configured via environment variable:
 
 ### SAAS_MODE=B2B (Team Collaboration)
+
 - **Use Case**: Digital agencies, team-based CRM, collaborative workspaces
 - **Features**: Team management, role-based permissions, shared organization resources
 - **Organization**: Shared workspaces with multiple members
 - **UI**: Team features, member management, role assignments visible
 
 ### SAAS_MODE=B2C (Individual Use)
+
 - **Use Case**: Personal productivity apps, individual dashboards, solo entrepreneurs
 - **Features**: Personal data management, individual subscriptions, private workspaces
 - **Organization**: Auto-created personal organizations (one per user)
 - **UI**: Team features hidden, focus on individual productivity
 
 ### Configuration
+
 ```bash
 # B2B Mode (default)
 SAAS_MODE=B2B
@@ -259,12 +276,13 @@ ENABLE_TEAM_FEATURES=true
 SHOW_MEMBER_MANAGEMENT=true
 
 # B2C Mode
-SAAS_MODE=B2C  
+SAAS_MODE=B2C
 ENABLE_TEAM_FEATURES=false
 SHOW_MEMBER_MANAGEMENT=false
 ```
 
 **Important Notes:**
+
 - Both modes use organization-scoped data isolation (org_id filtering)
 - Auto-organization creation on registration works for both modes
 - Header-based multi-tenancy (X-Org-Id) is always enforced
@@ -276,9 +294,10 @@ SHOW_MEMBER_MANAGEMENT=false
 ### Core Patterns
 
 **1. Organization Context (All endpoints must use this):**
+
 ```typescript
 // Frontend: Automatic X-Org-Id header
-import { useOrgContext } from '@/hooks/use-org-context'
+import { useOrgContext } from "@/hooks/use-org-context"
 
 const { organization } = useOrgContext()
 ```
@@ -295,14 +314,15 @@ async def get_items(
 ```
 
 **2. Model Pattern (All business models must include):**
+
 ```python
 class YourModel(Base):
     __tablename__ = "your_table"
-    
+
     id = Column(UUID(as_uuid=True), primary_key=True)
     # REQUIRED: Organization FK
     organization_id = Column(UUID, ForeignKey("organizations.id"), nullable=False)
-    
+
     # REQUIRED: Index for performance
     __table_args__ = (
         Index('ix_your_table_org_id', 'organization_id'),
@@ -310,6 +330,7 @@ class YourModel(Base):
 ```
 
 **3. Repository Pattern (All data access must filter by org):**
+
 ```python
 class YourRepository(SQLRepository):
     def get_by_organization(self, org_id: UUID):
@@ -321,6 +342,7 @@ class YourRepository(SQLRepository):
 ## CRM-Specific Architecture
 
 ### Pipeline System (90% Complete)
+
 - **Fixed 5-stage pipeline**: Lead → Contact → Proposal → Negotiation → Closed
 - **Drag & drop interface**: `components/crm/pipeline-kanban.tsx` with @dnd-kit/core
 - **Pipeline stages**: `components/crm/pipeline-stage.tsx` with optimistic UI updates
@@ -331,12 +353,14 @@ class YourRepository(SQLRepository):
 - **Remaining**: Pipeline-specific WebSocket endpoint (`/ws/pipeline`) and broadcasting integration
 
 ### Communication System
+
 - **Timeline component**: `components/crm/timeline.tsx`
 - **WhatsApp integration**: Ready for WhatsApp Business API
 - **VoIP system**: Click-to-call functionality
 - **Communication models**: `api/models/crm_communication.py`
 
 ### AI Features
+
 - **AI summaries**: `components/crm/ai-summary.tsx`
 - **Sentiment analysis**: Backend service integration
 - **Conversation insights**: Automatic lead scoring
@@ -346,6 +370,7 @@ class YourRepository(SQLRepository):
 ### Frontend Patterns
 
 **Container-Component Pattern:**
+
 ```typescript
 // containers/crm/CRMContainer.tsx
 export function CRMContainer() {
@@ -360,6 +385,7 @@ export function CRMView({ data, loading }: Props) {
 ```
 
 **Component Decomposition Pattern (NEW 2025):**
+
 ```typescript
 // Main component file
 export function PipelineKanban() {
@@ -373,17 +399,19 @@ export function PipelineKanban() {
 ```
 
 **Service Layer Pattern:**
+
 ```typescript
 // services/crm-leads.ts
 class CRMLeadsService extends BaseService {
   async getLeads(filters: LeadFilters) {
     // Automatic X-Org-Id header injection
-    return this.get('/crm/leads', { params: filters })
+    return this.get("/crm/leads", { params: filters })
   }
 }
 ```
 
 **State Management:**
+
 ```typescript
 // stores/crm.ts
 interface CRMStore {
@@ -398,6 +426,7 @@ export const useCRMStore = create<CRMStore>(...)
 ### Backend Patterns
 
 **Clean Architecture Layers:**
+
 ```python
 # 1. Router (HTTP layer)
 @router.post("/leads")
@@ -424,18 +453,21 @@ class CRMLeadRepository:
 ## Testing Guidelines
 
 ### Frontend Testing
+
 - **Unit tests**: Component behavior and logic
 - **Integration tests**: Service interactions
 - **E2E tests**: Complete user workflows
 - **Location**: `tests/frontend/`
 
 ### Backend Testing
+
 - **Unit tests**: Service and repository logic
 - **API tests**: Endpoint behavior
 - **Multi-tenancy tests**: Data isolation verification
 - **Location**: `tests/unit/` and `tests/e2e/api/`
 
 ### Test Organization Isolation
+
 ```python
 def test_crm_leads_organization_isolation(client, auth_headers, other_org):
     """Verify leads cannot be accessed across organizations."""
@@ -449,6 +481,7 @@ def test_crm_leads_organization_isolation(client, auth_headers, other_org):
 ## Configuration & Environment
 
 ### Environment Verification
+
 ```bash
 # Check current SAAS mode configuration
 ./check-saas-mode.sh
@@ -458,6 +491,7 @@ make status
 ```
 
 ### Required Environment Variables
+
 ```bash
 # Database
 DATABASE_URL=postgresql://user:pass@localhost:5433/crm_db
@@ -485,6 +519,7 @@ RECAPTCHA_SECRET_KEY=your-recaptcha-secret-key
 ```
 
 ### Development Tools Configuration
+
 - **TypeScript**: Strict mode enabled in `tsconfig.json`
 - **ESLint**: Next.js + TypeScript + security rules
 - **Tailwind**: CRM-themed color system with pipeline/communication colors
@@ -495,6 +530,7 @@ RECAPTCHA_SECRET_KEY=your-recaptcha-secret-key
 ## Production Deployment
 
 **Railway Deployment:**
+
 - **Frontend**: Next.js on Railway
 - **Backend**: FastAPI on Railway
 - **Database**: PostgreSQL with SSL
@@ -502,6 +538,7 @@ RECAPTCHA_SECRET_KEY=your-recaptcha-secret-key
 - **Domain**: Custom domain with SSL
 
 **Health Monitoring:**
+
 ```bash
 # Production health checks
 curl https://backend-production-fd50.up.railway.app/health
@@ -515,7 +552,9 @@ make db-prod-migration-apply
 ## Current Development Status & Next Steps
 
 ### Pipeline Kanban MVP (Story 1.1) - 90% Complete
+
 **Completed:**
+
 - ✅ Drag & drop interface with @dnd-kit/core
 - ✅ Backend API endpoint `/crm/leads/{id}/stage`
 - ✅ WebSocket infrastructure (`websocket_manager.py`) with organization isolation
@@ -530,13 +569,16 @@ make db-prod-migration-apply
 - ✅ Component decomposition architecture with dedicated helpers
 
 **Remaining (10%):**
+
 - WebSocket pipeline-specific endpoint `/ws/pipeline`
 - Broadcasting integration in CRMLeadService
 - Complete frontend WebSocket connection in pipeline-kanban
 - E2E tests for real-time collaboration
 
 ### Component Architecture Pattern
+
 Most CRM components now follow decomposition pattern:
+
 - Main component: `component-name.tsx`
 - Helper components: `component-name-components.tsx`
 - Logic utilities: `component-name-utils.tsx` or `component-name-helpers.tsx`
@@ -545,6 +587,7 @@ Most CRM components now follow decomposition pattern:
 ## Common Development Tasks
 
 ### Adding New CRM Features
+
 1. Create model in `api/models/` with `organization_id` FK
 2. Add migration in `migrations/`
 3. Create repository with org filtering
@@ -555,12 +598,14 @@ Most CRM components now follow decomposition pattern:
 8. Write tests for multi-tenancy isolation
 
 ### Debugging Multi-Tenancy Issues
+
 - Check `X-Org-Id` header in requests
 - Verify organization middleware is applied
 - Ensure all queries include `organization_id` filter
 - Test cross-organization access restrictions
 
 ### Performance Optimization
+
 - Add database indexes for org-scoped queries
 - Use pagination for large datasets
 - Implement proper caching strategies
@@ -571,6 +616,7 @@ This architecture ensures complete data isolation between organizations while pr
 ## File Structure & Key Locations
 
 ### Frontend Architecture
+
 ```
 app/[locale]/               # Internationalized routing
 ├── admin/                  # Protected admin routes
@@ -591,6 +637,7 @@ components/                 # React components library
 ```
 
 ### Backend Architecture
+
 ```
 api/                        # FastAPI backend
 ├── core/                  # Infrastructure & middleware
@@ -605,12 +652,14 @@ api/                        # FastAPI backend
 ```
 
 ### Critical Files for Multi-Tenancy
+
 - `api/core/organization_middleware.py`: Enforces organization context
 - `api/core/deps.py`: `get_current_organization()` dependency
 - `hooks/use-org-context.ts`: Frontend organization context
 - All models in `api/models/`: Must include `organization_id` FK
 
 ### Testing Infrastructure
+
 ```
 tests/
 ├── frontend/              # Vitest frontend tests
@@ -628,16 +677,18 @@ tests/
 ```
 
 ### Development Tools
+
 - `Makefile`: 50+ automation commands for development workflow
 - `check-saas-mode.sh`: Validates B2B/B2C configuration
 - `migrations/migrate`: Database migration tool with hot updates
 - `docker-compose.yml`: Development environment
-- `docker-compose.test.yml`: E2E testing environment 
+- `docker-compose.test.yml`: E2E testing environment
 - `docker-compose.prod.yml`: Production environment
 - `requirements.txt`: Python dependencies
 - `package.json`: Node.js dependencies with comprehensive scripts
 
 ### Recent Architectural Enhancements (2025)
+
 - **Component decomposition pattern**: Many components now split into `-components.tsx` files for better maintainability
 - **WebSocket infrastructure**: Complete real-time system with organization isolation and polling fallback via `use-pipeline-websocket.ts`
 - **Pipeline Kanban MVP**: 90% complete with drag-drop, real-time updates, and performance optimization
@@ -650,14 +701,18 @@ tests/
 ## Development Rules & Guidelines
 
 ### 95% Confidence Rule
+
 **CRITICAL:** Before implementing any feature, ensure 95%+ confidence about requirements:
+
 - ✅ **MUST**: Ask questions until absolutely certain about business requirements
-- ✅ **MUST**: Stop and obtain specific evidence if any validation fails  
+- ✅ **MUST**: Stop and obtain specific evidence if any validation fails
 - ❌ **NEVER**: Assume requirements or make speculative interpretations
 - ❌ **NEVER**: Proceed without complete validation of user inputs
 
 ### Codebase Analysis Rule
+
 **BEFORE creating any component, service, API, or model:**
+
 1. **SEARCH FIRST**: Use Glob/Grep/Read tools to analyze existing codebase
 2. **VERIFY EXISTS**: Check if component/service already exists
 3. **EVOLVE vs CREATE**: If exists, evolve existing; if not, follow similar patterns
@@ -665,23 +720,29 @@ tests/
 5. **JUSTIFY**: Clear reasoning for evolution vs new creation
 
 ### Fail-Fast Validation
+
 **Always detect errors as early as possible:**
+
 - ✅ Validate data at input/function start/process beginning
 - ✅ Immediately halt execution when validation fails
 - ✅ Provide specific error messages with resolution guidance
 - ✅ Prevent invalid data from propagating through system
 
 ### Multi-Tenancy Security (Non-Negotiable)
+
 **Every feature MUST follow these patterns:**
+
 - ✅ Organization-scoped data isolation (org_id filtering)
-- ✅ Header-based isolation (X-Org-Id + middleware validation)  
+- ✅ Header-based isolation (X-Org-Id + middleware validation)
 - ✅ Repository pattern with automatic org filtering
 - ✅ JWT with organization context
 - ❌ **NEVER** create routes without organization validation
 - ❌ **NEVER** implement user_id isolation (always use org_id)
 
 ### Technology Stack Constraints
+
 **MUST use established technology stack:**
+
 - ✅ Next.js 14 + FastAPI + PostgreSQL + Railway only
 - ✅ shadcn/ui + Tailwind CSS + Lucide icons
 - ✅ Leverage existing 55+ production endpoints
@@ -690,6 +751,7 @@ tests/
 ## Common Development Patterns
 
 ### Adding New Features (Step-by-Step)
+
 1. **Database**: Add migration in `migrations/` with `organization_id` FK
 2. **Backend**: Create model → schema → repository → service → router
 3. **Frontend**: Create types → service → store → components → pages
@@ -697,6 +759,7 @@ tests/
 5. **Integration**: Update relevant containers and hooks
 
 ### Quick Development Commands for Daily Use
+
 ```bash
 # Development workflow
 make setup                     # First-time setup
@@ -734,6 +797,7 @@ make dev-stop               # Stop all services
 ```
 
 ### Debugging Multi-Tenancy Issues
+
 ```bash
 # Check organization context
 grep -r "X-Org-Id" .                    # Find header usage

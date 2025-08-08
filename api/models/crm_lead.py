@@ -85,7 +85,7 @@ class Lead(Base):
 
     # Additional information
     notes: Optional[str] = Column(Text, nullable=True)
-    lead_metadata: dict = Column("metadata", JSONB, nullable=False, default=dict)
+    lead_metadata: dict = Column("lead_metadata", JSONB, nullable=False, default=dict)
 
     # Favorite functionality
     is_favorite: bool = Column("is_favorite", nullable=False, default=False, index=True)

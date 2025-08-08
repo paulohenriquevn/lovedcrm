@@ -32,15 +32,15 @@ const pricingPlans = [
       'WhatsApp integração básica',
       '1 usuário',
       'Suporte por email',
-      'Relatórios básicos'
-    ]
+      'Relatórios básicos',
+    ],
   },
   {
     id: 'pro',
     name: 'Professional',
     tagline: 'Mais popular',
     monthlyPrice: 197,
-    yearlyPrice: 1576, 
+    yearlyPrice: 1576,
     yearlyDiscount: 'Economize R$ 788/ano',
     description: 'Perfeito para agências em crescimento',
     icon: BarChart3,
@@ -61,8 +61,8 @@ const pricingPlans = [
       'Integrações (Zapier, etc)',
       'Suporte prioritário',
       'Relatórios avançados',
-      'White-label disponível'
-    ]
+      'White-label disponível',
+    ],
   },
   {
     id: 'enterprise',
@@ -87,9 +87,9 @@ const pricingPlans = [
       'Backup diário',
       'Integrações customizadas',
       'Relatórios personalizados',
-      'Suporte 24/7'
-    ]
-  }
+      'Suporte 24/7',
+    ],
+  },
 ]
 
 export function PricingSection(): JSX.Element {
@@ -101,11 +101,11 @@ export function PricingSection(): JSX.Element {
   }
 
   return (
-    <section 
+    <section
       ref={ref}
       className="py-20 px-4 bg-gradient-to-b from-muted/30 via-background to-background"
     >
-      <motion.div 
+      <motion.div
         className="max-w-7xl mx-auto"
         initial="hidden"
         whileInView="visible"
@@ -113,8 +113,8 @@ export function PricingSection(): JSX.Element {
         variants={staggerContainer}
       >
         <PricingHeader isYearly={isYearly} onToggle={handleToggle} />
-        
-        <motion.div 
+
+        <motion.div
           className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12"
           variants={staggerContainer}
         >
@@ -124,7 +124,7 @@ export function PricingSection(): JSX.Element {
             </motion.div>
           ))}
         </motion.div>
-        
+
         <PricingFooter />
       </motion.div>
     </section>

@@ -68,7 +68,7 @@ module.exports = {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))',
         },
-        
+
         // === LOVED CRM EXTENDED COLORS ===
         // Organization Tiers
         tier: {
@@ -76,7 +76,7 @@ module.exports = {
           pro: 'hsl(var(--tier-pro))',
           enterprise: 'hsl(var(--tier-enterprise))',
         },
-        
+
         // Pipeline Stages
         pipeline: {
           lead: 'hsl(var(--pipeline-lead))',
@@ -85,7 +85,7 @@ module.exports = {
           negotiation: 'hsl(var(--pipeline-negotiation))',
           closed: 'hsl(var(--pipeline-closed))',
         },
-        
+
         // Communication Channels
         whatsapp: {
           DEFAULT: 'hsl(var(--whatsapp))',
@@ -95,20 +95,20 @@ module.exports = {
           incoming: 'hsl(var(--whatsapp-incoming))',
           outgoing: 'hsl(var(--whatsapp-outgoing))',
         },
-        
+
         communication: {
           email: 'hsl(var(--email))',
           voip: 'hsl(var(--voip))',
           note: 'hsl(var(--note))',
         },
-        
+
         // AI Features
         ai: {
           summary: 'hsl(var(--ai-summary))',
           suggestion: 'hsl(var(--ai-suggestion))',
           warning: 'hsl(var(--ai-warning))',
         },
-        
+
         // Timeline States
         timeline: {
           whatsapp: 'hsl(var(--timeline-whatsapp))',
@@ -121,7 +121,7 @@ module.exports = {
           read: 'hsl(var(--timeline-read))',
           failed: 'hsl(var(--timeline-failed))',
         },
-        
+
         // Security States
         security: {
           isolated: 'hsl(var(--security-isolated))',
@@ -129,21 +129,21 @@ module.exports = {
           warning: 'hsl(var(--security-warning))',
           danger: 'hsl(var(--security-danger))',
         },
-        
+
         // Organization Context
         org: {
           current: 'hsl(var(--org-current))',
           indicator: 'hsl(var(--org-scope-indicator))',
           border: 'hsl(var(--org-isolation-border))',
         },
-        
+
         // Team Roles
         team: {
           member: 'hsl(var(--team-member))',
           admin: 'hsl(var(--team-admin))',
           owner: 'hsl(var(--team-owner))',
         },
-        
+
         // === SECTORIAL DESIGN TOKENS (08-design-tokens.md) ===
         // Cores setoriais
         'sector-primary': {
@@ -152,22 +152,22 @@ module.exports = {
         },
         'sector-secondary': 'hsl(var(--sector-secondary))',
         'sector-accent': 'hsl(var(--sector-accent))',
-        
+
         // Modelo B2B
-        'organization': 'hsl(var(--organization))',
-        'collaborative': 'hsl(var(--collaborative))',
+        organization: 'hsl(var(--organization))',
+        collaborative: 'hsl(var(--collaborative))',
         'sector-cta': 'hsl(var(--sector-cta))',
         'sector-trust': 'hsl(var(--sector-trust))',
-        
+
         // Cores competitivas (para análises)
-        'competitor': {
+        competitor: {
           hubspot: 'hsl(var(--competitor-hubspot))',
           pipedrive: 'hsl(var(--competitor-pipedrive))',
           rd: 'hsl(var(--competitor-rd))',
         },
-        
+
         // Cores agência digital
-        'agency': {
+        agency: {
           premium: 'hsl(var(--agency-premium))',
           growth: 'hsl(var(--agency-growth))',
           conversion: 'hsl(var(--agency-conversion))',
@@ -265,7 +265,7 @@ module.exports = {
         'pipeline-card': '0.375rem',
         'ai-summary': '0.75rem',
         'communication-bubble': '1rem',
-        'timeline': '0.375rem',
+        timeline: '0.375rem',
         'team-badge': '9999px',
       },
     },

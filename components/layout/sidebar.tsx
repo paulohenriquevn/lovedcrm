@@ -1,5 +1,5 @@
 /**
- * Sidebar - Main Application Sidebar Navigation  
+ * Sidebar - Main Application Sidebar Navigation
  * Sidebar principal com navegação CRM específica
  * Baseado na especificação do agente 09-ui-ux-designer.md
  */
@@ -16,7 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Plus,
-  Target
+  Target,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -30,7 +30,6 @@ import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/auth'
 
 import { SidebarFooter } from './sidebar-components'
-
 
 interface SidebarProps {
   className?: string
@@ -50,7 +49,6 @@ interface NavigationSection {
   items: NavigationItem[]
 }
 
-
 const navigationSections: NavigationSection[] = [
   {
     title: 'Principal',
@@ -59,7 +57,7 @@ const navigationSections: NavigationSection[] = [
         label: 'Dashboard',
         href: '/admin',
         icon: LayoutDashboard,
-        description: 'Visão geral da agência'
+        description: 'Visão geral da agência',
       },
       {
         label: 'CRM',
@@ -67,9 +65,9 @@ const navigationSections: NavigationSection[] = [
         icon: Kanban,
         badge: 'BETA',
         badgeVariant: 'outline',
-        description: 'Sistema de gestão de clientes'
-      }
-    ]
+        description: 'Sistema de gestão de clientes',
+      },
+    ],
   },
   {
     title: 'Gestão',
@@ -78,15 +76,15 @@ const navigationSections: NavigationSection[] = [
         label: 'Equipe',
         href: '/admin/team',
         icon: Users,
-        description: 'Gerenciar membros da organização'
+        description: 'Gerenciar membros da organização',
       },
       {
         label: 'Faturamento',
         href: '/admin/billing',
         icon: BarChart3,
-        description: 'Planos e pagamentos'
-      }
-    ]
+        description: 'Planos e pagamentos',
+      },
+    ],
   },
   {
     title: 'Configurações',
@@ -95,20 +93,25 @@ const navigationSections: NavigationSection[] = [
         label: 'Perfil',
         href: '/admin/profile',
         icon: User,
-        description: 'Seu perfil pessoal'
+        description: 'Seu perfil pessoal',
       },
       {
         label: 'Configurações',
         href: '/admin/settings',
         icon: Settings,
-        description: 'Configurações da organização'
-      }
-    ]
-  }
+        description: 'Configurações da organização',
+      },
+    ],
+  },
 ]
 
-
-function SidebarHeader({ collapsed, toggleCollapsed }: { collapsed: boolean; toggleCollapsed: () => void }): JSX.Element {
+function SidebarHeader({
+  collapsed,
+  toggleCollapsed,
+}: {
+  collapsed: boolean
+  toggleCollapsed: () => void
+}): JSX.Element {
   return (
     <div className="p-4 border-b border-border">
       <div className="flex items-center justify-between">
@@ -123,21 +126,10 @@ function SidebarHeader({ collapsed, toggleCollapsed }: { collapsed: boolean; tog
             </div>
           </div>
         )}
-        
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={toggleCollapsed}
-          className="h-8 w-8 shrink-0"
-        >
-          {collapsed ? (
-            <ChevronRight className="h-4 w-4" />
-          ) : (
-            <ChevronLeft className="h-4 w-4" />
-          )}
-          <span className="sr-only">
-            {collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}
-          </span>
+
+        <Button variant="ghost" size="sm" onClick={toggleCollapsed} className="h-8 w-8 shrink-0">
+          {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+          <span className="sr-only">{collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}</span>
         </Button>
       </div>
     </div>
@@ -148,7 +140,7 @@ function QuickAction({ collapsed }: { collapsed: boolean }): JSX.Element | null 
   if (collapsed) {
     return null
   }
-  
+
   return (
     <div className="p-4">
       <Button className="w-full" size="sm">
@@ -170,7 +162,7 @@ function getPathWithoutLocale(pathname: string): string {
 
 function isActiveRoute(href: string, pathname: string): boolean {
   const pathWithoutLocale = getPathWithoutLocale(pathname)
-  
+
   if (href === '/admin') {
     return pathWithoutLocale === '/admin' || pathWithoutLocale.endsWith('/admin')
   }
@@ -185,40 +177,34 @@ interface NavigationItemProps {
 
 const getButtonClasses = (collapsed: boolean, isActive: boolean): string => {
   return cn(
-    "w-full justify-start h-10 px-3",
-    collapsed ? "px-2" : "px-3",
-    isActive && "bg-primary/10 text-primary border-r-2 border-primary"
+    'w-full justify-start h-10 px-3',
+    collapsed ? 'px-2' : 'px-3',
+    isActive && 'bg-primary/10 text-primary border-r-2 border-primary'
   )
 }
 
 const getIconClasses = (collapsed: boolean): string => {
-  return cn(
-    "h-4 w-4 shrink-0",
-    collapsed ? "mr-0" : "mr-3"
-  )
+  return cn('h-4 w-4 shrink-0', collapsed ? 'mr-0' : 'mr-3')
 }
 
 function NavigationItemComponent({ item, collapsed, pathname }: NavigationItemProps): JSX.Element {
   const isActive = isActiveRoute(item.href, pathname)
   const Icon = item.icon
-  
+
   return (
     <Link href={item.href}>
       <Button
-        variant={isActive ? "secondary" : "ghost"}
+        variant={isActive ? 'secondary' : 'ghost'}
         className={getButtonClasses(collapsed, isActive)}
         title={collapsed ? item.label : undefined}
       >
         <Icon className={getIconClasses(collapsed)} />
-        
+
         {!collapsed && (
           <>
             <span className="flex-1 text-left">{item.label}</span>
             {Boolean(item.badge) && (
-              <Badge 
-                variant={item.badgeVariant ?? "secondary"} 
-                className="ml-auto text-xs"
-              >
+              <Badge variant={item.badgeVariant ?? 'secondary'} className="ml-auto text-xs">
                 {item.badge}
               </Badge>
             )}
@@ -239,10 +225,10 @@ function Navigation({ collapsed, pathname }: NavigationProps): JSX.Element {
               {section.title}
             </h3>
           )}
-          
+
           <div className="space-y-1">
-            {section.items.map((item) => (
-              <NavigationItemComponent 
+            {section.items.map(item => (
+              <NavigationItemComponent
                 key={item.href}
                 item={item}
                 collapsed={collapsed}
@@ -250,16 +236,15 @@ function Navigation({ collapsed, pathname }: NavigationProps): JSX.Element {
               />
             ))}
           </div>
-          
-          {sectionIndex < navigationSections.length - 1 && !collapsed && Boolean(navigationSections.length > 1) && (
-            <Separator className="mt-4" />
-          )}
+
+          {sectionIndex < navigationSections.length - 1 &&
+            !collapsed &&
+            Boolean(navigationSections.length > 1) && <Separator className="mt-4" />}
         </div>
       ))}
     </nav>
   )
 }
-
 
 export function Sidebar({ className }: SidebarProps): JSX.Element {
   const [collapsed, setCollapsed] = useState(false)
@@ -274,7 +259,7 @@ export function Sidebar({ className }: SidebarProps): JSX.Element {
     tier: 'free',
     ownerId: '',
     createdAt: '',
-    updatedAt: ''
+    updatedAt: '',
   }
 
   const toggleCollapsed = (): void => {
@@ -282,19 +267,21 @@ export function Sidebar({ className }: SidebarProps): JSX.Element {
   }
 
   return (
-    <div className={cn(
-      "bg-background border-r border-border flex flex-col transition-all duration-200",
-      collapsed ? "w-16" : "w-64",
-      className
-    )}>
+    <div
+      className={cn(
+        'bg-background border-r border-border flex flex-col transition-all duration-200',
+        collapsed ? 'w-16' : 'w-64',
+        className
+      )}
+    >
       <SidebarHeader collapsed={collapsed} toggleCollapsed={toggleCollapsed} />
       <QuickAction collapsed={collapsed} />
       <Navigation collapsed={collapsed} pathname={pathname} />
-      <SidebarFooter 
-        collapsed={collapsed} 
-        currentOrg={currentOrg} 
-        memberCount={memberCount} 
-        memberLoading={memberLoading} 
+      <SidebarFooter
+        collapsed={collapsed}
+        currentOrg={currentOrg}
+        memberCount={memberCount}
+        memberLoading={memberLoading}
       />
     </div>
   )

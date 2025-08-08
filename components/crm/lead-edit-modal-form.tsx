@@ -36,7 +36,7 @@ export function LeadEditModalForm({
   onRemoveTag,
   onTagKeyPress,
   onSubmit,
-  onCancel
+  onCancel,
 }: LeadEditModalFormProps): React.ReactElement {
   return (
     <Form {...form}>
@@ -54,18 +54,10 @@ export function LeadEditModalForm({
 
         {/* Action Buttons */}
         <div className="flex justify-end gap-2 pt-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onCancel}
-            disabled={isLoading}
-          >
+          <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
             Cancelar
           </Button>
-          <Button
-            type="submit"
-            disabled={isLoading}
-          >
+          <Button type="submit" disabled={isLoading}>
             {isLoading ? 'Salvando...' : 'Salvar alterações'}
           </Button>
         </div>

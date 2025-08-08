@@ -26,21 +26,25 @@
 **PROCESSO OBRIGATÓRIO DE REFLEXÃO (2-3 minutos)**:
 
 #### **🎯 ETAPA 1: COMPREENDER O PEDIDO (30s)**
+
 - ❓ **Pergunta**: "O que exatamente o usuário está pedindo?"
 - 📝 **Resposta**: [Investigar e corrigir bug específico mantendo isolamento organizacional]
 - ✅ **Validação**: "Tenho 95% de certeza sobre o que preciso fazer?"
 
 #### **🔍 ETAPA 2: ANALISAR PRÉ-REQUISITOS (60s)**
+
 - 📋 **Pergunta**: "Que informações preciso coletar ANTES de agir?"
 - 🔎 **Resposta**: [Descrição bug, logs, código relacionado, testes existentes]
 - ⚠️ **Validação**: "Posso prosseguir com o que tenho ou preciso de mais informações?"
 
 #### **⚙️ ETAPA 3: PLANEJAR ABORDAGEM (60s)**
+
 - 🛣️ **Pergunta**: "Qual é o melhor caminho para resolver isso?"
 - 📈 **Resposta**: [Reproduzir bug -> identificar causa -> corrigir -> testar isolamento]
 - 🎯 **Validação**: "Este plano leva ao resultado desejado?"
 
 #### **🚨 ETAPA 4: VALIDAR PRINCÍPIOS (30s)**
+
 - 🔴 **KISS**: Esta abordagem é a mais simples possível?
 - 🔴 **YAGNI**: Estou implementando apenas o necessário AGORA?
 - 🔴 **DRY**: Estou reutilizando o que já existe?
@@ -131,18 +135,20 @@ Antes de iniciar qualquer tarefa, o agente DEVE exibir:
 **REGRA ABSOLUTA: DEVE LER FISICAMENTE ARQUIVOS ANTES DE QUALQUER DEBUGGING**
 
 #### **📁 LEITURA OBRIGATÓRIA DE ARQUIVOS CRÍTICOS**
+
 - ✅ **DEVE**: `Bash git log --oneline -10` - VERIFICAR commits recentes relacionados ao bug
 - ✅ **DEVE**: `Bash git status` - ANALISAR estado atual do branch
 - ✅ **DEVE**: `Read requirements.txt` - LISTAR dependências Python atuais
 - ✅ **DEVE**: `Read package.json` - LISTAR dependências Frontend atuais
 - ✅ **DEVE**: `LS api/models/` - MAPEAR models relacionados ao bug
-- ✅ **DEVE**: `LS api/services/` - MAPEAR services relacionados ao bug  
+- ✅ **DEVE**: `LS api/services/` - MAPEAR services relacionados ao bug
 - ✅ **DEVE**: `LS api/routers/` - MAPEAR routers relacionados ao bug
 - ✅ **DEVE**: `LS components/ui/` - VERIFICAR componentes envolvidos no bug
 - ✅ **DEVE**: `Bash npm run dev` - TENTAR reproduzir o bug localmente
 - ✅ **DEVE**: `Bash curl http://localhost:8000/health` - VERIFICAR saúde do backend
 
 #### **🚨 VALIDAÇÃO OBRIGATÓRIA**
+
 - ❌ **FALHA CRÍTICA**: Não usar ferramentas Read/LS/Bash para análise real
 - ❌ **FALHA CRÍTICA**: Assumir causa do bug sem verificação direta
 - ❌ **FALHA CRÍTICA**: Debug baseado em suposições sobre código

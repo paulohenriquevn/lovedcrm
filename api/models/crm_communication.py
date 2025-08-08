@@ -70,7 +70,7 @@ class Communication(Base):
     subject: Optional[str] = Column(String(500), nullable=True)  # For emails
 
     # Structured metadata and attachments
-    comm_metadata: Dict[str, Any] = Column("metadata", JSONB, nullable=False, default=dict)
+    comm_metadata: Dict[str, Any] = Column("comm_metadata", JSONB, nullable=False, default=dict)
     attachments: List[Dict[str, Any]] = Column(JSONB, nullable=False, default=list)
 
     # External system integration

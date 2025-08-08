@@ -5,11 +5,11 @@ interface PerformanceStatsCardProps {
   color: string
 }
 
-export function PerformanceStatsCard({ 
-  icon: Icon, 
-  value, 
-  label, 
-  color 
+export function PerformanceStatsCard({
+  icon: Icon,
+  value,
+  label,
+  color,
 }: PerformanceStatsCardProps): React.ReactElement {
   return (
     <div>

@@ -14,16 +14,16 @@ interface CategorySidebarProps {
   }>
 }
 
-export function CategorySidebar({ 
-  activeCategory, 
-  setActiveCategory, 
-  categories 
+export function CategorySidebar({
+  activeCategory,
+  setActiveCategory,
+  categories,
 }: CategorySidebarProps): React.ReactElement {
   return (
     <div className="w-full">
       <h3 className="font-semibold text-foreground mb-4">Categorias</h3>
       <div className="space-y-2">
-        {categories.map((category) => (
+        {categories.map(category => (
           <button
             key={category.id}
             type="button"

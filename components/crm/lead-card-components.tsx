@@ -10,7 +10,7 @@ import {
   MessageCircle,
   MoreHorizontal,
   Phone,
-  Star
+  Star,
 } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
@@ -32,17 +32,17 @@ import {
   LeadValueDisplay,
   LeadNotesDisplay,
   LeadContactInfo,
-  LeadTagsDisplay
+  LeadTagsDisplay,
 } from './lead-card-utils'
 
-function LeadCardHeader({ 
-  lead, 
+function LeadCardHeader({
+  lead,
   priority,
   onViewDetails,
   onEditLead,
   onSendEmail,
-  onRemoveLead
-}: { 
+  onRemoveLead,
+}: {
   lead: Lead
   priority: string
   onViewDetails: (lead: Lead) => void
@@ -54,7 +54,7 @@ function LeadCardHeader({
     <div className="flex items-start justify-between mb-3">
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1">
-          <h4 
+          <h4
             className="font-semibold text-sm text-foreground truncate max-w-[200px]"
             title={lead.name}
           >
@@ -64,7 +64,7 @@ function LeadCardHeader({
             <Star className="h-3 w-3 text-yellow-500 fill-current flex-shrink-0" />
           )}
         </div>
-        {(lead.source !== null && lead.source !== undefined && lead.source.length > 0) ? (
+        {lead.source !== null && lead.source !== undefined && lead.source.length > 0 ? (
           <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1 min-w-0">
             <Building2 className="h-3 w-3 flex-shrink-0" />
             <span className="truncate max-w-[180px]" title={lead.source}>
@@ -74,9 +74,7 @@ function LeadCardHeader({
         ) : null}
       </div>
       <div className="flex items-center gap-1">
-        <div className={getPriorityColor(priority)}>
-          {getPriorityIcon(priority)}
-        </div>
+        <div className={getPriorityColor(priority)}>{getPriorityIcon(priority)}</div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button type="button" variant="ghost" size="sm" className="h-6 w-6 p-0">
@@ -85,19 +83,10 @@ function LeadCardHeader({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onViewDetails(lead)}>
-              Ver detalhes
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onEditLead(lead)}>
-              Editar lead
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onSendEmail(lead)}>
-              Enviar email
-            </DropdownMenuItem>
-            <DropdownMenuItem 
-              className="text-red-600"
-              onClick={() => onRemoveLead(lead)}
-            >
+            <DropdownMenuItem onClick={() => onViewDetails(lead)}>Ver detalhes</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onEditLead(lead)}>Editar lead</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onSendEmail(lead)}>Enviar email</DropdownMenuItem>
+            <DropdownMenuItem className="text-red-600" onClick={() => onRemoveLead(lead)}>
               Remover lead
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -107,9 +96,12 @@ function LeadCardHeader({
   )
 }
 
-
 function ValueSection({ lead }: { lead: Lead }): React.ReactElement | null {
-  if (lead.estimated_value === null || lead.estimated_value === undefined || lead.estimated_value <= 0) {
+  if (
+    lead.estimated_value === null ||
+    lead.estimated_value === undefined ||
+    lead.estimated_value <= 0
+  ) {
     return null
   }
   return <LeadValueDisplay value={lead.estimated_value} />
@@ -140,7 +132,11 @@ function LeadCardContent({ lead }: { lead: Lead }): React.ReactElement {
   )
 }
 
-function LeadCardFooter({ lead, onCall, onWhatsApp }: { 
+function LeadCardFooter({
+  lead,
+  onCall,
+  onWhatsApp,
+}: {
   lead: Lead
   onCall: (lead: Lead) => void
   onWhatsApp: (lead: Lead) => void
@@ -154,7 +150,7 @@ function LeadCardFooter({ lead, onCall, onWhatsApp }: {
             {STAGE_DISPLAY_CONFIG[lead.stage].name}
           </Badge>
         </div>
-        
+
         <div className="flex items-center gap-1 text-xs text-muted-foreground">
           <Clock className="h-3 w-3" />
           <span>
@@ -164,31 +160,33 @@ function LeadCardFooter({ lead, onCall, onWhatsApp }: {
       </div>
 
       {/* Last Contact */}
-      {(lead.last_contact_at !== null && lead.last_contact_at !== undefined) && (
+      {lead.last_contact_at !== null && lead.last_contact_at !== undefined && (
         <div className="mt-2 pt-2 border-t border-border">
           <div className="flex items-center gap-1 text-xs text-orange-600 dark:text-orange-400">
             <Calendar className="h-3 w-3" />
-            <span>Último contato: {new Date(lead.last_contact_at).toLocaleDateString('pt-BR')}</span>
+            <span>
+              Último contato: {new Date(lead.last_contact_at).toLocaleDateString('pt-BR')}
+            </span>
           </div>
         </div>
       )}
 
       {/* Quick Actions */}
       <div className="mt-3 flex gap-1">
-        <Button 
-          type="button" 
-          size="sm" 
-          variant="outline" 
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
           className="flex-1 h-7 text-xs"
           onClick={() => onCall(lead)}
         >
           <Phone className="mr-1 h-3 w-3" />
           Ligar
         </Button>
-        <Button 
-          type="button" 
-          size="sm" 
-          variant="outline" 
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
           className="flex-1 h-7 text-xs"
           onClick={() => onWhatsApp(lead)}
         >
@@ -200,16 +198,16 @@ function LeadCardFooter({ lead, onCall, onWhatsApp }: {
   )
 }
 
-export function LeadCard({ 
-  lead, 
+export function LeadCard({
+  lead,
   onDragStart,
   onViewDetails,
   onEditLead,
   onSendEmail,
   onRemoveLead,
   onCall,
-  onWhatsApp
-}: { 
+  onWhatsApp,
+}: {
   lead: Lead
   onDragStart: (lead: Lead) => void
   onViewDetails: (lead: Lead) => void
@@ -220,7 +218,7 @@ export function LeadCard({
   onWhatsApp: (lead: Lead) => void
 }): React.ReactElement {
   const priority = getPriorityFromValue(lead.estimated_value)
-  
+
   return (
     <Card
       className="cursor-grab hover:shadow-md transition-shadow active:cursor-grabbing w-full"
@@ -228,7 +226,7 @@ export function LeadCard({
       onDragStart={() => onDragStart(lead)}
     >
       <CardContent className="p-4">
-        <LeadCardHeader 
+        <LeadCardHeader
           lead={lead}
           priority={priority}
           onViewDetails={onViewDetails}
@@ -237,11 +235,7 @@ export function LeadCard({
           onRemoveLead={onRemoveLead}
         />
         <LeadCardContent lead={lead} />
-        <LeadCardFooter 
-          lead={lead}
-          onCall={onCall}
-          onWhatsApp={onWhatsApp}
-        />
+        <LeadCardFooter lead={lead} onCall={onCall} onWhatsApp={onWhatsApp} />
       </CardContent>
     </Card>
   )

@@ -9,9 +9,21 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 
-import { heroAnimations, staggerContainer, buttonPressVariants, iconBounceVariants } from '@/hooks/use-scroll-animation'
+import {
+  heroAnimations,
+  staggerContainer,
+  buttonPressVariants,
+  iconBounceVariants,
+} from '@/hooks/use-scroll-animation'
 
-import { HeroBadge, HeroHeadline, HeroCTAButtons, HeroTrustIndicators, DashboardMockup, SocialProof } from './hero-section-components'
+import {
+  HeroBadge,
+  HeroHeadline,
+  HeroCTAButtons,
+  HeroTrustIndicators,
+  DashboardMockup,
+  SocialProof,
+} from './hero-section-components'
 
 interface ImageLoadingState {
   dashboard: boolean
@@ -21,7 +33,7 @@ interface ImageLoadingState {
 export function HeroSection(): JSX.Element {
   const [imageLoading, setImageLoading] = useState<ImageLoadingState>({
     dashboard: true,
-    logos: [true, true, true, true]
+    logos: [true, true, true, true],
   })
 
   const handleImageLoad = (type: 'dashboard' | 'logo', index?: number): void => {
@@ -30,13 +42,13 @@ export function HeroSection(): JSX.Element {
     } else if (type === 'logo' && typeof index === 'number') {
       setImageLoading(prev => ({
         ...prev,
-        logos: prev.logos.map((loading, i) => i === index ? false : loading)
+        logos: prev.logos.map((loading, i) => (i === index ? false : loading)),
       }))
     }
   }
 
   return (
-    <motion.section 
+    <motion.section
       className="py-20 px-4 text-center bg-gradient-to-b from-background via-violet-50/30 to-background"
       initial="hidden"
       animate="visible"
@@ -45,21 +57,18 @@ export function HeroSection(): JSX.Element {
       <div className="max-w-7xl mx-auto">
         <HeroBadge heroAnimations={heroAnimations} />
         <HeroHeadline heroAnimations={heroAnimations} />
-        <HeroCTAButtons 
+        <HeroCTAButtons
           heroAnimations={heroAnimations}
           buttonPressVariants={buttonPressVariants}
           iconBounceVariants={iconBounceVariants}
         />
         <HeroTrustIndicators heroAnimations={heroAnimations} />
-        <DashboardMockup 
+        <DashboardMockup
           imageLoading={imageLoading}
           handleImageLoad={handleImageLoad}
           heroAnimations={heroAnimations}
         />
-        <SocialProof 
-          imageLoading={imageLoading}
-          handleImageLoad={handleImageLoad}
-        />
+        <SocialProof imageLoading={imageLoading} handleImageLoad={handleImageLoad} />
       </div>
     </motion.section>
   )

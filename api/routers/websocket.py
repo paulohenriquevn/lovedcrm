@@ -1,6 +1,6 @@
-"""
-WebSocket Router for Real-time Collaboration B2B
-Organization-isolated real-time events for team collaboration
+"""WebSocket Router for Real-time Collaboration B2B.
+
+Organization-isolated real-time events for team collaboration.
 """
 
 import json
@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 async def authenticate_websocket(token: str, org_id: str) -> tuple[User, Organization]:
-    """Authenticate WebSocket connection with organization validation"""
+    """Authenticate WebSocket connection with organization validation."""
     try:
         # Verify JWT token
         payload = verify_token(token, "access")
@@ -107,14 +107,87 @@ async def authenticate_websocket(token: str, org_id: str) -> tuple[User, Organiz
         )
 
 
+async def _prepare_user_info(user: User) -> Dict[str, Any]:
+    """Prepare user information dictionary for WebSocket broadcasting."""
+    return {
+        "user_id": str(user.id),
+        "full_name": user.full_name,
+        "email": user.email,
+        "avatar_url": getattr(user, "avatar_url", None),
+    }
+
+
+async def _send_connection_established_message(
+    organization: Organization,
+    user_info: Dict[str, Any],
+    message_type: str = "connection_established",
+) -> Dict[str, Any]:
+    """Create connection established message for WebSocket."""
+    room_type = "pipeline room" if "pipeline" in message_type else "collaboration room"
+    return {
+        "type": message_type,
+        "message": f"Connected to {organization.name} {room_type}",
+        "organization": {"id": str(organization.id), "name": organization.name},
+        "user": user_info,
+        "active_users": websocket_manager.get_active_users(UUID(str(organization.id))),
+    }
+
+
+async def _handle_websocket_disconnect_error(e: Exception, user_id: UUID) -> bool:
+    """Handle WebSocket disconnect-related errors and return if should break loop."""
+    error_msg = str(e).lower()
+    logger.error(f"Exception type: {type(e).__name__}, message: {e}")
+
+    disconnect_keywords = [
+        "disconnect",
+        "closed",
+        "connection",
+        "receive",
+        "message has been received",
+    ]
+
+    if any(keyword in error_msg for keyword in disconnect_keywords):
+        logger.info(f"WebSocket connection closed for user {user_id}: {e}")
+        return True
+    else:
+        logger.error(f"Error handling WebSocket message: {e}")
+        return False
+
+
+async def _websocket_message_loop(
+    websocket: WebSocket, user: User, organization: Organization, handler_func
+):
+    """Handle WebSocket message loop with proper error handling."""
+    while True:
+        try:
+            data = await websocket.receive_text()
+            message = json.loads(data)
+            await handler_func(websocket, user, organization, message)
+        except json.JSONDecodeError:
+            logger.error("Invalid JSON received from WebSocket client")
+            await websocket_manager.send_personal_message(
+                {"type": "error", "message": "Invalid JSON format"},
+                UUID(str(organization.id)),
+                UUID(str(user.id)),
+            )
+        except WebSocketDisconnect:
+            logger.info(
+                f"WebSocket client disconnected for user {user.id} in org {organization.id}"
+            )
+            break
+        except Exception as e:
+            should_break = await _handle_websocket_disconnect_error(e, UUID(str(user.id)))
+            if should_break:
+                break
+
+
 @router.websocket("/collaborate")
 async def websocket_collaboration_endpoint(
     websocket: WebSocket,
     token: str = Query(..., description="JWT access token"),
     org_id: str = Query(..., description="Organization ID"),
 ):
-    """
-    WebSocket endpoint for real-time collaboration within organization
+    """Provide WebSocket endpoint for real-time collaboration within organization.
 
     **Required Query Parameters:**
     - token: JWT access token
@@ -132,12 +205,7 @@ async def websocket_collaboration_endpoint(
         user, organization = await authenticate_websocket(token, org_id)
 
         # Prepare user info for broadcasting
-        user_info = {
-            "user_id": str(user.id),
-            "full_name": user.full_name,
-            "email": user.email,
-            "avatar_url": getattr(user, "avatar_url", None),
-        }
+        user_info = await _prepare_user_info(user)
 
         # Connect user to organization room
         await websocket_manager.connect(
@@ -146,61 +214,15 @@ async def websocket_collaboration_endpoint(
 
         try:
             # Send initial connection success message
+            connection_message = await _send_connection_established_message(organization, user_info)
             await websocket_manager.send_personal_message(
-                {
-                    "type": "connection_established",
-                    "message": f"Connected to {organization.name} collaboration room",
-                    "organization": {"id": str(organization.id), "name": organization.name},
-                    "user": user_info,
-                    "active_users": websocket_manager.get_active_users(UUID(str(organization.id))),
-                },
+                connection_message,
                 UUID(str(organization.id)),
                 UUID(str(user.id)),
             )
 
-            # Listen for client messages (keepalive, user activity)
-            while True:
-                try:
-                    # Wait for message from client
-                    data = await websocket.receive_text()
-                    message = json.loads(data)
-
-                    # Handle different message types
-                    await handle_client_message(websocket, user, organization, message)
-
-                except json.JSONDecodeError:
-                    logger.error("Invalid JSON received from WebSocket client")
-                    await websocket_manager.send_personal_message(
-                        {"type": "error", "message": "Invalid JSON format"},
-                        UUID(str(organization.id)),
-                        UUID(str(user.id)),
-                    )
-                except WebSocketDisconnect:
-                    # Client disconnected - exit the loop
-                    logger.info(
-                        f"WebSocket client disconnected for user {user.id} in org {organization.id}"
-                    )
-                    break
-                except Exception as e:
-                    # Check if it's a disconnect-related error
-                    error_msg = str(e).lower()
-                    logger.error(f"Exception type: {type(e).__name__}, message: {e}")
-
-                    if any(
-                        keyword in error_msg
-                        for keyword in [
-                            "disconnect",
-                            "closed",
-                            "connection",
-                            "receive",
-                            "message has been received",
-                        ]
-                    ):
-                        logger.info(f"WebSocket connection closed for user {user.id}: {e}")
-                        break
-                    else:
-                        logger.error(f"Error handling WebSocket message: {e}")
-                        # Don't break on other errors, continue listening
+            # Handle WebSocket message loop
+            await _websocket_message_loop(websocket, user, organization, handle_client_message)
 
         except WebSocketDisconnect:
             logger.info(f"WebSocket disconnected for user {user.id} in org {organization.id}")
@@ -221,7 +243,7 @@ async def websocket_collaboration_endpoint(
 async def handle_client_message(
     websocket: WebSocket, user: User, organization: Organization, message: Dict[str, Any]
 ):
-    """Handle incoming messages from WebSocket clients"""
+    """Handle incoming messages from WebSocket clients."""
     message_type = message.get("type")
 
     if message_type == "ping":
@@ -273,7 +295,7 @@ async def get_active_users(
     organization: Organization = Depends(get_current_organization),
     current_user: User = Depends(get_current_active_user),
 ) -> JSONResponse:
-    """Get list of currently active users in organization"""
+    """Get list of currently active users in organization."""
     try:
         # First validate X-Org-Id header is present
         header_org_id = get_org_id_from_header(request)
@@ -314,8 +336,7 @@ async def websocket_pipeline_endpoint(
     token: str = Query(..., description="JWT access token"),
     org_id: str = Query(..., description="Organization ID"),
 ):
-    """
-    WebSocket endpoint específico para Pipeline Kanban real-time updates
+    """Provide WebSocket endpoint specific for Pipeline Kanban real-time updates.
 
     **Required Query Parameters:**
     - token: JWT access token
@@ -334,12 +355,7 @@ async def websocket_pipeline_endpoint(
         user, organization = await authenticate_websocket(token, org_id)
 
         # Prepare user info for broadcasting
-        user_info = {
-            "user_id": str(user.id),
-            "full_name": user.full_name,
-            "email": user.email,
-            "avatar_url": getattr(user, "avatar_url", None),
-        }
+        user_info = await _prepare_user_info(user)
 
         # Connect user to organization room
         await websocket_manager.connect(
@@ -348,60 +364,17 @@ async def websocket_pipeline_endpoint(
 
         try:
             # Send initial connection success message
+            connection_message = await _send_connection_established_message(
+                organization, user_info, "pipeline_connection_established"
+            )
             await websocket_manager.send_personal_message(
-                {
-                    "type": "pipeline_connection_established",
-                    "message": f"Connected to {organization.name} pipeline room",
-                    "organization": {"id": str(organization.id), "name": organization.name},
-                    "user": user_info,
-                    "active_users": websocket_manager.get_active_users(UUID(str(organization.id))),
-                },
+                connection_message,
                 UUID(str(organization.id)),
                 UUID(str(user.id)),
             )
 
-            # Listen for client messages (drag events, pipeline updates)
-            while True:
-                try:
-                    # Wait for message from client
-                    data = await websocket.receive_text()
-                    message = json.loads(data)
-
-                    # Handle pipeline-specific message types
-                    await handle_pipeline_message(websocket, user, organization, message)
-
-                except json.JSONDecodeError:
-                    logger.error("Invalid JSON received from Pipeline WebSocket client")
-                    await websocket_manager.send_personal_message(
-                        {"type": "error", "message": "Invalid JSON format"},
-                        UUID(str(organization.id)),
-                        UUID(str(user.id)),
-                    )
-                except WebSocketDisconnect:
-                    logger.info(
-                        f"Pipeline WebSocket client disconnected for user {user.id} in org {organization.id}"
-                    )
-                    break
-                except Exception as e:
-                    error_msg = str(e).lower()
-                    logger.error(
-                        f"Pipeline WebSocket exception type: {type(e).__name__}, message: {e}"
-                    )
-
-                    if any(
-                        keyword in error_msg
-                        for keyword in [
-                            "disconnect",
-                            "closed",
-                            "connection",
-                            "receive",
-                            "message has been received",
-                        ]
-                    ):
-                        logger.info(f"Pipeline WebSocket connection closed for user {user.id}: {e}")
-                        break
-                    else:
-                        logger.error(f"Error handling Pipeline WebSocket message: {e}")
+            # Handle WebSocket message loop for pipeline
+            await _websocket_message_loop(websocket, user, organization, handle_pipeline_message)
 
         except WebSocketDisconnect:
             logger.info(
@@ -424,7 +397,7 @@ async def websocket_pipeline_endpoint(
 async def handle_pipeline_message(
     websocket: WebSocket, user: User, organization: Organization, message: Dict[str, Any]
 ):
-    """Handle incoming messages from Pipeline WebSocket clients"""
+    """Handle incoming messages from Pipeline WebSocket clients."""
     message_type = message.get("type")
 
     if message_type == "ping":
@@ -508,7 +481,7 @@ async def get_organization_collaboration_stats(
     organization: Organization = Depends(get_current_organization),
     current_user: User = Depends(get_current_active_user),
 ) -> JSONResponse:
-    """Get real-time collaboration statistics for organization"""
+    """Get real-time collaboration statistics for organization."""
     try:
         # First validate X-Org-Id header is present
         header_org_id = get_org_id_from_header(request)

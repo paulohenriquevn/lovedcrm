@@ -26,30 +26,39 @@ export function useTagManager(form: UseFormReturn<TagManagerForm>): UseTagManage
   const [currentTags, setCurrentTags] = useState<string[]>([])
   const [tagInput, setTagInput] = useState('')
 
-  const addTag = useCallback((tag: string): void => {
-    const trimmedTag = tag.trim().toLowerCase()
-    if (trimmedTag && !currentTags.includes(trimmedTag)) {
-      const newTags = [...currentTags, trimmedTag]
+  const addTag = useCallback(
+    (tag: string): void => {
+      const trimmedTag = tag.trim().toLowerCase()
+      if (trimmedTag && !currentTags.includes(trimmedTag)) {
+        const newTags = [...currentTags, trimmedTag]
+        setCurrentTags(newTags)
+        form.setValue('tags', newTags)
+      }
+      setTagInput('')
+    },
+    [currentTags, form]
+  )
+
+  const removeTag = useCallback(
+    (tagToRemove: string): void => {
+      const newTags = currentTags.filter(tag => tag !== tagToRemove)
       setCurrentTags(newTags)
       form.setValue('tags', newTags)
-    }
-    setTagInput('')
-  }, [currentTags, form])
+    },
+    [currentTags, form]
+  )
 
-  const removeTag = useCallback((tagToRemove: string): void => {
-    const newTags = currentTags.filter(tag => tag !== tagToRemove)
-    setCurrentTags(newTags)
-    form.setValue('tags', newTags)
-  }, [currentTags, form])
-
-  const handleTagInputKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (e.key === 'Enter' || e.key === ',') {
-      e.preventDefault()
-      if (tagInput.trim()) {
-        addTag(tagInput)
+  const handleTagInputKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>): void => {
+      if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault()
+        if (tagInput.trim()) {
+          addTag(tagInput)
+        }
       }
-    }
-  }, [tagInput, addTag])
+    },
+    [tagInput, addTag]
+  )
 
   return {
     currentTags,
@@ -58,6 +67,6 @@ export function useTagManager(form: UseFormReturn<TagManagerForm>): UseTagManage
     setCurrentTags,
     addTag,
     removeTag,
-    handleTagInputKeyDown
+    handleTagInputKeyDown,
   }
 }

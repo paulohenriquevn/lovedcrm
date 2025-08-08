@@ -5,16 +5,7 @@
 
 'use client'
 
-import {
-  Heart,
-  MapPin,
-  Mail,
-  Phone,
-  Clock,
-  ExternalLink,
-  Globe,
-  ArrowUp
-} from 'lucide-react'
+import { Heart, MapPin, Mail, Phone, Clock, ExternalLink, Globe, ArrowUp } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -38,10 +29,10 @@ export function FooterBrandSection({ socialLinks }: FooterBrandSectionProps): JS
           <span className="text-xl font-bold text-primary">CRM</span>
         </div>
       </div>
-      
+
       <p className="text-muted-foreground mb-6 leading-relaxed">
-        O único CRM desenvolvido especificamente para agências digitais brasileiras. 
-        WhatsApp integrado, IA em português e pipeline otimizado para o mercado brasileiro.
+        O único CRM desenvolvido especificamente para agências digitais brasileiras. WhatsApp
+        integrado, IA em português e pipeline otimizado para o mercado brasileiro.
       </p>
 
       {/* Contact Info */}
@@ -66,7 +57,7 @@ export function FooterBrandSection({ socialLinks }: FooterBrandSectionProps): JS
 
       {/* Social Links */}
       <div className="flex gap-3">
-        {socialLinks.map((social) => (
+        {socialLinks.map(social => (
           <a
             key={social.label}
             href={social.href}
@@ -90,16 +81,16 @@ interface FooterLinksGridProps {
 export function FooterLinksGrid({ sections }: FooterLinksGridProps): JSX.Element {
   return (
     <>
-      {sections.map((section) => (
+      {sections.map(section => (
         <div key={section.title} className="lg:col-span-1">
           <h4 className="font-semibold text-white mb-4">{section.title}</h4>
           <ul className="space-y-3">
-            {section.links.map((link) => (
+            {section.links.map(link => (
               <li key={link.label}>
                 <a
                   href={link.href}
-                  target={link.external === true ? "_blank" : undefined}
-                  rel={link.external === true ? "noopener noreferrer" : undefined}
+                  target={link.external === true ? '_blank' : undefined}
+                  rel={link.external === true ? 'noopener noreferrer' : undefined}
                   className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2"
                 >
                   {link.label}
@@ -125,8 +116,8 @@ export function NewsletterSection(): JSX.Element {
               Newsletter Exclusiva para Agências
             </h4>
             <p className="text-muted-foreground text-sm">
-              Dicas semanais, cases de sucesso e novidades do CRM. 
-              Conteúdo exclusivo para gestores de agências digitais.
+              Dicas semanais, cases de sucesso e novidades do CRM. Conteúdo exclusivo para gestores
+              de agências digitais.
             </p>
           </div>
           <div className="flex gap-3">
@@ -135,9 +126,7 @@ export function NewsletterSection(): JSX.Element {
               placeholder="seu.email@agencia.com.br"
               className="px-4 py-2 bg-muted border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent min-w-[250px]"
             />
-            <Button onClick={handleNewsletterSignup}>
-              Assinar
-            </Button>
+            <Button onClick={handleNewsletterSignup}>Assinar</Button>
           </div>
         </div>
       </CardContent>
@@ -161,9 +150,9 @@ export function FooterBottomSection({ currentYear }: FooterBottomSectionProps): 
           <div className="h-4 w-6 bg-gradient-to-r from-green-500 via-yellow-500 to-blue-500 rounded-sm" />
           <span className="text-sm text-muted-foreground">
             Feito por{' '}
-            <a 
-              href="https://www.linkedin.com/in/paulohenriquevn" 
-              target="_blank" 
+            <a
+              href="https://www.linkedin.com/in/paulohenriquevn"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-violet-600 hover:text-violet-700 transition-colors underline"
             >
@@ -175,7 +164,7 @@ export function FooterBottomSection({ currentYear }: FooterBottomSectionProps): 
 
       {/* Center: Certifications */}
       <div className="flex items-center gap-4">
-        {certifications.map((cert) => (
+        {certifications.map(cert => (
           <div key={cert.name} className="flex items-center gap-2 bg-muted rounded-lg px-3 py-2">
             <cert.icon className="h-4 w-4 text-emerald-400" />
             <div>

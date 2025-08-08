@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 function scrollToTop(): void {
   window.scrollTo({
     top: 0,
-    behavior: 'smooth'
+    behavior: 'smooth',
   })
 }
 
@@ -32,7 +32,6 @@ export function ScrollToTop(): JSX.Element {
     return () => window.removeEventListener('scroll', toggleVisibility)
   }, [])
 
-
   return (
     <AnimatePresence>
       {isVisible === true ? (
@@ -41,12 +40,9 @@ export function ScrollToTop(): JSX.Element {
           initial={{ opacity: 0, scale: 0.8, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 20 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
         >
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               onClick={scrollToTop}
               size="lg"

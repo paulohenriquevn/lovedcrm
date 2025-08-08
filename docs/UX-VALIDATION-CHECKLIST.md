@@ -8,32 +8,36 @@
 
 ## 📋 **CHECKLIST RÁPIDO (2 minutos)**
 
-**Data**: _______ | **Feature**: _________________ | **Dev**: _______
+**Data**: **\_\_\_** | **Feature**: **\*\*\*\***\_**\*\*\*\*** | **Dev**: **\_\_\_**
 
 ### **⚡ Validação Básica - TODOS os itens obrigatórios:**
 
 #### **🖱️ Interactive Elements**
+
 - [ ] **Cliquei em TODOS os botões** - todos respondem ✅/❌
-- [ ] **Testei TODOS os formulários** - todos submetem ✅/❌  
+- [ ] **Testei TODOS os formulários** - todos submetem ✅/❌
 - [ ] **Abri TODAS as modais** - todas abrem/fecham ✅/❌
 - [ ] **Cliquei TODOS os links** - todos navegam ✅/❌
 - [ ] **Testei TODOS os dropdowns** - todos expandem ✅/❌
 
-#### **📱 States & Feedback**  
+#### **📱 States & Feedback**
+
 - [ ] **Loading states aparecem** durante operações ✅/❌
 - [ ] **Error states mostram** mensagens úteis ✅/❌
 - [ ] **Success feedback é visível** após ações ✅/❌
 - [ ] **Empty states são informativos** quando aplicável ✅/❌
 
 #### **🔄 User Journeys**
+
 - [ ] **Fluxo principal funciona** end-to-end ✅/❌
 - [ ] **Usuário consegue voltar** de qualquer ponto ✅/❌
 - [ ] **Dados persistem** entre navegações ✅/❌
 - [ ] **Mobile funciona** (viewport pequeno) ✅/❌
 
 #### **🔌 Integrations**
+
 - [ ] **Email links funcionam** (se aplicável) ✅/❌
-- [ ] **Telefone links funcionam** (se aplicável) ✅/❌  
+- [ ] **Telefone links funcionam** (se aplicável) ✅/❌
 - [ ] **WhatsApp funciona** (se aplicável) ✅/❌
 - [ ] **APIs respondem corretamente** ✅/❌
 
@@ -45,11 +49,13 @@
 □ **REPROVADO** - Algum item ❌ → **NÃO ESTÁ COMPLETA**
 
 **Issues encontrados:**
-1. _________________________________
-2. _________________________________  
-3. _________________________________
+
+1. ***
+2. ***
+3. ***
 
 **Próximos passos:**
+
 - [ ] Corrigir issues encontrados
 - [ ] Re-executar checklist completo
 - [ ] Documentar correções aplicadas
@@ -58,17 +64,19 @@
 
 ## 📖 **CHECKLIST DETALHADO (5-10 minutos)**
 
-*Use quando feature é complexa ou crítica*
+_Use quando feature é complexa ou crítica_
 
 ### **🎯 User Journey Testing**
 
-**Journey 1: ________________________**
+**Journey 1: **\*\*\*\*\***\*\_\_\_\_\*\***\*\*\*\*\*\*\*\*
+
 - [ ] Usuário consegue iniciar ✅/❌
-- [ ] Usuário consegue completar ✅/❌  
+- [ ] Usuário consegue completar ✅/❌
 - [ ] Feedback é claro ✅/❌
 - [ ] Erro é recuperável ✅/❌
 
-**Journey 2: ________________________**
+**Journey 2: **\*\*\*\*\***\*\_\_\_\_\*\***\*\*\*\*\*\*\*\*
+
 - [ ] Usuário consegue iniciar ✅/❌
 - [ ] Usuário consegue completar ✅/❌
 - [ ] Feedback é claro ✅/❌
@@ -76,38 +84,41 @@
 
 ### **🔍 Detailed Element Testing**
 
-**Buttons Found: ____**
+**Buttons Found: \_\_\_\_**
 | Button Text | Clickable | Action Works | Notes |
 |-------------|-----------|--------------|-------|
-| ___________ | ✅/❌     | ✅/❌        | _____ |
-| ___________ | ✅/❌     | ✅/❌        | _____ |
-| ___________ | ✅/❌     | ✅/❌        | _____ |
+| \***\*\_\_\_\*\*** | ✅/❌ | ✅/❌ | **\_** |
+| \***\*\_\_\_\*\*** | ✅/❌ | ✅/❌ | **\_** |
+| \***\*\_\_\_\*\*** | ✅/❌ | ✅/❌ | **\_** |
 
-**Forms Found: ____**
+**Forms Found: \_\_\_\_**
 | Form Purpose | Submittable | Validation Works | Notes |
 |--------------|-------------|------------------|-------|
-| ____________ | ✅/❌       | ✅/❌            | _____ |
-| ____________ | ✅/❌       | ✅/❌            | _____ |
+| \***\*\_\_\_\_\*\*** | ✅/❌ | ✅/❌ | **\_** |
+| \***\*\_\_\_\_\*\*** | ✅/❌ | ✅/❌ | **\_** |
 
-**Modals Found: ____**
+**Modals Found: \_\_\_\_**
 | Modal Purpose | Opens | Closes | Content Loads | Notes |
 |---------------|-------|--------|---------------|-------|
-| _____________ | ✅/❌  | ✅/❌   | ✅/❌         | _____ |
-| _____________ | ✅/❌  | ✅/❌   | ✅/❌         | _____ |
+| **\*\***\_**\*\*** | ✅/❌ | ✅/❌ | ✅/❌ | **\_** |
+| **\*\***\_**\*\*** | ✅/❌ | ✅/❌ | ✅/❌ | **\_** |
 
 ### **📱 Cross-Device Testing**
+
 - [ ] **Desktop Chrome** - funciona perfeitamente ✅/❌
 - [ ] **Mobile viewport** - responsivo e utilizável ✅/❌
 - [ ] **Touch interactions** - funcionam no mobile ✅/❌
 - [ ] **Keyboard navigation** - acessível via tab ✅/❌
 
 ### **🔄 State Management Testing**
+
 - [ ] **Page refresh** - estado se mantém ✅/❌
 - [ ] **Navigation back/forward** - funciona corretamente ✅/❌
 - [ ] **Multiple tabs** - não conflitam ✅/❌
 - [ ] **Session timeout** - comportamento apropriado ✅/❌
 
 ### **⚡ Performance & UX**
+
 - [ ] **Loading é rápido** (<3s para carregar) ✅/❌
 - [ ] **Interações são responsivas** (<500ms) ✅/❌
 - [ ] **Não há flicker** ou jumping de layout ✅/❌
@@ -118,12 +129,13 @@
 ## 🛠️ **FERRAMENTAS DE TESTE**
 
 ### **Browser DevTools Check**
+
 ```bash
 # Console Tab
 - [ ] Zero erros JavaScript ✅/❌
 - [ ] Zero warnings críticos ✅/❌
 
-# Network Tab  
+# Network Tab
 - [ ] Todas requests succedem (200-299) ✅/❌
 - [ ] Nenhuma request infinita ✅/❌
 
@@ -135,14 +147,17 @@
 ### **Manual Testing Scenarios**
 
 **Cenário 1: Usuário Experiente**
+
 - [ ] Consegue usar feature sem hesitação ✅/❌
 - [ ] Completa tarefas rapidamente ✅/❌
 
-**Cenário 2: Usuário Novato** 
+**Cenário 2: Usuário Novato**
+
 - [ ] Entende como usar sem treinamento ✅/❌
 - [ ] Não fica confuso com interface ✅/❌
 
 **Cenário 3: Cenário de Erro**
+
 - [ ] Entende quando algo deu errado ✅/❌
 - [ ] Consegue recuperar do erro ✅/❌
 
@@ -171,19 +186,21 @@
 ## 📊 **TEMPLATES DE REPORT**
 
 ### **Quick Report Template**
+
 ```
 UX VALIDATION ✅ PASSED / ❌ FAILED
 Feature: ________________
 Date: ___________________
 
 Elements Tested: ___ buttons, ___ forms, ___ modals
-Journeys Tested: ___ primary flows  
+Journeys Tested: ___ primary flows
 Issues Found: ___ (all resolved)
 
 Status: READY FOR PRODUCTION
 ```
 
-### **Detailed Report Template**  
+### **Detailed Report Template**
+
 ```
 ## UX Validation Report
 **Feature**: ____________________
@@ -192,13 +209,13 @@ Status: READY FOR PRODUCTION
 
 ### Summary
 - Interactive Elements: ___/___  working
-- User Journeys: ___/___ completed successfully  
+- User Journeys: ___/___ completed successfully
 - Cross-device: ✅ Passed / ❌ Failed
 - Performance: ✅ Acceptable / ❌ Needs work
 
 ### Issues Found
 1. [RESOLVED] _______________________
-2. [RESOLVED] _______________________  
+2. [RESOLVED] _______________________
 3. [RESOLVED] _______________________
 
 ### Final Status
@@ -214,15 +231,17 @@ _________________________________
 ## 🎯 **QUICK REFERENCE**
 
 ### **Red Flags = STOP IMMEDIATELY**
+
 - Button doesn't respond to click
-- Form doesn't submit  
+- Form doesn't submit
 - Modal doesn't open/close
 - Link doesn't navigate
 - Loading never ends
 - Error without message
 - User can't complete intended action
 
-### **Green Flags = CONTINUE**  
+### **Green Flags = CONTINUE**
+
 - All interactive elements respond
 - All journeys completable
 - Appropriate feedback for all actions
@@ -239,4 +258,4 @@ _________________________________
 
 ---
 
-*Salvar este checklist e usar religiosamente. É a diferença entre código que funciona e produto que os usuários podem usar.*
+_Salvar este checklist e usar religiosamente. É a diferença entre código que funciona e produto que os usuários podem usar._

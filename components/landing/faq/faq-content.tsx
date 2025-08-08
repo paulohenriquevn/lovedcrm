@@ -15,19 +15,17 @@ interface FAQContentProps {
   toggleItem: (categoryId: string, questionIndex: number) => void
 }
 
-export function FAQContent({ 
-  activeCategoryData, 
-  activeCategory, 
-  openItems, 
-  toggleItem 
+export function FAQContent({
+  activeCategoryData,
+  activeCategory,
+  openItems,
+  toggleItem,
 }: FAQContentProps): React.ReactElement {
   return (
     <div className="w-full">
       <div className="flex items-center gap-3 mb-6">
         <activeCategoryData.icon className={`h-6 w-6 ${activeCategoryData.color}`} />
-        <h3 className="text-xl font-bold text-foreground">
-          {activeCategoryData.name}
-        </h3>
+        <h3 className="text-xl font-bold text-foreground">{activeCategoryData.name}</h3>
       </div>
 
       <div className="space-y-4 w-full">

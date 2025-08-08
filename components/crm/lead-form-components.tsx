@@ -10,13 +10,7 @@ import { UseFormReturn } from 'react-hook-form'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -74,7 +68,7 @@ const STAGE_LABELS: Record<PipelineStage, string> = {
   [PipelineStage.CONTATO]: 'Contato',
   [PipelineStage.PROPOSTA]: 'Proposta',
   [PipelineStage.NEGOCIACAO]: 'Negociação',
-  [PipelineStage.FECHADO]: 'Fechado'
+  [PipelineStage.FECHADO]: 'Fechado',
 }
 
 const COMMON_SOURCES = [
@@ -87,7 +81,7 @@ const COMMON_SOURCES = [
   'WhatsApp',
   'Email Marketing',
   'Telefone',
-  'Outros'
+  'Outros',
 ]
 
 const COMMON_TAGS = [
@@ -100,7 +94,7 @@ const COMMON_TAGS = [
   'high-value',
   'urgent',
   'meeting-scheduled',
-  'proposal-sent'
+  'proposal-sent',
 ]
 
 export function ContactFields({ form, isLoading }: ContactFieldsProps): React.ReactElement {
@@ -113,12 +107,7 @@ export function ContactFields({ form, isLoading }: ContactFieldsProps): React.Re
           <FormItem>
             <FormLabel>Email</FormLabel>
             <FormControl>
-              <Input
-                {...field}
-                type="email"
-                placeholder="email@exemplo.com"
-                disabled={isLoading}
-              />
+              <Input {...field} type="email" placeholder="email@exemplo.com" disabled={isLoading} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -132,12 +121,7 @@ export function ContactFields({ form, isLoading }: ContactFieldsProps): React.Re
           <FormItem>
             <FormLabel>Telefone</FormLabel>
             <FormControl>
-              <Input
-                {...field}
-                type="tel"
-                placeholder="(11) 99999-9999"
-                disabled={isLoading}
-              />
+              <Input {...field} type="tel" placeholder="(11) 99999-9999" disabled={isLoading} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -156,7 +140,11 @@ export function StageSourceFields({ form, isLoading }: StageSourceFieldsProps): 
         render={({ field }) => (
           <FormItem>
             <FormLabel>Estágio do Pipeline</FormLabel>
-            <Select onValueChange={(value) => field.onChange(value)} defaultValue={field.value} disabled={isLoading}>
+            <Select
+              onValueChange={value => field.onChange(value)}
+              defaultValue={field.value}
+              disabled={isLoading}
+            >
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o estágio" />
@@ -181,14 +169,18 @@ export function StageSourceFields({ form, isLoading }: StageSourceFieldsProps): 
         render={({ field }) => (
           <FormItem>
             <FormLabel>Origem</FormLabel>
-            <Select onValueChange={(value) => field.onChange(value)} defaultValue={field.value} disabled={isLoading}>
+            <Select
+              onValueChange={value => field.onChange(value)}
+              defaultValue={field.value}
+              disabled={isLoading}
+            >
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Como nos encontrou?" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {COMMON_SOURCES.map((source) => (
+                {COMMON_SOURCES.map(source => (
                   <SelectItem key={source} value={source}>
                     {source}
                   </SelectItem>
@@ -203,7 +195,10 @@ export function StageSourceFields({ form, isLoading }: StageSourceFieldsProps): 
   )
 }
 
-export function EstimatedValueField({ form, isLoading }: EstimatedValueFieldProps): React.ReactElement {
+export function EstimatedValueField({
+  form,
+  isLoading,
+}: EstimatedValueFieldProps): React.ReactElement {
   return (
     <FormField
       control={form.control}
@@ -219,7 +214,9 @@ export function EstimatedValueField({ form, isLoading }: EstimatedValueFieldProp
               step="0.01"
               placeholder="0.00"
               disabled={isLoading}
-              onChange={(e) => field.onChange(e.target.value ? Number.parseFloat(e.target.value) : undefined)}
+              onChange={e =>
+                field.onChange(e.target.value ? Number.parseFloat(e.target.value) : undefined)
+              }
             />
           </FormControl>
           <FormMessage />
@@ -236,7 +233,7 @@ export function TagsField({
   onTagInputChange,
   onAddTag,
   onRemoveTag,
-  onTagKeyPress
+  onTagKeyPress,
 }: TagsFieldProps): React.ReactElement {
   return (
     <div>
@@ -247,7 +244,7 @@ export function TagsField({
           <Input
             placeholder="Digite uma tag..."
             value={tagInput}
-            onChange={(e) => onTagInputChange(e.target.value)}
+            onChange={e => onTagInputChange(e.target.value)}
             onKeyDown={onTagKeyPress}
             disabled={isLoading}
             className="flex-1"
@@ -264,7 +261,7 @@ export function TagsField({
 
         {/* Tags comuns sugeridas */}
         <div className="flex flex-wrap gap-1">
-          {COMMON_TAGS.map((tag) => (
+          {COMMON_TAGS.map(tag => (
             <button
               key={tag}
               type="button"
@@ -280,13 +277,10 @@ export function TagsField({
         {/* Tags selecionadas */}
         {currentTags.length > 0 && (
           <div className="flex flex-wrap gap-1">
-            {currentTags.map((tag) => (
+            {currentTags.map(tag => (
               <Badge key={tag} variant="secondary" className="gap-1">
                 {tag}
-                <X
-                  className="h-3 w-3 cursor-pointer"
-                  onClick={() => onRemoveTag(tag)}
-                />
+                <X className="h-3 w-3 cursor-pointer" onClick={() => onRemoveTag(tag)} />
               </Badge>
             ))}
           </div>

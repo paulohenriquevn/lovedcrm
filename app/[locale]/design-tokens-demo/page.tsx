@@ -6,13 +6,13 @@
 
 'use client'
 
-import { useState } from "react"
+import { useState } from 'react'
 
-import { type TimelineEntry } from "@/components/crm/timeline"
+import { type TimelineEntry } from '@/components/crm/timeline'
 
-import { DemoFooter } from "./components/DemoFooter"
-import { DemoHeader } from "./components/DemoHeader"
-import { DemoTabs } from "./components/DemoTabs"
+import { DemoFooter } from './components/DemoFooter'
+import { DemoHeader } from './components/DemoHeader'
+import { DemoTabs } from './components/DemoTabs'
 
 // Constants
 const DEMO_ORG_NAME = 'Agência Demo'
@@ -22,7 +22,9 @@ const DEMO_USER_NAME = 'Maria Santos'
 
 function DesignTokensDemo(): JSX.Element {
   const [selectedTier, setSelectedTier] = useState<'free' | 'pro' | 'enterprise'>('pro')
-  const [selectedStage, setSelectedStage] = useState<'lead' | 'contact' | 'proposal' | 'negotiation' | 'closed'>('contact')
+  const [selectedStage, setSelectedStage] = useState<
+    'lead' | 'contact' | 'proposal' | 'negotiation' | 'closed'
+  >('contact')
 
   // Demo timeline data
   const demoTimelineEntries: TimelineEntry[] = [
@@ -34,17 +36,18 @@ function DesignTokensDemo(): JSX.Element {
       direction: 'inbound',
       status: 'read',
       leadName: DEMO_LEAD_NAME,
-      leadId: DEMO_LEAD_ID
+      leadId: DEMO_LEAD_ID,
     },
     {
       id: '2',
       type: 'ai_summary',
       timestamp: new Date(Date.now() - 1000 * 60 * 10), // 10 min ago
-      summary: 'Cliente demonstrou interesse genuíno em serviços de marketing digital. Menciona urgência para começar projeto ainda este mês.',
+      summary:
+        'Cliente demonstrou interesse genuíno em serviços de marketing digital. Menciona urgência para começar projeto ainda este mês.',
       confidence: 87,
       sentiment: 'positive',
       leadName: DEMO_LEAD_NAME,
-      leadId: DEMO_LEAD_ID
+      leadId: DEMO_LEAD_ID,
     },
     {
       id: '3',
@@ -56,7 +59,7 @@ function DesignTokensDemo(): JSX.Element {
       userName: DEMO_USER_NAME,
       leadName: DEMO_LEAD_NAME,
       leadId: DEMO_LEAD_ID,
-      attachmentCount: 1
+      attachmentCount: 1,
     },
     {
       id: '4',
@@ -67,14 +70,14 @@ function DesignTokensDemo(): JSX.Element {
       newValue: 'contact',
       description: 'Lead movido para estágio "Contato" após primeiro retorno',
       leadName: DEMO_LEAD_NAME,
-      leadId: DEMO_LEAD_ID
-    }
+      leadId: DEMO_LEAD_ID,
+    },
   ]
 
   return (
     <div className="container mx-auto p-6 space-y-8">
       <DemoHeader selectedTier={selectedTier} demoOrgName={DEMO_ORG_NAME} />
-      
+
       <DemoTabs
         selectedTier={selectedTier}
         selectedStage={selectedStage}

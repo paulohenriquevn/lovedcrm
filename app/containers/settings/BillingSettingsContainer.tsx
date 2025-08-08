@@ -267,12 +267,8 @@ function shouldShowError(storeData: BillingStoreData): boolean {
   )
 }
 
-// Helper to check if component should show loading state  
-function shouldShowLoading(
-  user: unknown,
-  organization: unknown,
-  isLoading: boolean
-): boolean {
+// Helper to check if component should show loading state
+function shouldShowLoading(user: unknown, organization: unknown, isLoading: boolean): boolean {
   return user === null || organization === null || isLoading
 }
 
