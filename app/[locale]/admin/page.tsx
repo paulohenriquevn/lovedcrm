@@ -245,120 +245,133 @@ function PipelineOverview(): JSX.Element {
   )
 }
 
-export default function AdminDashboard(): JSX.Element {
+function DashboardHeader(): JSX.Element {
+  return (
+    <div className="flex items-center justify-between">
+      <div>
+        <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+        <p className="text-muted-foreground">
+          Visão geral da Silva Digital Agency
+        </p>
+      </div>
+      
+      <div className="flex gap-2">
+        <Button size="sm" variant="outline">
+          <Calendar className="mr-2 h-4 w-4" />
+          Hoje
+        </Button>
+        <Button size="sm">
+          <Plus className="mr-2 h-4 w-4" />
+          Novo Lead
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+function MetricsGrid(): JSX.Element {
+  return (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <MetricsCard 
+        metric={dashboardMetrics.totalLeads} 
+        icon={Users} 
+        title="Total de Leads" 
+      />
+      <MetricsCard 
+        metric={dashboardMetrics.activeDeals} 
+        icon={Target} 
+        title="Negócios Ativos" 
+      />
+      <MetricsCard 
+        metric={dashboardMetrics.revenue} 
+        icon={DollarSign} 
+        title="Receita do Mês" 
+        formatValue={formatCurrency}
+      />
+      <MetricsCard 
+        metric={dashboardMetrics.conversionRate} 
+        icon={TrendingUp} 
+        title="Taxa de Conversão" 
+        formatValue={(value): string => `${value}%`}
+      />
+    </div>
+  )
+}
+
+function QuickActionsSection(): JSX.Element {
   return (
     <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground">
-            Visão geral da Silva Digital Agency
-          </p>
-        </div>
-        
-        <div className="flex gap-2">
-          <Button size="sm" variant="outline">
-            <Calendar className="mr-2 h-4 w-4" />
-            Hoje
-          </Button>
-          <Button size="sm">
-            <Plus className="mr-2 h-4 w-4" />
-            Novo Lead
-          </Button>
-        </div>
-      </div>
-
-      {/* Metrics Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <MetricsCard 
-          metric={dashboardMetrics.totalLeads} 
-          icon={Users} 
-          title="Total de Leads" 
-        />
-        <MetricsCard 
-          metric={dashboardMetrics.activeDeals} 
-          icon={Target} 
-          title="Negócios Ativos" 
-        />
-        <MetricsCard 
-          metric={dashboardMetrics.revenue} 
-          icon={DollarSign} 
-          title="Receita do Mês" 
-          formatValue={formatCurrency}
-        />
-        <MetricsCard 
-          metric={dashboardMetrics.conversionRate} 
-          icon={TrendingUp} 
-          title="Taxa de Conversão" 
-          formatValue={(value): string => `${value}%`}
-        />
-      </div>
-
-      {/* Main Content Grid */}
-      <div className="grid gap-6 md:grid-cols-3">
-        
-        <PipelineOverview />
-
-        {/* Quick Actions */}
-        <div className="space-y-6">
-          
-          {/* AI Summary */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Insights Recentes</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <AISummaryCompact 
-                summary="12 leads qualificados esta semana. Maria Silva e Carlos Oliveira com alta probabilidade de conversão. Foco em marketing digital crescendo 40%."
-                confidence={94}
-              />
-            </CardContent>
-          </Card>
-
-          {/* Upcoming Tasks */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Próximas Tarefas</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {upcomingTasks.map((task) => (
-                  <TaskItem key={task.id} task={task} />
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
-      {/* Recent Activity */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5" />
-            Atividade Recente
-          </CardTitle>
+          <CardTitle className="text-base">Insights Recentes</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {recentActivity.map((activity) => (
-              <div key={activity.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/50">
-                <CommunicationChannelBadge channel={activity.channel} />
-                
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium">{activity.title}</p>
-                  <p className="text-xs text-muted-foreground">{activity.description}</p>
-                </div>
-                
-                <div className="text-xs text-muted-foreground">
-                  {activity.time}
-                </div>
-              </div>
+          <AISummaryCompact 
+            summary="12 leads qualificados esta semana. Maria Silva e Carlos Oliveira com alta probabilidade de conversão. Foco em marketing digital crescendo 40%."
+            confidence={94}
+          />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Próximas Tarefas</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {upcomingTasks.map((task) => (
+              <TaskItem key={task.id} task={task} />
             ))}
           </div>
         </CardContent>
       </Card>
+    </div>
+  )
+}
+
+function RecentActivitySection(): JSX.Element {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Activity className="h-5 w-5" />
+          Atividade Recente
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {recentActivity.map((activity) => (
+            <div key={activity.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/50">
+              <CommunicationChannelBadge channel={activity.channel} />
+              
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium">{activity.title}</p>
+                <p className="text-xs text-muted-foreground">{activity.description}</p>
+              </div>
+              
+              <div className="text-xs text-muted-foreground">
+                {activity.time}
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+export default function AdminDashboard(): JSX.Element {
+  return (
+    <div className="space-y-6">
+      <DashboardHeader />
+      <MetricsGrid />
+      
+      <div className="grid gap-6 md:grid-cols-3">
+        <PipelineOverview />
+        <QuickActionsSection />
+      </div>
+
+      <RecentActivitySection />
     </div>
   )
 }

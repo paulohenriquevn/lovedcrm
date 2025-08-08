@@ -250,6 +250,32 @@ function ErrorState({ error, onRetry }: { error: string; onRetry: () => void }) 
   )
 }
 
+interface BillingStoreData {
+  currentPlan: unknown
+  errors: {
+    currentPlan: string | null
+  }
+  fetchAllData: () => void
+}
+
+// Helper to check if component should show error state
+function shouldShowError(storeData: BillingStoreData): boolean {
+  return (
+    Boolean(storeData.errors.currentPlan) &&
+    storeData.errors.currentPlan !== '' &&
+    storeData.currentPlan === null
+  )
+}
+
+// Helper to check if component should show loading state  
+function shouldShowLoading(
+  user: unknown,
+  organization: unknown,
+  isLoading: boolean
+): boolean {
+  return user === null || organization === null || isLoading
+}
+
 export function BillingSettingsContainer() {
   const { user, organization } = useAuthStore()
   const storeData = useBillingStore()
@@ -269,22 +295,13 @@ export function BillingSettingsContainer() {
     }
   }, [user, organization])
 
-  // Show loading while user/organization are loading
-  if (!user || !organization) {
+  // Show loading state
+  if (shouldShowLoading(user, organization, isLoading)) {
     return <LoadingState />
   }
 
-  // Render loading state
-  if (isLoading && !storeData.currentPlan) {
-    return <LoadingState />
-  }
-
-  // Render error state - handle nullable string explicitly
-  const hasError =
-    storeData.errors.currentPlan !== null &&
-    storeData.errors.currentPlan !== '' &&
-    !storeData.currentPlan
-  if (hasError) {
+  // Show error state
+  if (shouldShowError(storeData)) {
     return (
       <ErrorState
         error={storeData.errors.currentPlan ?? 'Unknown error'}

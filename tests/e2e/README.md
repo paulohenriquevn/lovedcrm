@@ -27,6 +27,18 @@ tests/e2e/
 │   ├── test_health.py          # Health & security tests (17 tests)
 │   ├── test_invites.py         # Invitation system tests
 │   └── test_roles.py           # Role management tests
+├── proxy/                       # NEXT.JS PROXY E2E TESTS (NEW!)
+│   ├── conftest.py             # Proxy-specific fixtures & utilities
+│   ├── test_proxy_auth.py      # Auth endpoints via Next.js proxy (13 tests)
+│   ├── test_proxy_users.py     # User endpoints via Next.js proxy (15 tests)
+│   ├── test_proxy_organizations.py # Org endpoints via Next.js proxy (19 tests)
+│   ├── test_proxy_user_preferences.py # Preferences via proxy (13 tests)
+│   ├── test_proxy_billing.py   # Billing endpoints via proxy (7 tests)
+│   ├── test_proxy_roles.py     # Role endpoints via proxy (3 tests)
+│   ├── test_proxy_invites.py   # Invite endpoints via proxy (3 tests)
+│   └── utils/                  # Proxy testing utilities
+│       ├── nextjs_client.py    # Next.js client for proxy testing
+│       └── proxy_helpers.py    # Logging and testing helpers
 └── mocks/                      # External service mocks
     ├── stripe/                 # Stripe API mocks (payments)
     │   ├── mappings/           # WireMock configurations
@@ -86,10 +98,19 @@ make test-api
 # OR
 npm run test:e2e:api
 
+# 🆕 NEXT.JS PROXY TESTS (NEW!)
+make test-proxy                                # All 73 endpoints via proxy
+pytest tests/e2e/proxy/ -v                     # Complete proxy test suite
+
 # Specific test categories
 pytest tests/e2e/api/test_auth.py -v          # Authentication
 pytest tests/e2e/api/test_organizations.py -v # Organizations
 pytest tests/e2e/api/ -k "Success" -v         # Success scenarios only
+
+# Proxy-specific categories
+pytest tests/e2e/proxy/test_proxy_auth.py -v     # Auth via proxy
+pytest tests/e2e/proxy/test_proxy_users.py -v    # Users via proxy
+pytest tests/e2e/proxy/ -k "2xx" -v              # All success scenarios
 ```
 
 ### **3. Hot Development (NEW - Super Fast!)**
@@ -139,6 +160,51 @@ EMAIL_ENABLED=false  # Mocked via MailHog
 ```
 
 ## Test Categories & Coverage
+
+## 🆕 **NEXT.JS PROXY TESTS (NEW!)** 
+
+**Complete E2E integration testing between Next.js frontend and FastAPI backend via proxy rewrites.**
+
+### **Proxy Test Architecture**
+
+- **💯 73 Endpoints Tested**: ALL FastAPI endpoints covered via Next.js proxy
+- **🔄 Universal Catch-All**: Tests validate simplified next.config.js configuration
+- **🔒 Multi-Tenant**: All tests include X-Org-Id headers for organization scoping
+- **⚙️ Real Integration**: Tests actual frontend → Next.js proxy → FastAPI flow
+
+### **Proxy Test Coverage by Module**
+
+| Module | Tests | Coverage | Purpose |
+|--------|-------|----------|----------|
+| **test_proxy_auth.py** | 13 | Authentication | Login, register, JWT refresh via proxy |
+| **test_proxy_users.py** | 15 | User Management | Profile, preferences, 2FA via proxy |
+| **test_proxy_organizations.py** | 19 | Organizations | CRUD, members, roles via proxy |
+| **test_proxy_user_preferences.py** | 13 | User Preferences | Settings, notifications, themes via proxy |
+| **test_proxy_billing.py** | 7 | Billing & Stripe | Plans, subscriptions, payments via proxy |
+| **test_proxy_roles.py** | 3 | Role Management | Permissions, hierarchy via proxy |
+| **test_proxy_invites.py** | 3 | Team Invites | Member invitations via proxy |
+| **Total** | **73** | **100%** | **Complete API coverage** |
+
+### **Key Proxy Test Features**
+
+```python
+# Example proxy test pattern
+def test_login_via_proxy(self, proxy_client):
+    """✅ Test: Login via Next.js proxy returns 200."""
+    
+    # Request goes: Test → Next.js:3000 → FastAPI:8000
+    response = proxy_client.post("/api/auth/login", json=login_data)
+    
+    # Validates complete integration chain
+    assert_successful_response(response, 200)
+    assert "access_token" in response.json()
+```
+
+**Critical Validation Rules**:
+- ✅ **Specific Status Codes**: Never ranges, always exact codes (`200`, `404`, `422`)
+- ✅ **Proxy-Only**: All tests use ONLY proxy, no direct backend calls
+- ✅ **Organization Headers**: X-Org-Id included automatically where needed
+- ✅ **Real Data Flow**: Tests validate actual user request patterns
 
 ### **Authentication Tests (`test_auth.py`)**
 
@@ -523,20 +589,42 @@ MIGRATE_DEBUG=1 make test-hot-migrate
 
 ### **Current Test Statistics**
 
-- **Total E2E Tests**: ~100 comprehensive tests
-- **Success Scenarios**: ~25 tests (PRIORITY 1 - functionality)
-- **Validation Scenarios**: ~50 tests (PRIORITY 2 - security)
-- **Edge Cases**: ~15 tests (boundary conditions)
-- **Performance & Security**: ~10 tests (non-functional)
+#### **Complete Test Suite**
+- **Total E2E Tests**: ~175 comprehensive tests
+- **API Tests**: ~100 tests (direct backend testing)
+- **🆕 Proxy Tests**: **73 tests** (Next.js → FastAPI integration)
+- **Success Scenarios**: ~40 tests (PRIORITY 1 - functionality)
+- **Validation Scenarios**: ~80 tests (PRIORITY 2 - security)
+- **Edge Cases**: ~25 tests (boundary conditions)
+- **Performance & Security**: ~15 tests (non-functional)
+
+#### **Proxy Test Breakdown**
+- **Authentication Proxy**: 13 tests (login, register, JWT via proxy)
+- **Users Proxy**: 15 tests (profiles, preferences, 2FA via proxy)
+- **Organizations Proxy**: 19 tests (CRUD, members, roles via proxy)
+- **Preferences Proxy**: 13 tests (settings, notifications via proxy)
+- **Billing Proxy**: 7 tests (Stripe integration via proxy)
+- **Roles Proxy**: 3 tests (permissions system via proxy)
+- **Invites Proxy**: 3 tests (team management via proxy)
 
 ### **Coverage by Module**
 
+#### **API Tests (Direct Backend)**
 - **Authentication**: 22 tests (registration, login, tokens, security)
 - **Users**: 21 tests (CRUD, profiles, preferences, validation)
 - **Organizations**: 24 tests (multi-tenancy, roles, permissions)
 - **Health & Security**: 17 tests (API health, security, performance)
 - **Invitations**: 8 tests (team management workflows)
 - **Roles**: 6 tests (permission system validation)
+
+#### **🆕 Proxy Tests (Next.js → FastAPI Integration)**
+- **Proxy Authentication**: 13 tests (auth flow via proxy)
+- **Proxy Users**: 15 tests (user management via proxy)
+- **Proxy Organizations**: 19 tests (org operations via proxy)
+- **Proxy Preferences**: 13 tests (user settings via proxy)
+- **Proxy Billing**: 7 tests (payment integration via proxy)
+- **Proxy Roles**: 3 tests (role management via proxy)
+- **Proxy Invites**: 3 tests (team invites via proxy)
 
 ### **Multi-Tenancy Coverage**
 
@@ -550,12 +638,21 @@ MIGRATE_DEBUG=1 make test-hot-migrate
 
 ### **Test Development Guidelines**
 
+#### **General Testing Principles**
 1. **Follow GOLDEN RULE**: Test success scenarios first
 2. **Multi-tenant by default**: Always include org_id context
 3. **Use unique test data**: Avoid conflicts with UUIDs
 4. **Verify data isolation**: Test cross-org security
 5. **Document test intent**: Clear test names and docstrings
 6. **Test real workflows**: Simulate actual user interactions
+
+#### **🆕 Proxy Testing Guidelines**
+1. **Specific Status Codes**: NEVER use ranges (`assert response.status_code == 200`)
+2. **Proxy-Only Testing**: NO direct backend calls in proxy tests
+3. **Organization Headers**: Use `X-Org-Id` for multi-tenant endpoints
+4. **Real Integration**: Test complete frontend → proxy → backend flow
+5. **Universal Coverage**: Every endpoint MUST have at least one 2xx test
+6. **Next.js Validation**: Verify proxy rewrites work correctly
 
 ### **Performance Optimization**
 
@@ -582,20 +679,28 @@ MIGRATE_DEBUG=1 make test-hot-migrate
 make setup-test-start  # Environment setup
 make test-verify       # Health verification
 make test-e2e-run      # Execute all E2E tests
+make test-proxy        # Execute all proxy integration tests
 make setup-test-stop   # Cleanup
 
 # Fast development cycle
 make test-hot-all      # Hot updates only
 pytest tests/e2e/api/ -x  # Stop on first failure
+pytest tests/e2e/proxy/ -x  # Stop on first proxy failure
+
+# Integration validation cycle
+make test-proxy        # Validate Next.js → FastAPI integration
+make test-api         # Validate direct API functionality
 ```
 
 ### **Expected Results**
 
 - **All tests pass** in fresh environment
 - **No flaky tests** due to proper isolation
-- **Fast execution** (~2-5 minutes total)
+- **Fast execution** (~3-7 minutes total for complete suite)
 - **Comprehensive coverage** of all API endpoints
+- **💯 Complete proxy integration** validation
 - **Zero false positives** from proper multi-tenant design
+- **Universal catch-all** validation for next.config.js
 
 ## Future Enhancements
 
@@ -606,6 +711,8 @@ pytest tests/e2e/api/ -x  # Stop on first failure
 - **Security Scanning**: Automated vulnerability assessment
 - **Visual Regression**: UI component change detection
 - **Test Reporting**: Detailed coverage and performance metrics
+- **🔄 Enhanced Proxy Testing**: WebSocket and streaming endpoint validation
+- **🌍 Cross-Origin Testing**: CORS and domain validation via proxy
 
 ### **Architecture Evolution**
 

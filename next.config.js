@@ -20,7 +20,7 @@ const nextConfig = withNextIntl({
     const backendUrl =
       process.env.NODE_ENV === 'production'
         ? process.env.NEXT_PUBLIC_API_URL
-        : 'http://192.168.2.111:8000'
+        : process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'
 
     if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_API_URL) {
       console.error('NEXT_PUBLIC_API_URL is required in production!')
@@ -29,56 +29,15 @@ const nextConfig = withNextIntl({
 
     const rules = [
       // ====================================================================
-      // 🚨 CRITICAL: ADD NEW API ROUTES HERE - BEFORE GENERIC /api/:path* 
-      // ====================================================================
-      // IMPORTANT: More specific rules FIRST!
-      {
-        source: '/api/auth/:path*',
-        destination: `${backendUrl}/auth/:path*`,
-      },
-      {
-        source: '/api/users/:path*',
-        destination: `${backendUrl}/users/:path*`,
-      },
-      {
-        source: '/api/organizations/:path*',
-        destination: `${backendUrl}/organizations/:path*`,
-      },
-      {
-        source: '/api/members/:path*',
-        destination: `${backendUrl}/members/:path*`,
-      },
-      {
-        source: '/api/billing/:path*',
-        destination: `${backendUrl}/billing/:path*`,
-      },
-      {
-        source: '/api/crm/leads/:path*',
-        destination: `${backendUrl}/crm/leads/:path*`,
-      },
-      {
-        source: '/api/crm/communications/:path*',
-        destination: `${backendUrl}/crm/communications/:path*`,
-      },
-      {
-        source: '/api/crm/ai-summaries/:path*',
-        destination: `${backendUrl}/crm/ai-summaries/:path*`,
-      },
-      {
-        source: '/api/integrations/:path*',
-        destination: `${backendUrl}/integrations/:path*`,
-      },
-      {
-        source: '/api/admin/:path*',
-        destination: `${backendUrl}/admin/:path*`,
-      },
-      // ====================================================================
-      // 🚨 ADD NEW ROUTES ABOVE THIS LINE - NOT BELOW!
+      // 🚀 UNIVERSAL CATCH-ALL: All /api/* routes map to backend directly
+      // Convention over Configuration - eliminates manual route management
       // ====================================================================
       {
         source: '/api/:path*',
         destination: `${backendUrl}/:path*`,
       },
+
+      // Non-API routes
       {
         source: '/docs',
         destination: `${backendUrl}/docs`,

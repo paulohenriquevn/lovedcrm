@@ -136,68 +136,226 @@
 - 🗄️ **Database**: @docs/project/05-database.md (pipeline_stages, leads)
 - 🔄 **Fluxos**: @docs/project/07-diagrams.md (pipeline management flow)
 
-### ÉPICO 2: WhatsApp Business Integration (3 semanas)
-**Objetivo**: Chat integrado com dual provider para comunicação centralizada
-**Modelo**: B2B com dual provider (Business API + Web API)
-**Timeline**: 3 semanas
+### ÉPICO 2: WhatsApp Business Integration (6 semanas)
+**Objetivo**: Sistema WhatsApp multi-provider com arquitetura de plugins para comunicação centralizada
+**Modelo**: B2B com arquitetura multi-provider extensível (Web API + Twilio + Meta Business)
+**Timeline**: 6 semanas (incluindo Sprint 0 - Infrastructure)
+**Complexidade**: Alta (conforme technical blueprint)
 
-#### Story 2.1: WhatsApp Integration - MVP Básico (5 dias)
+#### Sprint 0: Infrastructure Setup (2 semanas - Pré-requisito)
+**Como** desenvolvedor
+**Quero** infrastructure robusta para WhatsApp multi-provider
+**Para** suportar arquitetura plugin-based escalável
+
+**Critérios de Aceite:**
+- [ ] **Node.js Service**: Railway Node.js service deployed para WhatsApp APIs
+- [ ] **Redis Enhancement**: Session management + connection state storage
+- [ ] **WebSocket Integration**: Messaging enhancement usando infraestrutura Pipeline existente
+- [ ] **Webhook Infrastructure**: Signature validation + rate limiting + organization routing
+
+**Arquivos de Referência para Implementação:**
+- 🔧 **Tech Blueprint**: @docs/project/03-tech.md (WhatsApp technical architecture)
+- 🗄️ **Database**: @docs/project/05-database.md (whatsapp_configs, messages tables - já implementadas)
+- 🏗️ **Infrastructure**: Node.js microservice + Redis cluster + webhook endpoints
+
+**Definição de Pronto:**
+- ✅ Node.js service respondendo health checks no Railway
+- ✅ Redis upgrade suportando session management
+- ✅ WebSocket messaging integration testada
+- ✅ Webhook endpoints validando signatures organizacionais
+
+#### Story 2.0: Multi-Provider Foundation (1 semana)
+**Como** arquiteto de sistema
+**Quero** abstraction layer para WhatsApp providers
+**Para** inserção transparente de novos providers no futuro
+
+**Critérios de Aceite:**
+- [ ] **Provider Interface**: Interface comum `WhatsAppProvider` para todos providers
+- [ ] **Plugin System**: `WhatsAppProviderManager` para registration + switching
+- [ ] **Configuration**: Organization-level provider selection + management
+- [ ] **Database Enhancement**: Provider type support + configuration storage
+
+**Arquitetura Multi-Provider:**
+```typescript
+interface WhatsAppProvider {
+  setup(config: ProviderConfig): Promise<void>
+  sendMessage(message: MessageData): Promise<MessageResult>
+  receiveMessages(callback: MessageCallback): void
+  getStatus(): ProviderStatus
+  disconnect(): Promise<void>
+}
+
+class WhatsAppProviderManager {
+  registerProvider(type: ProviderType, provider: WhatsAppProvider)
+  getProvider(orgId: UUID): WhatsAppProvider
+  switchProvider(orgId: UUID, newType: ProviderType): Promise<void>
+}
+```
+
+**Arquivos de Referência para Implementação:**
+- 🏗️ **Provider Interface**: `api/integrations/whatsapp/providers/base.py`
+- 🔧 **Manager**: `api/integrations/whatsapp/provider_manager.py`
+- 🗄️ **Database**: Enhance `whatsapp_configs` table com provider selection
+- 📋 **API Spec**: @docs/project/06-api.md (endpoints /integrations/whatsapp/*)
+
+**Definição de Pronto:**
+- ✅ Provider abstraction layer funcionando
+- ✅ Plugin registration system implementado
+- ✅ Organization-level provider configuration
+- ✅ Database supporting multiple provider types
+- ✅ Tests validating interface contract
+
+#### Story 2.1: WhatsApp Web Provider Implementation (2 semanas)
 **Como** vendedor B2B
 **Quero** receber mensagens WhatsApp no CRM
 **Para** manter contexto da conversa
 
 **Critérios de Aceite:**
-- [ ] **Frontend**: Interface WhatsApp chat (já implementada no template)
-- [ ] **Backend**: WhatsApp Web API (não-oficial) + webhook receiver
-- [ ] **Database**: whatsapp_configs + messages tables
-- [ ] **Tests**: Recebimento de mensagens + org isolation
+- [ ] **Provider Implementation**: `WhatsAppWebProvider` implementando interface `WhatsAppProvider`
+- [ ] **Library Choice**: whatsapp-web.js ou Baileys integrado via abstraction layer
+- [ ] **Session Management**: QR code setup + Redis session persistence
+- [ ] **Message Flow**: Bi-directional messaging via provider interface
+- [ ] **Organization Isolation**: Multi-tenancy via provider configuration
+
+**Technical Implementation:**
+```typescript
+class WhatsAppWebProvider implements WhatsAppProvider {
+  // whatsapp-web.js integration
+  private client: Client
+  
+  async setup(config: WebAPIConfig): Promise<void> {
+    // QR code generation + session management
+  }
+  
+  async sendMessage(message: MessageData): Promise<MessageResult> {
+    // Send via whatsapp-web.js client
+  }
+  
+  receiveMessages(callback: MessageCallback): void {
+    // Webhook processing + callback trigger
+  }
+}
+```
+
+**Risk Mitigation - Ban Prevention:**
+- [ ] **Multiple Numbers**: Pool de números por organização
+- [ ] **Session Rotation**: Automatic session switching
+- [ ] **Rate Limiting**: Conservative message rate limits
+- [ ] **Ban Detection**: Monitoring + automatic fallback
 
 **Arquivos de Referência para Implementação:**
+- 🏗️ **Provider**: `api/integrations/whatsapp/providers/web_provider.py`
 - 📋 **API Spec**: @docs/project/06-api.md (endpoints /integrations/whatsapp/*)
-- 🗄️ **Database**: @docs/project/05-database.md (whatsapp_configs, messages)
+- 🗄️ **Database**: @docs/project/05-database.md (whatsapp_configs, messages - já implementadas)
 - 🔄 **Fluxos**: @docs/project/07-diagrams.md (whatsapp communication flow)
 
 **Definição de Pronto:**
-- ✅ QR code setup funcionando para WhatsApp Web
-- ✅ Mensagens recebidas aparecem no CRM
-- ✅ Histórico de mensagens por lead
-- ✅ Multi-tenancy: mensagens isoladas por organização
+- ✅ WhatsAppWebProvider registrado no ProviderManager
+- ✅ QR code setup funcionando via abstraction layer
+- ✅ Mensagens bi-direcionais via interface comum
+- ✅ Session management com Redis funcionando
+- ✅ Ban prevention strategies implementadas
+- ✅ Multi-tenancy: isolation por organization_id
 
-#### Story 2.2: WhatsApp Integration - Versão Completa (10 dias)
-**Como** vendedor B2B
-**Quero** conversa bidirecional completa com anexos
-**Para** gerenciar comunicação completa no CRM
+#### Story 2.2: Provider Management System (1 semana)
+**Como** admin de organização B2B
+**Quero** gerenciar providers WhatsApp da minha organização
+**Para** escolher e trocar providers sem interrupção de serviço
 
 **Critérios de Aceite:**
-- [ ] **Frontend**: Chat completo + anexos + status delivery + templates
-- [ ] **Backend**: Dual provider (Business + Web API) + bidirectional sync
-- [ ] **Database**: message_attachments + provider configs + audit
-- [ ] **Tests**: Envio/recebimento + anexos + provider switching
+- [ ] **Provider Selection**: Interface para seleção de provider por organização
+- [ ] **Status Monitoring**: Dashboard de health + connection status dos providers
+- [ ] **Provider Switching**: Live migration entre providers sem perda de histórico
+- [ ] **Cost Tracking**: Monitoring de custos por provider + organização
+
+**Provider Management Features:**
+```typescript
+interface ProviderManagement {
+  listProviders(): ProviderInfo[]
+  selectProvider(orgId: UUID, providerType: ProviderType): Promise<void>
+  switchProvider(orgId: UUID, fromType: ProviderType, toType: ProviderType): Promise<void>
+  getProviderStatus(orgId: UUID): ProviderStatus
+  getCostAnalytics(orgId: UUID, period: DateRange): CostAnalytics
+}
+```
+
+**Live Provider Switching:**
+- [ ] **Zero Downtime**: Traffic routing sem interrupção
+- [ ] **Message Preservation**: Histórico mantido durante switch
+- [ ] **Gradual Migration**: Rollout controlado com rollback capability
+- [ ] **Connection Monitoring**: Health checks + automatic failover
 
 **Arquivos de Referência para Implementação:**
-- 📋 **API Spec**: @docs/project/06-api.md (endpoints /integrations/whatsapp/*)
-- 🗄️ **Database**: @docs/project/05-database.md (whatsapp_configs, messages)
-- 🔄 **Fluxos**: @docs/project/07-diagrams.md (whatsapp communication flow)
+- 🏗️ **Management API**: `api/integrations/whatsapp/management.py`
+- 🎛️ **Frontend Dashboard**: `components/admin/provider-management.tsx`
+- 📊 **Cost Tracking**: `api/analytics/provider_costs.py`
+- 📋 **API Spec**: @docs/project/06-api.md (endpoints /admin/whatsapp/providers/*)
 
 **Definição de Pronto:**
-- ✅ Envio de mensagens pelo CRM funcionando
-- ✅ WhatsApp Business API como provider oficial
-- ✅ Anexos (imagens, documentos, áudios) suportados
-- ✅ Provider switching sem perda de histórico
+- ✅ Provider selection interface funcionando
+- ✅ Live switching sem perda de mensagens
+- ✅ Status dashboard com health metrics
+- ✅ Cost tracking por provider implementado
+- ✅ Automatic failover em case de provider failure
+- ✅ Multi-tenancy: provider isolation por organization_id
 
-#### Story 2.3: WhatsApp Integration - Melhorias UX (3 dias)
-**Como** vendedor B2B
-**Quero** interface otimizada para alta produtividade
-**Para** responder leads mais rapidamente
+#### Story 2.3: Twilio Provider Plugin (2 semanas)
+**Como** organização B2B
+**Quero** WhatsApp oficial via Twilio como provider
+**Para** compliance + estabilidade + features avançadas
 
 **Critérios de Aceite:**
-- [ ] **Melhorias UX**: Status indicators + typing indicators + message search
-- [ ] **Otimizações**: Template suggestions + contact matching + notifications
+- [ ] **Plugin Implementation**: `TwilioWhatsAppProvider` implementando interface `WhatsAppProvider`
+- [ ] **Plug-and-Play**: Zero code changes na arquitetura existente
+- [ ] **Official API**: Twilio WhatsApp Business API integration
+- [ ] **Advanced Features**: Delivery receipts + template messages + media support
+
+**Technical Implementation:**
+```typescript
+class TwilioWhatsAppProvider implements WhatsAppProvider {
+  // Twilio SDK integration
+  private client: Twilio
+  
+  async setup(config: TwilioConfig): Promise<void> {
+    // Account SID + Auth Token + Phone verification
+  }
+  
+  async sendMessage(message: MessageData): Promise<MessageResult> {
+    // Send via Twilio WhatsApp API
+  }
+  
+  receiveMessages(callback: MessageCallback): void {
+    // Webhook processing via Twilio webhooks
+  }
+}
+```
+
+**Transparent Integration:**
+- [ ] **Same Interface**: Usa mesma `WhatsAppProvider` interface
+- [ ] **Auto Registration**: Plugin auto-registers no `ProviderManager`
+- [ ] **Configuration UI**: Admin pode selecionar Twilio como provider
+- [ ] **Seamless Migration**: Switch de Web API → Twilio transparente
+
+**Advanced Features (Twilio Exclusive):**
+- [ ] **Official Compliance**: Full WhatsApp ToS compliance
+- [ ] **Template Messages**: Pre-approved business templates
+- [ ] **Delivery Receipts**: Read receipts + delivery confirmations
+- [ ] **Media Support**: Images, documents, audio, video
+- [ ] **Rate Limiting**: Official API rate limits + optimization
 
 **Arquivos de Referência para Implementação:**
+- 🏗️ **Provider**: `api/integrations/whatsapp/providers/twilio_provider.py`
 - 📋 **API Spec**: @docs/project/06-api.md (endpoints /integrations/whatsapp/*)
-- 🗄️ **Database**: @docs/project/05-database.md (whatsapp_configs, messages)
-- 🔄 **Fluxos**: @docs/project/07-diagrams.md (whatsapp communication flow)
+- 🔧 **Twilio SDK**: Official Twilio Python SDK integration
+- 🔄 **Migration**: Provider switching from Web API to Twilio
+
+**Definição de Pronto:**
+- ✅ TwilioWhatsAppProvider plug-and-play funcionando
+- ✅ Official WhatsApp Business API via Twilio
+- ✅ Template messages + media support implementado
+- ✅ Delivery receipts + read confirmations working
+- ✅ Demonstração de transparência: Web API → Twilio switch
+- ✅ Zero disruption na arquitetura existente
 
 ### ÉPICO 3: Lead Management & Scoring (2 semanas)
 **Objetivo**: Sistema inteligente de captura, qualificação e distribuição de leads
@@ -311,21 +469,87 @@
 - ✅ Gestão de membros (ativar/desativar/remover)
 - ✅ Herança de permissões funcionando
 
-### ÉPICO 5: VoIP Integration (2 semanas)
-**Objetivo**: Chamadas click-to-call com dual provider para redução de custos
-**Modelo**: B2B com foco em cost optimization
-**Timeline**: 2 semanas
+### ÉPICO 5: VoIP Integration (4 semanas)
+**Objetivo**: Sistema VoIP multi-provider com arquitetura de plugins para chamadas centralizadas
+**Modelo**: B2B com arquitetura multi-provider extensível (Telnyx Economy + Twilio Premium)
+**Timeline**: 4 semanas (conforme technical blueprint)
+**Complexidade**: Média-Alta (dual provider + TwiML compatibility + foundation architecture)
 
-#### Story 5.1: VoIP Integration - MVP Básico (5 dias)
+#### Sprint 0: VoIP Infrastructure Setup (2 dias)
+**Objetivo**: Preparar infraestrutura para suporte multi-provider VoIP
+**Owner**: DevOps + Backend Lead
+**Definição de Pronto**: Infraestrutura pronta para desenvolvimento VoIP
+
+**Tasks Sprint 0:**
+- [ ] **Telnyx Account Setup**: Criar conta + configurar SIP credentials
+- [ ] **Twilio Voice API Setup**: Configurar TwiML apps + phone numbers
+- [ ] **Railway VoIP Service**: Deploy Node.js service para webhook handling
+- [ ] **Database Schema**: Migrations para voip_configs + call_logs + provider_configs
+- [ ] **Provider Testing**: Verificar conectividade Telnyx + Twilio em staging
+
+#### Story 5.0: VoIP Multi-Provider Foundation (3 dias)
+**Como** System Architect
+**Quero** foundation multi-provider para VoIP
+**Para** inserir novos providers transparentemente
+
+**Critérios de Aceite:**
+- [ ] **Provider Abstraction Interface**: VoIPProvider interface definida
+- [ ] **Provider Registry**: Sistema de registry para VoIP providers dinâmicos
+- [ ] **Event System**: Event-driven architecture para call events
+- [ ] **Connection Management**: Health monitoring + failover automático
+- [ ] **Tests**: Provider abstraction + registry + event handling
+
+**VoIPProvider Interface:**
+```typescript
+interface VoIPProvider {
+  // Provider identification
+  name: string;
+  type: 'sip' | 'api' | 'hybrid';
+  
+  // Core functionality
+  setup(config: VoIPProviderConfig): Promise<void>;
+  initiateCall(callData: CallInitiationData): Promise<CallResult>;
+  receiveWebhook(webhookData: VoIPWebhookData): Promise<void>;
+  getCallStatus(callId: string): Promise<CallStatus>;
+  disconnect(): Promise<void>;
+  
+  // Management
+  getStatus(): VoIPProviderStatus;
+  validateConfig(config: VoIPProviderConfig): Promise<ValidationResult>;
+  estimateCost(callData: CallEstimationData): Promise<CostEstimate>;
+}
+```
+
+**Provider Management System:**
+- Provider registration/deregistration dinâmico
+- Auto-discovery de novos providers
+- Load balancing entre providers ativos
+- Graceful degradation quando provider falha
+
+**Event-Driven Architecture:**
+- Call events: initiated, ringing, answered, ended, failed
+- Provider events: connected, disconnected, error, degraded
+- Cost events: call_costed, threshold_reached, budget_alert
+- Quality events: poor_connection, recording_ready, transcription_complete
+
+#### Story 5.1: Telnyx Economy Provider Plugin (5 dias)
 **Como** vendedor B2B
-**Quero** fazer chamadas direto do CRM
-**Para** manter histórico unificado
+**Quero** fazer chamadas direto do CRM via Telnyx (economia 30-70% vs Twilio)
+**Para** manter histórico unificado com otimização de custos
 
 **Critérios de Aceite:**
-- [ ] **Frontend**: Click-to-call interface + call status display
-- [ ] **Backend**: Telnyx Voice API (economy) + webhook processing
-- [ ] **Database**: voip_configs + call_logs tables
-- [ ] **Tests**: Call initiation + status tracking + org isolation
+- [ ] **TelnyxProvider Plugin**: Implementar VoIPProvider interface para Telnyx
+- [ ] **Frontend**: Click-to-call interface via provider abstraction layer
+- [ ] **Backend**: VoIP service usando provider registry + Telnyx plugin
+- [ ] **Webhook Handling**: SIP events via provider abstraction
+- [ ] **Tests**: Plugin registration + call flow + provider switching
+
+**Provider Implementation:**
+- TelnyxVoIPProvider implementa VoIPProvider interface
+- SIP-based call initiation com automatic failover
+- Cost tracking em tempo real via Telnyx billing API
+- Webhook processing para call events (ringing, answered, ended)
+- Quality monitoring + connection health checks
 
 **Arquivos de Referência para Implementação:**
 - 📋 **API Spec**: @docs/project/06-api.md (endpoints /integrations/voip/*)
@@ -333,21 +557,36 @@
 - 🔄 **Fluxos**: @docs/project/07-diagrams.md (voip integration flow)
 
 **Definição de Pronto:**
-- ✅ Click-to-call funcionando com Telnyx
-- ✅ Call logs salvos com duração e custo
-- ✅ Integration setup wizard funcionando
-- ✅ Multi-tenancy: configs e calls isolados
+- ✅ TelnyxVoIPProvider plugin funcionando via abstraction layer
+- ✅ Click-to-call com cost preview (30-70% savings indicator)
+- ✅ Call logs com provider information + cost breakdown
+- ✅ SIP connection monitoring + automatic reconnection
+- ✅ Multi-tenancy: provider configs isolated por organization
 
-#### Story 5.2: VoIP Integration - Versão Completa (7 days)
+#### Story 5.2: Twilio Premium Provider Plugin + Management System (7 dias)
 **Como** admin B2B
-**Quero** dual provider com hot-swap capability
-**Para** otimizar custos (30-70% savings com Telnyx vs Twilio)
+**Quero** dual provider system (Telnyx + Twilio) com hot-swap
+**Para** otimizar custos (30-70% savings) mantendo qualidade premium como backup
 
 **Critérios de Aceite:**
-- [ ] **Frontend**: Provider comparison + cost calculator + switching interface
-- [ ] **Backend**: Dual provider (Twilio + Telnyx) + hot-swap + cost tracking
-- [ ] **Database**: Provider migrations + cost analytics + recordings
-- [ ] **Tests**: Provider switching + cost tracking + TwiML compatibility
+- [ ] **TwilioProvider Plugin**: Implementar VoIPProvider interface para Twilio Voice
+- [ ] **Provider Management**: Interface para switching entre providers
+- [ ] **Hot-swap System**: Provider switching sem downtime (<30s)
+- [ ] **Cost Analytics**: Real-time cost comparison + ROI dashboard
+- [ ] **Tests**: Dual provider + hot-swapping + cost tracking
+
+**Provider Management System:**
+- Provider priority routing (Telnyx primary, Twilio fallback)
+- Real-time provider health monitoring + automatic failover
+- Cost threshold alerts + automatic provider switching
+- Load balancing entre providers para otimização
+- Provider performance metrics (latency, success rate, quality)
+
+**Advanced Features:**
+- **Provider Migration**: Seamless migration de configs entre providers
+- **TwiML Compatibility**: Twilio advanced features (recordings, conferences)
+- **Quality Metrics**: Call quality scoring + provider comparison
+- **Cost Optimization**: Automatic routing baseado em cost/quality ratio
 
 **Arquivos de Referência para Implementação:**
 - 📋 **API Spec**: @docs/project/06-api.md (endpoints /integrations/voip/*)
@@ -355,24 +594,49 @@
 - 🔄 **Fluxos**: @docs/project/07-diagrams.md (voip integration flow)
 
 **Definição de Pronto:**
-- ✅ Twilio Voice API como provider premium
-- ✅ Provider switching sem downtime (<30 seconds)
-- ✅ Call recordings + transcription automática
-- ✅ Cost tracking e ROI calculation
+- ✅ TwilioVoIPProvider plugin com advanced features (recordings, transcription)
+- ✅ Provider hot-swapping com zero-downtime migration
+- ✅ Cost comparison dashboard com savings analytics
+- ✅ Automatic failover when provider quality degrades
+- ✅ Provider performance monitoring + health checks
 
-#### Story 5.3: VoIP Integration - Melhorias UX (2 days)
+#### Story 5.3: Advanced VoIP Analytics + Team Optimization (4 dias)
 **Como** gestor B2B
-**Quero** analytics detalhado de chamadas
-**Para** otimizar performance da equipe
+**Quero** analytics avançado multi-provider + team optimization
+**Para** maximizar ROI e performance da equipe
 
 **Critérios de Aceite:**
-- [ ] **Melhorias UX**: Call analytics dashboard + quality metrics + team performance
-- [ ] **Otimizações**: Auto-dialer + call scheduling + CRM integration
+- [ ] **Multi-Provider Analytics**: Comparação de performance entre providers
+- [ ] **Team Performance**: Dashboard individual + team metrics por provider
+- [ ] **Cost Intelligence**: Smart routing + budget optimization automático
+- [ ] **Advanced CRM Integration**: Auto-dialer + call scheduling via provider abstraction
+- [ ] **Tests**: Analytics accuracy + team insights + cost optimization
+
+**Advanced Analytics Features:**
+- **Provider Comparison**: Side-by-side metrics (cost, quality, success rate)
+- **Smart Routing**: AI-powered provider selection baseado em context
+- **Budget Management**: Per-team budgets + automatic provider switching
+- **Quality Insights**: Call quality heatmaps + provider reliability scoring
+- **Performance Trends**: Historical analysis + predictive insights
+
+**Team Optimization:**
+- **Individual Dashboards**: Per-agent call metrics + provider preferences
+- **Auto-dialer Integration**: Provider-aware call scheduling + queue management  
+- **Lead Scoring Integration**: High-value leads routed para premium provider
+- **Training Insights**: Call analysis + coaching recommendations
+- **ROI Tracking**: Revenue attribution + cost-per-acquisition por provider
 
 **Arquivos de Referência para Implementação:**
 - 📋 **API Spec**: @docs/project/06-api.md (endpoints /integrations/voip/*)
 - 🗄️ **Database**: @docs/project/05-database.md (voip_configs, call_logs)
 - 🔄 **Fluxos**: @docs/project/07-diagrams.md (voip integration flow)
+
+**Definição de Pronto:**
+- ✅ Multi-provider performance comparison dashboard
+- ✅ Smart routing com AI-powered provider selection
+- ✅ Team optimization metrics + individual coaching insights
+- ✅ Budget management + automatic cost optimization
+- ✅ Advanced CRM integration com provider-aware features
 
 ### ÉPICO 6: Templates & Automation (1 semana)
 **Objetivo**: Biblioteca de templates com A/B testing para agilizar comunicação
@@ -579,47 +843,51 @@
 - **Entrega**: Sistema funcional de gestão visual de vendas
 - **Valor**: Jornada core #1 completamente funcional
 
-### Semana 4-6: MVP Core - WhatsApp Integration  
-- **Story 2.1**: WhatsApp MVP (5 dias)
-- **Story 2.2**: WhatsApp Completo (10 dias)
-- **Story 2.3**: WhatsApp UX (3 dias)
-- **Entrega**: Comunicação WhatsApp centralizada no CRM
-- **Valor**: Jornada core #2 + diferenciação competitiva
+### Semana 4-9: MVP Core - WhatsApp Multi-Provider Integration
+- **Sprint 0**: Infrastructure Setup (2 semanas) - Node.js + Redis + WebSocket
+- **Story 2.0**: Multi-Provider Foundation (1 semana) - Abstraction layer + plugin system  
+- **Story 2.1**: WhatsApp Web Provider (2 semanas) - whatsapp-web.js via abstraction
+- **Story 2.2**: Provider Management (1 semana) - Live switching + monitoring
+- **Story 2.3**: Twilio Provider Plugin (2 semanas) - Official API plug-and-play
+- **Entrega**: Sistema WhatsApp multi-provider com arquitetura extensível
+- **Valor**: Jornada core #2 + future-proof architecture + provider flexibility
 
-### Semana 7-8: MVP Core - Lead Management
+### Semana 10-11: MVP Core - Lead Management  
 - **Story 3.1**: Lead Management MVP (3 dias)
 - **Story 3.2**: Lead Management Completo (7 dias) 
 - **Story 3.3**: Lead Management UX (2 dias)
 - **Entrega**: Sistema inteligente de leads com scoring
 - **Valor**: Jornada core #3 + automation
 
-### Semana 9: MVP Core - Multi-Tenancy
+### Semana 12: MVP Core - Multi-Tenancy
 - **Story 4.1**: Multi-Tenancy MVP (3 dias)
 - **Story 4.2**: Organization Management (4 dias)
 - **Entrega**: Isolamento completo + gestão organizacional
 - **Valor**: Jornada core #4 + security compliance
 
-### Semana 10-11: Supporting Features - VoIP
-- **Story 5.1**: VoIP MVP (5 days)
-- **Story 5.2**: VoIP Completo (7 days)
-- **Story 5.3**: VoIP UX (2 days)
-- **Entrega**: Click-to-call com dual provider cost optimization
-- **Valor**: Supporting feature #1 + cost savings
+### Semana 13-16: Supporting Features - VoIP Multi-Provider
+- **Sprint 0**: VoIP Infrastructure Setup (2 dias)
+- **Story 5.0**: VoIP Multi-Provider Foundation (3 dias)
+- **Story 5.1**: Telnyx Economy Provider Plugin (5 dias)
+- **Story 5.2**: Twilio Premium Provider + Management (7 dias)
+- **Story 5.3**: Advanced VoIP Analytics + Optimization (4 dias)
+- **Entrega**: Sistema VoIP multi-provider com cost intelligence
+- **Valor**: Supporting feature #1 + 30-70% cost savings + provider flexibility
 
-### Semana 12: Supporting Features - Templates
+### Semana 17: Supporting Features - Templates
 - **Story 6.1**: Templates MVP (3 days)
 - **Story 6.2**: Templates Completo (4 days)
 - **Entrega**: Biblioteca templates + A/B testing
 - **Valor**: Supporting feature #2 + productivity boost
 
-### Semana 13-15: Advanced Features - AI Core
+### Semana 18-20: Advanced Features - AI Core
 - **Story 7.1**: IA Conversational MVP (7 days)
 - **Story 7.2**: Sentiment Analysis MVP (7 days)
 - **Story 7.3**: AI Learning Integration (7 days)
 - **Entrega**: AI chatbot + sentiment analysis + learning
 - **Valor**: Diferenciação competitiva via AI
 
-### Semana 16-17: Advanced Features - Analytics & Integrations
+### Semana 21-22: Advanced Features - Analytics & Integrations
 - **Story 8.1**: Advanced Analytics (5 days)
 - **Story 8.2**: Marketing Integration (5 days)
 - **Story 8.3**: Calendar Integration (4 days)
@@ -672,9 +940,23 @@
 ## 5. RISCOS E MITIGAÇÕES
 
 ### Riscos Técnicos:
-- **Risco**: WhatsApp Web API instability/bans
-  - **Mitigação**: Dual provider com Business API fallback + multiple numbers
+- **Risco**: WhatsApp Web API instability/bans (Alto Risco)
+  - **Mitigação**: Multi-provider architecture + automatic failover + ban detection
+  - **Strategy**: Pool de números + session rotation + rate limiting agressivo
+  - **Fallback**: Immediate switch para Twilio provider
   - **Owner**: Backend Developer + DevOps
+
+- **Risco**: Provider switching complexity (Médio Risco)
+  - **Mitigação**: Abstraction layer + plugin architecture desde foundation
+  - **Strategy**: Event-driven architecture + message preservation + gradual migration
+  - **Rollback**: Automatic rollback mechanism + connection monitoring
+  - **Owner**: System Architect + Backend Lead
+
+- **Risco**: Node.js service infrastructure dependency (Médio Risco)
+  - **Mitigação**: Sprint 0 dedicado + Railway deployment expertise
+  - **Strategy**: Infrastructure-first approach + health monitoring + auto-scaling
+  - **Backup**: Alternative deployment options researched
+  - **Owner**: DevOps + Infrastructure Lead
 
 - **Risco**: OpenAI API rate limits/costs
   - **Mitigação**: Token optimization + conversation caching + cost monitoring
@@ -683,6 +965,18 @@
 - **Risco**: Multi-tenancy data leakage
   - **Mitigação**: Comprehensive testing + audit logging + security reviews
   - **Owner**: Security Lead + QA
+
+- **Risco**: VoIP provider rate limits + service interruptions (Médio Risco)
+  - **Mitigação**: Multi-provider architecture + automatic failover + usage monitoring
+  - **Strategy**: Provider prioritization + cost thresholds + quality-based routing
+  - **Fallback**: Instant provider switching + connection health monitoring
+  - **Owner**: VoIP Integration Developer + DevOps
+
+- **Risco**: SIP connectivity issues + voice quality degradation (Alto Risco)
+  - **Mitigação**: Sprint 0 infrastructure setup + provider health monitoring
+  - **Strategy**: Dual-provider testing + quality metrics + automatic degradation detection
+  - **Backup**: Provider hot-swapping + call quality analytics + user feedback loops
+  - **Owner**: VoIP Developer + Network Engineer
 
 ### Riscos de Negócio:
 - **Risco**: User adoption of AI features
@@ -697,6 +991,11 @@
 - **Risco**: WhatsApp integration complexity
   - **Mitigação**: Start with simpler Web API + parallel Business API development
   - **Owner**: Integration Developer
+
+- **Risco**: VoIP multi-provider foundation complexity
+  - **Mitigação**: Foundation-first approach + provider abstraction layer desde Sprint 0
+  - **Strategy**: Sprint 0 para infrastructure + provider plugins incrementais
+  - **Owner**: System Architect + VoIP Developer
 
 - **Risco**: AI features scope creep
   - **Mitigação**: MVP-first approach + clear acceptance criteria
@@ -726,10 +1025,11 @@ Para todas as stories, deve atender:
 ### Entrega Incremental:
 - **Week 1**: Foundation (Database) → Development ready
 - **Week 3**: Pipeline Working → First user value
-- **Week 6**: WhatsApp Integration → Core differentiation  
-- **Week 8**: Lead Management → Complete sales workflow
-- **Week 9**: Multi-tenancy → Production security
-- **Week 17**: Full Feature Set → Market ready
+- **Week 4-6**: Infrastructure Setup → Multi-provider foundation
+- **Week 9**: WhatsApp Multi-Provider → Core differentiation + extensible architecture
+- **Week 11**: Lead Management → Complete sales workflow
+- **Week 12**: Multi-tenancy → Production security
+- **Week 20**: Full Feature Set → Market ready
 
 ### Validation Strategy:
 - **Each Epic**: Demo + stakeholder feedback
@@ -747,7 +1047,7 @@ Para todas as stories, deve atender:
 **✅ Jornadas Preservadas**: 4 jornadas core completamente suportadas  
 **✅ Template Foundation**: Interface pronta conforme UX validation  
 **✅ B2B Model Applied**: Multi-tenancy e colaboração em todas stories  
-**✅ Timeline Realista**: 17 semanas baseado em complexidade técnica identificada  
+**✅ Timeline Realista**: 18 semanas baseado em complexidade técnica identificada  
 **✅ Risk Mitigation**: Estratégias específicas para challenges identificados  
 
 **Implementation Ready**: Roadmap executável com vertical slices incrementais entregando valor desde semana 1

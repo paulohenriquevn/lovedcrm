@@ -11,7 +11,7 @@ import { ArrowRight, Users, Zap, Shield } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
-export function HeroSectionV2() {
+export function HeroSectionV2(): React.ReactElement {
   return (
     <section className="bg-gradient-to-b from-background via-sector-primary/5 to-background px-6 py-24">
       <div className="container mx-auto max-w-6xl text-center">

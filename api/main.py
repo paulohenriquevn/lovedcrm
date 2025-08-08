@@ -53,12 +53,12 @@ except ImportError:
 # Import essential routers only
 from api.routers.auth import router as auth_router
 from api.routers.billing import router as billing_router
+from api.routers.crm_leads import router as crm_leads_router
 from api.routers.invites import router as invites_router
 from api.routers.organizations import router as organizations_router
 from api.routers.roles import router as roles_router
-from api.routers.users import router as users_router
 from api.routers.user_preferences import router as user_preferences_router
-from api.routers.crm_leads import router as crm_leads_router
+from api.routers.users import router as users_router
 from api.routers.websocket import router as websocket_router
 
 # Setup logging and monitoring before creating the app

@@ -6,25 +6,23 @@
 
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { 
-  ChevronDown, 
-  ChevronUp, 
   HelpCircle,
   MessageSquare,
   CreditCard,
   Shield,
   Smartphone,
-  Users,
-  Zap,
-  ArrowRight
+  Zap
 } from 'lucide-react'
 import { useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { useScrollAnimation, scrollAnimationVariants, staggerContainer, staggerItem, buttonPressVariants } from '@/hooks/use-scroll-animation'
+import { useScrollAnimation, scrollAnimationVariants, staggerContainer, staggerItem } from '@/hooks/use-scroll-animation'
+
+import { BottomCTA } from './faq/bottom-cta'
+import { CategorySidebar } from './faq/category-sidebar'
+import { FAQContent } from './faq/faq-content'
 
 const faqCategories = [
   {
@@ -149,226 +147,8 @@ const faqCategories = [
   }
 ]
 
-function CategorySidebar({ 
-  activeCategory, 
-  setActiveCategory 
-}: { 
-  activeCategory: string
-  setActiveCategory: (category: string) => void 
-}): React.ReactElement {
-  return <div className="w-full">
-    <h3 className="font-semibold text-foreground mb-4">Categorias</h3>
-    <div className="space-y-2">
-      {faqCategories.map((category) => (
-        <button
-          key={category.id}
-          type="button"
-          onClick={() => setActiveCategory(category.id)}
-          className={`w-full text-left p-3 rounded-lg flex items-center gap-3 transition-all duration-200 ${
-            activeCategory === category.id
-              ? 'bg-primary/10 text-primary border border-primary/20'
-              : 'hover:bg-muted/50 text-muted-foreground'
-          }`}
-        >
-          <category.icon className={`h-4 w-4 ${category.color}`} />
-          <span className="font-medium">{category.name}</span>
-        </button>
-      ))}
-    </div>
-
-    {/* Contact CTA */}
-    <Card className="mt-8 bg-card border border-border shadow-sm">
-      <CardContent className="p-4 text-center">
-        <Users className="h-8 w-8 text-primary mx-auto mb-3" />
-        <h4 className="font-semibold text-sm mb-2">Ainda com dúvidas?</h4>
-        <p className="text-xs text-muted-foreground mb-4">
-          Fale com nossa equipe especializada em agências
-        </p>
-        <Button type="button" size="sm" className="w-full">
-          <MessageSquare className="h-4 w-4 mr-2" />
-          Chat ao Vivo
-        </Button>
-      </CardContent>
-    </Card>
-  </div>
-}
-
-function FAQItem({ 
-  faq, 
-  isOpen, 
-  onToggle 
-}: { 
-  faq: { question: string; answer: string }
-  isOpen: boolean
-  onToggle: () => void 
-}): React.ReactElement {
-  return <Card className="w-full overflow-hidden bg-card border border-border hover:border-primary/10 hover:shadow-md transition-all duration-300">
-    <CardContent className="p-0 w-full">
-      <motion.button
-        type="button"
-        onClick={onToggle}
-        className="w-full p-6 text-left flex items-center justify-between hover:bg-muted/30 transition-colors"
-      >
-        <h4 className="font-semibold text-foreground flex-1 pr-4">
-          {faq.question}
-        </h4>
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <ChevronDown className={`h-5 w-5 ${isOpen ? 'text-primary' : 'text-muted-foreground'} flex-shrink-0`} />
-        </motion.div>
-      </motion.button>
-      
-      <AnimatePresence>
-        {isOpen ? <motion.div 
-            className="w-full px-6 pb-6 border-t border-border bg-muted/20"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-          >
-            <p className="text-muted-foreground leading-relaxed pt-4">
-              {faq.answer}
-            </p>
-          </motion.div> : null}
-      </AnimatePresence>
-    </CardContent>
-  </Card>
-}
-
-function FAQContent({ 
-  activeCategoryData, 
-  activeCategory, 
-  openItems, 
-  toggleItem 
-}: { 
-  activeCategoryData: typeof faqCategories[0]
-  activeCategory: string
-  openItems: string[]
-  toggleItem: (categoryId: string, questionIndex: number) => void 
-}): React.ReactElement {
-  return <div className="w-full">
-    <div className="flex items-center gap-3 mb-6">
-      <activeCategoryData.icon className={`h-6 w-6 ${activeCategoryData.color}`} />
-      <h3 className="text-xl font-bold text-foreground">
-        {activeCategoryData.name}
-      </h3>
-    </div>
-
-    <div className="space-y-4 w-full">
-      {activeCategoryData.questions.map((faq, index) => {
-        const itemId = `${activeCategory}-${index}`
-        const isOpen = openItems.includes(itemId)
-
-        return (
-          <FAQItem
-            key={`${faq.question}-${index}`}
-            faq={faq}
-            isOpen={isOpen}
-            onToggle={() => toggleItem(activeCategory, index)}
-          />
-        )
-      })}
-    </div>
-  </div>
-}
-
-function ContactOption({ 
-  icon: Icon, 
-  title, 
-  description, 
-  color 
-}: { 
-  icon: React.ComponentType<{ className?: string }>
-  title: string
-  description: string
-  color: string 
-}): React.ReactElement {
-  return <div className="text-center">
-    <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-      <Icon className="h-6 w-6 text-primary" />
-    </div>
-    <h4 className="font-semibold mb-1">{title}</h4>
-    <p className="text-sm text-muted-foreground">{description}</p>
-  </div>
-}
-
-function BottomCTA({ ctaRef, ctaInView }: { ctaRef: any, ctaInView: boolean }): React.ReactElement {
-  return <motion.div 
-    ref={ctaRef}
-    className="mt-16 text-center"
-    initial="hidden"
-    animate={ctaInView ? "visible" : "hidden"}
-    variants={scrollAnimationVariants}
-  >
-    <Card className="max-w-4xl mx-auto bg-card border border-border shadow-sm">
-      <CardContent className="p-8">
-        <h3 className="text-2xl font-bold text-foreground mb-4">
-          Não Encontrou sua Dúvida?
-        </h3>
-        <p className="text-muted-foreground mb-6 text-lg">
-          Nossa equipe especializada em agências digitais está aqui para ajudar. 
-          <br />
-          <strong className="text-foreground">Resposta garantida em até 2 horas!</strong>
-        </p>
-
-        <motion.div 
-          className="grid md:grid-cols-3 gap-4 mb-8"
-          variants={staggerContainer}
-          initial="hidden"
-          animate={ctaInView ? "visible" : "hidden"}
-        >
-          <motion.div variants={staggerItem}>
-            <ContactOption 
-              icon={MessageSquare}
-              title="WhatsApp"
-              description="Chat direto com especialista"
-              color=""
-            />
-          </motion.div>
-          
-          <motion.div variants={staggerItem}>
-            <ContactOption 
-              icon={HelpCircle}
-              title="Central de Ajuda"
-              description="Documentação completa"
-              color=""
-            />
-          </motion.div>
-          
-          <motion.div variants={staggerItem}>
-            <ContactOption 
-              icon={Users}
-              title="Consultoria"
-              description="Call gratuita de 30min"
-              color=""
-            />
-          </motion.div>
-        </motion.div>
-
-        <motion.div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <motion.div variants={buttonPressVariants} whileTap="press">
-            <Button type="button" size="lg">
-              <MessageSquare className="mr-2 h-5 w-5" />
-              Falar com Especialista
-            </Button>
-          </motion.div>
-          
-          <motion.div variants={buttonPressVariants} whileTap="press">
-            <Button type="button" size="lg" variant="outline">
-              Agendar Demo Gratuita
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </motion.div>
-        </motion.div>
-      </CardContent>
-    </Card>
-  </motion.div>
-}
-
 export function FAQSection(): React.ReactElement {
-  const [openItems, setOpenItems] = useState<string[]>(['geral-0']) // Primeira pergunta aberta por padrão
+  const [openItems, setOpenItems] = useState<string[]>(['geral-0'])
   const [activeCategory, setActiveCategory] = useState('geral')
   const { ref: headerRef, isInView: headerInView } = useScrollAnimation()
   const { ref: contentRef, isInView: contentInView } = useScrollAnimation()
@@ -383,7 +163,7 @@ export function FAQSection(): React.ReactElement {
     )
   }
 
-  const activeCategoryData = faqCategories.find(cat => cat.id === activeCategory) || faqCategories[0]
+  const activeCategoryData = faqCategories.find(cat => cat.id === activeCategory) ?? faqCategories[0]
 
   return (
     <section className="py-20 px-4 bg-gradient-to-b from-background to-muted/20">
@@ -397,7 +177,7 @@ export function FAQSection(): React.ReactElement {
           variants={scrollAnimationVariants}
         >
           <Badge className="mb-4 bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20">
-Dúvidas Frequentes
+            Dúvidas Frequentes
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
             Tire Todas as suas{" "}
@@ -422,6 +202,7 @@ Dúvidas Frequentes
             <CategorySidebar 
               activeCategory={activeCategory}
               setActiveCategory={setActiveCategory}
+              categories={faqCategories}
             />
           </motion.div>
 

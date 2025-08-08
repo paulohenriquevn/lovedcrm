@@ -1,17 +1,25 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowUp } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 import { Button } from '@/components/ui/button'
 
-export function ScrollToTop() {
+// Smooth scroll to top
+function scrollToTop(): void {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
+
+export function ScrollToTop(): JSX.Element {
   const [isVisible, setIsVisible] = useState(false)
 
   // Show button when page is scrolled down
   useEffect(() => {
-    const toggleVisibility = () => {
+    const toggleVisibility = (): void => {
       if (window.pageYOffset > 300) {
         setIsVisible(true)
       } else {
@@ -24,17 +32,10 @@ export function ScrollToTop() {
     return () => window.removeEventListener('scroll', toggleVisibility)
   }, [])
 
-  // Smooth scroll to top
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    })
-  }
 
   return (
     <AnimatePresence>
-      {isVisible && (
+      {isVisible === true ? (
         <motion.div
           className="fixed bottom-8 right-8 z-50"
           initial={{ opacity: 0, scale: 0.8, y: 20 }}
@@ -56,7 +57,7 @@ export function ScrollToTop() {
             </Button>
           </motion.div>
         </motion.div>
-      )}
+      ) : null}
     </AnimatePresence>
   )
 }

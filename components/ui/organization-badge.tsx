@@ -32,7 +32,8 @@ export function OrganizationBadge({
     enterprise: "👑"
   }
 
-  const displayContent = children ?? (showLabel ? organizationTierLabels[`tier${tier.charAt(0).toUpperCase() + tier.slice(1)}` as keyof typeof organizationTierLabels] : tierIcons[tier])
+  const tierKey = `tier${tier.charAt(0).toUpperCase() + tier.slice(1)}` as keyof typeof organizationTierLabels
+  const displayContent = children ?? (showLabel === true ? organizationTierLabels[tierKey] : tierIcons[tier])
   
   return (
     <span 
@@ -42,9 +43,9 @@ export function OrganizationBadge({
         tierStyles[tier],
         className
       )}
-      title={`Plano ${organizationTierLabels[`tier${tier.charAt(0).toUpperCase() + tier.slice(1)}` as keyof typeof organizationTierLabels]}`}
+      title={`Plano ${organizationTierLabels[tierKey]}`}
     >
-      {typeof displayContent === 'string' && Boolean(!children) && (
+      {typeof displayContent === 'string' && children === null && (
         <span className="text-[10px]" aria-hidden="true">
           {tierIcons[tier]}
         </span>

@@ -6,10 +6,10 @@ import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 
 interface MobileLinkProps extends LinkProps {

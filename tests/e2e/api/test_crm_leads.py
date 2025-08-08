@@ -52,7 +52,7 @@ class TestCRMLeadsAPI:
         }
         
         response = api_client.post(
-            f"{TEST_BASE_URL}/api/crm/leads/",
+            f"{TEST_BASE_URL}/crm/leads/",
             json=lead_data,
             headers=headers
         )
@@ -89,7 +89,7 @@ class TestCRMLeadsAPI:
         
         # List leads
         response = api_client.get(
-            f"{TEST_BASE_URL}/api/crm/leads/?page=1&page_size=10",
+            f"{TEST_BASE_URL}/crm/leads/?page=1&page_size=10",
             headers=headers
         )
         
@@ -129,7 +129,7 @@ class TestCRMLeadsAPI:
         
         # Get lead by ID
         response = api_client.get(
-            f"{TEST_BASE_URL}/api/crm/leads/{created_lead['id']}",
+            f"{TEST_BASE_URL}/crm/leads/{created_lead['id']}",
             headers=headers
         )
         
@@ -159,7 +159,7 @@ class TestCRMLeadsAPI:
         }
         
         response = api_client.put(
-            f"{TEST_BASE_URL}/api/crm/leads/{created_lead['id']}",
+            f"{TEST_BASE_URL}/crm/leads/{created_lead['id']}",
             json=update_data,
             headers=headers
         )
@@ -191,7 +191,7 @@ class TestCRMLeadsAPI:
         }
         
         response = api_client.put(
-            f"{TEST_BASE_URL}/api/crm/leads/{created_lead['id']}/stage",
+            f"{TEST_BASE_URL}/crm/leads/{created_lead['id']}/stage",
             json=stage_data,
             headers=headers
         )
@@ -222,7 +222,7 @@ class TestCRMLeadsAPI:
         }
         
         response = api_client.post(
-            f"{TEST_BASE_URL}/api/crm/leads/search",
+            f"{TEST_BASE_URL}/crm/leads/search",
             json=search_data,
             headers=headers
         )
@@ -250,7 +250,7 @@ class TestCRMLeadsAPI:
         
         # Get statistics
         response = api_client.get(
-            f"{TEST_BASE_URL}/api/crm/leads/statistics",
+            f"{TEST_BASE_URL}/crm/leads/statistics",
             headers=headers
         )
         
@@ -283,7 +283,7 @@ class TestCRMLeadsAPI:
         
         # Delete lead
         response = api_client.delete(
-            f"{TEST_BASE_URL}/api/crm/leads/{created_lead['id']}",
+            f"{TEST_BASE_URL}/crm/leads/{created_lead['id']}",
             headers=headers
         )
         
@@ -291,7 +291,7 @@ class TestCRMLeadsAPI:
         
         # Verify lead is deleted - should return 404
         get_response = api_client.get(
-            f"{TEST_BASE_URL}/api/crm/leads/{created_lead['id']}",
+            f"{TEST_BASE_URL}/crm/leads/{created_lead['id']}",
             headers=headers
         )
         
@@ -318,7 +318,7 @@ class TestCRMLeadsAPI:
         }
         
         response = api_client.post(
-            f"{TEST_BASE_URL}/api/crm/leads/",
+            f"{TEST_BASE_URL}/crm/leads/",
             json=lead_data,
             headers=org1_headers
         )
@@ -334,7 +334,7 @@ class TestCRMLeadsAPI:
         
         # Should not be able to get org1's lead
         response = api_client.get(
-            f"{TEST_BASE_URL}/api/crm/leads/{org1_lead['id']}",
+            f"{TEST_BASE_URL}/crm/leads/{org1_lead['id']}",
             headers=org2_headers
         )
         
@@ -342,12 +342,12 @@ class TestCRMLeadsAPI:
         
         # List leads should show different data for each org
         org1_list = api_client.get(
-            f"{TEST_BASE_URL}/api/crm/leads/",
+            f"{TEST_BASE_URL}/crm/leads/",
             headers=org1_headers
         ).json()
         
         org2_list = api_client.get(
-            f"{TEST_BASE_URL}/api/crm/leads/",
+            f"{TEST_BASE_URL}/crm/leads/",
             headers=org2_headers
         ).json()
         
@@ -362,13 +362,13 @@ class TestCRMLeadsAPI:
     def test_crm_endpoints_require_authentication(self, api_client):
         """🔒 Test all CRM endpoints require authentication."""
         endpoints = [
-            ('GET', '/api/crm/leads/'),
-            ('POST', '/api/crm/leads/'),
-            ('GET', '/api/crm/leads/statistics'),
-            ('POST', '/api/crm/leads/search'),
-            ('GET', f'/api/crm/leads/{uuid.uuid4()}'),
-            ('PUT', f'/api/crm/leads/{uuid.uuid4()}'),
-            ('DELETE', f'/api/crm/leads/{uuid.uuid4()}'),
+            ('GET', '/crm/leads/'),
+            ('POST', '/crm/leads/'),
+            ('GET', '/crm/leads/statistics'),
+            ('POST', '/crm/leads/search'),
+            ('GET', f'/crm/leads/{uuid.uuid4()}'),
+            ('PUT', f'/crm/leads/{uuid.uuid4()}'),
+            ('DELETE', f'/crm/leads/{uuid.uuid4()}'),
         ]
         
         for method, endpoint in endpoints:
@@ -397,9 +397,9 @@ class TestCRMLeadsAPI:
         }
         
         endpoints = [
-            ('GET', '/api/crm/leads/'),
-            ('POST', '/api/crm/leads/'),
-            ('GET', '/api/crm/leads/statistics'),
+            ('GET', '/crm/leads/'),
+            ('POST', '/crm/leads/'),
+            ('GET', '/crm/leads/statistics'),
         ]
         
         for method, endpoint in endpoints:
@@ -425,7 +425,7 @@ class TestCRMLeadsAPI:
         }
         
         response = api_client.post(
-            f"{TEST_BASE_URL}/api/crm/leads/",
+            f"{TEST_BASE_URL}/crm/leads/",
             json=invalid_data,
             headers=headers
         )
@@ -439,7 +439,7 @@ class TestCRMLeadsAPI:
         }
         
         response = api_client.post(
-            f"{TEST_BASE_URL}/api/crm/leads/",
+            f"{TEST_BASE_URL}/crm/leads/",
             json=invalid_data,
             headers=headers
         )
@@ -453,7 +453,7 @@ class TestCRMLeadsAPI:
         }
         
         response = api_client.post(
-            f"{TEST_BASE_URL}/api/crm/leads/",
+            f"{TEST_BASE_URL}/crm/leads/",
             json=invalid_data,
             headers=headers
         )
@@ -470,7 +470,7 @@ class TestCRMLeadsAPI:
         nonexistent_id = str(uuid.uuid4())
         
         response = api_client.put(
-            f"{TEST_BASE_URL}/api/crm/leads/{nonexistent_id}",
+            f"{TEST_BASE_URL}/crm/leads/{nonexistent_id}",
             json={"name": "Updated Name"},
             headers=headers
         )
@@ -486,7 +486,7 @@ class TestCRMLeadsAPI:
         
         # Test missing query
         response = api_client.post(
-            f"{TEST_BASE_URL}/api/crm/leads/search",
+            f"{TEST_BASE_URL}/crm/leads/search",
             json={"page": 1},  # Missing query
             headers=headers
         )
@@ -495,7 +495,7 @@ class TestCRMLeadsAPI:
         
         # Test invalid page size
         response = api_client.post(
-            f"{TEST_BASE_URL}/api/crm/leads/search",
+            f"{TEST_BASE_URL}/crm/leads/search",
             json={"query": "test", "page_size": 150},  # Too large
             headers=headers
         )
@@ -526,7 +526,7 @@ class TestCRMLeadsIntegration:
         }
         
         create_response = api_client.post(
-            f"{TEST_BASE_URL}/api/crm/leads/",
+            f"{TEST_BASE_URL}/crm/leads/",
             json=lead_data,
             headers=headers
         )
@@ -541,7 +541,7 @@ class TestCRMLeadsIntegration:
         }
         
         update_response = api_client.put(
-            f"{TEST_BASE_URL}/api/crm/leads/{lead['id']}",
+            f"{TEST_BASE_URL}/crm/leads/{lead['id']}",
             json=update_data,
             headers=headers
         )
@@ -553,7 +553,7 @@ class TestCRMLeadsIntegration:
         
         for stage in stages:
             stage_response = api_client.put(
-                f"{TEST_BASE_URL}/api/crm/leads/{lead['id']}/stage",
+                f"{TEST_BASE_URL}/crm/leads/{lead['id']}/stage",
                 json={"stage": stage, "notes": f"Moved to {stage}"},
                 headers=headers
             )
@@ -569,7 +569,7 @@ class TestCRMLeadsIntegration:
         
         # 5. Clean up - delete lead
         delete_response = api_client.delete(
-            f"{TEST_BASE_URL}/api/crm/leads/{lead['id']}",
+            f"{TEST_BASE_URL}/crm/leads/{lead['id']}",
             headers=headers
         )
         

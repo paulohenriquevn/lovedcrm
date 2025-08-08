@@ -47,7 +47,7 @@ class TestCRMCollaborationAPI:
         org_id = authenticated_user['organization']['id']
         
         # Test organization stats
-        stats_response = api_client.get(f"{TEST_BASE_URL}/api/ws/organization-stats/{org_id}", headers=headers)
+        stats_response = api_client.get(f"{TEST_BASE_URL}/ws/organization-stats/{org_id}", headers=headers)
         assert_successful_response(stats_response, 200)
         
         stats_data = stats_response.json()
@@ -58,7 +58,7 @@ class TestCRMCollaborationAPI:
         assert stats_data['organization_id'] == org_id
         
         # Test active users
-        users_response = api_client.get(f"{TEST_BASE_URL}/api/ws/active-users/{org_id}", headers=headers)
+        users_response = api_client.get(f"{TEST_BASE_URL}/ws/active-users/{org_id}", headers=headers)
         assert_successful_response(users_response, 200)
         
         users_data = users_response.json()
@@ -74,7 +74,7 @@ class TestCRMCollaborationAPI:
         token = authenticated_user['tokens']['access_token']
         
         # Convert http://localhost:8001 to ws://localhost:8001
-        ws_url = f"ws://localhost:8001/api/ws/collaborate?token={token}&org_id={org_id}"
+        ws_url = f"ws://localhost:8001/ws/collaborate?token={token}&org_id={org_id}"
         
         try:
             async with websockets.connect(ws_url) as websocket:
@@ -114,7 +114,7 @@ class TestCRMCollaborationAPI:
         token = authenticated_user['tokens']['access_token']
         
         # Connect to WebSocket first
-        ws_url = f"ws://localhost:8001/api/ws/collaborate?token={token}&org_id={org_id}"
+        ws_url = f"ws://localhost:8001/ws/collaborate?token={token}&org_id={org_id}"
         
         try:
             async with websockets.connect(ws_url) as websocket:
@@ -139,7 +139,7 @@ class TestCRMCollaborationAPI:
                 
                 # Create lead
                 response = api_client.post(
-                    f"{TEST_BASE_URL}/api/crm/leads/",
+                    f"{TEST_BASE_URL}/crm/leads/",
                     json=lead_data,
                     headers=headers
                 )
@@ -180,12 +180,12 @@ class TestCRMCollaborationAPI:
             "stage": "lead"
         }
         
-        response = api_client.post(f"{TEST_BASE_URL}/api/crm/leads/", json=lead_data, headers=headers)
+        response = api_client.post(f"{TEST_BASE_URL}/crm/leads/", json=lead_data, headers=headers)
         assert_successful_response(response, 201)
         created_lead = response.json()
         
         # Connect to WebSocket
-        ws_url = f"ws://localhost:8001/api/ws/collaborate?token={token}&org_id={org_id}"
+        ws_url = f"ws://localhost:8001/ws/collaborate?token={token}&org_id={org_id}"
         
         try:
             async with websockets.connect(ws_url) as websocket:
@@ -199,7 +199,7 @@ class TestCRMCollaborationAPI:
                 }
                 
                 stage_response = api_client.put(
-                    f"{TEST_BASE_URL}/api/crm/leads/{created_lead['id']}/stage",
+                    f"{TEST_BASE_URL}/crm/leads/{created_lead['id']}/stage",
                     json=stage_update,
                     headers=headers
                 )
@@ -236,7 +236,7 @@ class TestCRMCollaborationAPI:
     async def test_websocket_requires_authentication(self):
         """🔒 Test WebSocket requires valid authentication."""
         # Try to connect without token
-        ws_url = "ws://localhost:8001/api/ws/collaborate?org_id=00000000-0000-0000-0000-000000000000"
+        ws_url = "ws://localhost:8001/ws/collaborate?org_id=00000000-0000-0000-0000-000000000000"
         
         try:
             async with websockets.connect(ws_url) as websocket:
@@ -263,7 +263,7 @@ class TestCRMCollaborationAPI:
         token = authenticated_user['tokens']['access_token']
         
         # Try to connect without org_id
-        ws_url = f"ws://localhost:8001/api/ws/collaborate?token={token}"
+        ws_url = f"ws://localhost:8001/ws/collaborate?token={token}"
         
         try:
             async with websockets.connect(ws_url) as websocket:
@@ -298,8 +298,8 @@ class TestCRMCollaborationAPI:
         assert user1_org_id != user2_org_id
         
         # Connect both users to their respective organizations
-        ws_url_user1 = f"ws://localhost:8001/api/ws/collaborate?token={user1_token}&org_id={user1_org_id}"
-        ws_url_user2 = f"ws://localhost:8001/api/ws/collaborate?token={user2_token}&org_id={user2_org_id}"
+        ws_url_user1 = f"ws://localhost:8001/ws/collaborate?token={user1_token}&org_id={user1_org_id}"
+        ws_url_user2 = f"ws://localhost:8001/ws/collaborate?token={user2_token}&org_id={user2_org_id}"
         
         try:
             async with websockets.connect(ws_url_user1) as ws1, \
@@ -324,7 +324,7 @@ class TestCRMCollaborationAPI:
                 # Import requests for this test
                 import requests
                 response = requests.post(
-                    f"{TEST_BASE_URL}/api/crm/leads/",
+                    f"{TEST_BASE_URL}/crm/leads/",
                     json=lead_data,
                     headers=headers_user1
                 )
@@ -358,7 +358,7 @@ class TestCRMCollaborationAPI:
         }
         
         user1_org_id = authenticated_user['organization']['id']
-        stats1_response = api_client.get(f"{TEST_BASE_URL}/api/ws/organization-stats/{user1_org_id}", headers=headers_user1)
+        stats1_response = api_client.get(f"{TEST_BASE_URL}/ws/organization-stats/{user1_org_id}", headers=headers_user1)
         assert_successful_response(stats1_response, 200)
         stats1_data = stats1_response.json()
         
@@ -369,7 +369,7 @@ class TestCRMCollaborationAPI:
         }
         
         user2_org_id = second_organization_user['organization']['id']
-        stats2_response = api_client.get(f"{TEST_BASE_URL}/api/ws/organization-stats/{user2_org_id}", headers=headers_user2)
+        stats2_response = api_client.get(f"{TEST_BASE_URL}/ws/organization-stats/{user2_org_id}", headers=headers_user2)
         assert_successful_response(stats2_response, 200)
         stats2_data = stats2_response.json()
         
@@ -392,12 +392,12 @@ class TestCRMCollaborationAPI:
         org_id = authenticated_user['organization']['id']
         
         # Test stats endpoint
-        stats_response = api_client.get(f"{TEST_BASE_URL}/api/ws/organization-stats/{org_id}", headers=headers)
+        stats_response = api_client.get(f"{TEST_BASE_URL}/ws/organization-stats/{org_id}", headers=headers)
         assert_error_response(stats_response, 400)
         assert "Missing X-Org-Id header" in stats_response.json()['detail']
         
         # Test active users endpoint
-        users_response = api_client.get(f"{TEST_BASE_URL}/api/ws/active-users/{org_id}", headers=headers)
+        users_response = api_client.get(f"{TEST_BASE_URL}/ws/active-users/{org_id}", headers=headers)
         assert_error_response(users_response, 400)
         assert "Missing X-Org-Id header" in users_response.json()['detail']
 
@@ -419,7 +419,7 @@ class TestCRMCollaborationIntegration:
         }
         
         # Step 1: Connect to WebSocket
-        ws_url = f"ws://localhost:8001/api/ws/collaborate?token={token}&org_id={org_id}"
+        ws_url = f"ws://localhost:8001/ws/collaborate?token={token}&org_id={org_id}"
         
         try:
             async with websockets.connect(ws_url) as websocket:
@@ -436,7 +436,7 @@ class TestCRMCollaborationIntegration:
                     "estimated_value": 5000.0
                 }
                 
-                create_response = api_client.post(f"{TEST_BASE_URL}/api/crm/leads/", json=lead_data, headers=headers)
+                create_response = api_client.post(f"{TEST_BASE_URL}/crm/leads/", json=lead_data, headers=headers)
                 assert_successful_response(create_response, 201)
                 created_lead = create_response.json()
                 
@@ -449,7 +449,7 @@ class TestCRMCollaborationIntegration:
                 # Step 4: Update lead stage and verify broadcast
                 stage_update = {"stage": "proposta", "notes": "Moving to proposal stage"}
                 stage_response = api_client.put(
-                    f"{TEST_BASE_URL}/api/crm/leads/{created_lead['id']}/stage",
+                    f"{TEST_BASE_URL}/crm/leads/{created_lead['id']}/stage",
                     json=stage_update,
                     headers=headers
                 )
@@ -486,7 +486,7 @@ class TestCRMCollaborationIntegration:
         
         # Test WebSocket stats performance
         start_time = time.time()
-        stats_response = api_client.get(f"{TEST_BASE_URL}/api/ws/organization-stats/{org_id}", headers=headers)
+        stats_response = api_client.get(f"{TEST_BASE_URL}/ws/organization-stats/{org_id}", headers=headers)
         stats_duration = (time.time() - start_time) * 1000  # Convert to milliseconds
         
         assert_successful_response(stats_response, 200)
@@ -494,7 +494,7 @@ class TestCRMCollaborationIntegration:
         
         # Test active users performance
         start_time = time.time()
-        users_response = api_client.get(f"{TEST_BASE_URL}/api/ws/active-users/{org_id}", headers=headers)
+        users_response = api_client.get(f"{TEST_BASE_URL}/ws/active-users/{org_id}", headers=headers)
         users_duration = (time.time() - start_time) * 1000
         
         assert_successful_response(users_response, 200)

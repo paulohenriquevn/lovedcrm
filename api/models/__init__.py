@@ -1,20 +1,24 @@
 """Essential models for multi-tenant SaaS."""
 # Template foundation models (DO NOT MODIFY)
 from .billing import OrganizationSubscription, Plan
-from .organization import Organization, OrganizationMember
-from .organization_invite import InviteStatus, OrganizationInvite, OrganizationRole
-from .user import User
-from .user_session import UserSession
-from .user_two_factor import UserTwoFactor
-from .user_preferences import UserPreferences
+from .crm_ai_summary import AISentiment, AISummary
+from .crm_audit_log import AuditAction, AuditLog
+from .crm_communication import Communication, CommunicationChannel, CommunicationDirection
+from .crm_file_attachment import FileAttachment, StorageType
 
 # CRM business models (YOUR EXTENSION)
 from .crm_lead import Lead, PipelineStage
-from .crm_communication import Communication, CommunicationChannel, CommunicationDirection
-from .crm_ai_summary import AISummary, AISentiment
-from .crm_organization_integration import OrganizationIntegration, IntegrationProvider, IntegrationStatus
-from .crm_file_attachment import FileAttachment, StorageType
-from .crm_audit_log import AuditLog, AuditAction
+from .crm_organization_integration import (
+    IntegrationProvider,
+    IntegrationStatus,
+    OrganizationIntegration,
+)
+from .organization import Organization, OrganizationMember
+from .organization_invite import InviteStatus, OrganizationInvite, OrganizationRole
+from .user import User
+from .user_preferences import UserPreferences
+from .user_session import UserSession
+from .user_two_factor import UserTwoFactor
 
 __all__ = [
     # Template foundation models
@@ -29,7 +33,6 @@ __all__ = [
     "UserSession",
     "UserTwoFactor",
     "UserPreferences",
-    
     # CRM business models
     "Lead",
     "PipelineStage",

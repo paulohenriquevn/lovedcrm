@@ -196,11 +196,15 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=1, max_length=128)
     recaptcha_token: Optional[str] = None  # 🤖 reCAPTCHA v3 token
-    
+
     # 🔐 Optional 2FA fields
-    totp_token: Optional[str] = Field(None, min_length=6, max_length=6, description="6-digit TOTP token")
-    backup_code: Optional[str] = Field(None, min_length=8, max_length=8, description="8-digit backup code")
-    
+    totp_token: Optional[str] = Field(
+        None, min_length=6, max_length=6, description="6-digit TOTP token"
+    )
+    backup_code: Optional[str] = Field(
+        None, min_length=8, max_length=8, description="8-digit backup code"
+    )
+
     @validator("totp_token")
     @classmethod
     def validate_totp_token(cls, v: Optional[str]) -> Optional[str]:
@@ -212,7 +216,7 @@ class UserLogin(BaseModel):
         if len(v) != 6:
             raise ValueError("TOTP token must be exactly 6 digits")
         return v
-    
+
     @validator("backup_code")
     @classmethod
     def validate_backup_code(cls, v: Optional[str]) -> Optional[str]:
@@ -228,20 +232,21 @@ class UserLogin(BaseModel):
 
 class LoginResponse(BaseModel):
     """Response schema for login with optional 2FA requirement."""
-    
+
     # Success case - full login response
     user: Optional[dict] = None
     organization: Optional[dict] = None
     access_token: Optional[str] = None
     refresh_token: Optional[str] = None
     token_type: Optional[str] = None
-    
+
     # 2FA required case
     requires_2fa: bool = False
     message: Optional[str] = None
-    
+
     class Config:
         """Pydantic configuration."""
+
         json_schema_extra = {
             "examples": [
                 {
@@ -250,12 +255,9 @@ class LoginResponse(BaseModel):
                     "access_token": "eyJ...",
                     "refresh_token": "eyJ...",
                     "token_type": "bearer",
-                    "requires_2fa": False
+                    "requires_2fa": False,
                 },
-                {
-                    "requires_2fa": True,
-                    "message": "2FA token required"
-                }
+                {"requires_2fa": True, "message": "2FA token required"},
             ]
         }
 

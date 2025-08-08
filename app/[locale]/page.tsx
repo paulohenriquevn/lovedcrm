@@ -11,12 +11,12 @@ import { FAQSection } from '@/components/landing/faq-section'
 import { FinalCTASection } from '@/components/landing/final-cta-section'
 import { Footer } from '@/components/landing/footer'
 import { HeroSectionV2 } from '@/components/landing/hero-section-v2'
-import { PricingSection } from '@/components/landing/pricing-section'
 import { 
   PipelineVisualSection, 
   WhatsAppIntegrationSection, 
   LeadsManagementSection 
 } from '@/components/landing/prd-features-sections'
+import { PricingSection } from '@/components/landing/pricing-section'
 import { SocialProofSectorial } from '@/components/landing/social-proof-sectorial'
 import { ScrollToTop } from '@/components/ui/scroll-to-top'
 

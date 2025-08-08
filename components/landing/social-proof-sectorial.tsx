@@ -8,7 +8,7 @@
 
 import { Card, CardContent } from '@/components/ui/card'
 
-export function SocialProofSectorial() {
+export function SocialProofSectorial(): JSX.Element {
   return (
     <section className="bg-muted/50 px-6 py-16">
       <div className="container mx-auto max-w-6xl text-center">
@@ -52,7 +52,7 @@ export function SocialProofSectorial() {
         </div>
 
         <blockquote className="text-lg italic text-muted-foreground mb-4 max-w-2xl mx-auto">
-          "Finalmente um CRM brasileiro que entende agências. Eliminamos 6 ferramentas e aumentamos nossa conversão em 400%. O WhatsApp nativo foi um game changer."
+          &ldquo;Finalmente um CRM brasileiro que entende agências. Eliminamos 6 ferramentas e aumentamos nossa conversão em 400%. O WhatsApp nativo foi um game changer.&rdquo;
         </blockquote>
         <cite className="text-sm font-medium">
           — Carlos Silva, Founder @ Digital Growth Agency (15 colaboradores)

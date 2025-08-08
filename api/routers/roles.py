@@ -17,7 +17,7 @@ from ..models.user import User
 from ..schemas.organization import OrganizationMemberResponse
 from ..services.role_management_service import RoleManagementService
 
-router = APIRouter(prefix="/organizations/roles", tags=["Role Management"])
+router = APIRouter(prefix="/roles", tags=["Role Management"])
 
 
 # Pydantic schemas for role management

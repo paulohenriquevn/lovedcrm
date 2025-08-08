@@ -11,7 +11,7 @@ import { CheckCircle } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 
-export function PipelineVisualSection() {
+export function PipelineVisualSection(): React.ReactElement {
   return (
     <section className="px-6 py-16">
       <div className="container mx-auto max-w-6xl">
@@ -59,8 +59,8 @@ export function PipelineVisualSection() {
                     <div key={stage} className="bg-gray-50 rounded p-2">
                       <div className="font-medium text-center mb-2">{stage}</div>
                       <div className="space-y-1">
-                        {Array.from({length: i + 1}).map((_, j) => (
-                          <div key={j} className="bg-sector-primary/20 rounded p-1 text-center">
+                        {Array.from({length: i + 1}, (_, j) => (
+                          <div key={`pipeline-lead-${stage}-item-${j + 1}`} className="bg-sector-primary/20 rounded p-1 text-center">
                             Lead {j + 1}
                           </div>
                         ))}
@@ -77,7 +77,7 @@ export function PipelineVisualSection() {
   )
 }
 
-export function WhatsAppIntegrationSection() {
+export function WhatsAppIntegrationSection(): React.ReactElement {
   return (
     <section className="px-6 py-16 bg-muted/30">
       <div className="container mx-auto max-w-6xl">
@@ -147,7 +147,7 @@ export function WhatsAppIntegrationSection() {
   )
 }
 
-export function LeadsManagementSection() {
+export function LeadsManagementSection(): React.ReactElement {
   return (
     <section className="px-6 py-16">
       <div className="container mx-auto max-w-6xl">

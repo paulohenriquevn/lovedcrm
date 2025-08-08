@@ -58,78 +58,139 @@ const stageConfig: Record<PipelineStage, {
   }
 }
 
-export function PipelineStage({ 
-  stage, 
-  count, 
+const createKeyDownHandler = (onClick?: () => void) => (event: React.KeyboardEvent): void => {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault()
+    const handleClick = onClick ?? (() => {})
+    handleClick()
+  }
+}
+
+function InteractiveHint({ interactive }: { interactive: boolean }): React.ReactElement | null {
+  if (interactive !== true) {
+    return null
+  }
+
+  return (
+    <div className="text-xs opacity-50 mt-2">
+      Clique para ver detalhes
+    </div>
+  )
+}
+
+function CompactPipelineStage({
+  stage,
+  count,
   className,
-  variant = 'default',
-  interactive = false,
+  interactive,
   onClick
-}: PipelineStageProps): React.ReactElement {
+}: Omit<PipelineStageProps, 'variant'>): React.ReactElement {
   const config = stageConfig[stage]
   const Icon = config.icon
 
-  if (variant === 'compact') {
-    return (
-      <div className={cn(
+  const handleClick = onClick ?? (() => {})
+  const handleKeyDown = createKeyDownHandler(onClick)
+
+  return (
+    <div 
+      className={cn(
         "inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-colors",
         config.styles,
-        interactive && "cursor-pointer",
+        interactive === true && "cursor-pointer",
         className
-      )} onClick={onClick}>
-        <Icon className="h-4 w-4" />
-        <span className="text-sm font-medium">
-          {pipelineStageLabels[stage]}
+      )} 
+      onClick={handleClick}
+      onKeyDown={interactive === true ? handleKeyDown : undefined}
+      tabIndex={interactive === true ? 0 : undefined}
+      role={interactive === true ? "button" : undefined}
+    >
+      <Icon className="h-4 w-4" />
+      <span className="text-sm font-medium">
+        {pipelineStageLabels[stage]}
+      </span>
+      {count !== null && count !== undefined && (
+        <span className="text-xs opacity-75 bg-white/50 px-1.5 py-0.5 rounded-full">
+          {count}
         </span>
-        {count != null && (
-          <span className="text-xs opacity-75 bg-white/50 px-1.5 py-0.5 rounded-full">
+      )}
+    </div>
+  )
+}
+
+function KanbanPipelineStage({
+  stage,
+  count,
+  className,
+  interactive,
+  onClick
+}: Omit<PipelineStageProps, 'variant'>): React.ReactElement {
+  const config = stageConfig[stage]
+  const Icon = config.icon
+
+  const handleClick = onClick ?? (() => {})
+  const handleKeyDown = createKeyDownHandler(onClick)
+
+  return (
+    <div 
+      className={cn(
+        "rounded-lg border-2 border-dashed p-4 transition-all duration-200",
+        "min-h-[120px] flex flex-col",
+        config.styles,
+        interactive === true && "cursor-pointer hover:border-solid",
+        className
+      )} 
+      onClick={handleClick}
+      onKeyDown={interactive === true ? handleKeyDown : undefined}
+      tabIndex={interactive === true ? 0 : undefined}
+      role={interactive === true ? "button" : undefined}
+    >
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <Icon className="h-5 w-5" />
+          <h3 className="font-semibold text-sm">
+            {pipelineStageLabels[stage]}
+          </h3>
+        </div>
+        {count !== null && count !== undefined && (
+          <span className="text-sm font-medium bg-white/70 px-2 py-1 rounded-full">
             {count}
           </span>
         )}
       </div>
-    )
-  }
+      <p className="text-xs opacity-75 mb-auto">
+        {config.description}
+      </p>
+      <InteractiveHint interactive={interactive} />
+    </div>
+  )
+}
 
-  if (variant === 'kanban') {
-    return (
-      <div className={cn(
-        "rounded-lg border-2 border-dashed p-4 transition-all duration-200",
-        "min-h-[120px] flex flex-col",
-        config.styles,
-        interactive && "cursor-pointer hover:border-solid",
-        className
-      )} onClick={onClick}>
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <Icon className="h-5 w-5" />
-            <h3 className="font-semibold text-sm">
-              {pipelineStageLabels[stage]}
-            </h3>
-          </div>
-          {count != null && (
-            <span className="text-sm font-medium bg-white/70 px-2 py-1 rounded-full">
-              {count}
-            </span>
-          )}
-        </div>
-        <p className="text-xs opacity-75 mb-auto">
-          {config.description}
-        </p>
-        {interactive ? <div className="text-xs opacity-50 mt-2">
-            Clique para ver detalhes
-          </div> : null}
-      </div>
-    )
-  }
+function DefaultPipelineStage({
+  stage,
+  count,
+  className,
+  interactive,
+  onClick
+}: Omit<PipelineStageProps, 'variant'>): React.ReactElement {
+  const config = stageConfig[stage]
+  const Icon = config.icon
 
-  // Variant padrão
+  const handleClick = onClick ?? (() => {})
+  const handleKeyDown = createKeyDownHandler(onClick)
+
   return (
-    <div className={cn(
-      "rounded-lg border-2 border-dashed p-4 transition-colors",
-      config.styles,
-      interactive && "cursor-pointer",
-      className
-    )} onClick={onClick}>
+    <div 
+      className={cn(
+        "rounded-lg border-2 border-dashed p-4 transition-colors",
+        config.styles,
+        interactive === true && "cursor-pointer",
+        className
+      )} 
+      onClick={handleClick}
+      onKeyDown={interactive === true ? handleKeyDown : undefined}
+      tabIndex={interactive === true ? 0 : undefined}
+      role={interactive === true ? "button" : undefined}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Icon className="h-5 w-5" />
@@ -137,7 +198,7 @@ export function PipelineStage({
             {pipelineStageLabels[stage]}
           </h3>
         </div>
-        {count != null && (
+        {count !== null && count !== undefined && (
           <span className="text-sm opacity-75 font-medium">
             {count}
           </span>
@@ -148,6 +209,35 @@ export function PipelineStage({
       </p>
     </div>
   )
+}
+
+export function PipelineStage({ 
+  stage, 
+  count, 
+  className,
+  variant = 'default',
+  interactive = false,
+  onClick
+}: PipelineStageProps): React.ReactElement {
+  const commonProps = {
+    stage,
+    count,
+    className,
+    interactive,
+    onClick
+  }
+
+  switch (variant) {
+    case 'compact': {
+      return <CompactPipelineStage {...commonProps} />
+    }
+    case 'kanban': {
+      return <KanbanPipelineStage {...commonProps} />
+    }
+    default: {
+      return <DefaultPipelineStage {...commonProps} />
+    }
+  }
 }
 
 // Componente para progresso entre estágios

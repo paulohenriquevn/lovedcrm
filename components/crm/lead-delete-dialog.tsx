@@ -5,10 +5,9 @@
 
 'use client'
 
-import { useState } from 'react'
 import { AlertTriangle } from 'lucide-react'
+import { useState } from 'react'
 
-import { Button } from '@/components/ui/button'
 import {
   AlertDialog,
   AlertDialogContent,
@@ -17,14 +16,35 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
-import crmLeadsService, { Lead } from '@/services/crm-leads'
+import { default as crmLeadsService, Lead } from '@/services/crm-leads'
 
 interface LeadDeleteDialogProps {
   isOpen: boolean
   onClose: () => void
   onSuccess: () => void
   lead: Lead | null
+}
+
+function LeadValueWarning({ lead }: { lead: Lead }): React.ReactElement | null {
+  if (lead.estimated_value === null || lead.estimated_value === undefined || lead.estimated_value <= 0) {
+    return null
+  }
+
+  return (
+    <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
+      <p className="text-sm text-orange-800">
+        ⚠️ Este lead tem um valor estimado de{' '}
+        <strong>
+          {new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+          }).format(lead.estimated_value)}
+        </strong>
+      </p>
+    </div>
+  )
 }
 
 export function LeadDeleteDialog({ 
@@ -37,7 +57,9 @@ export function LeadDeleteDialog({
   const { toast } = useToast()
 
   const handleDelete = async (): Promise<void> => {
-    if (!lead) return
+    if (!lead) {
+      return
+    }
 
     try {
       setIsDeleting(true)
@@ -51,8 +73,8 @@ export function LeadDeleteDialog({
       
       onClose()
       onSuccess()
-    } catch (error) {
-      console.error('Erro ao remover lead:', error)
+    } catch {
+      // Error handling - replace with proper logging in production
       toast({
         title: 'Erro ao remover lead',
         description: 'Não foi possível remover o lead. Tente novamente.',
@@ -63,7 +85,9 @@ export function LeadDeleteDialog({
     }
   }
 
-  if (!lead) return <></>
+  if (!lead) {
+    return null
+  }
 
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
@@ -76,25 +100,12 @@ export function LeadDeleteDialog({
           <AlertDialogDescription asChild>
             <div className="space-y-2">
               <p>
-                Tem certeza que deseja remover o lead <strong>"{lead.name}"</strong>?
+                Tem certeza que deseja remover o lead <strong>&ldquo;{lead.name}&rdquo;</strong>?
               </p>
               <p className="text-sm text-muted-foreground">
                 Esta ação não pode ser desfeita. Todas as informações do lead serão perdidas permanentemente.
               </p>
-              
-              {(lead.estimated_value && lead.estimated_value > 0) && (
-                <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
-                  <p className="text-sm text-orange-800">
-                    ⚠️ Este lead tem um valor estimado de{' '}
-                    <strong>
-                      {new Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL'
-                      }).format(lead.estimated_value)}
-                    </strong>
-                  </p>
-                </div>
-              )}
+              <LeadValueWarning lead={lead} />
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -108,7 +119,7 @@ export function LeadDeleteDialog({
           </Button>
           <Button
             variant="destructive"
-            onClick={handleDelete}
+            onClick={() => void handleDelete()}
             disabled={isDeleting}
           >
             {isDeleting ? 'Removendo...' : 'Sim, remover lead'}

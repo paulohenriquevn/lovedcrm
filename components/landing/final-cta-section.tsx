@@ -10,7 +10,7 @@ import { ArrowRight } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
-export function FinalCTASection() {
+export function FinalCTASection(): React.ReactElement {
   return (
     <section className="bg-gradient-to-r from-sector-primary to-purple-600 px-6 py-20 text-white">
       <div className="container mx-auto max-w-4xl text-center">

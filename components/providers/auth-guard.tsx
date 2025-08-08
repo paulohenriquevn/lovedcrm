@@ -34,6 +34,19 @@ function isProtectedRoute(pathname: string): boolean {
   return PROTECTED_ROUTES.some(route => pathname.includes(route))
 }
 
+function getPathWithoutLocale(pathname: string): string {
+  return pathname.replace(/^\/[a-z]{2}(?:-[A-Z]{2})?/, '') || '/'
+}
+
+function handleUnauthorizedAccess(pathname: string, router: ReturnType<typeof useRouter>): void {
+  const returnUrl = encodeURIComponent(pathname)
+  router.push(`/auth/login?returnUrl=${returnUrl}`)
+}
+
+function handleAuthenticatedUserOnAuthPage(router: ReturnType<typeof useRouter>): void {
+  router.push('/admin')
+}
+
 // Loading spinner component
 function AuthLoadingSpinner(): JSX.Element {
   return (
@@ -50,42 +63,35 @@ export function AuthGuard({ children }: AuthGuardProps): JSX.Element {
 
   useEffect(() => {
     // Wait for auth state to load
-    if (loading) {
+    if (loading === true) {
       return
     }
 
-    // Get pathname without locale for route matching
-    const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}(?:-[A-Z]{2})?/, '') || '/'
+    const pathWithoutLocale = getPathWithoutLocale(pathname)
     
     // If user is not authenticated and trying to access protected route
     if (!isAuthenticated && !user && isProtectedRoute(pathWithoutLocale)) {
-      console.log('🚨 Unauthorized access attempt to:', pathWithoutLocale)
-      // Redirect to login with return URL
-      const returnUrl = encodeURIComponent(pathname)
-      router.push(`/auth/login?returnUrl=${returnUrl}`)
+      handleUnauthorizedAccess(pathname, router)
       return
     }
 
     // If user is authenticated and trying to access auth pages, redirect to admin
     if (isAuthenticated && user && isPublicRoute(pathWithoutLocale)) {
-      console.log('✅ Authenticated user accessing auth page, redirecting to admin')
-      router.push('/admin')
-      return
+      handleAuthenticatedUserOnAuthPage(router)
     }
   }, [user, isAuthenticated, loading, router, pathname])
 
   // Show loading spinner while auth state is being determined
-  if (loading) {
+  if (loading === true) {
     return <AuthLoadingSpinner />
   }
 
-  // Get pathname without locale for route matching
-  const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}(?:-[A-Z]{2})?/, '') || '/'
+  const pathWithoutLocale = getPathWithoutLocale(pathname)
 
   // Block access to protected routes for unauthenticated users
   if (!isAuthenticated && !user && isProtectedRoute(pathWithoutLocale)) {
     return <AuthLoadingSpinner />
   }
 
-  return <>{children}</>
+  return children
 }

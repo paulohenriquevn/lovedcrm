@@ -188,6 +188,13 @@ make test-hot-all           # Apply all hot updates
 make test-logs              # View all service logs
 make test-logs-api          # View API logs only
 make test-logs-db           # View database logs only
+
+# Proxy integration testing (NEW)
+make test-proxy             # Run all proxy integration tests
+make test-proxy-quick       # Quick proxy tests
+make test-proxy-auth        # Authentication via proxy
+make test-proxy-headers     # Header forwarding validation
+make test-proxy-compare     # Proxy vs direct API comparison
 ```
 
 ### Code Quality
@@ -313,11 +320,15 @@ class YourRepository(SQLRepository):
 
 ## CRM-Specific Architecture
 
-### Pipeline System
+### Pipeline System (90% Complete)
 - **Fixed 5-stage pipeline**: Lead → Contact → Proposal → Negotiation → Closed
-- **Drag & drop interface**: `components/crm/pipeline-kanban.tsx`
-- **Pipeline stages**: `components/crm/pipeline-stage.tsx`
-- **Lead management**: `api/routers/crm_leads.py`
+- **Drag & drop interface**: `components/crm/pipeline-kanban.tsx` with @dnd-kit/core
+- **Pipeline stages**: `components/crm/pipeline-stage.tsx` with optimistic UI updates
+- **Lead management**: `api/routers/crm_leads.py` with `/crm/leads/{id}/stage` endpoint
+- **Real-time WebSocket**: `hooks/use-pipeline-websocket.ts` with automatic polling fallback
+- **Performance optimization**: Database indexes (`migrations/014_pipeline_performance_index.sql`)
+- **WebSocket handlers**: Complete real-time collaboration system
+- **Remaining**: Pipeline-specific WebSocket endpoint (`/ws/pipeline`) and broadcasting integration
 
 ### Communication System
 - **Timeline component**: `components/crm/timeline.tsx`
@@ -346,6 +357,19 @@ export function CRMContainer() {
 export function CRMView({ data, loading }: Props) {
   // Pure presentation component
 }
+```
+
+**Component Decomposition Pattern (NEW 2025):**
+```typescript
+// Main component file
+export function PipelineKanban() {
+  // Main component logic
+}
+
+// Decomposed helper components in separate files
+// components/crm/pipeline-kanban-helpers.tsx
+// components/crm/pipeline-websocket-handlers.tsx
+// components/crm/pipeline-data-handlers.tsx
 ```
 
 **Service Layer Pattern:**
@@ -488,6 +512,36 @@ make db-prod-status
 make db-prod-migration-apply
 ```
 
+## Current Development Status & Next Steps
+
+### Pipeline Kanban MVP (Story 1.1) - 90% Complete
+**Completed:**
+- ✅ Drag & drop interface with @dnd-kit/core
+- ✅ Backend API endpoint `/crm/leads/{id}/stage`
+- ✅ WebSocket infrastructure (`websocket_manager.py`) with organization isolation
+- ✅ Database schema with PipelineStage enum
+- ✅ Service layer `moveLeadToStage()` implementation
+- ✅ Performance indexes (`migrations/014_pipeline_performance_index.sql`)
+  - Optimized queries: `idx_leads_org_stage`, `idx_leads_org_stage_updated`
+  - Team filtering: `idx_leads_org_assigned_user`
+  - Search optimization: `idx_leads_org_search`
+- ✅ Frontend WebSocket hook (`use-pipeline-websocket.ts`) with polling fallback
+- ✅ Multi-tenancy organization isolation
+- ✅ Component decomposition architecture with dedicated helpers
+
+**Remaining (10%):**
+- WebSocket pipeline-specific endpoint `/ws/pipeline`
+- Broadcasting integration in CRMLeadService
+- Complete frontend WebSocket connection in pipeline-kanban
+- E2E tests for real-time collaboration
+
+### Component Architecture Pattern
+Most CRM components now follow decomposition pattern:
+- Main component: `component-name.tsx`
+- Helper components: `component-name-components.tsx`
+- Logic utilities: `component-name-utils.tsx` or `component-name-helpers.tsx`
+- Type definitions: `component-name-types.ts`
+
 ## Common Development Tasks
 
 ### Adding New CRM Features
@@ -496,7 +550,7 @@ make db-prod-migration-apply
 3. Create repository with org filtering
 4. Implement service with business logic
 5. Add API endpoints with org validation
-6. Create frontend components
+6. Create frontend components (follow decomposition pattern)
 7. Add to admin routes with proper auth
 8. Write tests for multi-tenancy isolation
 
@@ -562,7 +616,13 @@ tests/
 ├── frontend/              # Vitest frontend tests
 ├── e2e/api/              # API integration tests
 │   ├── test_multi_tenant_isolation.py  # Critical isolation tests
-│   └── test_saas_mode_*.py            # B2B/B2C mode tests
+│   ├── test_saas_mode_*.py            # B2B/B2C mode tests
+│   └── test_pipeline_realtime.py     # Pipeline real-time collaboration tests
+├── e2e/proxy/            # Next.js → Backend proxy integration tests
+│   ├── test_proxy_auth.py            # Authentication via proxy
+│   ├── test_proxy_headers.py         # Header forwarding validation
+│   ├── test_proxy_crm_leads.py       # CRM features via proxy
+│   └── utils/nextjs_client.py        # Proxy test utilities
 ├── unit/                 # Backend unit tests
 └── e2e/mocks/            # WireMock configurations for external services
 ```
@@ -570,10 +630,22 @@ tests/
 ### Development Tools
 - `Makefile`: 50+ automation commands for development workflow
 - `check-saas-mode.sh`: Validates B2B/B2C configuration
-- `migrations/migrate`: Database migration tool
-- `docker-compose*.yml`: Different environments (dev, test, prod)
+- `migrations/migrate`: Database migration tool with hot updates
+- `docker-compose.yml`: Development environment
+- `docker-compose.test.yml`: E2E testing environment 
+- `docker-compose.prod.yml`: Production environment
 - `requirements.txt`: Python dependencies
 - `package.json`: Node.js dependencies with comprehensive scripts
+
+### Recent Architectural Enhancements (2025)
+- **Component decomposition pattern**: Many components now split into `-components.tsx` files for better maintainability
+- **WebSocket infrastructure**: Complete real-time system with organization isolation and polling fallback via `use-pipeline-websocket.ts`
+- **Pipeline Kanban MVP**: 90% complete with drag-drop, real-time updates, and performance optimization
+- **Advanced hook system**: 20+ custom hooks including comprehensive WebSocket management and organization context
+- **Performance indexes**: Pipeline-specific database indexes for optimal Kanban performance (`migrations/014_pipeline_performance_index.sql`)
+- **Design tokens demo**: Complete showcase of CRM UI components and design system
+- **Proxy integration testing**: Complete E2E test suite for Next.js → Backend proxy validation
+- **Database schema evolution**: 38-table complete CRM schema with multi-tenant isolation
 
 ## Development Rules & Guidelines
 
@@ -628,7 +700,7 @@ tests/
 ```bash
 # Development workflow
 make setup                     # First-time setup
-npm run dev                    # Start development
+npm run dev                    # Start development (Frontend: 3000, Backend: 8000)
 make test-hot-migrate         # Apply schema changes (2s)
 make test-hot-data           # Reload test data (3s)
 
@@ -646,6 +718,19 @@ make connect-db-prod               # Production access
 make test-frontend-watch     # Frontend tests (watch mode)
 make test-backend-unit-quick # Backend tests (quick)
 make test-hot-all           # Apply all updates
+npm run test:e2e:api         # API E2E tests
+
+# WebSocket & Pipeline debugging
+npm run dev                  # Check WebSocket connections in browser dev tools
+make test-logs-api          # Monitor WebSocket connections in API logs
+# Pipeline Kanban WebSocket: /api/ws/pipeline?token=JWT&org_id=UUID
+# WebSocket Manager: api/core/websocket_manager.py with organization isolation
+# Frontend Hook: hooks/use-pipeline-websocket.ts with polling fallback
+
+# Docker development (alternative to npm run dev)
+make dev-start              # Complete Docker environment
+make dev-logs               # View all service logs
+make dev-stop               # Stop all services
 ```
 
 ### Debugging Multi-Tenancy Issues

@@ -22,18 +22,18 @@ from ..services.user_preferences_service import UserPreferencesService
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/users/me/preferences", tags=["user-preferences"])
+router = APIRouter(prefix="/user-preferences", tags=["user-preferences"])
 
 
 @router.get("", response_model=UserPreferencesResponse)
 async def get_user_preferences(
     current_user: User = Depends(get_current_active_user),
     organization: Organization = Depends(get_current_organization),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Get current user's preferences for the organization."""
     service = UserPreferencesService(db)
-    
+
     try:
         return service.get_user_preferences(current_user, organization)
     except Exception as e:
@@ -42,13 +42,13 @@ async def get_user_preferences(
             extra={
                 "user_id": str(current_user.id),
                 "organization_id": str(organization.id),
-                "error": str(e)
+                "error": str(e),
             },
-            exc_info=True
+            exc_info=True,
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to retrieve preferences"
+            detail="Failed to retrieve preferences",
         )
 
 
@@ -57,11 +57,11 @@ async def update_user_preferences(
     preferences_data: UserPreferencesUpdate,
     current_user: User = Depends(get_current_active_user),
     organization: Organization = Depends(get_current_organization),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Update user preferences."""
     service = UserPreferencesService(db)
-    
+
     try:
         return service.update_preferences(current_user, organization, preferences_data)
     except Exception as e:
@@ -70,13 +70,12 @@ async def update_user_preferences(
             extra={
                 "user_id": str(current_user.id),
                 "organization_id": str(organization.id),
-                "error": str(e)
+                "error": str(e),
             },
-            exc_info=True
+            exc_info=True,
         )
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to update preferences"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to update preferences"
         )
 
 
@@ -85,11 +84,11 @@ async def update_notification_preferences(
     notification_data: UserPreferencesUpdateNotifications,
     current_user: User = Depends(get_current_active_user),
     organization: Organization = Depends(get_current_organization),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Update only notification preferences."""
     service = UserPreferencesService(db)
-    
+
     try:
         # Convert to dict and exclude None values
         notification_dict = notification_data.model_dump(exclude_none=True)
@@ -100,13 +99,13 @@ async def update_notification_preferences(
             extra={
                 "user_id": str(current_user.id),
                 "organization_id": str(organization.id),
-                "error": str(e)
+                "error": str(e),
             },
-            exc_info=True
+            exc_info=True,
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to update notification preferences"
+            detail="Failed to update notification preferences",
         )
 
 
@@ -115,11 +114,11 @@ async def update_display_preferences(
     display_data: UserPreferencesUpdateDisplay,
     current_user: User = Depends(get_current_active_user),
     organization: Organization = Depends(get_current_organization),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Update only display preferences."""
     service = UserPreferencesService(db)
-    
+
     try:
         # Convert to dict and exclude None values
         display_dict = display_data.model_dump(exclude_none=True)
@@ -130,13 +129,13 @@ async def update_display_preferences(
             extra={
                 "user_id": str(current_user.id),
                 "organization_id": str(organization.id),
-                "error": str(e)
+                "error": str(e),
             },
-            exc_info=True
+            exc_info=True,
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to update display preferences"
+            detail="Failed to update display preferences",
         )
 
 
@@ -145,11 +144,11 @@ async def update_privacy_preferences(
     privacy_data: UserPreferencesUpdatePrivacy,
     current_user: User = Depends(get_current_active_user),
     organization: Organization = Depends(get_current_organization),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Update only privacy preferences."""
     service = UserPreferencesService(db)
-    
+
     try:
         # Convert to dict and exclude None values
         privacy_dict = privacy_data.model_dump(exclude_none=True)
@@ -160,13 +159,13 @@ async def update_privacy_preferences(
             extra={
                 "user_id": str(current_user.id),
                 "organization_id": str(organization.id),
-                "error": str(e)
+                "error": str(e),
             },
-            exc_info=True
+            exc_info=True,
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to update privacy preferences"
+            detail="Failed to update privacy preferences",
         )
 
 
@@ -175,11 +174,11 @@ async def update_quiet_hours(
     quiet_hours_data: QuietHoursSettings,
     current_user: User = Depends(get_current_active_user),
     organization: Organization = Depends(get_current_organization),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Update quiet hours settings."""
     service = UserPreferencesService(db)
-    
+
     try:
         quiet_hours_dict = quiet_hours_data.model_dump()
         return service.update_quiet_hours(current_user, organization, quiet_hours_dict)
@@ -189,13 +188,12 @@ async def update_quiet_hours(
             extra={
                 "user_id": str(current_user.id),
                 "organization_id": str(organization.id),
-                "error": str(e)
+                "error": str(e),
             },
-            exc_info=True
+            exc_info=True,
         )
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to update quiet hours"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to update quiet hours"
         )
 
 
@@ -204,11 +202,11 @@ async def quick_update_preferences(
     quick_data: UserPreferencesQuickUpdate,
     current_user: User = Depends(get_current_active_user),
     organization: Organization = Depends(get_current_organization),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Quick update for common preferences (theme, language, notifications)."""
     service = UserPreferencesService(db)
-    
+
     try:
         # Convert to dict and exclude None values
         update_dict = quick_data.model_dump(exclude_none=True)
@@ -219,13 +217,12 @@ async def quick_update_preferences(
             extra={
                 "user_id": str(current_user.id),
                 "organization_id": str(organization.id),
-                "error": str(e)
+                "error": str(e),
             },
-            exc_info=True
+            exc_info=True,
         )
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to update preferences"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to update preferences"
         )
 
 
@@ -233,11 +230,11 @@ async def quick_update_preferences(
 async def reset_preferences_to_defaults(
     current_user: User = Depends(get_current_active_user),
     organization: Organization = Depends(get_current_organization),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Reset user preferences to default values."""
     service = UserPreferencesService(db)
-    
+
     try:
         return service.reset_to_defaults(current_user, organization)
     except Exception as e:
@@ -246,13 +243,12 @@ async def reset_preferences_to_defaults(
             extra={
                 "user_id": str(current_user.id),
                 "organization_id": str(organization.id),
-                "error": str(e)
+                "error": str(e),
             },
-            exc_info=True
+            exc_info=True,
         )
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to reset preferences"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to reset preferences"
         )
 
 
@@ -260,17 +256,16 @@ async def reset_preferences_to_defaults(
 async def delete_user_preferences(
     current_user: User = Depends(get_current_active_user),
     organization: Organization = Depends(get_current_organization),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Delete user preferences (will use defaults afterward)."""
     service = UserPreferencesService(db)
-    
+
     try:
         success = service.delete_preferences(current_user, organization)
         if not success:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User preferences not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="User preferences not found"
             )
         return None
     except HTTPException:
@@ -281,13 +276,12 @@ async def delete_user_preferences(
             extra={
                 "user_id": str(current_user.id),
                 "organization_id": str(organization.id),
-                "error": str(e)
+                "error": str(e),
             },
-            exc_info=True
+            exc_info=True,
         )
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to delete preferences"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to delete preferences"
         )
 
 
@@ -295,25 +289,26 @@ async def delete_user_preferences(
 async def get_preferences_statistics(
     current_user: User = Depends(get_current_active_user),
     organization: Organization = Depends(get_current_organization),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     """Get preferences statistics for the organization (admin only)."""
     # Check if user is admin or owner
     from ..models.organization import OrganizationMember
-    
-    member = db.query(OrganizationMember).filter(
-        OrganizationMember.user_id == current_user.id,
-        OrganizationMember.organization_id == organization.id
-    ).first()
-    
-    if not member or member.role not in ["admin", "owner"]:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin access required"
+
+    member = (
+        db.query(OrganizationMember)
+        .filter(
+            OrganizationMember.user_id == current_user.id,
+            OrganizationMember.organization_id == organization.id,
         )
-    
+        .first()
+    )
+
+    if not member or member.role not in ["admin", "owner"]:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
+
     service = UserPreferencesService(db)
-    
+
     try:
         return service.get_organization_statistics(organization)
     except Exception as e:
@@ -322,13 +317,13 @@ async def get_preferences_statistics(
             extra={
                 "user_id": str(current_user.id),
                 "organization_id": str(organization.id),
-                "error": str(e)
+                "error": str(e),
             },
-            exc_info=True
+            exc_info=True,
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to retrieve statistics"
+            detail="Failed to retrieve statistics",
         )
 
 
@@ -336,11 +331,11 @@ async def get_preferences_statistics(
 async def get_effective_settings(
     current_user: User = Depends(get_current_active_user),
     organization: Organization = Depends(get_current_organization),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ) -> Dict[str, str]:
     """Get effective language and timezone settings with fallbacks."""
     service = UserPreferencesService(db)
-    
+
     try:
         return service.get_effective_settings(current_user, organization)
     except Exception as e:
@@ -349,13 +344,13 @@ async def get_effective_settings(
             extra={
                 "user_id": str(current_user.id),
                 "organization_id": str(organization.id),
-                "error": str(e)
+                "error": str(e),
             },
-            exc_info=True
+            exc_info=True,
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to retrieve effective settings"
+            detail="Failed to retrieve effective settings",
         )
 
 
@@ -366,42 +361,46 @@ async def bulk_update_notification_preference(
     enabled: bool,
     current_user: User = Depends(get_current_active_user),
     organization: Organization = Depends(get_current_organization),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ) -> Dict[str, int]:
     """Bulk update notification preference for all users (admin only)."""
     # Check if user is admin or owner
     from ..models.organization import OrganizationMember
-    
-    member = db.query(OrganizationMember).filter(
-        OrganizationMember.user_id == current_user.id,
-        OrganizationMember.organization_id == organization.id
-    ).first()
-    
-    if not member or member.role not in ["admin", "owner"]:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin access required"
+
+    member = (
+        db.query(OrganizationMember)
+        .filter(
+            OrganizationMember.user_id == current_user.id,
+            OrganizationMember.organization_id == organization.id,
         )
-    
+        .first()
+    )
+
+    if not member or member.role not in ["admin", "owner"]:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
+
     # Validate notification type
     valid_types = [
-        "email_notifications", "push_notifications", "sms_notifications",
-        "email_marketing", "email_product_updates", "email_security_alerts",
-        "email_billing_alerts", "email_team_activity"
+        "email_notifications",
+        "push_notifications",
+        "sms_notifications",
+        "email_marketing",
+        "email_product_updates",
+        "email_security_alerts",
+        "email_billing_alerts",
+        "email_team_activity",
     ]
-    
+
     if notification_type not in valid_types:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid notification type. Must be one of: {', '.join(valid_types)}"
+            detail=f"Invalid notification type. Must be one of: {', '.join(valid_types)}",
         )
-    
+
     service = UserPreferencesService(db)
-    
+
     try:
-        updated_count = service.bulk_notification_update(
-            organization, notification_type, enabled
-        )
+        updated_count = service.bulk_notification_update(organization, notification_type, enabled)
         return {"updated_count": updated_count}
     except Exception as e:
         logger.error(
@@ -411,11 +410,11 @@ async def bulk_update_notification_preference(
                 "organization_id": str(organization.id),
                 "notification_type": notification_type,
                 "enabled": enabled,
-                "error": str(e)
+                "error": str(e),
             },
-            exc_info=True
+            exc_info=True,
         )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to update notification preferences"
+            detail="Failed to update notification preferences",
         )

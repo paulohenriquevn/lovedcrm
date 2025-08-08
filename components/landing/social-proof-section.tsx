@@ -1,32 +1,24 @@
 /**
- * Social Proof Section - Landing Page Loved CRM
+ * Social Proof Section - Landing Page Loved CRM (Refactored)
  * Seção de prova social e depoimentos de agências brasileiras
  * Baseado na especificação do agente 08-landing-page.md
  */
 
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Star, 
-  Quote, 
-  TrendingUp, 
-  Users, 
-  Award,
-  MapPin,
-  Calendar
-} from 'lucide-react'
-import Image from 'next/image'
+import { motion } from 'framer-motion'
+import { TrendingUp, Users, Award, Calendar } from 'lucide-react'
 import { useState } from 'react'
 
-import { ImageLoading } from '@/components/loading/section-loading'
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { useScrollAnimation, scrollAnimationVariants, staggerContainer, staggerItem } from '@/hooks/use-scroll-animation'
-import { testimonialImages, companyLogos, getImageProps } from '@/lib/images'
+import { useScrollAnimation, staggerContainer } from '@/hooks/use-scroll-animation'
+import { testimonialImages } from '@/lib/images'
 
+import { 
+  TestimonialCard, 
+  SocialProofHeader, 
+  SocialProofMetrics, 
+  SocialProofFooter 
+} from './social-proof-components'
 
 const testimonials = [
   {
@@ -50,10 +42,10 @@ const testimonials = [
     location: "Rio de Janeiro, RJ",
     avatar: testimonialImages.marina,
     rating: 5,
-    quote: "O pipeline visual mudou tudo. Minha equipe agora vê exatamente onde cada lead está. As automações do WhatsApp economizam 3 horas por dia. ROI de 400% no primeiro trimestre.",
-    results: "Team de 6 para 15 pessoas",
+    quote: "O pipeline visual e as automações mudaram nosso jogo. Economizamos 15h/semana em tarefas manuais. O ROI foi de 340% no primeiro trimestre.",
+    results: "+340% ROI em 3 meses",
     tier: "ENTERPRISE",
-    teamSize: "15 pessoas"
+    teamSize: "25 pessoas"
   },
   {
     id: 3,
@@ -63,324 +55,75 @@ const testimonials = [
     location: "Belo Horizonte, MG",
     avatar: testimonialImages.rafael,
     rating: 5,
-    quote: "Setup em 5 minutos, sem complicação. A timeline unificada é genial - vejo todo histórico do cliente numa tela. Fechamos 60% mais negócios só com melhor organização.",
-    results: "200% aumento em conversões",
+    quote: "Implementação super rápida e suporte em português excelente. Em 2 semanas já estava 100% operacional. A integração com WhatsApp é perfeita.",
+    results: "+67% eficiência operacional",
     tier: "PRO",
     teamSize: "8 pessoas"
   }
 ]
 
-const companyData = [
-  { 
-    key: 'pixelCreative',
-    name: "Pixel Creative", 
-    industry: "Design & Branding",
-    image: companyLogos.pixelCreative
+const metrics = [
+  {
+    icon: TrendingUp,
+    value: "+186%",
+    description: "Aumento médio de conversão",
+    color: "bg-emerald-100 text-emerald-600"
   },
-  { 
-    key: 'growthHub',
-    name: "Growth Hub", 
-    industry: "Performance Marketing",
-    image: companyLogos.growthHub
-  },
-  { 
-    key: 'digitalFirst',
-    name: "Digital First", 
-    industry: "Marketing Digital",
-    image: companyLogos.digitalFirst
-  },
-  { 
-    key: 'creativeLab',
-    name: "Creative Lab", 
-    industry: "Conteúdo & Social",
-    image: companyLogos.creativeLab
-  },
-  { 
-    key: 'scaleAgency',
-    name: "Scale Agency", 
-    industry: "Growth Hacking",
-    image: companyLogos.scaleAgency
-  },
-  { 
-    key: 'brandBoost',
-    name: "Brand Boost", 
-    industry: "Branding & UX",
-    image: companyLogos.brandBoost
-  }
-]
-
-const stats = [
   {
     icon: Users,
     value: "500+",
-    label: "Agências Ativas",
-    sublabel: "Crescimento de 40%/mês"
-  },
-  {
-    icon: TrendingUp,
-    value: "R$ 50M+",
-    label: "Faturamento Gerado",
-    sublabel: "Pelos nossos clientes"
+    description: "Agências ativas",
+    color: "bg-blue-100 text-blue-600"
   },
   {
     icon: Award,
-    value: "98%",
-    label: "Taxa de Satisfação",
-    sublabel: "NPS de +87"
+    value: "4.9/5",
+    description: "Avaliação média",
+    color: "bg-yellow-100 text-yellow-600"
   },
   {
     icon: Calendar,
-    value: "2 anos",
-    label: "No Mercado",
-    sublabel: "Empresa 100% brasileira"
+    value: "5min",
+    description: "Tempo de setup",
+    color: "bg-purple-100 text-purple-600"
   }
 ]
 
-const caseStudyHighlight = {
-  company: "Growth Hub - RJ",
-  period: "Janeiro a Junho 2024",
-  before: {
-    revenue: "R$ 80k/mês",
-    conversion: "12%",
-    team: "6 pessoas",
-    leads: "200/mês"
-  },
-  after: {
-    revenue: "R$ 180k/mês", 
-    conversion: "28%",
-    team: "15 pessoas",
-    leads: "350/mês"
-  }
-}
+export function SocialProofSection(): JSX.Element {
+  const [imageLoading, setImageLoading] = useState<boolean[]>(Array.from({ length: 6 }, () => true))
+  const { ref } = useScrollAnimation()
 
-declare global {
-  function gtag(...args: any[]): void
-}
-
-export function SocialProofSection() {
-  const [imageLoading, setImageLoading] = useState<{[key: string]: boolean}>({})
-
-  const handleImageLoad = (imageKey: string) => {
-    setImageLoading(prev => ({ ...prev, [imageKey]: false }))
-  }
-
-  const handleImageLoadStart = (imageKey: string) => {
-    setImageLoading(prev => ({ ...prev, [imageKey]: true }))
+  const handleImageLoad = (index: number): void => {
+    setImageLoading(prev => prev.map((loading, i) => i === index ? false : loading))
   }
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-muted/20 to-background">
+    <section 
+      ref={ref}
+      className="py-20 px-4 bg-gradient-to-b from-emerald-50/30 via-background to-background"
+    >
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <Badge className="mb-4 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20">
-Agências que Cresceram com a Gente
-          </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-            Resultados{" "}
-            <span className="text-primary bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
-              Reais e Comprovados
-            </span>{" "}
-            de Agências Brasileiras
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Mais de 500 agências já transformaram seus processos e cresceram significativamente. 
-            Veja os resultados que elas alcançaram.
-          </p>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="grid md:grid-cols-4 gap-6 mb-16">
-          {stats.map((stat, index) => (
-            <Card key={index} className="text-center bg-card border border-border hover:border-primary/20 hover:shadow-lg transition-all duration-300">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-center mb-4">
-                  <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <stat.icon className="h-6 w-6 text-primary" />
-                  </div>
-                </div>
-                <div className="text-3xl font-bold text-primary mb-2">{stat.value}</div>
-                <div className="font-semibold text-foreground mb-1">{stat.label}</div>
-                <div className="text-sm text-muted-foreground">{stat.sublabel}</div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Testimonials */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {testimonials.map((testimonial, index) => (
-            <Card key={testimonial.id} className="relative overflow-hidden bg-card border border-border hover:border-primary/10 hover:shadow-xl transition-all duration-300 group">
-              <CardContent className="p-6">
-                {/* Quote Icon */}
-                <Quote className="h-8 w-8 text-primary/20 mb-4" />
-                
-                {/* Rating */}
-                <div className="flex gap-1 mb-4">
-                  {Array.from({length: 5}).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-
-                {/* Quote */}
-                <p className="text-muted-foreground mb-6 leading-relaxed italic">
-                  "{testimonial.quote}"
-                </p>
-
-                {/* Results Highlight */}
-                <div className="bg-emerald-500/10 rounded-lg p-3 mb-6 border border-emerald-500/20">
-                  <div className="flex items-center gap-2 mb-1">
-                    <TrendingUp className="h-4 w-4 text-emerald-600" />
-                    <span className="text-sm font-semibold text-emerald-800">Resultado:</span>
-                  </div>
-                  <p className="text-sm text-emerald-700 font-medium">{testimonial.results}</p>
-                </div>
-
-                {/* Author Info */}
-                <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <Avatar className="h-12 w-12">
-                      <AnimatePresence>
-                        {imageLoading[`testimonial-${testimonial.id}`] ? <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-full z-10" /> : null}
-                      </AnimatePresence>
-                      <AvatarImage 
-                        {...getImageProps(testimonial.avatar, 96, 96)}
-                        onLoadStart={() => handleImageLoadStart(`testimonial-${testimonial.id}`)}
-                        onLoad={() => handleImageLoad(`testimonial-${testimonial.id}`)}
-                      />
-                      <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                        {testimonial.name.split(' ').map(n => n[0]).join('')}
-                      </AvatarFallback>
-                    </Avatar>
-                  </div>
-                  <div className="flex-1">
-                    <div className="font-semibold text-foreground">{testimonial.name}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {testimonial.role}, {testimonial.company}
-                    </div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <MapPin className="h-3 w-3 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground">{testimonial.location}</span>
-                      <Badge className="text-xs bg-violet-100 text-violet-700">
-                        {testimonial.tier}
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Case Study Highlight */}
-        <Card className="mb-16 bg-card border border-border shadow-sm">
-          <CardContent className="p-8">
-            <div className="text-center mb-8">
-              <Badge className="mb-3 bg-violet-100 text-violet-700">
-CASE STUDY
-              </Badge>
-              <h3 className="text-2xl font-bold text-foreground mb-2">
-                Como a {caseStudyHighlight.company} Duplicou o Faturamento
-              </h3>
-              <p className="text-muted-foreground">
-                Período: {caseStudyHighlight.period}
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Before */}
-              <div className="text-center">
-                <h4 className="text-lg font-semibold text-red-700 mb-4">Antes do Loved CRM</h4>
-                <div className="space-y-3">
-                  <div className="bg-red-500/10 rounded-lg p-3 border border-red-500/20">
-                    <div className="text-2xl font-bold text-red-700">{caseStudyHighlight.before.revenue}</div>
-                    <div className="text-sm text-red-600">Faturamento mensal</div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="bg-background rounded p-2 border">
-                      <div className="font-bold text-red-700">{caseStudyHighlight.before.conversion}</div>
-                      <div className="text-xs text-muted-foreground">Conversão</div>
-                    </div>
-                    <div className="bg-background rounded p-2 border">
-                      <div className="font-bold text-red-700">{caseStudyHighlight.before.team}</div>
-                      <div className="text-xs text-muted-foreground">Equipe</div>
-                    </div>
-                    <div className="bg-background rounded p-2 border">
-                      <div className="font-bold text-red-700">{caseStudyHighlight.before.leads}</div>
-                      <div className="text-xs text-muted-foreground">Leads</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* After */}
-              <div className="text-center">
-                <h4 className="text-lg font-semibold text-emerald-700 mb-4">Depois do Loved CRM</h4>
-                <div className="space-y-3">
-                  <div className="bg-emerald-500/10 rounded-lg p-3 border border-emerald-500/20">
-                    <div className="text-2xl font-bold text-emerald-700">{caseStudyHighlight.after.revenue}</div>
-                    <div className="text-sm text-emerald-600">Faturamento mensal</div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="bg-background rounded p-2 border">
-                      <div className="font-bold text-emerald-700">{caseStudyHighlight.after.conversion}</div>
-                      <div className="text-xs text-muted-foreground">Conversão</div>
-                    </div>
-                    <div className="bg-background rounded p-2 border">
-                      <div className="font-bold text-emerald-700">{caseStudyHighlight.after.team}</div>
-                      <div className="text-xs text-muted-foreground">Equipe</div>
-                    </div>
-                    <div className="bg-background rounded p-2 border">
-                      <div className="font-bold text-emerald-700">{caseStudyHighlight.after.leads}</div>
-                      <div className="text-xs text-muted-foreground">Leads</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="text-center mt-8">
-              <Button 
-                variant="outline" 
-                onClick={() => {
-                  if (typeof gtag !== 'undefined') {
-                    gtag('event', 'case_study_interest', { source: 'social_proof' })
-                  }
-                }}
-              >
-                Ver Case Completo
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Company Logos */}
-        <div className="text-center">
-          <h3 className="text-lg font-semibold text-muted-foreground mb-8">
-            Agências que confiam no Loved CRM
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-6 opacity-60">
-            {companyData.map((company) => (
-              <div key={company.key} className="text-center group">
-                <div className="h-12 w-24 rounded-lg overflow-hidden mb-2 mx-auto relative hover:opacity-80 transition-opacity">
-                  <AnimatePresence>
-                    {imageLoading[`company-${company.key}`] ? <div className="absolute inset-0 bg-gray-100 animate-pulse rounded-lg z-10" /> : null}
-                  </AnimatePresence>
-                  <Image
-                    {...getImageProps(company.image, 96, 48)}
-                    fill
-                    className="object-cover filter grayscale group-hover:grayscale-0 transition-all duration-300"
-                    sizes="96px"
-                    onLoadStart={() => handleImageLoadStart(`company-${company.key}`)}
-                    onLoad={() => handleImageLoad(`company-${company.key}`)}
-                  />
-                  <div className="absolute inset-0 bg-background/20 group-hover:bg-background/0 transition-all duration-300" />
-                </div>
-                <p className="text-xs text-muted-foreground">{company.industry}</p>
-              </div>
+        <SocialProofHeader />
+        
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={staggerContainer}
+        >
+          <SocialProofMetrics metrics={metrics} />
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            {testimonials.map((testimonial) => (
+              <TestimonialCard key={testimonial.id} testimonial={testimonial} />
             ))}
           </div>
-        </div>
+          
+          <SocialProofFooter 
+            imageLoading={imageLoading} 
+            handleImageLoad={handleImageLoad} 
+          />
+        </motion.div>
       </div>
     </section>
   )

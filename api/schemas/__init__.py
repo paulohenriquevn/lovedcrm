@@ -22,18 +22,18 @@ from .organization_invite import (
 )
 from .user import UserCreate, UserLogin, UserResponse, UserUpdate
 from .user_preferences import (
-    NotificationPreferences,
     DisplayPreferences,
+    NotificationPreferences,
     PrivacyPreferences,
     QuietHoursSettings,
     UserPreferencesCreate,
+    UserPreferencesQuickUpdate,
     UserPreferencesResponse,
+    UserPreferencesStatistics,
     UserPreferencesUpdate,
     UserPreferencesUpdateDisplay,
     UserPreferencesUpdateNotifications,
     UserPreferencesUpdatePrivacy,
-    UserPreferencesQuickUpdate,
-    UserPreferencesStatistics,
 )
 
 __all__ = [

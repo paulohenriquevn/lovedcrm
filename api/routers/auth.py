@@ -141,7 +141,7 @@ async def login(
             email=login_data.email,
             password=login_data.password,
             totp_token=login_data.totp_token,
-            backup_code=login_data.backup_code
+            backup_code=login_data.backup_code,
         )
 
         # Handle 2FA required case
@@ -149,7 +149,7 @@ async def login(
             logger.info(f"2FA required for user {login_data.email}")
             return {
                 "requires_2fa": True,
-                "message": login_result.get("message", "2FA token required")
+                "message": login_result.get("message", "2FA token required"),
             }
 
         logger.info(

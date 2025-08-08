@@ -3,6 +3,8 @@
  * All images are royalty-free and properly attributed
  */
 
+const MERAKIST_CREDIT = "Photo by Merakist on Unsplash"
+
 // Testimonial Images - Brazilian professionals
 export const testimonialImages = {
   carlos: {
@@ -64,7 +66,7 @@ export const companyLogos = {
   creativeLab: {
     src: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=200&h=100&fit=crop",
     alt: "Creative Lab - Content & Social Agency",
-    credit: "Photo by Merakist on Unsplash",
+    credit: MERAKIST_CREDIT,
     photographer: "Merakist"
   },
   scaleAgency: {
@@ -76,7 +78,7 @@ export const companyLogos = {
   brandBoost: {
     src: "https://images.unsplash.com/photo-1611605698335-8b1569810432?w=200&h=100&fit=crop",
     alt: "Brand Boost - Branding & UX Agency",
-    credit: "Photo by Merakist on Unsplash", 
+    credit: MERAKIST_CREDIT, 
     photographer: "Merakist"
   }
 }
@@ -86,13 +88,13 @@ export const featuresImages = {
   pipelineManagement: {
     src: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop",
     alt: "Pipeline de vendas visual e organizado",
-    credit: "Photo by Merakist on Unsplash",
+    credit: MERAKIST_CREDIT,
     photographer: "Merakist"
   },
   whatsappIntegration: {
     src: "https://images.unsplash.com/photo-1611605698335-8b1569810432?w=800&h=600&fit=crop",
     alt: "Integração WhatsApp para agências",
-    credit: "Photo by Merakist on Unsplash", 
+    credit: MERAKIST_CREDIT, 
     photographer: "Merakist"
   },
   aiSummaries: {
@@ -174,11 +176,10 @@ export const backgroundImages = {
 // Utility function to get optimized image URL
 export function getOptimizedImageUrl(
   url: string, 
-  width: number = 800, 
-  height: number = 600,
-  quality: number = 85
+  dimensions: { width?: number; height?: number; quality?: number } = {}
 ): string {
-  const baseUrl = url.split('?')[0]
+  const { width = 800, height = 600, quality = 85 } = dimensions
+  const [baseUrl] = url.split('?')
   return `${baseUrl}?w=${width}&h=${height}&fit=crop&q=${quality}&auto=format`
 }
 
@@ -188,9 +189,14 @@ export function getImageProps(imageConfig: {
   alt: string
   credit: string
   photographer: string
-}, width?: number, height?: number) {
+}, width?: number, height?: number): {
+  src: string
+  alt: string
+  title: string
+  'data-photographer': string
+} {
   return {
-    src: width && height ? getOptimizedImageUrl(imageConfig.src, width, height) : imageConfig.src,
+    src: (width !== undefined && height !== undefined) ? getOptimizedImageUrl(imageConfig.src, { width, height }) : imageConfig.src,
     alt: imageConfig.alt,
     title: imageConfig.credit,
     'data-photographer': imageConfig.photographer
