@@ -34,14 +34,24 @@ class Organization(Base):
     # Relationships
     members = relationship("OrganizationMember", back_populates="organization")
     invites = relationship("OrganizationInvite", back_populates="organization")
-    
+
     # CRM Relationships
     leads = relationship("Lead", back_populates="organization", cascade="all, delete-orphan")
-    communications = relationship("Communication", back_populates="organization", cascade="all, delete-orphan")
-    ai_summaries = relationship("AISummary", back_populates="organization", cascade="all, delete-orphan")
-    integrations = relationship("OrganizationIntegration", back_populates="organization", cascade="all, delete-orphan")
-    file_attachments = relationship("FileAttachment", back_populates="organization", cascade="all, delete-orphan")
-    audit_logs = relationship("AuditLog", back_populates="organization", cascade="all, delete-orphan")
+    communications = relationship(
+        "Communication", back_populates="organization", cascade="all, delete-orphan"
+    )
+    ai_summaries = relationship(
+        "AISummary", back_populates="organization", cascade="all, delete-orphan"
+    )
+    integrations = relationship(
+        "OrganizationIntegration", back_populates="organization", cascade="all, delete-orphan"
+    )
+    file_attachments = relationship(
+        "FileAttachment", back_populates="organization", cascade="all, delete-orphan"
+    )
+    audit_logs = relationship(
+        "AuditLog", back_populates="organization", cascade="all, delete-orphan"
+    )
 
     # Performance indexes
     __table_args__ = (

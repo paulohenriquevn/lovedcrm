@@ -34,7 +34,7 @@ class UserSessionService:
         """Parse user agent string into readable device info."""
         if not user_agent_string:
             return "Unknown Device"
-        
+
         try:
             user_agent = parse(user_agent_string)
             browser = f"{user_agent.browser.family} {user_agent.browser.version_string}"
@@ -48,12 +48,16 @@ class UserSessionService:
         """Extract location from IP address (placeholder for GeoIP service)."""
         if not ip_address:
             return None
-        
+
         # TODO: Integrate with GeoIP service (MaxMind, IP2Location, etc.)
         # For now, return a placeholder
-        if ip_address.startswith("192.168.") or ip_address.startswith("10.") or ip_address.startswith("127."):
+        if (
+            ip_address.startswith("192.168.")
+            or ip_address.startswith("10.")
+            or ip_address.startswith("127.")
+        ):
             return "Local Network"
-        
+
         return "Unknown Location"
 
     def get_client_ip(self, request: Request) -> Optional[str]:
@@ -63,36 +67,33 @@ class UserSessionService:
         if forwarded_for:
             # Take the first IP (original client)
             return forwarded_for.split(",")[0].strip()
-        
+
         real_ip = request.headers.get("x-real-ip")
         if real_ip:
             return real_ip
-        
+
         # Fallback to direct connection
         if hasattr(request, "client") and request.client:
             return request.client.host
-        
+
         return None
 
     def create_session(
-        self,
-        user: User,
-        organization: Organization,
-        request: Optional[Request] = None
+        self, user: User, organization: Organization, request: Optional[Request] = None
     ) -> UserSession:
         """Create a new user session with device and location tracking."""
         session_token = self.generate_session_token()
-        
+
         # Extract request information
         ip_address = None
         user_agent = None
         if request:
             ip_address = self.get_client_ip(request)
             user_agent = request.headers.get("user-agent")
-        
+
         device_info = self.parse_device_info(user_agent)
         location = self.extract_location_from_ip(ip_address)
-        
+
         return self.repository.create_session(
             user_id=user.id,
             organization_id=organization.id,
@@ -100,34 +101,29 @@ class UserSessionService:
             device_info=device_info,
             ip_address=ip_address,
             location=location,
-            user_agent=user_agent
+            user_agent=user_agent,
         )
 
     def get_active_sessions(
-        self,
-        user: User,
-        organization: Organization,
-        current_session_token: Optional[str] = None
+        self, user: User, organization: Organization, current_session_token: Optional[str] = None
     ) -> UserSessionListResponse:
         """Get all active sessions for a user with current session marking."""
         sessions = self.repository.get_active_sessions_by_user(
-            user_id=user.id,
-            organization_id=organization.id
+            user_id=user.id, organization_id=organization.id
         )
-        
+
         # Convert to response format and mark current session
         session_responses = []
         current_session_id = None
-        
+
         for session in sessions:
             is_current = (
-                current_session_token is not None
-                and session.session_token == current_session_token
+                current_session_token is not None and session.session_token == current_session_token
             )
-            
+
             if is_current:
                 current_session_id = session.id
-            
+
             session_response = UserSessionResponse(
                 id=session.id,
                 user_id=session.user_id,
@@ -141,98 +137,74 @@ class UserSessionService:
                 last_activity=session.last_activity,
                 created_at=session.created_at,
                 expires_at=session.expires_at,
-                current=is_current
+                current=is_current,
             )
             session_responses.append(session_response)
-        
+
         return UserSessionListResponse(
             sessions=session_responses,
             total=len(session_responses),
-            current_session_id=current_session_id
+            current_session_id=current_session_id,
         )
 
-    def revoke_session(
-        self,
-        session_id: uuid.UUID,
-        user: User,
-        organization: Organization
-    ) -> bool:
+    def revoke_session(self, session_id: uuid.UUID, user: User, organization: Organization) -> bool:
         """Revoke a specific user session."""
         return self.repository.revoke_session(
-            session_id=session_id,
-            user_id=user.id,
-            organization_id=organization.id
+            session_id=session_id, user_id=user.id, organization_id=organization.id
         )
 
     def revoke_all_sessions_except_current(
-        self,
-        user: User,
-        organization: Organization,
-        current_session_token: str
+        self, user: User, organization: Organization, current_session_token: str
     ) -> int:
         """Revoke all sessions except the current one."""
         return self.repository.revoke_all_sessions_except_current(
             user_id=user.id,
             organization_id=organization.id,
-            current_session_token=current_session_token
+            current_session_token=current_session_token,
         )
 
     def validate_session(
-        self,
-        session_token: str,
-        organization: Organization
+        self, session_token: str, organization: Organization
     ) -> Optional[UserSession]:
         """Validate and return session if active and not expired."""
         return self.repository.get_session_by_token(
-            session_token=session_token,
-            organization_id=organization.id
+            session_token=session_token, organization_id=organization.id
         )
 
     def update_session_activity(
-        self,
-        session_token: str,
-        organization: Organization,
-        request: Optional[Request] = None
+        self, session_token: str, organization: Organization, request: Optional[Request] = None
     ) -> bool:
         """Update session activity and location if request provided."""
         ip_address = None
         location = None
-        
+
         if request:
             ip_address = self.get_client_ip(request)
             location = self.extract_location_from_ip(ip_address)
-        
+
         return self.repository.update_session_activity(
             session_token=session_token,
             organization_id=organization.id,
             ip_address=ip_address,
-            location=location
+            location=location,
         )
 
     def cleanup_expired_sessions(self, batch_size: int = 1000) -> int:
         """Clean up expired sessions (maintenance task)."""
         return self.repository.cleanup_expired_sessions(batch_size=batch_size)
 
-    def get_session_statistics(
-        self,
-        user: User,
-        organization: Organization
-    ) -> dict:
+    def get_session_statistics(self, user: User, organization: Organization) -> dict:
         """Get session statistics for a user."""
         active_count = self.repository.get_session_count_by_user(
-            user_id=user.id,
-            organization_id=organization.id,
-            active_only=True
+            user_id=user.id, organization_id=organization.id, active_only=True
         )
-        
+
         total_count = self.repository.get_session_count_by_user(
-            user_id=user.id,
-            organization_id=organization.id,
-            active_only=False
+            user_id=user.id, organization_id=organization.id, active_only=False
         )
-        
+
         return {
             "active_sessions": active_count,
             "total_sessions": total_count,
-            "expired_sessions": total_count - active_count
+            "expired_sessions": total_count - active_count,
         }

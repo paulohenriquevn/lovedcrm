@@ -1,10 +1,13 @@
 import { ErrorBoundary } from '@/components/common/ErrorBoundary'
-import { AdminLayout } from '@/components/layout/admin-layout'
+import { MainLayout } from '@/components/layout/main-layout'
+import { AuthGuard } from '@/components/providers/auth-guard'
 
 export default function AdminLayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
-    <AdminLayout>
-      <ErrorBoundary>{children}</ErrorBoundary>
-    </AdminLayout>
+    <AuthGuard>
+      <MainLayout>
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </MainLayout>
+    </AuthGuard>
   )
 }

@@ -46,7 +46,7 @@ class TestRoleManagementSuccess:
         }
         
         response = api_client.put(
-            f"{TEST_BASE_URL}/organizations/roles/members/{member_user['user_id']}", 
+            f"{TEST_BASE_URL}/roles/members/{member_user['user_id']}", 
             json=role_change_data
         )
         
@@ -64,7 +64,7 @@ class TestRoleManagementSuccess:
         }
         
         restore_response = api_client.put(
-            f"{TEST_BASE_URL}/organizations/roles/members/{member_user['user_id']}", 
+            f"{TEST_BASE_URL}/roles/members/{member_user['user_id']}", 
             json=restore_role_data
         )
         
@@ -97,7 +97,7 @@ class TestRoleManagementSuccess:
         }
         
         response = api_client.put(
-            f"{TEST_BASE_URL}/organizations/roles/members/{viewer_user['user_id']}", 
+            f"{TEST_BASE_URL}/roles/members/{viewer_user['user_id']}", 
             json=role_change_data
         )
         
@@ -113,7 +113,7 @@ class TestRoleManagementSuccess:
         }
         
         restore_response = api_client.put(
-            f"{TEST_BASE_URL}/organizations/roles/members/{viewer_user['user_id']}", 
+            f"{TEST_BASE_URL}/roles/members/{viewer_user['user_id']}", 
             json=restore_role_data
         )
         
@@ -121,7 +121,7 @@ class TestRoleManagementSuccess:
 
     def test_get_user_permissions_success(self, api_client, authenticated_user):
         """✅ Test getting current user permissions returns 200."""
-        response = api_client.get(f"{TEST_BASE_URL}/organizations/roles/permissions")
+        response = api_client.get(f"{TEST_BASE_URL}/roles/permissions")
         
         assert_successful_response(response, 200)
         
@@ -159,7 +159,7 @@ class TestRoleManagementSuccess:
             pytest.skip("No member user found in test data")
         
         response = api_client.get(
-            f"{TEST_BASE_URL}/organizations/roles/permissions/{member_user['user_id']}"
+            f"{TEST_BASE_URL}/roles/permissions/{member_user['user_id']}"
         )
         
         assert_successful_response(response, 200)
@@ -181,7 +181,7 @@ class TestRoleManagementSuccess:
 
     def test_get_roles_summary_success(self, api_client, seed_user_owner):
         """✅ Test getting organization roles summary returns 200."""
-        response = api_client.get(f"{TEST_BASE_URL}/organizations/roles/summary")
+        response = api_client.get(f"{TEST_BASE_URL}/roles/summary")
         
         assert_successful_response(response, 200)
         
@@ -209,7 +209,7 @@ class TestRoleManagementSuccess:
 
     def test_get_manageable_roles_success(self, api_client, authenticated_user):
         """✅ Test getting manageable roles returns 200."""
-        response = api_client.get(f"{TEST_BASE_URL}/organizations/roles/manageable")
+        response = api_client.get(f"{TEST_BASE_URL}/roles/manageable")
         
         assert_successful_response(response, 200)
         
@@ -235,7 +235,7 @@ class TestRoleManagementSuccess:
         permission = "manage_members"
         
         response = api_client.get(
-            f"{TEST_BASE_URL}/organizations/roles/check-permission?permission={permission}"
+            f"{TEST_BASE_URL}/roles/check-permission?permission={permission}"
         )
         
         assert_successful_response(response, 200)
@@ -257,7 +257,7 @@ class TestRoleManagementValidation:
         role_change_data = {"new_role": "admin"}
         
         response = api_client.put(
-            f"{TEST_BASE_URL}/organizations/roles/members/{fake_user_id}", 
+            f"{TEST_BASE_URL}/roles/members/{fake_user_id}", 
             json=role_change_data
         )
         
@@ -285,7 +285,7 @@ class TestRoleManagementValidation:
         role_change_data = {"new_role": "admin"}
         
         response = api_client.put(
-            f"{TEST_BASE_URL}/organizations/roles/members/{member_user['user_id']}", 
+            f"{TEST_BASE_URL}/roles/members/{member_user['user_id']}", 
             json=role_change_data
         )
         
@@ -297,7 +297,7 @@ class TestRoleManagementValidation:
         role_change_data = {"new_role": "admin"}
         
         response = api_client.put(
-            f"{TEST_BASE_URL}/organizations/roles/members/{authenticated_user['id']}", 
+            f"{TEST_BASE_URL}/roles/members/{authenticated_user['id']}", 
             json=role_change_data
         )
         
@@ -308,7 +308,7 @@ class TestRoleManagementValidation:
         fake_user_id = str(uuid.uuid4())
         
         response = api_client.delete(
-            f"{TEST_BASE_URL}/organizations/roles/members/{fake_user_id}"
+            f"{TEST_BASE_URL}/roles/members/{fake_user_id}"
         )
         
         assert_error_response(response, 403, "User is not a member")
@@ -324,7 +324,7 @@ class TestRoleManagementValidation:
         
         # For now, verify that attempting self-removal fails
         response = api_client.delete(
-            f"{TEST_BASE_URL}/organizations/roles/members/{authenticated_user['id']}"
+            f"{TEST_BASE_URL}/roles/members/{authenticated_user['id']}"
         )
         
         assert_error_response(response, 400, "Cannot remove the last owner")
@@ -335,7 +335,7 @@ class TestRoleManagementValidation:
         api_client.headers.pop("Authorization", None)
         api_client.headers.pop("X-Org-Id", None)
         
-        response = api_client.get(f"{TEST_BASE_URL}/organizations/roles/permissions")
+        response = api_client.get(f"{TEST_BASE_URL}/roles/permissions")
         
         assert_error_response(response, 403)  # Focus on status code, not exact message
 
@@ -347,12 +347,12 @@ class TestRoleManagementValidation:
         fake_user_id = str(uuid.uuid4())
         
         response = api_client.get(
-            f"{TEST_BASE_URL}/organizations/roles/permissions/{fake_user_id}"
+            f"{TEST_BASE_URL}/roles/permissions/{fake_user_id}"
         )
         
         # Note: Viewers actually have view_members permission, so this should work
         # Let's test with a permission they don't have
-        response = api_client.get(f"{TEST_BASE_URL}/organizations/roles/summary")
+        response = api_client.get(f"{TEST_BASE_URL}/roles/summary")
         
         # Actually, viewers do have view_members, so they can see summary
         # The role hierarchy allows viewers to view organization info
@@ -372,7 +372,7 @@ class TestRoleManagementValidation:
             role_change_data = {"new_role": "invalid_role"}
             
             response = api_client.put(
-                f"{TEST_BASE_URL}/organizations/roles/members/{target_member['user_id']}", 
+                f"{TEST_BASE_URL}/roles/members/{target_member['user_id']}", 
                 json=role_change_data
             )
             
@@ -384,7 +384,7 @@ class TestRoleHierarchyValidation:
     
     def test_admin_manageable_roles_correct(self, api_client, seed_user_admin):
         """✅ Test user sees correct manageable roles."""
-        response = api_client.get(f"{TEST_BASE_URL}/organizations/roles/manageable")
+        response = api_client.get(f"{TEST_BASE_URL}/roles/manageable")
         
         assert_successful_response(response, 200)
         
@@ -398,7 +398,7 @@ class TestRoleHierarchyValidation:
 
     def test_member_permissions_correct(self, api_client, seed_user_member):
         """✅ Test member has correct permissions."""
-        response = api_client.get(f"{TEST_BASE_URL}/organizations/roles/permissions")
+        response = api_client.get(f"{TEST_BASE_URL}/roles/permissions")
         
         assert_successful_response(response, 200)
         
@@ -413,7 +413,7 @@ class TestRoleHierarchyValidation:
 
     def test_viewer_permissions_minimal(self, api_client, seed_user_viewer):
         """✅ Test user has correct permissions (will be owner)."""
-        response = api_client.get(f"{TEST_BASE_URL}/organizations/roles/permissions")
+        response = api_client.get(f"{TEST_BASE_URL}/roles/permissions")
         
         assert_successful_response(response, 200)
         
@@ -455,7 +455,7 @@ class TestRoleManagementEdgeCases:
         }
         
         response = api_client.put(
-            f"{TEST_BASE_URL}/organizations/roles/members/{member_user['user_id']}", 
+            f"{TEST_BASE_URL}/roles/members/{member_user['user_id']}", 
             json=role_change_data
         )
         
@@ -472,7 +472,7 @@ class TestRoleManagementEdgeCases:
         }
         
         restore_response = api_client.put(
-            f"{TEST_BASE_URL}/organizations/roles/members/{member_user['user_id']}", 
+            f"{TEST_BASE_URL}/roles/members/{member_user['user_id']}", 
             json=restore_role_data
         )
         
@@ -491,7 +491,7 @@ class TestRoleManagementEdgeCases:
         for permission, expected in permissions_to_test:
             # Use GET with query parameter, not POST with JSON
             response = api_client.get(
-                f"{TEST_BASE_URL}/organizations/roles/check-permission?permission={permission}"
+                f"{TEST_BASE_URL}/roles/check-permission?permission={permission}"
             )
             
             assert_successful_response(response, 200)
@@ -503,7 +503,7 @@ class TestRoleManagementEdgeCases:
     def test_roles_summary_accuracy_after_changes(self, api_client, seed_user_owner):
         """🔍 Test roles summary updates correctly after role changes."""
         # Get initial summary
-        response = api_client.get(f"{TEST_BASE_URL}/organizations/roles/summary")
+        response = api_client.get(f"{TEST_BASE_URL}/roles/summary")
         assert_successful_response(response, 200)
         
         initial_summary = response.json()
@@ -531,13 +531,13 @@ class TestRoleManagementEdgeCases:
         role_change_data = {"new_role": "viewer"}
         
         change_response = api_client.put(
-            f"{TEST_BASE_URL}/organizations/roles/members/{member_user['user_id']}", 
+            f"{TEST_BASE_URL}/roles/members/{member_user['user_id']}", 
             json=role_change_data
         )
         assert_successful_response(change_response, 200)
         
         # Get updated summary
-        response = api_client.get(f"{TEST_BASE_URL}/organizations/roles/summary")
+        response = api_client.get(f"{TEST_BASE_URL}/roles/summary")
         assert_successful_response(response, 200)
         
         updated_summary = response.json()
@@ -556,7 +556,7 @@ class TestRoleManagementEdgeCases:
         }
         
         restore_response = api_client.put(
-            f"{TEST_BASE_URL}/organizations/roles/members/{member_user['user_id']}", 
+            f"{TEST_BASE_URL}/roles/members/{member_user['user_id']}", 
             json=restore_role_data
         )
         

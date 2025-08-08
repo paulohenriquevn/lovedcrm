@@ -216,11 +216,7 @@ export function StatusActionButton({
 
   if (user.status === UserStatus.ACTIVE) {
     return (
-      <Button
-        variant="secondary"
-        onClick={onSuspendUser}
-        className="w-full"
-      >
+      <Button variant="secondary" onClick={onSuspendUser} className="w-full">
         {tUser('suspendUser')}
       </Button>
     )

@@ -34,6 +34,7 @@ class OrganizationContextMiddleware(BaseHTTPMiddleware):
             "/billing/available-plans",  # Public billing plans
             "/billing/stripe-webhook",  # Stripe webhook (handles auth internally)
             "/invites/",  # All invite endpoints are public (get token info, accept, reject)
+            "/ws/",  # WebSocket endpoints (handle auth internally)
         ]
 
         # 🔐 AUTH-ONLY ROUTES: Authentication required, no org validation

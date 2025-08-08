@@ -22,8 +22,8 @@ function PlanHeader({ plan }: { plan: Plan }): JSX.Element {
         <h3 className="text-lg font-semibold">{plan.name}</h3>
         {isPremiumPlan === true && (
           <div className="flex items-center gap-1">
-            <Crown className="h-4 w-4 text-amber-600" />
-            <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full font-medium">
+            <Crown className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+            <span className="text-xs bg-amber-500/10 text-amber-600 dark:text-amber-400 px-2 py-1 rounded-full font-medium">
               {plan.slug === 'expert' ? 'EXPERT' : 'PRO'}
             </span>
           </div>
@@ -60,7 +60,7 @@ function PlanFeatures({
             <Package className="h-4 w-4 text-green-600 mr-2 flex-shrink-0" />
             <span className="flex-1">{feature}</span>
             {isPremiumFeature === true && planSlug !== 'basic' && (
-              <Zap className="h-3 w-3 text-amber-600 ml-2" />
+              <Zap className="h-3 w-3 text-amber-600 dark:text-amber-400 ml-2" />
             )}
           </li>
         )
@@ -69,7 +69,7 @@ function PlanFeatures({
       {/* Show premium feature callout for basic plan */}
       {planSlug === 'basic' && (
         <li className="flex items-center text-xs text-muted-foreground border-t pt-2 mt-4">
-          <Crown className="h-4 w-4 text-amber-600 mr-2 flex-shrink-0" />
+          <Crown className="h-4 w-4 text-amber-600 dark:text-amber-400 mr-2 flex-shrink-0" />
           <span>Upgrade para acessar recursos avançados</span>
         </li>
       )}
@@ -160,7 +160,7 @@ function PlanDetails({ subscription }: { subscription: Subscription }): JSX.Elem
   return (
     <div className="space-y-4">
       <div>
-        <span className="block text-sm font-medium text-gray-700">Plano</span>
+        <span className="block text-sm font-medium text-foreground">Plano</span>
         <p className="mt-1 text-lg font-semibold">{subscription.plan.name}</p>
       </div>
       <div>

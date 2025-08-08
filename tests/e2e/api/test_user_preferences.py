@@ -33,7 +33,7 @@ class TestUserPreferencesSuccess:
             "X-Org-Id": authenticated_user['organization']['id']
         }
         
-        response = api_client.get(f"{TEST_BASE_URL}/users/me/preferences", headers=headers)
+        response = api_client.get(f"{TEST_BASE_URL}/user-preferences", headers=headers)
         
         assert_successful_response(response, 200)
         
@@ -66,7 +66,7 @@ class TestUserPreferencesSuccess:
         }
         
         # First get current preferences to establish baseline
-        get_response = api_client.get(f"{TEST_BASE_URL}/users/me/preferences", headers=headers)
+        get_response = api_client.get(f"{TEST_BASE_URL}/user-preferences", headers=headers)
         assert_successful_response(get_response, 200)
         
         # Update preferences
@@ -82,7 +82,7 @@ class TestUserPreferencesSuccess:
         }
         
         response = api_client.put(
-            f"{TEST_BASE_URL}/users/me/preferences",
+            f"{TEST_BASE_URL}/user-preferences",
             json=update_data,
             headers=headers
         )
@@ -117,7 +117,7 @@ class TestUserPreferencesSuccess:
         }
         
         response = api_client.patch(
-            f"{TEST_BASE_URL}/users/me/preferences/notifications",
+            f"{TEST_BASE_URL}/user-preferences/notifications",
             json=notification_data,
             headers=headers
         )
@@ -150,7 +150,7 @@ class TestUserPreferencesSuccess:
         }
         
         response = api_client.patch(
-            f"{TEST_BASE_URL}/users/me/preferences/display",
+            f"{TEST_BASE_URL}/user-preferences/display",
             json=display_data,
             headers=headers
         )
@@ -179,7 +179,7 @@ class TestUserPreferencesSuccess:
         }
         
         response = api_client.patch(
-            f"{TEST_BASE_URL}/users/me/preferences/privacy",
+            f"{TEST_BASE_URL}/user-preferences/privacy",
             json=privacy_data,
             headers=headers
         )
@@ -208,7 +208,7 @@ class TestUserPreferencesSuccess:
         }
         
         response = api_client.patch(
-            f"{TEST_BASE_URL}/users/me/preferences/quiet-hours",
+            f"{TEST_BASE_URL}/user-preferences/quiet-hours",
             json=quiet_hours_data,
             headers=headers
         )
@@ -237,7 +237,7 @@ class TestUserPreferencesSuccess:
         }
         
         response = api_client.patch(
-            f"{TEST_BASE_URL}/users/me/preferences/quick",
+            f"{TEST_BASE_URL}/user-preferences/quick",
             json=quick_data,
             headers=headers
         )
@@ -260,10 +260,10 @@ class TestUserPreferencesSuccess:
         
         # First update some preferences
         update_data = {"theme": "dark", "language": "pt", "email_notifications": False}
-        api_client.put(f"{TEST_BASE_URL}/users/me/preferences", json=update_data, headers=headers)
+        api_client.put(f"{TEST_BASE_URL}/user-preferences", json=update_data, headers=headers)
         
         # Reset to defaults
-        response = api_client.post(f"{TEST_BASE_URL}/users/me/preferences/reset", headers=headers)
+        response = api_client.post(f"{TEST_BASE_URL}/user-preferences/reset", headers=headers)
         
         assert_successful_response(response, 200)
         
@@ -283,7 +283,7 @@ class TestUserPreferencesSuccess:
         }
         
         response = api_client.get(
-            f"{TEST_BASE_URL}/users/me/preferences/effective-settings",
+            f"{TEST_BASE_URL}/user-preferences/effective-settings",
             headers=headers
         )
         
@@ -305,15 +305,15 @@ class TestUserPreferencesSuccess:
         }
         
         # First ensure preferences exist
-        api_client.get(f"{TEST_BASE_URL}/users/me/preferences", headers=headers)
+        api_client.get(f"{TEST_BASE_URL}/user-preferences", headers=headers)
         
         # Delete preferences
-        response = api_client.delete(f"{TEST_BASE_URL}/users/me/preferences", headers=headers)
+        response = api_client.delete(f"{TEST_BASE_URL}/user-preferences", headers=headers)
         
         assert response.status_code == 204  # No content
         
         # Verify getting preferences again creates new defaults
-        get_response = api_client.get(f"{TEST_BASE_URL}/users/me/preferences", headers=headers)
+        get_response = api_client.get(f"{TEST_BASE_URL}/user-preferences", headers=headers)
         assert_successful_response(get_response, 200)
         
         data = get_response.json()
@@ -327,16 +327,16 @@ class TestUserPreferencesValidation:
     def test_preferences_require_authentication(self, api_client):
         """❌ Test all preferences endpoints require authentication."""
         endpoints = [
-            ("GET", "/users/me/preferences"),
-            ("PUT", "/users/me/preferences"),
-            ("PATCH", "/users/me/preferences/notifications"),
-            ("PATCH", "/users/me/preferences/display"),
-            ("PATCH", "/users/me/preferences/privacy"),
-            ("PATCH", "/users/me/preferences/quiet-hours"),
-            ("PATCH", "/users/me/preferences/quick"),
-            ("POST", "/users/me/preferences/reset"),
-            ("DELETE", "/users/me/preferences"),
-            ("GET", "/users/me/preferences/effective-settings"),
+            ("GET", "/user-preferences"),
+            ("PUT", "/user-preferences"),
+            ("PATCH", "/user-preferences/notifications"),
+            ("PATCH", "/user-preferences/display"),
+            ("PATCH", "/user-preferences/privacy"),
+            ("PATCH", "/user-preferences/quiet-hours"),
+            ("PATCH", "/user-preferences/quick"),
+            ("POST", "/user-preferences/reset"),
+            ("DELETE", "/user-preferences"),
+            ("GET", "/user-preferences/effective-settings"),
         ]
         
         for method, endpoint in endpoints:
@@ -364,7 +364,7 @@ class TestUserPreferencesValidation:
         invalid_data = {"theme": "rainbow"}  # Invalid theme
         
         response = api_client.put(
-            f"{TEST_BASE_URL}/users/me/preferences",
+            f"{TEST_BASE_URL}/user-preferences",
             json=invalid_data,
             headers=headers
         )
@@ -381,7 +381,7 @@ class TestUserPreferencesValidation:
         invalid_data = {"time_format": "25h"}  # Invalid time format
         
         response = api_client.patch(
-            f"{TEST_BASE_URL}/users/me/preferences/display",
+            f"{TEST_BASE_URL}/user-preferences/display",
             json=invalid_data,
             headers=headers
         )
@@ -403,7 +403,7 @@ class TestUserPreferencesValidation:
         }
         
         response = api_client.patch(
-            f"{TEST_BASE_URL}/users/me/preferences/quiet-hours",
+            f"{TEST_BASE_URL}/user-preferences/quiet-hours",
             json=invalid_data,
             headers=headers
         )
@@ -423,7 +423,7 @@ class TestUserPreferencesMultiTenant:
             "X-Org-Id": other_organization['id']  # Wrong organization!
         }
         
-        response = api_client.get(f"{TEST_BASE_URL}/users/me/preferences", headers=headers)
+        response = api_client.get(f"{TEST_BASE_URL}/user-preferences", headers=headers)
         
         assert_error_response(response, 403)
         
@@ -444,6 +444,6 @@ def user_with_preferences(api_client, authenticated_user):
     }
     
     # Create preferences by getting them (auto-creates defaults)
-    api_client.get(f"{TEST_BASE_URL}/users/me/preferences", headers=headers)
+    api_client.get(f"{TEST_BASE_URL}/user-preferences", headers=headers)
     
     return authenticated_user

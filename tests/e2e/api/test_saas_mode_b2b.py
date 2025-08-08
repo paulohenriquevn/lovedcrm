@@ -229,7 +229,10 @@ class TestB2BModeTeamFeatures:
     @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
     def test_b2b_organization_roles_endpoint_accessible(self, api_client, authenticated_user):
         """✅ Test B2B mode exposes organization roles management."""
-        response = api_client.get(f"{TEST_BASE_URL}/organizations/roles/summary")
+        response = api_client.get(f"{TEST_BASE_URL}/roles/summary", headers={
+            "Authorization": f"Bearer {authenticated_user['tokens']['access_token']}",
+            "X-Org-Id": authenticated_user['organization']['id']
+        })
         
         assert_successful_response(response, 200)
         
@@ -449,7 +452,7 @@ class TestB2BModeScenarios:
         })
         
         # Should be able to access team management endpoints
-        roles_response = api_client.get(f"{TEST_BASE_URL}/organizations/roles/summary")
+        roles_response = api_client.get(f"{TEST_BASE_URL}/roles/summary")
         assert_successful_response(roles_response, 200)
         
         members_response = api_client.get(f"{TEST_BASE_URL}/organizations/members")

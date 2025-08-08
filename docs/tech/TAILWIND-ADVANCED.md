@@ -146,7 +146,9 @@ function MyComponent() {
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl font-semibold tracking-tight">Card Title</CardTitle>
+          <CardTitle className="text-2xl font-semibold tracking-tight">
+            Card Title
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-2">

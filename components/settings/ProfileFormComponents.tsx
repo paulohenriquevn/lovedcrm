@@ -85,8 +85,8 @@ export function ProfileAvatar({ user }: { user: UserType }): JSX.Element {
           height={80}
         />
       ) : (
-        <div className="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center">
-          <span className="text-gray-600 text-2xl font-medium">{getUserInitial(user)}</span>
+        <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center">
+          <span className="text-muted-foreground text-2xl font-medium">{getUserInitial(user)}</span>
         </div>
       )}
       <Button type="button" variant="outline" className="ml-4">

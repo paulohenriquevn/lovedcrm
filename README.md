@@ -1,10 +1,10 @@
-# 🚀 Multi-Tenant SaaS Starter Template
+# 💜 Loved CRM - CRM para Agências Digitais
 
-**Complete SaaS starter template** with Next.js 14 + FastAPI. Organization-centric architecture with complete data isolation, team management, and internationalization support. **Perfect foundation for your next B2B SaaS application.**
+**O único CRM que agências digitais brasileiras realmente precisam.** Pipeline Kanban fixo, WhatsApp Business, VoIP integrado e IA para resumos automáticos - tudo em uma única plataforma moderna.
 
-> 🎯 **STARTER TEMPLATE**: Ready-to-customize foundation for SaaS applications  
+> 🎯 **FOCO LASER**: Agências digitais de 5-20 colaboradores no Brasil  
 > 🔗 **LIVE DEMO**: https://frontend-production-c57a.up.railway.app  
-> 📖 **Documentation**: [Template Guide](CLAUDE.md) | [Backend Development](api/CLAUDE.md) | [Customization Rules](RULES.md)
+> 📖 **Documentation**: [Development Guide](CLAUDE.md) | [Backend API](api/CLAUDE.md) | [Product Vision](docs/project/01-vision.md)
 
 ## **Quick Start**
 
@@ -47,51 +47,63 @@ make db-prod-migration-apply # Apply migrations
 curl https://backend-production-fd50.up.railway.app/health
 ```
 
-## 🎁 **What This Template Provides**
+## 🎁 **Funcionalidades Core do Loved CRM**
 
-**🏢 Multi-Tenant Foundation Ready for Customization**
+**📊 Pipeline Visual Kanban Fixo**
 
-- Organization-centric: Every user auto-assigned to org on signup
-- Complete data isolation between organizations (header-based)
-- Team management with role-based permissions (Owner/Admin/Member)
-- Email invitations with acceptance flow
+- 5 estágios obrigatórios: Lead → Contato → Proposta → Negociação → Fechado
+- Drag & drop para movimentação intuitiva de leads
+- Cards completos com valor, prioridade, contato e next actions
+- Filtros avançados por responsável, valor e data
 
-**🚀 Production-Ready Features Out of the Box**
+**🔗 Comunicação Unificada**
 
-- Internationalization: English, Portuguese, Spanish (ready for your translations)
-- 55+ API endpoints with comprehensive documentation (extend for your business)
-- Authentication: JWT + Google OAuth + email verification (OAuth ready for your apps)
-- Database: PostgreSQL with consolidated schema (add your business tables)
+- WhatsApp Business API integrado (Enterprise tier)
+- VoIP click-to-call com gravação automática
+- Timeline cronológica de todas as interações
+- Email parsing automático para captura de leads
 
-**⚡ Superior Developer Experience for Template Customization**
+**🤖 Inteligência Artificial**
 
-- Hot updates: 2-5s schema changes vs 45s restarts (develop your features faster)
-- Complete test suite: E2E + unit + integration (460+ tests to build upon)
-- Docker development environment (works anywhere)
-- Extensive automation: 100+ make commands (focus on your business logic)
+- Resumos automáticos de conversas com sentiment analysis
+- Insights de probabilidade de conversão
+- Sugestão de próximas ações baseada no histórico
+- Análise de padrões de comunicação
 
-## 🏗️ **Template Architecture**
+**🏢 Multi-Tenancy para Agências**
 
-**Clean Architecture + Multi-Tenancy (Ready to Extend)**
+- Isolamento completo de dados entre organizações (agencies)
+- Contexto organizacional em TODAS as operações
+- Colaboração segura entre membros da equipe
+- Role-based permissions (Owner/Admin/Member)
+
+## 🏗️ **Arquitetura CRM Organisation-Centric**
+
+**Clean Architecture + Multi-Tenancy Focada em Agências**
 
 ```
-Frontend: Next.js 14 → Container → Component → Service → Store
-Backend:  Router → Service → Repository → Model (SQLAlchemy)
+Frontend: Next.js 14 → CRM Container → Component → Service → Store
+Backend:  CRM Router → Service → Repository → Model (SQLAlchemy)
 ```
 
-**Key Patterns Built Into the Template**
+**Padrões CRM Implementados**
 
-- **Frontend**: `/[locale]/admin/` routing with org context (add your business routes here)
-- **Backend**: Every query filtered by `organization_id` (your tables inherit this pattern)
-- **API**: X-Org-Id headers + JWT validation (automatically handles multi-tenancy)
-- **Database**: Complete tenant isolation at row level (your data stays isolated)
+- **Frontend**: `/[locale]/admin/` routing with org context para agências
+- **Backend**: TODAS as queries filtradas por `organization_id` (isolamento total)
+- **API**: X-Org-Id headers + JWT validation (multi-tenancy seguro)
+- **Database**: Isolamento completo ao nível de linha (dados organizacionais protegidos)
 
-**Modern Tech Stack (Production-Ready)**
+**Fluxo Core Organization-Centric**
 
-- **Frontend**: Next.js 14, TypeScript, shadcn/ui, Tailwind, next-intl
-- **Backend**: FastAPI, SQLAlchemy 2.0, PostgreSQL, Redis
-- **Testing**: Playwright E2E, Vitest frontend, pytest backend (test your customizations)
-- **Deployment**: Railway template with one-click deploy (your SaaS live in minutes)
+- User Registration → Auto-Create Organization → User = Owner → JWT with org_id → All Operations Org-Scoped
+
+**Stack Técnico Loved CRM (Production-Ready)**
+
+- **Frontend**: Next.js 14, TypeScript, shadcn/ui, Tailwind CSS, Zustand, TanStack Query
+- **Backend**: FastAPI, SQLAlchemy 2.0, PostgreSQL 16, Redis, Pydantic
+- **CRM Features**: Pipeline Kanban, Timeline System, AI Summaries, WhatsApp API, VoIP
+- **Testing**: 460+ tests - Playwright E2E, Vitest frontend, pytest backend
+- **Deployment**: Railway com deploy automático (CRM online em minutos)
 
 ## **Essential Commands**
 

@@ -34,10 +34,7 @@ export function RemoveMemberDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isRemoving}>Cancelar</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={onConfirm}
-            disabled={isRemoving}
-          >
+          <AlertDialogAction onClick={onConfirm} disabled={isRemoving}>
             {isRemoving ? 'Removendo...' : 'Remover'}
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -20,7 +20,7 @@ const nextConfig = withNextIntl({
     const backendUrl =
       process.env.NODE_ENV === 'production'
         ? process.env.NEXT_PUBLIC_API_URL
-        : 'http://192.168.2.111:8000'
+        : process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'
 
     if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_API_URL) {
       console.error('NEXT_PUBLIC_API_URL is required in production!')
@@ -28,35 +28,16 @@ const nextConfig = withNextIntl({
     }
 
     const rules = [
-      // IMPORTANT: More specific rules FIRST!
-      {
-        source: '/api/auth/:endpoint*',
-        destination: `${backendUrl}/auth/:endpoint*`,
-      },
-      {
-        source: '/api/users/:path*',
-        destination: `${backendUrl}/users/:path*`,
-      },
-      {
-        source: '/api/organizations/:path*',
-        destination: `${backendUrl}/organizations/:path*`,
-      },
-      {
-        source: '/api/members/:path*',
-        destination: `${backendUrl}/members/:path*`,
-      },
-      {
-        source: '/api/billing/:path*',
-        destination: `${backendUrl}/billing/:path*`,
-      },
-      {
-        source: '/api/admin/:path*',
-        destination: `${backendUrl}/admin/:path*`,
-      },
+      // ====================================================================
+      // 🚀 UNIVERSAL CATCH-ALL: All /api/* routes map to backend directly
+      // Convention over Configuration - eliminates manual route management
+      // ====================================================================
       {
         source: '/api/:path*',
         destination: `${backendUrl}/:path*`,
       },
+
+      // Non-API routes
       {
         source: '/docs',
         destination: `${backendUrl}/docs`,
@@ -93,6 +74,26 @@ const nextConfig = withNextIntl({
   // Para MVP: disable static export em páginas com useSearchParams
   experimental: {
     missingSuspenseWithCSRBailout: false,
+  },
+
+  // Image domains configuration for external images
+  images: {
+    domains: ['images.unsplash.com', 'upload.wikimedia.org'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/photo-*',
+      },
+      {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org',
+        port: '',
+        pathname: '/wikipedia/commons/**',
+      },
+    ],
+    formats: ['image/webp', 'image/avif'],
   },
 
   // Headers de segurança

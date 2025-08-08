@@ -7,6 +7,7 @@ import { ErrorMessage } from '@/components/common/error-message'
 import { LoadingSpinner } from '@/components/common/loading-spinner'
 import { BillingSettingsView } from '@/components/settings/BillingSettingsView'
 import { logger } from '@/lib/logger'
+import { useAuthStore } from '@/stores/auth'
 import { useBillingStore, useBillingSelectors } from '@/stores/billing'
 
 // Removed unused type interfaces to resolve lint errors
@@ -249,7 +250,30 @@ function ErrorState({ error, onRetry }: { error: string; onRetry: () => void }) 
   )
 }
 
+interface BillingStoreData {
+  currentPlan: unknown
+  errors: {
+    currentPlan: string | null
+  }
+  fetchAllData: () => void
+}
+
+// Helper to check if component should show error state
+function shouldShowError(storeData: BillingStoreData): boolean {
+  return (
+    Boolean(storeData.errors.currentPlan) &&
+    storeData.errors.currentPlan !== '' &&
+    storeData.currentPlan === null
+  )
+}
+
+// Helper to check if component should show loading state
+function shouldShowLoading(user: unknown, organization: unknown, isLoading: boolean): boolean {
+  return user === null || organization === null || isLoading
+}
+
 export function BillingSettingsContainer() {
+  const { user, organization } = useAuthStore()
   const storeData = useBillingStore()
   const { isLoading } = useBillingSelectors()
 
@@ -259,23 +283,21 @@ export function BillingSettingsContainer() {
   const handleCancelSubscription = useSubscriptionCancellation()
   const handleManagePaymentMethods = useCustomerPortal()
 
-  // Load billing data on mount - using stable reference
+  // Load billing data only when user and organization are available
   useEffect(() => {
-    const { fetchAllData } = useBillingStore.getState()
-    void fetchAllData()
-  }, [])
+    if (user && organization) {
+      const { fetchAllData } = useBillingStore.getState()
+      void fetchAllData()
+    }
+  }, [user, organization])
 
-  // Render loading state
-  if (isLoading && !storeData.currentPlan) {
+  // Show loading state
+  if (shouldShowLoading(user, organization, isLoading)) {
     return <LoadingState />
   }
 
-  // Render error state - handle nullable string explicitly
-  const hasError =
-    storeData.errors.currentPlan !== null &&
-    storeData.errors.currentPlan !== '' &&
-    !storeData.currentPlan
-  if (hasError) {
+  // Show error state
+  if (shouldShowError(storeData)) {
     return (
       <ErrorState
         error={storeData.errors.currentPlan ?? 'Unknown error'}

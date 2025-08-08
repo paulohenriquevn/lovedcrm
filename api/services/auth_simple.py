@@ -145,7 +145,9 @@ class SimpleAuthService:
             "token_type": "bearer",
         }
 
-    def login(self, email: str, password: str, totp_token: str = None, backup_code: str = None) -> dict:
+    def login(
+        self, email: str, password: str, totp_token: str = None, backup_code: str = None
+    ) -> dict:
         """Login user and return tokens with organization."""
         user = self.authenticate_user(email, password)
 
@@ -186,8 +188,9 @@ class SimpleAuthService:
 
         # 🔐 2FA VERIFICATION (OPTIONAL)
         from ..services.user_two_factor_service import UserTwoFactorService
+
         two_factor_service = UserTwoFactorService(self.db)
-        
+
         # Check if 2FA is required for this user
         if two_factor_service.is_2fa_required(user, organization):
             # 2FA is enabled - verify token
@@ -198,22 +201,19 @@ class SimpleAuthService:
                     "message": "2FA token required",
                     "user_id": str(user.id),  # Temp user ID for 2FA flow
                 }
-            
+
             # Verify 2FA credentials
             is_2fa_valid = two_factor_service.verify_2fa_for_login(
-                user=user,
-                organization=organization,
-                token=totp_token,
-                backup_code=backup_code
+                user=user, organization=organization, token=totp_token, backup_code=backup_code
             )
-            
+
             if not is_2fa_valid:
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Invalid 2FA token or backup code",
                     headers={"WWW-Authenticate": "Bearer"},
                 )
-            
+
             logger.info(f"2FA verification successful for user {user.email}")
 
         # Generate tokens and return successful login

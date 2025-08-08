@@ -1,4 +1,4 @@
-.PHONY: help setup dev build test lint clean db-up db-down db-migrate db-reset check-db-prod connect-db-prod db-prod-info db-prod-status db-prod-logs db-prod-migration-status db-prod-migration-check db-prod-migration-apply db-prod-migration-init db-prod-console dev-docker dev-start dev-stop dev-logs dev-docker-reset test-hot-migrate test-hot-data test-hot-reset test-hot-mocks test-hot-status test-hot-all test-migration-check test-backend-unit test-backend-unit-quick test-backend-unit-failed test-backend-unit-ci test-rebuild test-logs test-logs-api test-logs-db test-nuclear
+.PHONY: help setup dev build test lint clean db-up db-down db-migrate db-reset check-db-prod connect-db-prod db-prod-info db-prod-status db-prod-logs db-prod-migration-status db-prod-migration-check db-prod-migration-apply db-prod-migration-init db-prod-console dev-docker dev-start dev-stop dev-logs dev-docker-reset test-hot-migrate test-hot-data test-hot-reset test-hot-mocks test-hot-status test-hot-all test-migration-check test-backend-unit test-backend-unit-quick test-backend-unit-failed test-backend-unit-ci test-rebuild test-logs test-logs-api test-logs-db test-nuclear docker-stop-all docker-clean-all test-proxy test-proxy-auth test-proxy-orgs test-proxy-headers test-proxy-compare test-proxy-quick
 
 # =============================================================================
 # NextJS + FastAPI SaaS Starter - CLEAN MAKEFILE
@@ -54,6 +54,14 @@ help: ## Show available commands
 	@echo "    make test-logs-db          # View database logs only"
 	@echo "    make test-rebuild          # Rebuild API image (after dependency changes)"
 	@echo "    make test-nuclear          # NUCLEAR: Remove ALL Docker data (extreme cases)"
+	@echo ""
+	@echo "  Proxy Integration Tests (NEW):"
+	@echo "    make test-proxy            # Run all proxy integration tests"
+	@echo "    make test-proxy-quick      # Run proxy tests (quick mode)"
+	@echo "    make test-proxy-auth       # Test auth via Next.js proxy"
+	@echo "    make test-proxy-orgs       # Test organizations via proxy"
+	@echo "    make test-proxy-headers    # Test header forwarding"
+	@echo "    make test-proxy-compare    # Compare proxy vs direct responses"
 	@echo ""
 	@echo "HOT UPDATES (Fast - No Restart):"
 	@echo "  make test-hot-migrate  # Apply schema changes (2s)"
@@ -696,3 +704,73 @@ status: ## Show project status
 	@echo "Migrations: $$(cd migrations && ./migrate status 2>/dev/null | grep -E '(up to date|needs updates)' | sed 's/\x1b\[[0-9;]*m//g' | head -1 || echo 'Error checking migrations')"
 	@echo "Node modules: $$([ -d node_modules ] && echo 'Installed' || echo 'Missing')"
 	@echo "Python deps: $$(pip list 2>/dev/null | grep -q fastapi && echo 'Installed' || echo 'Missing')"
+
+# =============================================================================
+# E2E PROXY INTEGRATION TESTS - NEW
+# =============================================================================
+
+test-proxy: ## Run all proxy integration tests (Next.js → Backend)
+	@echo "🌐 Running E2E Proxy Integration Tests"
+	@echo "======================================"
+	@echo ""
+	@echo "ℹ️  These tests validate:"
+	@echo "   • Next.js rewrites working correctly"
+	@echo "   • Headers (X-Org-Id, Authorization) forwarded"
+	@echo "   • Complete integration: Frontend → Proxy → Backend"
+	@echo ""
+	@echo "🚀 Starting test environment..."
+	@make test-start --no-print-directory
+	@echo ""
+	@echo "🧪 Running proxy tests..."
+	python3 -m pytest tests/e2e/proxy/ -v --tb=short
+	@echo ""
+	@echo "✅ Proxy integration tests completed!"
+
+test-proxy-quick: ## Run proxy tests in quick mode
+	@echo "🌐 Running E2E Proxy Tests (Quick Mode)"
+	@echo "========================================"
+	@echo ""
+	@make test-start --no-print-directory
+	python3 -m pytest tests/e2e/proxy/ -v --tb=line -q
+	@echo ""
+	@echo "✅ Quick proxy tests completed!"
+
+test-proxy-auth: ## Run authentication proxy tests only
+	@echo "🔐 Running Authentication Proxy Tests"
+	@echo "======================================"
+	@echo ""
+	@make test-start --no-print-directory
+	python3 -m pytest tests/e2e/proxy/test_proxy_auth.py -v --tb=short
+	@echo ""
+	@echo "✅ Auth proxy tests completed!"
+
+test-proxy-orgs: ## Run organization proxy tests only
+	@echo "🏢 Running Organizations Proxy Tests"
+	@echo "====================================="
+	@echo ""
+	@make test-start --no-print-directory
+	python3 -m pytest tests/e2e/proxy/test_proxy_organizations.py -v --tb=short
+	@echo ""
+	@echo "✅ Organizations proxy tests completed!"
+
+test-proxy-headers: ## Run header forwarding tests only
+	@echo "🌐 Running Header Forwarding Tests"
+	@echo "==================================="
+	@echo ""
+	@make test-start --no-print-directory
+	python3 -m pytest tests/e2e/proxy/test_proxy_headers.py -v --tb=short
+	@echo ""
+	@echo "✅ Header forwarding tests completed!"
+
+test-proxy-compare: ## Compare proxy vs direct API responses
+	@echo "⚖️  Comparing Proxy vs Direct API Responses"
+	@echo "==========================================="
+	@echo ""
+	@echo "ℹ️  This compares responses from:"
+	@echo "   • Direct: TestClient → FastAPI:8001"
+	@echo "   • Proxy:  TestClient → Next.js:3000 → FastAPI:8001"
+	@echo ""
+	@make test-start --no-print-directory
+	python3 -m pytest tests/e2e/proxy/ -v -k "vs_direct" --tb=short
+	@echo ""
+	@echo "✅ Proxy vs direct comparison completed!"

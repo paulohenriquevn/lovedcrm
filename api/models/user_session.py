@@ -17,35 +17,35 @@ class UserSession(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
     organization_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id"), nullable=False)
-    
+
     # Session identification
     session_token = Column(String(255), unique=True, nullable=False, index=True)
-    
+
     # Device and location information
     device_info = Column(String(500))  # "Chrome 120.0 on Windows 10"
-    ip_address = Column(String(45))    # IPv4/IPv6 address
-    location = Column(String(255))     # "São Paulo, Brasil"
-    user_agent = Column(Text)          # Full user agent string
-    
+    ip_address = Column(String(45))  # IPv4/IPv6 address
+    location = Column(String(255))  # "São Paulo, Brasil"
+    user_agent = Column(Text)  # Full user agent string
+
     # Session state
     is_active = Column(Boolean, default=True, nullable=False)
-    
+
     # Timestamps
     last_activity = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     expires_at = Column(DateTime, nullable=False)
-    
+
     # Relationships
     user = relationship("User", back_populates="sessions")
     organization = relationship("Organization")
 
     __table_args__ = (
         # Performance indexes for common queries
-        Index('ix_user_sessions_user_id', 'user_id'),
-        Index('ix_user_sessions_organization_id', 'organization_id'),
-        Index('ix_user_sessions_user_org', 'user_id', 'organization_id'),
-        Index('ix_user_sessions_active', 'is_active', 'expires_at'),
-        Index('ix_user_sessions_cleanup', 'expires_at', 'is_active'),
+        Index("ix_user_sessions_user_id", "user_id"),
+        Index("ix_user_sessions_organization_id", "organization_id"),
+        Index("ix_user_sessions_user_org", "user_id", "organization_id"),
+        Index("ix_user_sessions_active", "is_active", "expires_at"),
+        Index("ix_user_sessions_cleanup", "expires_at", "is_active"),
     )
 
     @classmethod

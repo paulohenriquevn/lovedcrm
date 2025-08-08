@@ -24,7 +24,7 @@ function FormField({
 }: FormFieldProps): JSX.Element {
   return (
     <div className="space-y-2">
-      <Label className="text-sm font-medium text-gray-700">
+      <Label className="text-sm font-medium text-foreground">
         {icon !== null && icon !== undefined ? (
           <span className="inline-flex items-center mr-2">{icon}</span>
         ) : null}
@@ -59,7 +59,7 @@ function TextareaField({
 }: TextareaFieldProps): JSX.Element {
   return (
     <div className="space-y-2">
-      <Label className="text-sm font-medium text-gray-700">{label}</Label>
+      <Label className="text-sm font-medium text-foreground">{label}</Label>
       <Textarea
         value={value}
         onChange={e => onChange(e.target.value)}
@@ -147,12 +147,12 @@ interface OrganizationSlugFieldProps {
 export function OrganizationSlugField({ organization }: OrganizationSlugFieldProps): JSX.Element {
   return (
     <div className="space-y-2">
-      <Label className="text-sm font-medium text-gray-700">Identificador Único</Label>
-      <div className="bg-gray-50 flex items-center justify-between p-2 border border-gray-300 rounded-md">
+      <Label className="text-sm font-medium text-foreground">Identificador Único</Label>
+      <div className="bg-muted flex items-center justify-between p-2 border border-border rounded-md">
         <span className="text-muted-foreground">{organization.slug}</span>
-        <span className="text-xs text-gray-500 ml-2">Somente leitura</span>
+        <span className="text-xs text-muted-foreground ml-2">Somente leitura</span>
       </div>
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-muted-foreground">
         Este identificador é usado nas URLs e não pode ser alterado.
       </p>
     </div>

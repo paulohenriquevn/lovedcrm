@@ -14,7 +14,7 @@ from ..models.user import User
 from ..repositories.user_repository_simple import get_user_repository
 from ..schemas.organization import OrganizationResponse
 from ..schemas.user import UserDeactivate, UserPasswordChange, UserResponse, UserUpdate
-from ..schemas.user_session import UserSessionListResponse, RevokeAllSessionsRequest
+from ..schemas.user_session import RevokeAllSessionsRequest, UserSessionListResponse
 from ..schemas.user_two_factor import (
     TwoFactorBackupCodesResponse,
     TwoFactorConfirmRequest,
@@ -133,7 +133,7 @@ async def get_current_user_organizations(
 
 
 # Organization-scoped admin endpoints
-@router.get("/", response_model=List[UserResponse])
+@router.get("", response_model=List[UserResponse])
 async def get_organization_users(
     membership: Annotated[OrganizationMember, Depends(require_admin)],
     db: Annotated[Session, Depends(get_db)],
@@ -256,23 +256,23 @@ async def get_user_sessions(
     """Get all active sessions for the current user."""
     try:
         session_service = UserSessionService(db)
-        
+
         # Extract current session token from Authorization header
         current_session_token = None
         auth_header = request.headers.get("authorization")
         if auth_header and auth_header.startswith("Bearer "):
             current_session_token = auth_header[7:]  # Remove "Bearer " prefix
-        
+
         return session_service.get_active_sessions(
             user=current_user,
             organization=organization,
-            current_session_token=current_session_token
+            current_session_token=current_session_token,
         )
-    
+
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to retrieve user sessions: {str(e)}"
+            detail=f"Failed to retrieve user sessions: {str(e)}",
         ) from e
 
 
@@ -286,25 +286,22 @@ async def revoke_user_session(
     """Revoke a specific user session."""
     try:
         session_service = UserSessionService(db)
-        
+
         success = session_service.revoke_session(
-            session_id=session_id,
-            user=current_user,
-            organization=organization
+            session_id=session_id, user=current_user, organization=organization
         )
-        
+
         if not success:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Session not found or already revoked"
+                status_code=status.HTTP_404_NOT_FOUND, detail="Session not found or already revoked"
             )
-    
+
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to revoke session: {str(e)}"
+            detail=f"Failed to revoke session: {str(e)}",
         ) from e
 
 
@@ -321,41 +318,40 @@ async def revoke_all_user_sessions(
         if not request_data.confirm:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Session revocation must be confirmed"
+                detail="Session revocation must be confirmed",
             )
-        
+
         session_service = UserSessionService(db)
-        
+
         # Extract current session token from Authorization header
         current_session_token = None
         auth_header = request.headers.get("authorization")
         if auth_header and auth_header.startswith("Bearer "):
             current_session_token = auth_header[7:]  # Remove "Bearer " prefix
-        
+
         if not current_session_token:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Cannot identify current session"
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Cannot identify current session"
             )
-        
+
         revoked_count = session_service.revoke_all_sessions_except_current(
             user=current_user,
             organization=organization,
-            current_session_token=current_session_token
+            current_session_token=current_session_token,
         )
-        
+
         return {
             "message": f"Successfully revoked {revoked_count} sessions",
             "revoked_sessions": revoked_count,
-            "current_session_preserved": True
+            "current_session_preserved": True,
         }
-    
+
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to revoke sessions: {str(e)}"
+            detail=f"Failed to revoke sessions: {str(e)}",
         ) from e
 
 
@@ -363,21 +359,22 @@ async def revoke_all_user_sessions(
 # 🔐 TWO-FACTOR AUTHENTICATION ENDPOINTS
 # =====================================================
 
+
 @router.get("/me/2fa/status", response_model=TwoFactorStatusResponse)
 async def get_2fa_status(
     current_user: Annotated[User, Depends(get_current_active_user)],
     organization: Annotated[Organization, Depends(get_current_organization)],
-    db: Annotated[Session, Depends(get_db)]
+    db: Annotated[Session, Depends(get_db)],
 ) -> TwoFactorStatusResponse:
     """Get current 2FA status for the authenticated user."""
     try:
         service = UserTwoFactorService(db)
         return service.get_2fa_status(current_user, organization)
-    
+
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to get 2FA status: {str(e)}"
+            detail=f"Failed to get 2FA status: {str(e)}",
         ) from e
 
 
@@ -385,28 +382,28 @@ async def get_2fa_status(
 async def setup_2fa(
     current_user: Annotated[User, Depends(get_current_active_user)],
     organization: Annotated[Organization, Depends(get_current_organization)],
-    db: Annotated[Session, Depends(get_db)]
+    db: Annotated[Session, Depends(get_db)],
 ) -> TwoFactorSetupResponse:
     """Setup 2FA for the authenticated user - generates secret key and QR code."""
     try:
         service = UserTwoFactorService(db)
-        
+
         # Check if 2FA is already enabled
         status_response = service.get_2fa_status(current_user, organization)
         if status_response.is_enabled:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="2FA is already enabled for this user"
+                detail="2FA is already enabled for this user",
             )
-        
+
         return service.setup_2fa(current_user, organization)
-    
+
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to setup 2FA: {str(e)}"
+            detail=f"Failed to setup 2FA: {str(e)}",
         ) from e
 
 
@@ -415,36 +412,35 @@ async def confirm_2fa_setup(
     request: TwoFactorConfirmRequest,
     current_user: Annotated[User, Depends(get_current_active_user)],
     organization: Annotated[Organization, Depends(get_current_organization)],
-    db: Annotated[Session, Depends(get_db)]
+    db: Annotated[Session, Depends(get_db)],
 ) -> dict:
     """Confirm 2FA setup by verifying the first TOTP token."""
     try:
         service = UserTwoFactorService(db)
-        
+
         # Check if 2FA is already enabled
         status_response = service.get_2fa_status(current_user, organization)
         if status_response.is_enabled:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="2FA is already enabled for this user"
+                detail="2FA is already enabled for this user",
             )
-        
+
         success = service.confirm_2fa_setup(current_user, organization, request.token)
-        
+
         if not success:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid TOTP token"
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid TOTP token"
             )
-        
+
         return {"message": "2FA has been successfully enabled"}
-    
+
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to confirm 2FA setup: {str(e)}"
+            detail=f"Failed to confirm 2FA setup: {str(e)}",
         ) from e
 
 
@@ -453,48 +449,43 @@ async def disable_2fa(
     request: TwoFactorDisableRequest,
     current_user: Annotated[User, Depends(get_current_active_user)],
     organization: Annotated[Organization, Depends(get_current_organization)],
-    db: Annotated[Session, Depends(get_db)]
+    db: Annotated[Session, Depends(get_db)],
 ) -> dict:
     """Disable 2FA for the authenticated user."""
     try:
         service = UserTwoFactorService(db)
-        
+
         # Validate that at least one credential is provided
         if not request.has_valid_credential():
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Either TOTP token or backup code is required"
+                detail="Either TOTP token or backup code is required",
             )
-        
+
         # Check if 2FA is currently enabled
         status_response = service.get_2fa_status(current_user, organization)
         if not status_response.is_enabled:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="2FA is not enabled for this user"
+                status_code=status.HTTP_400_BAD_REQUEST, detail="2FA is not enabled for this user"
             )
-        
+
         success = service.disable_2fa(
-            current_user, 
-            organization, 
-            token=request.token,
-            backup_code=request.backup_code
+            current_user, organization, token=request.token, backup_code=request.backup_code
         )
-        
+
         if not success:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid TOTP token or backup code"
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid TOTP token or backup code"
             )
-        
+
         return {"message": "2FA has been successfully disabled"}
-    
+
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to disable 2FA: {str(e)}"
+            detail=f"Failed to disable 2FA: {str(e)}",
         ) from e
 
 
@@ -502,34 +493,31 @@ async def disable_2fa(
 async def regenerate_backup_codes(
     current_user: Annotated[User, Depends(get_current_active_user)],
     organization: Annotated[Organization, Depends(get_current_organization)],
-    db: Annotated[Session, Depends(get_db)]
+    db: Annotated[Session, Depends(get_db)],
 ) -> TwoFactorBackupCodesResponse:
     """Regenerate backup codes for the authenticated user."""
     try:
         service = UserTwoFactorService(db)
-        
+
         # Check if 2FA is enabled
         status_response = service.get_2fa_status(current_user, organization)
         if not status_response.is_enabled:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="2FA must be enabled to regenerate backup codes"
+                detail="2FA must be enabled to regenerate backup codes",
             )
-        
+
         backup_codes_response = service.regenerate_backup_codes(current_user, organization)
-        
+
         if not backup_codes_response:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="2FA setup not found"
-            )
-        
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="2FA setup not found")
+
         return backup_codes_response
-    
+
     except HTTPException:
         raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to regenerate backup codes: {str(e)}"
+            detail=f"Failed to regenerate backup codes: {str(e)}",
         ) from e

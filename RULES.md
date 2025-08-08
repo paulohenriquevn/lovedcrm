@@ -13,6 +13,23 @@
 - ❌ **MUST NOT**: Assume requirements or make speculative interpretations about YOUR SaaS needs
 - ❌ **MUST NOT**: Continue without complete validation of YOUR business inputs
 
+### **FAIL-FAST VALIDATION PRINCIPLE**
+
+**ALWAYS detect errors and invalid conditions as early as possible and immediately halt execution:**
+
+- ✅ **MUST**: Validate data at the earliest possible point (input, function start, process beginning)
+- ✅ **MUST**: Immediately halt execution when validation fails (throw exceptions, return errors)
+- ✅ **MUST**: Provide specific error messages indicating problem nature and resolution
+- ✅ **MUST**: Prevent invalid data from propagating through system
+- ✅ **MUST**: Implement UI validation with immediate user feedback
+- ✅ **MUST**: Validate API requests before processing to protect backend
+- ✅ **MUST**: Apply domain logic validation to maintain data integrity
+- ✅ **MUST**: Use early prototypes and feedback loops in development
+- ❌ **MUST NOT**: Allow invalid data to continue processing
+- ❌ **MUST NOT**: Attempt recovery with corrupted/invalid states
+- ❌ **MUST NOT**: Provide generic or unclear error messages
+- ❌ **MUST NOT**: Skip validation for performance reasons
+
 ### **EXTREME HONESTY ABOUT TEMPLATE STATUS**
 
 - ✅ **MUST**: Be EXTREMELY HONEST about YOUR template customization progress
@@ -21,6 +38,28 @@
 - ❌ **MUST NOT**: Mask template issues or give false guarantees about YOUR SaaS
 - ❌ **MUST NOT**: Proceed without communicating identified risks in YOUR customization
 - ❌ **MUST NOT**: Give vague or evasive responses about YOUR development status
+
+### **🔍 CODEBASE ANALYSIS OBRIGATÓRIA - REGRA CRÍTICA**
+
+**ANTES DE CRIAR QUALQUER COMPONENTE, SERVIÇO, API OU MODEL:**
+
+- ✅ **OBRIGATÓRIO**: Analisar o codebase existente PRIMEIRO usando Glob/Grep/Read tools
+- ✅ **OBRIGATÓRIO**: Verificar se o componente/serviço JÁ EXISTE no template
+- ✅ **OBRIGATÓRIO**: Se existe: EVOLUIR o existente, NUNCA criar duplicado
+- ✅ **OBRIGATÓRIO**: Se não existe: Verificar padrões similares para seguir
+- ✅ **OBRIGATÓRIO**: Documentar análise realizada: "Analisado X arquivos, encontrado Y similar"
+- ✅ **OBRIGATÓRIO**: Justificar decisão: "Evoluindo Z existente" OU "Criando novo porque..."
+- ❌ **PROIBIDO**: Criar componentes/serviços sem análise prévia do codebase
+- ❌ **PROIBIDO**: Duplicar funcionalidades existentes sem justificativa extrema
+- ❌ **PROIBIDO**: Assumir que algo não existe sem verificação completa
+
+**PROCESSO DE VALIDAÇÃO OBRIGATÓRIO:**
+
+1. **BUSCAR PRIMEIRO**: `Glob "**/*.tsx"` + `Grep "ComponentName"` + `Read similares`
+2. **ANALISAR EXISTENTES**: Verificar funcionalidades, props, padrões
+3. **DECIDIR**: Evoluir existente OU criar novo (com justificativa)
+4. **DOCUMENTAR**: "Análise: X componentes encontrados, evolução Y aplicada"
+5. **IMPLEMENTAR**: Seguir padrões identificados na análise
 
 ## 🏗️ **TEMPLATE ARCHITECTURE & TECHNOLOGY RULES**
 
@@ -108,6 +147,31 @@
 - ❌ **NÃO DEVE**: Pular validações por pressão de tempo
 - ❌ **NÃO DEVE**: Aceitar validações superficiais ou genéricas
 - ❌ **NÃO DEVE**: Continuar sem evidências suficientes
+
+### **CHANGELOG OBRIGATÓRIO POR STORY**
+
+- ✅ **DEVE**: Gerar entrada no CHANGELOG.md para CADA story finalizada
+- ✅ **DEVE**: Criar changelog na raiz do projeto (formato Keep a Changelog)
+- ✅ **DEVE**: Incluir categorias: Adicionado, Alterado, Corrigido, Segurança
+- ✅ **DEVE**: Referenciar story específica ([STORY X.Y]) em cada entrada
+- ✅ **DEVE**: Usar versionamento semântico (MAJOR.MINOR.PATCH)
+- ✅ **DEVE**: Documentar funcionalidades em linguagem clara para usuários
+- ✅ **DEVE**: Incluir detalhes técnicos para desenvolvedores
+- ✅ **DEVE**: Gerar changelog IMEDIATAMENTE após deploy bem-sucedido
+- ❌ **NÃO DEVE**: Finalizar story sem entrada no changelog
+- ❌ **NÃO DEVE**: Usar linguagem técnica excessiva para usuários finais
+- ❌ **NÃO DEVE**: Omitir implicações de segurança quando aplicáveis
+
+### **ATUALIZAÇÃO STATUS ROADMAP OBRIGATÓRIA**
+
+- ✅ **DEVE**: Atualizar status no roadmap (`docs/project/11-roadmap.md`) para CADA story completada
+- ✅ **DEVE**: Marcar story como "✅ CONCLUÍDO (DD/MM/AAAA)" no roadmap
+- ✅ **DEVE**: Atualizar progresso do Epic pai quando aplicável
+- ✅ **DEVE**: Incluir data de conclusão e status de deploy
+- ✅ **DEVE**: Atualizar IMEDIATAMENTE após validação final da story
+- ❌ **NÃO DEVE**: Considerar story completa sem atualização do roadmap
+- ❌ **NÃO DEVE**: Deixar stories implementadas com status desatualizado
+- ❌ **NÃO DEVE**: Atualizar roadmap sem validação completa da funcionalidade
 
 ## 🚫 **PROIBIÇÕES CRÍTICAS**
 

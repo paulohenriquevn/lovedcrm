@@ -228,9 +228,7 @@ export function DisableStep({
         )}
 
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <p className="text-sm text-yellow-800">
-            Desativar 2FA reduzirá a segurança da sua conta
-          </p>
+          <p className="text-sm text-yellow-800">Desativar 2FA reduzirá a segurança da sua conta</p>
         </div>
       </div>
 

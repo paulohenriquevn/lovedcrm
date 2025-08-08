@@ -36,7 +36,7 @@ from ..services.organization_service import OrganizationService
 router = APIRouter(prefix="/organizations", tags=["Organizations"])
 
 
-@router.post("/", response_model=OrganizationResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=OrganizationResponse, status_code=status.HTTP_201_CREATED)
 async def create_organization(
     request: Request,
     org_data: OrganizationCreate,

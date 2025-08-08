@@ -1,641 +1,233 @@
-# 🎯 Loved CRM - Visão Estratégica do Produto
+# Loved CRM - Documento de Visão Estratégica
 
-**Data do Documento:** 06 de Janeiro de 2025  
-**Versão:** 1.1 (Atualizada com Insights de Mercado Brasileiro)  
-**Responsável:** Equipe de Produto  
-**Status:** Aprovado para Desenvolvimento - Foco Agências 5-20 Colaboradores
+## 1. **PROBLEMA E OPORTUNIDADE**
 
----
+### **Problema Principal**
 
-## 📋 Sumário Executivo
+Agências digitais brasileiras de 5-20 colaboradores enfrentam **fragmentação extrema** na gestão de relacionamento com clientes, resultando em perda sistêmica de leads de até 89.88% devido à desconexão entre comunicação (WhatsApp - 95% de uso) e gestão comercial (apenas 5.12% usam CRM integrado).
 
-### Visão do Produto
-**Transformar a gestão de relacionamento com clientes para agências digitais brasileiras através de um CRM completo que integra pipeline visual, comunicação unificada e inteligência artificial em uma única plataforma.**
+### **Público-Alvo**
 
-### Problema Principal
-Agências digitais brasileiras de 5-20 colaboradores enfrentam **fragmentação extrema** na gestão de relacionamento com clientes, dependendo de múltiplas ferramentas desconectadas (WhatsApp Business, planilhas, Gmail, sistemas telefônicos) que resultam em:
-- **Perda de leads por falta de acompanhamento sistematizado**
-- **Baixa produtividade** devido à mudança constante entre ferramentas  
-- **Experiência inconsistente** para clientes e equipe interna
-- **Dificuldade de colaboração** entre membros da equipe
-- **Ausência de histórico unificado** de comunicações
+- **Agências digitais brasileiras** com 5-20 colaboradores
+- **Equipes comerciais PMEs** que dependem do WhatsApp para vendas
+- **Empresas de marketing digital** que atendem múltiplos clientes simultaneamente
+- **Consultorias B2B** que precisam de pipeline visual + comunicação unificada
 
-### Proposta de Valor
-CRM especializado para agências que unifica **pipeline Kanban fixo** (Lead → Contato → Proposta → Negociação → Fechado), **timeline de comunicação integrada** (WhatsApp, VoIP, email), **IA para resumos automáticos** de conversas e **gestão completa do relacionamento** em uma única interface moderna e intuitiva.
+### **Tamanho do Mercado**
 
-### Mercado-Alvo
-- **Público Primário:** Agências digitais brasileiras de 5-20 colaboradores
-- **TAM:** R$ 2,18 bilhões (20,3 milhões de micro e pequenas empresas no Brasil)
-- **SAM:** R$ 717 milhões (1.196+ agências digitais × R$ 600k receita média anual)
-- **SOM:** R$ 36 milhões (2% market share nos primeiros 3 anos)
-- **Posicionamento:** "O único CRM que agências digitais brasileiras realmente precisam"
+- **Mercado CRM Brasil**: US$ 2.10 bilhões até 2029 (CAGR 11.84%)
+- **WhatsApp empresarial**: 95% das empresas brasileiras utilizam
+- **Gap crítico**: 89.88% entre uso de WhatsApp e CRM integrado
+- **Ticket médio agências**: R$ 500 - R$ 5.000/mês (potencial R$ 60k/ano)
 
-### Modelo de Negócio
-SaaS B2B com **assinatura recorrente mensal** de R$ 197/mês por organização (até 5 usuários), focado em **organizações compartilhadas** para colaboração entre equipes de agências.
+### **Por que Agora**
 
----
+- **API WhatsApp Business** cresceu 5.400% entre 2019-2024
+- **70% das equipes** apontam WhatsApp como canal de maior sucesso
+- **62% dos brasileiros** já compraram via WhatsApp
+- **Encerramento API on-premise** até outubro 2025 força migração para cloud
 
-## 🎯 Definição do Produto
+## 2. **SOLUÇÃO E DIFERENCIAÇÃO**
 
-### Identidade do Produto
-- **Nome:** Loved CRM
-- **Categoria:** Customer Relationship Management para Agências Digitais
-- **Posicionamento:** "O único CRM que agências digitais brasileiras realmente precisam"
-- **Personalidade:** Moderno, intuitivo, eficiente, confiável
+### **Nossa Solução**
 
-### Funcionalidades Core
+Loved CRM é o **único CRM brasileiro** que integra nativamente:
 
-#### 1. Pipeline Kanban Fixo
-- **5 estágios obrigatórios:** Lead → Contato → Proposta → Negociação → Fechado
-- **Drag & drop** para movimentação de cards
-- **Automações** de mudança de status
-- **Métricas de conversão** por estágio
-- **Tempo médio** de permanência por fase
+- **Pipeline Visual Avançado**: Funil Kanban com automações inteligentes
+- **WhatsApp/VoIP Unificado**: Comunicação centralizada com histórico completo
+- **Inteligência Artificial**: Automação de respostas + qualificação de leads
+- **Multi-Tenant Architecture**: Isolamento perfeito para agências com múltiplos clientes
 
-#### 2. Timeline Unificada de Comunicação
-- **Integração WhatsApp Business API** (mensagens bidirecionais)
-- **VoIP integrado** com gravação de chamadas
-- **Parsing automático de emails** (Gmail, Outlook)
-- **Histórico cronológico** de todas as interações
-- **Anexos e mídia** centralizados por cliente
+### **Proposta de Valor Única**
 
-#### 3. Inteligência Artificial Integrada
-- **Resumos automáticos** de conversas longas (OpenAI GPT)
-- **Análise de sentimento** nas interações
-- **Sugestões de próximas ações** baseadas no histórico
-- **Classificação automática** de urgência/prioridade
+> **"O primeiro CRM que elimina a fragmentação de ferramentas para agências digitais, integrando pipeline visual + WhatsApp + IA em uma única plataforma, aumentando a conversão de leads em até 300%."**
 
-#### 4. Gestão Completa de Clientes
-- **Perfis detalhados** com dados de contato e empresa
-- **Histórico financeiro** (propostas, contratos, pagamentos)
-- **Documentos compartilhados** (briefings, contratos, aprovações)
-- **Tags personalizáveis** para segmentação
+### **Vantagem Competitiva**
 
-### Arquitetura Técnica
-- **Frontend:** Next.js 14 + TypeScript + Tailwind CSS + shadcn/ui
-- **Backend:** FastAPI + Python 3.11 + PostgreSQL 16
-- **Multi-tenancy:** Header-based (X-Org-Id) com isolamento total de dados
-- **Deploy:** Railway (produção) + Docker (desenvolvimento)
-- **Integrações:** WhatsApp Business API, OpenAI GPT-4, Stripe, VoIP providers
+1. **Integração Nativa Brasileira**: Desenvolvido especificamente para o mercado brasileiro
+2. **WhatsApp como Cidadão de Primeira Classe**: Não é integração - é parte do core
+3. **IA Contextual**: Entende o contexto das agências digitais brasileiras
+4. **Multi-Tenancy Real**: Isolamento completo entre clientes da agência
 
----
+### **Resultado Final**
 
-## 🏪 Análise de Mercado
+- **↑ 300% conversão de leads** (eliminação de vazamentos entre ferramentas)
+- **↓ 60% tempo de resposta** (comunicação centralizada)
+- **↑ 250% produtividade da equipe** (automação inteligente)
+- **↓ 80% custo de ferramentas** (solução única substitui 5-8 tools)
 
-### Dimensionamento do Mercado (Brasil)
+## 3. **MODELO DE NEGÓCIO**
 
-#### TAM (Total Addressable Market): R$ 2,18 bilhões
-- **Base:** 20,3 milhões de micro e pequenas empresas no Brasil
-- **Ticket médio anual:** R$ 600 por empresa (5% da receita média)
-- **Cálculo:** 20.300.000 × (R$ 600.000 × 0,05) ÷ 12 = R$ 2,18 bi
-- **Fonte:** SEBRAE 2024, Estatísticas MPE Brasil
+### **Tipo: B2B (Business-to-Business)**
 
-#### SAM (Serviceable Addressable Market): R$ 717 milhões
-- **Agências digitais ativas:** 1.196+ (SCAD 2024)
-- **Receita média anual:** R$ 600.000 por agência
-- **% investimento em ferramentas:** 5% da receita
-- **Cálculo:** 1.196 × R$ 600.000 × 0,05 = R$ 35,9 mi
-- **Expansão para adjacentes:** 20x (consultores, freelancers, pequenas empresas de serviços)
-- **SAM Total:** R$ 717 milhões
+**Justificativa Definitiva**: Agências digitais são empresas que atendem outras empresas. O problema é organizacional (gestão de equipes, pipeline comercial, produtividade), não individual.
 
-#### SOM (Serviceable Obtainable Market): R$ 36 milhões
-- **Meta de market share:** 2% nos primeiros 3 anos
-- **Agências-alvo:** 24 (2% de 1.196)
-- **Receita mensal por agência:** R$ 197
-- **Receita anual total:** 24 × R$ 197 × 12 = R$ 56.712
-- **Expansão para 3.000 clientes:** R$ 36 milhões (2% do SAM)
+### **Monetização**
 
-### Análise Competitiva
+- **SaaS Recorrente**: Planos mensais por usuário + organização
+- **Tier Pricing**: Starter (R$ 49/usuário) → Pro (R$ 99/usuário) → Enterprise (R$ 199/usuário)
+- **WhatsApp API**: Taxa por mensagem (custo + markup)
+- **Premium Features**: IA avançada, integrações customizadas, white-label
 
-#### Concorrentes Diretos
+### **Cliente Ideal**
 
-**1. HubSpot CRM**
-- **Preço:** US$ 45/mês (R$ 270)
-- **Forças:** Brand recognition, integração marketing
-- **Fraquezas:** Complexidade excessiva, sem WhatsApp nativo, em inglês
-- **Market share:** 15% (CRM global)
+**Agência Digital Brasileira "Sweet Spot":**
 
-**2. Salesforce Essentials**
-- **Preço:** US$ 25/usuário/mês (R$ 150)
-- **Forças:** Robustez, customização
-- **Fraquezas:** Curva de aprendizado alta, sem foco em agências
-- **Market share:** 20% (CRM global)
+- **Tamanho**: 5-20 colaboradores (faturamento R$ 50k-500k/mês)
+- **Problema**: Perdem 40%+ leads por desorganização
+- **Ferramentas atuais**: WhatsApp + planilhas + 3-5 tools desconectados
+- **Ponto de dor**: Founder/sócio gastando 20h/semana organizando pipeline
 
-**3. Pipedrive**
-- **Preço:** US$ 14,90/usuário/mês (R$ 90)
-- **Forças:** Simplicidade, pipeline visual
-- **Fraquezas:** Funcionalidades limitadas, sem IA, sem WhatsApp Business
+### **Preço/Valor**
 
-**4. Zoho CRM**
-- **Preço:** US$ 14/usuário/mês (R$ 84)
-- **Forças:** Preço competitivo, suite completa
-- **Fraquezas:** Interface desatualizada, suporte limitado no Brasil
+- **Investimento**: R$ 49-199/usuário/mês
+- **ROI mensal**: R$ 5.000-25.000 (recuperação de leads perdidos)
+- **Payback**: 2-4 semanas (economia de ferramentas + aumento de conversão)
+- **LTV**: R$ 35.000-180.000 por agência cliente
 
-#### Concorrentes Adjacentes
+## 4. **ANÁLISE COMPETITIVA**
 
-**5. Monday.com**
-- **Preço:** US$ 10/usuário/mês (R$ 60)
-- **Forças:** Flexibilidade, colaboração
-- **Fraquezas:** Não é CRM especializado, sem integrações de comunicação
+### Concorrente Principal: **RD Station CRM**
 
-**6. Notion**
-- **Preço:** US$ 10/usuário/mês (R$ 60)
-- **Forças:** Customização total, popularidade
-- **Fraquezas:** Setup complexo, sem automações CRM, sem integrações
+**O que faz**:
 
-**7. Airtable**
-- **Preço:** US$ 20/usuário/mês (R$ 120)
-- **Forças:** Database flexível, automações
-- **Fraquezas:** Curva de aprendizado, sem foco em CRM
+- CRM brasileiro com integração WhatsApp via WhatStation
+- Marketing + vendas integrados
+- Preços: R$ 59,40/mês por usuário
 
-**8. Trello**
-- **Preço:** US$ 5/usuário/mês (R$ 30)
-- **Forças:** Simplicidade, Kanban visual
-- **Fraquezas:** Muito básico, sem funcionalidades CRM
+**Nosso Diferencial**:
 
-### Vantagem Competitiva
+- **WhatsApp nativo** (não extensão)
+- **Pipeline visual avançado** com automações IA
+- **Multi-tenancy real** para agências
+- **Foco laser** em agências (não genérico)
 
-#### Diferenciadores Únicos (Vantagem Competitiva Sustentável)
-1. **Especialização exclusiva em agências digitais brasileiras** - profundo conhecimento do mercado
-2. **WhatsApp Business API integrado nativamente** - 99% de penetração no Brasil
-3. **IA treinada para português brasileiro** - resumos e análises em linguagem natural  
-4. **Timeline unificada de comunicação** - WhatsApp + VoIP + Email + Notas em uma interface
-5. **Pipeline Kanban fixo otimizado** - 5 estágios validados para agências (Lead→Contato→Proposta→Negociação→Fechado)
-6. **Preço 27% mais competitivo** que principais concorrentes internacionais
-7. **Compliance LGPD nativo** - desde a concepção, não adaptação posterior
+### Concorrente Indireto: **Bitrix24**
 
-#### Barreira de Entrada
-- **Integração WhatsApp Business API** (complexidade técnica alta)
-- **Processamento IA em português** (especialização linguística)
-- **Conhecimento do mercado brasileiro** (compliance, tributação)
-- **Multi-tenancy segura** (arquitetura enterprise)
+**Abordagem**:
 
----
+- Plataforma tudo-em-um com WhatsApp integrado
+- Versão gratuita robusta
+- 35+ funcionalidades empresariais
 
-## 👥 Personas e Segmentação
+**Oportunidade**:
 
-### Persona Primária: Gestor de Agência Digital Brasileira
+- **Interface complexa** (curva de aprendizado alta)
+- **Não é específico** para agências digitais
+- **Integração WhatsApp** via terceiros (ChatApp)
 
-**Demografia:**
-- **Idade:** 28-45 anos  
-- **Cargo:** Sócio-fundador, Diretor Comercial, Gerente de Contas
-- **Equipe:** 5-20 colaboradores (equipe média-alta no segmento)
-- **Localização:** São Paulo, Rio de Janeiro, Belo Horizonte, Porto Alegre, Curitiba
-- **Faturamento:** R$ 50k-500k/mês
+### Player Dominante: **HubSpot**
 
-**Comportamento:**
-- **Ferramentas atuais:** WhatsApp Business, planilhas Google, Gmail
-- **Dores principais:** Perda de leads, falta de histórico, comunicação fragmentada
-- **Objetivos:** Aumentar conversão, melhorar organização, profissionalizar atendimento
-- **Orçamento disponível:** R$ 200-500/mês para ferramentas de gestão
+**Por que é líder**:
 
-**Cenários de Uso:**
-1. **Recepção de lead:** Captura via WhatsApp/formulário → Criação automática no pipeline
-2. **Acompanhamento comercial:** Histórico completo de interações → Tomada de decisão informada
-3. **Gestão de equipe:** Visibilidade de performance → Redistribuição de leads
-4. **Relatórios para clientes:** Extração de dados → Apresentação de resultados
+- Ecossistema completo Marketing + Sales + Service
+- Versão gratuita poderosa
+- Brand recognition global
 
-### Persona Secundária: Consultor/Freelancer de Marketing
+**Nossa Estratégia**:
 
-**Demografia:**
-- **Idade:** 25-40 anos
-- **Situação:** Profissional autônomo, MEI
-- **Clientes simultâneos:** 5-15 projetos
-- **Faturamento:** R$ 10-50k/mês
+- **Especialização** vs generalização
+- **Preço brasileiro** vs pricing dólar
+- **WhatsApp nativo** vs integrações fracas
+- **Time-to-value** 24h vs 3-6 meses
 
-**Necessidades específicas:**
-- **Gestão multi-cliente** eficiente
-- **Profissionalização** do atendimento
-- **Histórico centralizado** de comunicações
-- **Relatórios automáticos** de atividades
+## 5. **FUNCIONALIDADES COMPLETAS**
 
----
+### Core Features (Essenciais)
 
-## 💰 Modelo de Negócio
+- [ ] **Pipeline Visual Kanban**: Funil drag-and-drop com estágios customizáveis
+- [ ] **WhatsApp Business Nativo**: Chat integrado com histórico completo
+- [ ] **Gestão de Leads**: Captura automática + qualificação inteligente
+- [ ] **Automações Básicas**: Follow-ups automáticos + notificações
+- [ ] **Dashboard Analytics**: Métricas de conversão por estágio
 
-### Estrutura de Receita
+### Supporting Features (Suporte)
 
-#### Plano Único: Professional
-- **Preço:** R$ 197/mês por organização
-- **Usuários inclusos:** Até 5 colaboradores
-- **Usuários adicionais:** R$ 39/mês cada
-- **Contatos ilimitados**
-- **Armazenamento:** 100GB (adicional R$ 29/10GB)
+- [ ] **VoIP Integrado**: Chamadas telefônicas dentro da plataforma
+- [ ] **Gestão de Contatos**: Base unificada com dados enriquecidos
+- [ ] **Templates de Mensagem**: Biblioteca de respostas padronizadas
+- [ ] **Calendário Integrado**: Agendamento de reuniões automatizado
+- [ ] **Relatórios Avançados**: Performance por usuário e período
 
-#### Complementos (Add-ons)
-- **WhatsApp Business API:** R$ 47/mês (até 1.000 mensagens)
-- **VoIP avançado:** R$ 67/mês (gravação + transcrição)
-- **IA Premium:** R$ 77/mês (análises avançadas + automações)
-- **API customizada:** R$ 197/mês (integrações próprias)
+### Advanced Features (Diferenciação)
 
-### Economia Unitária
+- [ ] **IA Conversacional**: Chatbot que qualifica leads automaticamente
+- [ ] **Análise de Sentimento**: Detecção de urgência nas mensagens
+- [ ] **Integração CRM+Marketing**: Sync com Facebook/Google Ads
+- [ ] **API Pública**: Integrações customizadas para agências
+- [ ] **White-Label Mode**: Agências podem brandear para clientes
 
-#### Custos por Cliente (Mensal)
-- **Infraestrutura (Railway):** R$ 12
-- **WhatsApp Business API:** R$ 25 (média 500 mensagens)
-- **OpenAI GPT-4:** R$ 18 (100 resumos/mês)
-- **Stripe (3,99%):** R$ 8
-- **Suporte e Success:** R$ 25
-- **Margem operacional:** 34% (R$ 67)
-- **Total de custos:** R$ 130
+### Multi-Tenancy Features (Obrigatórias)
 
-#### Métricas de Negócio
-- **LTV (36 meses):** R$ 5.316 (considerando churn 5%/mês)
-- **CAC alvo:** R$ 590 (LTV:CAC ratio 9:1)
-- **Payback period:** 3 meses
-- **Monthly recurring revenue (MRR):** R$ 197
-- **Annual recurring revenue (ARR):** R$ 2.364
+- [ ] **Organization Management**: Isolamento completo por agência
+- [ ] **User Roles & Permissions**: Controle granular por organização
+- [ ] **Data Isolation**: Separação absoluta entre clientes da agência
+- [ ] **Billing Per Organization**: Faturamento independente por agência
+- [ ] **Custom Branding**: Logo e cores por organização
 
-### Projeções Financeiras (3 anos)
+### AI-Powered Features (Diferencial Competitivo)
 
-#### Ano 1
-- **Clientes:** 24 (2 por mês)
-- **MRR final:** R$ 4.728
-- **Receita total:** R$ 28.368
-- **Custos:** R$ 18.720
-- **EBITDA:** 34% (R$ 9.648)
+- [ ] **Lead Scoring Automático**: Pontuação baseada em interações
+- [ ] **Resposta Sugerida**: IA sugere replies contextuais
+- [ ] **Previsão de Conversão**: Algoritmo prevê probabilidade de fechamento
+- [ ] **Otimização de Pipeline**: IA identifica gargalos e sugere ações
+- [ ] **Análise Preditiva**: Forecasting de receita baseado em padrões
 
-#### Ano 2
-- **Clientes:** 150 (crescimento 525%)
-- **MRR final:** R$ 29.550
-- **Receita total:** R$ 201.960
-- **Custos:** R$ 133.300
-- **EBITDA:** 34% (R$ 68.660)
+### Integration & Automation Features
 
-#### Ano 3
-- **Clientes:** 500 (crescimento 233%)
-- **MRR final:** R$ 98.500
-- **Receita total:** R$ 844.500
-- **Custos:** R$ 557.370
-- **EBITDA:** 34% (R$ 287.130)
+- [ ] **Zapier Native**: 2000+ integrações via Zapier
+- [ ] **Webhook System**: Notificações em tempo real para sistemas externos
+- [ ] **Google Workspace**: Sync calendário, emails, drive
+- [ ] **Meta Business**: Integração com Facebook e Instagram Business
+- [ ] **Stripe/Pagamento**: Gestão de propostas e cobranças
+
+### Mobile & Communication Features
+
+- [ ] **App Mobile Nativo**: iOS e Android com push notifications
+- [ ] **WhatsApp Web Sync**: Sincronização bidirecional
+- [ ] **Email Marketing**: Campanhas direto do CRM
+- [ ] **SMS Integration**: Backup para WhatsApp indisponível
+- [ ] **Video Conferencing**: Reuniões integradas (Zoom/Meet)
+
+## 6. **ROADMAP DE IMPLEMENTAÇÃO**
+
+### **Fase 1 - MVP Core (3 meses)**
+
+- Pipeline visual básico
+- WhatsApp integração simples
+- Gestão de leads fundamental
+- Multi-tenancy básico
+
+### **Fase 2 - Automação (6 meses)**
+
+- IA conversacional básica
+- Automações de follow-up
+- Relatórios avançados
+- App mobile
+
+### **Fase 3 - Inteligência (12 meses)**
+
+- IA preditiva completa
+- Integrações avançadas
+- White-label
+- API pública
+
+## 7. **MÉTRICAS DE SUCESSO**
+
+### **KPIs de Produto**
+
+- **Conversão Lead→Cliente**: >15% (mercado: 3-7%)
+- **Time to First Value**: <24h (competidores: 7-14 dias)
+- **Daily Active Users**: >80% (alta adoção)
+- **Customer Satisfaction**: >4.8/5.0
+
+### **KPIs de Negócio**
+
+- **Monthly Recurring Revenue**: R$ 1M em 18 meses
+- **Customer Acquisition Cost**: <R$ 2.000 (LTV/CAC >18:1)
+- **Churn Rate**: <5% mensalmente
+- **Net Revenue Retention**: >120%
 
 ---
 
-## 🚀 Estratégia de Go-to-Market
-
-### Fases de Lançamento
-
-#### Fase 1: MVP e Validação (Meses 1-3)
-- **Objetivo:** Validar product-market fit com 10 clientes beta
-- **Funcionalidades:** Pipeline básico + WhatsApp + IA resumos
-- **Pricing:** R$ 97/mês (50% desconto)
-- **Métricas:** NPS > 50, retention > 80%, feedback qualitativo
-
-#### Fase 2: Escalabilidade (Meses 4-9)
-- **Objetivo:** Crescer para 50 clientes pagantes
-- **Funcionalidades:** VoIP, email parsing, automações
-- **Pricing:** R$ 147/mês (25% desconto early adopter)
-- **Métricas:** MRR R$ 7.350, CAC < R$ 400
-
-#### Fase 3: Market Leadership (Meses 10-18)
-- **Objetivo:** Alcançar 200 clientes e liderança no nicho
-- **Funcionalidades:** API pública, integrações avançadas, mobile app
-- **Pricing:** R$ 197/mês (preço final)
-- **Métricas:** MRR R$ 39.400, market share 5%
-
-### Canais de Aquisição
-
-#### Digital (60% dos leads)
-1. **SEO/Content Marketing:** Blog especializado em gestão de agências
-2. **Google Ads:** Keywords específicas ("CRM para agência", "WhatsApp Business CRM")
-3. **LinkedIn Ads:** Targeting direto para gestores de agências
-4. **YouTube:** Tutoriais e cases de sucesso
-
-#### Parcerias (25% dos leads)
-1. **Influenciadores de marketing digital** (parcerias de afiliação)
-2. **Consultorias de gestão** para agências
-3. **Eventos de marketing** (patrocínios e palestras)
-4. **Comunidades** (grupos WhatsApp/Telegram de agências)
-
-#### Referências (15% dos leads)
-1. **Programa de indicação:** 1 mês grátis para indicador
-2. **Cases de sucesso** documentados
-3. **NPS tracking** para identificar promotores
-4. **Advocacy program** com clientes top
-
-### Estratégia de Preços
-
-#### Penetração de Mercado
-- **Desconto early adopter:** 50% nos primeiros 6 meses
-- **Trial gratuito:** 14 dias completos (sem cartão)
-- **Freemium limitado:** 3 usuários, 100 contatos
-- **Money-back guarantee:** 30 dias
-
-#### Comparação Competitiva
-- **Loved CRM:** R$ 197/org/mês (até 5 usuários)
-- **HubSpot:** R$ 270/mês (1 usuário)
-- **Salesforce:** R$ 750/mês (5 usuários)
-- **Pipedrive:** R$ 450/mês (5 usuários)
-- **Posicionamento:** 27% mais barato que o concorrente mais próximo
-
----
-
-## 🛠️ Roadmap de Desenvolvimento
-
-### MVP (Meses 1-3)
-
-#### Core Features
-- [ ] **Pipeline Kanban:** 5 estágios fixos, drag & drop
-- [ ] **Gestão de contatos:** CRUD completo, campos customizáveis
-- [ ] **WhatsApp Business API:** Envio/recebimento de mensagens
-- [ ] **IA resumos básicos:** OpenAI GPT-4 para conversas
-- [ ] **Multi-tenancy:** Organizações isoladas, até 5 usuários
-- [ ] **Autenticação:** JWT + OAuth Google
-
-#### Arquitetura Técnica
-- [ ] **Backend:** FastAPI + PostgreSQL + Redis
-- [ ] **Frontend:** Next.js 14 + TypeScript + shadcn/ui
-- [ ] **Deploy:** Railway (staging + production)
-- [ ] **Monitoramento:** Logs estruturados + métricas básicas
-- [ ] **LGPD compliance:** Consentimento + data portability
-
-### V1.0 (Meses 4-6)
-
-#### Funcionalidades Avançadas
-- [ ] **VoIP integrado:** Chamadas + gravação
-- [ ] **Email parsing:** Gmail/Outlook integration
-- [ ] **Timeline unificada:** Todas as comunicações centralizadas
-- [ ] **Automações básicas:** Mudança de estágio, notificações
-- [ ] **Relatórios:** Dashboard com métricas de performance
-- [ ] **Mobile responsive:** PWA otimizada
-
-#### Integrações Externas
-- [ ] **Stripe:** Pagamentos recorrentes
-- [ ] **Zapier:** 50+ integrações via webhook
-- [ ] **Google Calendar:** Agendamento de reuniões
-- [ ] **Drive/Dropbox:** Sincronização de arquivos
-
-### V2.0 (Meses 7-12)
-
-#### Inteligência Artificial
-- [ ] **Análise de sentimento:** Classificação automática de humor
-- [ ] **Sugestões de ações:** IA recomenda próximos passos
-- [ ] **Lead scoring:** Pontuação automática de potencial
-- [ ] **Previsão de churn:** Alertas preventivos
-- [ ] **Chatbot básico:** Atendimento inicial automatizado
-
-#### Produtividade
-- [ ] **Templates:** Mensagens e propostas pré-definidas
-- [ ] **Workflows:** Automações complexas multi-etapa
-- [ ] **Colaboração:** Comentários, menções, tarefas
-- [ ] **Agenda unificada:** Calendário integrado com pipeline
-- [ ] **Mobile app:** iOS + Android nativo
-
-### V3.0 (Ano 2)
-
-#### Escala Enterprise
-- [ ] **API pública:** SDK completo para integrações
-- [ ] **White-label:** Customização de marca
-- [ ] **Multi-idioma:** Inglês + Espanhol
-- [ ] **Advanced analytics:** BI integrado
-- [ ] **Marketplace:** Apps de terceiros
-
----
-
-## 📊 Métricas de Sucesso
-
-### KPIs Principais
-
-#### Produto
-- **Product-Market Fit:** NPS > 50 (primeiro ano)
-- **Engagement:** Daily active users > 70%
-- **Feature adoption:** Core features > 90% uso
-- **Time to value:** < 7 dias para primeira conversão
-
-#### Negócio
-- **Monthly Recurring Revenue (MRR):** R$ 98.500 (ano 3)
-- **Customer Acquisition Cost (CAC):** < R$ 590
-- **Lifetime Value (LTV):** > R$ 5.316
-- **LTV:CAC ratio:** > 9:1
-- **Monthly churn rate:** < 5%
-- **Net Revenue Retention:** > 110%
-
-#### Operacional
-- **Customer satisfaction (CSAT):** > 4.5/5
-- **Support ticket resolution:** < 24h
-- **System uptime:** > 99.9%
-- **API response time:** < 200ms
-
-### Dashboard Executivo
-
-#### Métricas Diárias
-- **Novos signups:** Meta 2/dia (ano 1)
-- **Ativações:** > 60% dos trials
-- **MRR growth:** +15% month-over-month
-- **Support tickets:** < 5% dos usuários ativos
-
-#### Métricas Semanais
-- **Customer health score:** Combinação de uso + pagamento + NPS
-- **Feature requests:** Priorização baseada em votos
-- **Competitive analysis:** Monitoramento contínuo
-- **Pipeline review:** Projeções de crescimento
-
-#### Métricas Mensais
-- **Cohort analysis:** Retention por mês de aquisição
-- **Unit economics:** LTV, CAC, payback period
-- **Market research:** Surveys e entrevistas qualitativas
-- **Product roadmap:** Ajustes baseados em dados
-
----
-
-## 🔒 Compliance e Segurança
-
-### LGPD (Lei Geral de Proteção de Dados)
-
-#### Matriz de Proteção de Dados
-
-**Dados Coletados:**
-- **Identificação:** Nome, email, telefone, empresa
-- **Comerciais:** Histórico de propostas, contratos, pagamentos
-- **Comunicação:** Mensagens WhatsApp, emails, gravações VoIP
-- **Comportamento:** Logs de uso, cliques, tempo de sessão
-
-**Base Legal:**
-- **Consentimento:** Dados pessoais de marketing
-- **Execução de contrato:** Dados necessários para prestação do serviço
-- **Interesse legítimo:** Logs de segurança e performance
-- **Cumprimento de obrigação legal:** Dados fiscais e trabalhistas
-
-**Direitos dos Titulares:**
-- [ ] **Acesso:** Portal self-service para visualização
-- [ ] **Portabilidade:** Export completo em JSON/CSV
-- [ ] **Retificação:** Edição inline nos dados
-- [ ] **Eliminação:** Exclusão completa em 30 dias
-- [ ] **Oposição:** Opt-out de comunicações marketing
-
-#### Medidas Técnicas
-
-**Criptografia:**
-- **Em trânsito:** TLS 1.3 para todas as comunicações
-- **Em repouso:** AES-256 para dados sensíveis
-- **Backup:** Criptografia end-to-end nos backups
-- **Chaves:** Rotação automática a cada 90 dias
-
-**Controle de Acesso:**
-- **Autenticação:** MFA obrigatório para admins
-- **Autorização:** RBAC granular por recurso
-- **Auditoria:** Logs completos de acesso e modificação
-- **Segregação:** Isolamento total entre organizações
-
-**Incident Response:**
-- **Detecção:** Monitoramento 24/7 automated
-- **Notificação:** ANPD em até 72h se aplicável
-- **Mitigação:** Plano de contingência documentado
-- **Comunicação:** Template pré-aprovado para titulares
-
-### Segurança da Informação
-
-#### Certificações Target
-- **ISO 27001:** Gestão de segurança da informação
-- **SOC 2 Type II:** Auditoria de controles internos
-- **GDPR compliance:** União Europeia (futuro)
-- **PCI DSS:** Processamento de cartões (via Stripe)
-
-#### Políticas Internas
-- **Desenvolvimento seguro:** SAST/DAST integrado no CI/CD
-- **Gestão de vulnerabilidades:** Scan semanal + patch management
-- **Backup e recovery:** RTO < 4h, RPO < 1h
-- **Business continuity:** Plano de continuidade testado trimestralmente
-
----
-
-## 🎯 Análise SWOT
-
-### Forças (Strengths)
-- **Especialização no nicho:** Foco exclusivo em agências digitais brasileiras
-- **Integração WhatsApp nativa:** Diferencial competitivo técnico
-- **IA em português:** Processamento otimizado para o mercado local
-- **Arquitetura moderna:** Escalabilidade e performance superiores
-- **Time experiente:** Conhecimento profundo do mercado-alvo
-- **Preço competitivo:** 27% mais barato que principais concorrentes
-
-### Fraquezas (Weaknesses)
-- **Brand recognition:** Marca nova vs. concorrentes estabelecidos
-- **Budget limitado:** Recursos para marketing menores que BigTechs
-- **Time pequeno:** Capacidade de desenvolvimento limitada inicialmente
-- **Dependência de APIs:** WhatsApp Business API e OpenAI
-- **Market education:** Necessidade de educar mercado sobre benefícios
-- **Single point of failure:** Concentração de conhecimento técnico
-
-### Oportunidades (Opportunities)
-- **Mercado em crescimento:** Digitalização acelerada das agências
-- **Insatisfação com soluções atuais:** Gaps não atendidos pelos players atuais
-- **WhatsApp dominance:** 99% de penetração no Brasil
-- **AI mainstream adoption:** Aceitação crescente de ferramentas IA
-- **Remote work trend:** Necessidade de ferramentas de colaboração
-- **Government incentives:** Políticas de digitalização para PMEs
-
-### Ameaças (Threats)
-- **BigTech entry:** Google, Microsoft, Meta podem lançar soluções similares
-- **Economic downturn:** Redução de orçamento para ferramentas SaaS
-- **API policy changes:** WhatsApp Business API ou OpenAI mudanças de preço
-- **Regulatory changes:** Novas regulamentações LGPD ou tributárias
-- **Competitive response:** Concorrentes podem copiar diferenciadores
-- **Technology disruption:** Novas tecnologias podem tornar solução obsoleta
-
-### Estratégias Derivadas
-
-#### SO (Strengths + Opportunities)
-- **Domínio de nicho:** Tornar-se o padrão de facto para agências digitais
-- **IA leadership:** Referência em CRM com inteligência artificial
-- **Platform expansion:** Expandir para consultores e pequenos negócios
-
-#### WO (Weaknesses + Opportunities)
-- **Partnership strategy:** Alianças com influenciadores e consultorias
-- **Content marketing:** Educação de mercado via conteúdo relevante
-- **Community building:** Criar ecossistema de usuários advocatos
-
-#### ST (Strengths + Threats)
-- **IP protection:** Registrar patentes dos diferenciadores técnicos
-- **Vendor diversification:** Reduzir dependência de APIs específicas
-- **Financial resilience:** Manter runway suficiente para crises
-
-#### WT (Weaknesses + Threats)
-- **Team expansion:** Contratar talentos chave rapidamente
-- **Market positioning:** Diferenciação clara vs. BigTechs
-- **Customer loyalty:** Programa de fidelização e switching costs
-
----
-
-## 🏁 Conclusão e Próximos Passos
-
-### Resumo da Oportunidade
-
-**Loved CRM** representa uma oportunidade única de dominar o nicho de CRM para agências digitais brasileiras, combinando especialização técnica profunda, diferenciadores competitivos sustentáveis e timing de mercado favorável.
-
-**Fatores Críticos de Sucesso:**
-1. **Execução técnica excelente:** Produto estável e performático desde o MVP
-2. **Customer success obsessivo:** NPS > 50 através de experiência excepcional
-3. **Go-to-market focado:** Dominação do nicho antes de expansão horizontal
-4. **Unit economics saudáveis:** LTV:CAC > 9:1 com crescimento sustentável
-
-### Decisões Estratégicas Necessárias
-
-#### Próximos 30 dias
-- [ ] **MVP scope:** Definir features mínimas para validação
-- [ ] **Tech architecture:** Finalizar stack e infraestrutura
-- [ ] **Team assembly:** Contratar desenvolvedor backend sênior
-- [ ] **Beta customers:** Identificar 10 agências para programa beta
-- [ ] **Legal setup:** Estruturar empresa e contratos
-
-#### Próximos 90 dias
-- [ ] **MVP development:** Implementar pipeline + WhatsApp + IA básica
-- [ ] **Beta program:** Onboarding e feedback collection
-- [ ] **Pricing validation:** Confirmar willingness to pay R$ 197/mês
-- [ ] **Go-to-market preparation:** Website, materiais, processo de vendas
-- [ ] **Funding strategy:** Avaliar necessidade de investimento externo
-
-#### Próximos 12 meses
-- [ ] **Product-market fit:** NPS > 50, retention > 80%
-- [ ] **Revenue milestone:** R$ 29.550 MRR com 150 clientes
-- [ ] **Team scaling:** 8-10 pessoas (dev, CS, marketing, vendas)
-- [ ] **Market leadership:** Reconhecimento como referência no nicho
-- [ ] **Platform expansion:** Roadmap para segmentos adjacentes
-
-### Riscos e Mitigações
-
-**Risco Alto - Competitive Response:**
-- **Mitigação:** Construir switching costs através de integração profunda e dados proprietários
-
-**Risco Médio - API Dependencies:**
-- **Mitigação:** Diversificar integrações e manter vendor relationship próximo
-
-**Risco Baixo - Market Adoption:**
-- **Mitigação:** Programa beta extensivo e customer development contínuo
-
-### Aprovação e Recursos
-
-**Investimento Inicial Necessário:** R$ 450.000 (18 meses de runway)
-- **Desenvolvimento:** R$ 200.000 (40% - equipe técnica)
-- **Marketing:** R$ 150.000 (33% - aquisição de clientes)
-- **Operações:** R$ 100.000 (27% - infraestrutura e legal)
-
-**ROI Projetado:** 287% em 36 meses (R$ 1,29 milhão de EBITDA cumulativo)
-
-**Aprovação requerida para início do desenvolvimento:** ✅ **APROVADO**
-
----
-
-**Este documento serve como norte estratégico para o desenvolvimento do Loved CRM. Revisões trimestrais serão realizadas para ajustes baseados em aprendizados de mercado e feedback dos usuários.**
-
-## 🎯 **Principais Atualizações - Versão 1.1**
-
-### **Refinamento de Mercado-Alvo**
-- **Expansão de escala**: Agências de 5-20 colaboradores (anteriormente 2-5)
-- **Justificativa**: Maior potencial de receita e necessidade mais sofisticada de CRM
-- **Segmento premium**: Agências com faturamento R$ 50k-500k/mês
-
-### **Diferenciadores Competitivos Aprimorados**  
-- **Compliance LGPD nativo**: Vantagem sobre adaptações posteriores de concorrentes
-- **IA especializada em português brasileiro**: Não apenas tradução, mas compreensão cultural
-- **Pipeline otimizado para agências**: 5 estágios validados por pesquisa de mercado
-
-### **Posicionamento de Mercado Fortalecido**
-- **"O único CRM que agências digitais brasileiras realmente precisam"**
-- **27% mais competitivo** que HubSpot/Salesforce em preço
-- **Foco exclusivo no mercado brasileiro** vs abordagem generalista dos concorrentes
-
----
-
-**Última atualização:** 06 de Janeiro de 2025  
-**Próxima revisão:** 06 de Abril de 2025
+**🎯 VISÃO 2027**: Ser o CRM #1 para agências digitais no Brasil, presente em 50% das agências com 5-50 funcionários, processando R$ 1 bilhão em pipeline de vendas anual.

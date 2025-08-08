@@ -6,10 +6,10 @@ import { PaymentMethod } from '@/types/billing'
 export function PaymentMethodInfo({ method }: { method: PaymentMethod }): JSX.Element {
   return (
     <div className="flex items-center">
-      <CreditCard className="h-5 w-5 text-gray-400 mr-3" />
+      <CreditCard className="h-5 w-5 text-muted-foreground mr-3" />
       <div>
         <p className="font-medium">**** **** **** {method.last4}</p>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           {method.brand?.toUpperCase()} • {String(method.exp_month).padStart(2, '0')}/
           {String(method.exp_year)}
         </p>
@@ -33,13 +33,15 @@ export function PaymentMethodActions({
   return (
     <div className="flex items-center space-x-2">
       {isDefault === true && (
-        <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Padrão</span>
+        <span className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs px-2 py-1 rounded-full">
+          Padrão
+        </span>
       )}
       {isDefault === false && (
         <button
           type="button"
           onClick={() => onSetDefault(method.id)}
-          className="text-sm text-blue-600 hover:text-blue-800"
+          className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
         >
           Definir como padrão
         </button>
@@ -47,7 +49,7 @@ export function PaymentMethodActions({
       <button
         type="button"
         onClick={() => onRemove(method.id)}
-        className="text-sm text-red-600 hover:text-red-800"
+        className="text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300"
       >
         Remover
       </button>

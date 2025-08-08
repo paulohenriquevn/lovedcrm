@@ -17,6 +17,61 @@
 
 ---
 
+## 🧠 **PENSAR ANTES DE AGIR - REGRA UNIVERSAL**
+
+### **🚨 PAUSA OBRIGATÓRIA ANTES DE QUALQUER AÇÃO**
+
+**REGRA FUNDAMENTAL**: Este agente NUNCA deve iniciar qualquer processamento sem primeiro PENSAR e PLANEJAR suas ações.
+
+**PROCESSO OBRIGATÓRIO DE REFLEXÃO (2-3 minutos)**:
+
+#### **🎯 ETAPA 1: COMPREENDER O PEDIDO (30s)**
+
+- ❓ **Pergunta**: "O que exatamente o usuário está pedindo?"
+- 📝 **Resposta**: [Investigar e corrigir bug específico mantendo isolamento organizacional]
+- ✅ **Validação**: "Tenho 95% de certeza sobre o que preciso fazer?"
+
+#### **🔍 ETAPA 2: ANALISAR PRÉ-REQUISITOS (60s)**
+
+- 📋 **Pergunta**: "Que informações preciso coletar ANTES de agir?"
+- 🔎 **Resposta**: [Descrição bug, logs, código relacionado, testes existentes]
+- ⚠️ **Validação**: "Posso prosseguir com o que tenho ou preciso de mais informações?"
+
+#### **⚙️ ETAPA 3: PLANEJAR ABORDAGEM (60s)**
+
+- 🛣️ **Pergunta**: "Qual é o melhor caminho para resolver isso?"
+- 📈 **Resposta**: [Reproduzir bug -> identificar causa -> corrigir -> testar isolamento]
+- 🎯 **Validação**: "Este plano leva ao resultado desejado?"
+
+#### **🚨 ETAPA 4: VALIDAR PRINCÍPIOS (30s)**
+
+- 🔴 **KISS**: Esta abordagem é a mais simples possível?
+- 🔴 **YAGNI**: Estou implementando apenas o necessário AGORA?
+- 🔴 **DRY**: Estou reutilizando o que já existe?
+- 🔴 **95% CERTEZA**: Tenho confiança suficiente para prosseguir?
+
+**❌ SE QUALQUER VALIDAÇÃO FALHAR**: PARAR e pedir esclarecimentos ao usuário
+**✅ SE TODAS VALIDAÇÕES PASSAREM**: Prosseguir com execução confiante
+
+### **📝 TEMPLATE DE REFLEXÃO OBRIGATÓRIA**
+
+Antes de iniciar qualquer tarefa, o agente DEVE exibir:
+
+```
+🧠 PENSANDO ANTES DE AGIR...
+
+✅ COMPREENSÃO: [Descrição bug -> investigação + correção mantendo org isolation]
+✅ PRÉ-REQUISITOS: [Bug description, logs, código, testes]
+✅ PLANO: [Reproduzir -> diagnosticar -> corrigir -> validar]
+✅ VALIDAÇÃO: KISS ✓ YAGNI ✓ DRY ✓ 95% CERTEZA ✓
+
+🚀 INICIANDO EXECUÇÃO COM CONFIANÇA...
+```
+
+**TEMPO INVESTIDO**: 2-3 minutos de planejamento podem economizar horas de retrabalho.
+
+---
+
 ## 🏗️ **CONTEXTO SISTEMA MULTI-TENANT SAAS**
 
 ### **Projeto**: Multi-Tenant SaaS System - Production Ready
@@ -73,9 +128,33 @@
 
 ---
 
-## 🔍 **INVESTIGAÇÃO ESTRUTURADA - METODOLOGIA V4.1**
+## 🔍 **INVESTIGAÇÃO ESTRUTURADA EM 6 FASES - METODOLOGIA V4.1**
 
-### **ETAPA 1: COLETA DE EVIDÊNCIAS (95% DE CLAREZA)**
+### **🚨 FASE 0: ANÁLISE OBRIGATÓRIA DO ESTADO ATUAL DO PROJETO**
+
+**REGRA ABSOLUTA: DEVE LER FISICAMENTE ARQUIVOS ANTES DE QUALQUER DEBUGGING**
+
+#### **📁 LEITURA OBRIGATÓRIA DE ARQUIVOS CRÍTICOS**
+
+- ✅ **DEVE**: `Bash git log --oneline -10` - VERIFICAR commits recentes relacionados ao bug
+- ✅ **DEVE**: `Bash git status` - ANALISAR estado atual do branch
+- ✅ **DEVE**: `Read requirements.txt` - LISTAR dependências Python atuais
+- ✅ **DEVE**: `Read package.json` - LISTAR dependências Frontend atuais
+- ✅ **DEVE**: `LS api/models/` - MAPEAR models relacionados ao bug
+- ✅ **DEVE**: `LS api/services/` - MAPEAR services relacionados ao bug
+- ✅ **DEVE**: `LS api/routers/` - MAPEAR routers relacionados ao bug
+- ✅ **DEVE**: `LS components/ui/` - VERIFICAR componentes envolvidos no bug
+- ✅ **DEVE**: `Bash npm run dev` - TENTAR reproduzir o bug localmente
+- ✅ **DEVE**: `Bash curl http://localhost:8000/health` - VERIFICAR saúde do backend
+
+#### **🚨 VALIDAÇÃO OBRIGATÓRIA**
+
+- ❌ **FALHA CRÍTICA**: Não usar ferramentas Read/LS/Bash para análise real
+- ❌ **FALHA CRÍTICA**: Assumir causa do bug sem verificação direta
+- ❌ **FALHA CRÍTICA**: Debug baseado em suposições sobre código
+- ✅ **OBRIGATÓRIO**: Cada item acima DEVE ter evidência de leitura/execução real
+
+### **FASE 1: COLETA DE EVIDÊNCIAS (95% DE CLAREZA)**
 
 ```yaml
 Bug Analysis:
@@ -97,7 +176,7 @@ Evidências Coletadas:
   Network_Requests: [Requisições HTTP via DevTools]
 ```
 
-### **ETAPA 2: REPRODUÇÃO COM VERTICAL SLICE**
+### **FASE 2: REPRODUÇÃO COM VERTICAL SLICE**
 
 ```bash
 # 1. Reproduzir slice completa
@@ -114,7 +193,7 @@ npx prisma studio
 # Se bug em Payment, verificar impacto em Subscription
 ```
 
-### **ETAPA 3: ANÁLISE ANTI-SCOPE CREEP**
+### **FASE 3: ANÁLISE ANTI-SCOPE CREEP**
 
 ```yaml
 Escopo_Permitido:
@@ -128,6 +207,31 @@ Escopo_Proibido:
   - Implementar melhorias não solicitadas
   - Mudar arquitetura ou patterns
 ```
+
+### **FASE 4: ANÁLISE DE CAUSA RAIZ COM EVIDÊNCIAS**
+
+Aplicar metodologia "5 Porquês" baseada nas evidências coletadas na Fase 0:
+
+```yaml
+1. O_que_aconteceu: [Sintoma específico observado COM EVIDÊNCIAS]
+   Por_que: [Causa imediata - score 1-10 de confiança]
+   Evidência: [Arquivo/comando que confirma esta causa]
+
+2. Por_que_isso_causou_problema: [Causa deeper COM EVIDÊNCIAS]
+   Por_que: [Análise mais profunda - score 1-10]
+   Evidência: [Log/código específico que suporta esta causa]
+
+3. Por_que_essa_condição_existe: [Causa architectural COM EVIDÊNCIAS]
+   Por_que: [Problema de design/implementação identificado]
+   Evidência: [Arquivo específico com o código problemático]
+```
+
+### **FASE 5: IMPLEMENTAÇÃO DE CORREÇÃO**
+
+1. **Implementar mudança mínima** baseada na causa raiz identificada
+2. **Validar correção** com reprodução do bug original
+3. **Executar testes** para garantir não regressão
+4. **Documentar correção** aplicada
 
 ---
 
@@ -221,6 +325,24 @@ Validações_Multi_Tenant:
   - Rate limits per organization
   - Billing isolated by org
   - Webhooks validate organization
+```
+
+### **📋 CHECKLIST OBRIGATÓRIO - EVIDÊNCIAS DE ANÁLISE REAL**
+
+```yaml
+Análise de Arquivos Realizada (FASE 0):
+  ✅ git log: [COLAR commits recentes relacionados ao bug]
+  ✅ git status: [COLAR estado atual do branch]
+  ✅ requirements.txt: [LISTAR dependências Python atuais]
+  ✅ package.json: [LISTAR dependências Frontend atuais]
+  ✅ api/models/: [LISTAR arquivos relacionados ao bug]
+  ✅ api/services/: [LISTAR arquivos relacionados ao bug]
+  ✅ api/routers/: [LISTAR arquivos relacionados ao bug]
+  ✅ components/ui/: [LISTAR componentes envolvidos]
+  ✅ npm run dev: [RESULTADO - reproduziu o bug?]
+  ✅ backend health: [RESULTADO - sistema funcionando?]
+
+❌ FALHA CRÍTICA se qualquer item acima não tiver evidência REAL de execução
 ```
 
 ---

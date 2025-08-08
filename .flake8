@@ -15,6 +15,8 @@ ignore =
     W503,
     # E501: Line too long (handled by black)
     E501,
+    # E712: Comparison to True (required for SQLAlchemy queries)
+    E712,
     # B008: Function calls in argument defaults (normal for FastAPI)
     B008,
     # N805: First argument should be 'self' (incorrect for Pydantic validators with @validator)
@@ -39,10 +41,13 @@ per-file-ignores =
     # Ignore assert statements in tests
     tests/*:S101
     # Ignore E712 (comparison to True) in SQLAlchemy files - required for proper queries
-    core/deps.py:E712
-    repositories/*:E712
-    routers/*:E712
-    services/*:E712
+    core/deps.py:E712,
+    repositories/*:E712,
+    routers/*:E712,
+    services/*:E712,
+    models/*:E712,
+    # CRM files that use SQLAlchemy comparisons
+    routers/websocket.py:E712
     # Ignore D402 (docstring signature) in specific service files
     services/recaptcha_service.py:D402
 
