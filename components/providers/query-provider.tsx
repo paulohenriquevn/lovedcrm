@@ -18,7 +18,7 @@ function isHttpError(error: unknown): error is HttpError {
 
 export function QueryProvider({ children }: QueryProviderProps): JSX.Element {
   // Create a stable QueryClient instance
-  const [queryClient] = useState<QueryClient>(
+  const [queryClient, setQueryClient] = useState<QueryClient>(
     () =>
       new QueryClient({
         defaultOptions: {
@@ -30,8 +30,8 @@ export function QueryProvider({ children }: QueryProviderProps): JSX.Element {
             retry: (failureCount, error) => {
               // Don't retry on 4xx errors (client errors)
               if (isHttpError(error)) {
-                const status = error.status
-                if (status && status >= 400 && status < 500) {
+                const { status } = error
+                if (typeof status === 'number' && status >= 400 && status < 500) {
                   return false
                 }
               }
@@ -45,6 +45,9 @@ export function QueryProvider({ children }: QueryProviderProps): JSX.Element {
         },
       })
   )
+
+  // Prevent unused setter warning
+  void setQueryClient
 
   return (
     <QueryClientProvider client={queryClient}>

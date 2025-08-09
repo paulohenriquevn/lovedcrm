@@ -222,6 +222,49 @@ class CRMLeadsService extends BaseService {
 
     return response.leads.filter(lead => lead.assigned_user_id === userId)
   }
+
+  /**
+   * Get pipeline filter options
+   */
+  async getPipelineFilters(): Promise<{
+    sources: Array<{ label: string; value: string }>
+    users: Array<{ label: string; value: string }>
+    tags: Array<{ label: string; value: string }>
+  }> {
+    return this.get<{
+      sources: Array<{ label: string; value: string }>
+      users: Array<{ label: string; value: string }>
+      tags: Array<{ label: string; value: string }>
+    }>(`${this.baseUrl}/filters`)
+  }
+
+  /**
+   * Get pipeline metrics
+   */
+  async getPipelineMetrics(params?: { startDate?: string; endDate?: string }): Promise<{
+    stage_counts: Record<string, number>
+    average_stage_times: Record<string, number>
+    conversion_rate: number
+    total_pipeline_value: number
+    closed_pipeline_value: number
+    total_leads: number
+  }> {
+    const searchParams = new URLSearchParams()
+    if (params?.startDate) searchParams.append('start_date', params.startDate)
+    if (params?.endDate) searchParams.append('end_date', params.endDate)
+
+    const query = searchParams.toString()
+    const url = query ? `${this.baseUrl}/metrics?${query}` : `${this.baseUrl}/metrics`
+
+    return this.get<{
+      stage_counts: Record<string, number>
+      average_stage_times: Record<string, number>
+      conversion_rate: number
+      total_pipeline_value: number
+      closed_pipeline_value: number
+      total_leads: number
+    }>(url)
+  }
 }
 
 // Export singleton instance
