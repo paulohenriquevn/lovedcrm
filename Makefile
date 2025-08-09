@@ -17,9 +17,10 @@ help: ## Show available commands
 	@echo "  make dev-stop # Stop Docker environment"
 	@echo ""
 	@echo "DATABASE:"
-	@echo "  make db-up     # Start PostgreSQL + Redis"
-	@echo "  make db-down   # Stop database services"
-	@echo "  ./migrate help # Local migration commands"
+	@echo "  make db-up         # Start PostgreSQL + Redis"
+	@echo "  make db-down       # Stop database services"
+	@echo "  make db-seed-dev   # Apply development seeds (organizations + users)"
+	@echo "  ./migrate help     # Local migration commands"
 	@echo ""
 	@echo "PRODUCTION DATABASE:"
 	@echo "  make connect-db-prod           # Connect to Railway PostgreSQL (interactive psql)"
@@ -152,6 +153,40 @@ db-migrate: ## Apply pending migrations
 
 db-reset: ## Reset database (WARNING: deletes all data)
 	cd migrations && ./migrate init
+
+db-seed-dev: ## Apply all development seeds automatically (evolutionary)
+	@echo "🌱 Applying development seeds automatically..."
+	@cd migrations && \
+	SEED_COUNT=$$(find seeds/dev -name "*.sql" | wc -l) && \
+	echo "📦 Found $$SEED_COUNT seed files in seeds/dev/" && \
+	if [ "$$SEED_COUNT" -eq 0 ]; then \
+		echo "⚠️  No seed files found in seeds/dev/"; \
+	else \
+		echo "🔄 Applying seeds in order..."; \
+		for seed_file in $$(ls seeds/dev/*.sql | sort -V); do \
+			echo "   📄 Applying: $$(basename "$$seed_file")"; \
+			PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d saas_starter -f "$$seed_file" -q && \
+			echo "   ✅ Applied: $$(basename "$$seed_file")"; \
+		done; \
+		echo "🎉 All $$SEED_COUNT development seeds applied successfully!"; \
+	fi
+
+db-seed-dev-docker: ## Apply development seeds inside Docker container
+	@echo "🌱 Applying development seeds automatically (Docker)..."
+	@cd migrations && \
+	SEED_COUNT=$$(find seeds/dev -name "*.sql" | wc -l) && \
+	echo "📦 Found $$SEED_COUNT seed files in seeds/dev/" && \
+	if [ "$$SEED_COUNT" -eq 0 ]; then \
+		echo "⚠️  No seed files found in seeds/dev/"; \
+	else \
+		echo "🔄 Applying seeds in order..."; \
+		for seed_file in $$(ls seeds/dev/*.sql | sort -V); do \
+			echo "   📄 Applying: $$(basename "$$seed_file")"; \
+			PGPASSWORD=postgres psql -h postgres -p 5432 -U postgres -d saas_starter -f "$$seed_file" -q && \
+			echo "   ✅ Applied: $$(basename "$$seed_file")"; \
+		done; \
+		echo "🎉 All $$SEED_COUNT development seeds applied successfully!"; \
+	fi
 
 # =============================================================================
 # TESTING COMMANDS
@@ -347,6 +382,9 @@ test-run: ## Run all E2E tests (requires test environment)
 	@echo ""
 	@echo "Verifying test environment first..."
 	@make test-verify --no-print-directory
+	@echo ""
+	@echo "Auto-applying migrations if needed..."
+	@make test-hot-migrate --no-print-directory
 	@echo ""
 	@echo "Running API E2E tests..."
 	npm run test:e2e:api

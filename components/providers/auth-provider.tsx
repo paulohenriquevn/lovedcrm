@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 
+import { QueryProvider } from '@/components/providers/query-provider'
 import { useAuthStore } from '@/stores/auth'
 
 interface AuthProviderProps {
@@ -70,5 +71,9 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, [pathname, user, setUser, setIsAuthenticated, setLoading, isAuthenticated])
 
-  return <div>{children}</div>
+  return (
+    <QueryProvider>
+      {children}
+    </QueryProvider>
+  )
 }

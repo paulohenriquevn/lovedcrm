@@ -137,6 +137,12 @@ class WebSocketConnectionManager:
         if org_str in self.connections and user_str in self.connections[org_str]:
             websocket = self.connections[org_str][user_str]
             try:
+                # 🚨 SEGURANÇA: Check connection state before sending
+                if hasattr(websocket, 'client_state') and websocket.client_state.name in ["DISCONNECTED", "CLOSED"]:
+                    logger.warning(f"WebSocket already closed for user {user_str}, cleaning up")
+                    self.disconnect(organization_id, user_id)
+                    return
+                    
                 await websocket.send_text(json.dumps(message))
                 logger.debug(f"Personal message sent to user {user_str} in org {org_str}")
             except Exception as e:
@@ -175,6 +181,12 @@ class WebSocketConnectionManager:
                 continue
 
             try:
+                # 🚨 SEGURANÇA: Check connection state before broadcasting
+                if hasattr(websocket, 'client_state') and websocket.client_state.name in ["DISCONNECTED", "CLOSED"]:
+                    logger.warning(f"WebSocket already closed for user {user_str} during broadcast")
+                    failed_connections.append((user_str, organization_id))
+                    continue
+                
                 logger.debug(f"Sending message to user {user_str}")
                 await websocket.send_text(message_json)
                 successful_broadcasts += 1

@@ -3,7 +3,7 @@
 Repository pattern for Lead entity with organizational isolation.
 """
 
-from typing import List, Optional
+from typing import Dict, List, Optional
 from uuid import UUID
 
 from sqlalchemy import and_, func, or_
@@ -119,3 +119,59 @@ class CRMLeadRepository(SQLRepository[Lead]):
         self.session.refresh(lead)
 
         return lead
+
+    def get_unique_sources(self, org_id: UUID) -> List[str]:
+        """Get unique lead sources for organization."""
+        result = (
+            self.session.query(Lead.source)
+            .filter(Lead.organization_id == org_id)
+            .filter(Lead.source.isnot(None))
+            .distinct()
+            .all()
+        )
+        return [source[0] for source in result if source[0]]
+
+    def get_assigned_users(self, org_id: UUID):
+        """Get users with assigned leads in organization."""
+        from api.models.user import User
+
+        return (
+            self.session.query(User)
+            .join(Lead)
+            .filter(Lead.organization_id == org_id)
+            .filter(Lead.assigned_user_id == User.id)
+            .distinct()
+            .all()
+        )
+
+    def get_date_ranges(self, org_id: UUID) -> Dict[str, Optional[str]]:
+        """Get min/max dates for organization leads."""
+        result = (
+            self.session.query(
+                func.min(Lead.created_at).label("min_date"),
+                func.max(Lead.created_at).label("max_date"),
+            )
+            .filter(Lead.organization_id == org_id)
+            .first()
+        )
+
+        return {
+            "earliest": result.min_date.isoformat() if result.min_date else None,
+            "latest": result.max_date.isoformat() if result.max_date else None,
+        }
+
+    def get_unique_tags(self, org_id: UUID) -> List[str]:
+        """Get unique tags used in organization."""
+        leads = (
+            self.session.query(Lead.tags)
+            .filter(Lead.organization_id == org_id)
+            .filter(Lead.tags.isnot(None))
+            .all()
+        )
+
+        all_tags = set()
+        for lead in leads:
+            if lead.tags:
+                all_tags.update(lead.tags)
+
+        return list(all_tags)

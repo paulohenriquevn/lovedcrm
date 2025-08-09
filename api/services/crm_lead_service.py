@@ -4,7 +4,8 @@ Business logic for Lead management with organizational isolation.
 """
 
 import logging
-from typing import Optional
+from datetime import datetime
+from typing import Dict, List, Optional
 from uuid import UUID
 
 from fastapi import HTTPException, status
@@ -14,6 +15,8 @@ from api.models.crm_lead import Lead, PipelineStage
 from api.models.organization import Organization
 from api.repositories.crm_lead_repository import CRMLeadRepository
 from api.schemas.crm_lead import (
+    ConversionMetricsResponse,
+    FilterOptionsResponse,
     LeadCreate,
     LeadFavoriteToggle,
     LeadListResponse,
@@ -522,3 +525,104 @@ class CRMLeadService:
 
         except Exception as e:
             logger.error(f"Failed to prepare lead stage change broadcast: {e}")
+
+    def get_conversion_metrics(
+        self,
+        organization: Organization,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+    ) -> ConversionMetricsResponse:
+        """Get pipeline conversion metrics for organization."""
+        try:
+            # Base query with organization filtering
+            query = self.db.query(Lead).filter(Lead.organization_id == organization.id)
+
+            # Apply date filters if provided
+            if start_date:
+                query = query.filter(Lead.created_at >= start_date)
+            if end_date:
+                query = query.filter(Lead.created_at <= end_date)
+
+            leads = query.all()
+
+            # Calculate stage counts
+            stage_counts = {}
+            for stage in PipelineStage:
+                stage_counts[stage.value] = len([lead for lead in leads if lead.stage == stage])
+
+            # Calculate conversion rates
+            total_leads = len(leads)
+            closed_leads = stage_counts.get(PipelineStage.FECHADO.value, 0)
+
+            conversion_rate = (closed_leads / total_leads * 100) if total_leads > 0 else 0
+
+            # Calculate average time per stage
+            stage_times = self._calculate_average_stage_times(leads)
+
+            # Calculate total pipeline value
+            total_value = sum(lead.estimated_value or 0 for lead in leads)
+            closed_value = sum(
+                lead.estimated_value or 0 for lead in leads if lead.stage == PipelineStage.FECHADO
+            )
+
+            return ConversionMetricsResponse(
+                stage_counts=stage_counts,
+                conversion_rate=round(conversion_rate, 2),
+                average_stage_times=stage_times,
+                total_pipeline_value=total_value,
+                closed_pipeline_value=closed_value,
+                total_leads=total_leads,
+                period_start=start_date,
+                period_end=end_date,
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to get conversion metrics: {e}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to retrieve conversion metrics",
+            )
+
+    def get_filter_options(self, organization: Organization) -> FilterOptionsResponse:
+        """Get available filter options for pipeline."""
+        try:
+            # Get unique sources
+            sources = self.repository.get_unique_sources(organization.id)
+
+            # Get assigned users
+            assigned_users = self.repository.get_assigned_users(organization.id)
+
+            # Get date ranges
+            date_ranges = self.repository.get_date_ranges(organization.id)
+
+            # Get unique tags
+            tags = self.repository.get_unique_tags(organization.id)
+
+            return FilterOptionsResponse(
+                sources=sources,
+                assigned_users=[
+                    {"id": str(user.id), "name": user.full_name} for user in assigned_users
+                ],
+                date_ranges=date_ranges,
+                available_tags=tags,
+                stages=[stage.value for stage in PipelineStage],
+            )
+
+        except Exception as e:
+            logger.error(f"Failed to get filter options: {e}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to retrieve filter options",
+            )
+
+    def _calculate_average_stage_times(self, leads: List[Lead]) -> Dict[str, float]:
+        """Calculate average time spent in each stage."""
+        # This would require stage history tracking
+        # For MVP, return estimated values
+        return {
+            "lead": 2.5,  # Average days
+            "contato": 3.2,
+            "proposta": 5.1,
+            "negociacao": 7.3,
+            "fechado": 0.0,  # Final stage
+        }

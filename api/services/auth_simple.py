@@ -129,11 +129,19 @@ class SimpleAuthService:
             self.db.query(OrganizationMember).filter(OrganizationMember.user_id == user.id).first()
         )
 
+        # 🔴 CRITICAL: NEVER allow tokens without org_id
+        if not org_member:
+            logger.error(f"CRITICAL SECURITY: User {user.email} has no organization membership - CANNOT CREATE TOKEN")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="User has no organization membership",
+            )
+
         token_data = {
             "sub": str(user.id),
             "email": user.email,
-            "org_id": str(org_member.organization_id) if org_member else None,
-            "role": org_member.role if org_member else "member",
+            "org_id": str(org_member.organization_id),  # ALWAYS required
+            "role": org_member.role,
         }
 
         access_token = create_access_token(data=token_data)
