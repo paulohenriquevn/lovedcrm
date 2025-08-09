@@ -157,12 +157,18 @@ export function KanbanBoard({
 }
 
 interface MetricsViewProps {
-  dateFrom: Date | null
-  dateTo: Date | null
+  filters: PipelineFiltersState
 }
 
-export function MetricsView({ dateFrom, dateTo }: MetricsViewProps): JSX.Element {
-  return <PipelineMetrics startDate={dateFrom?.toISOString()} endDate={dateTo?.toISOString()} />
+export function MetricsView({ filters }: MetricsViewProps): JSX.Element {
+  return (
+    <PipelineMetrics
+      startDate={filters.dateFrom?.toISOString()}
+      endDate={filters.dateTo?.toISOString()}
+      filters={filters}
+      enableAdvanced={false}
+    />
+  )
 }
 
 interface AdvancedMetricsViewProps {
@@ -215,7 +221,7 @@ export function PipelineContent({
       </TabsContent>
 
       <TabsContent value="metrics" className="h-full mt-0">
-        <MetricsView dateFrom={currentFilters.dateFrom} dateTo={currentFilters.dateTo} />
+        <MetricsView filters={currentFilters} />
       </TabsContent>
 
       <TabsContent value="advanced" className="h-full mt-0">

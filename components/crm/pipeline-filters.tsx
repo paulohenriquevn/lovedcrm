@@ -82,10 +82,10 @@ export function PipelineFiltersHorizontalPanel({
       className={cn(
         'w-full overflow-hidden transition-all duration-300 ease-out',
         'border-b border-border',
-        isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        isExpanded ? 'max-h-[80vh] sm:max-h-96 opacity-100' : 'max-h-0 opacity-0'
       )}
     >
-      <div className="bg-muted/30 p-4">
+      <div className="bg-muted/30 p-3 sm:p-4">
         {/* Header do painel com botão limpar */}
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-medium text-foreground">Filtros Ativos</h3>

@@ -24,47 +24,71 @@ export function PipelineMetrics({
   filters,
   enableAdvanced = false,
 }: PipelineMetricsProps): JSX.Element {
+  const hasFilters = checkFiltersApplied(filters)
+  const shouldUseAdvanced = enableAdvanced || hasFilters
+
   const basicMetricsQuery = useBasicMetrics({
     startDate,
     endDate,
-    enabled: !enableAdvanced,
+    enabled: !shouldUseAdvanced,
   })
 
   const advancedMetricsQuery = useAdvancedMetrics({
     startDate,
     endDate,
     filters,
-    enabled: enableAdvanced,
+    enabled: shouldUseAdvanced,
   })
 
-  const isLoading = enableAdvanced ? advancedMetricsQuery.isLoading : basicMetricsQuery.isLoading
-  const error = enableAdvanced ? advancedMetricsQuery.error : basicMetricsQuery.error
+  const activeQuery = shouldUseAdvanced ? advancedMetricsQuery : basicMetricsQuery
 
-  if (isLoading) {
+  if (activeQuery.isLoading) {
     return <MetricsLoadingSkeleton className={className} />
   }
 
-  if (error) {
-    return <ErrorDisplay error={error} />
+  if (activeQuery.error !== null) {
+    return <ErrorDisplay error={activeQuery.error} />
   }
 
-  if (enableAdvanced && advancedMetricsQuery.data) {
-    return (
-      <div className={className}>
-        <AdvancedMetricsDisplay data={advancedMetricsQuery.data} />
-      </div>
-    )
+  return (
+    <div className={className}>{renderMetricsContent(activeQuery.data, shouldUseAdvanced)}</div>
+  )
+}
+
+// Helper functions to reduce complexity
+function checkFiltersApplied(filters?: PipelineFiltersState): boolean {
+  if (!filters) {
+    return false
   }
 
-  if (basicMetricsQuery.data) {
-    return (
-      <div className={className}>
-        <BasicMetricsDisplay data={basicMetricsQuery.data} />
-      </div>
-    )
+  return (
+    hasArrayItems(filters.stages) ||
+    hasArrayItems(filters.sources) ||
+    hasArrayItems(filters.assignedUsers) ||
+    hasArrayItems(filters.tags) ||
+    hasStringValue(filters.valueMin) ||
+    hasStringValue(filters.valueMax)
+  )
+}
+
+function hasArrayItems(arr?: string[]): boolean {
+  return (arr?.length ?? 0) > 0
+}
+
+function hasStringValue(str?: string): boolean {
+  return (str?.length ?? 0) > 0
+}
+
+function renderMetricsContent(data: unknown, isAdvanced: boolean): JSX.Element {
+  if (data === null || data === undefined) {
+    return <div>Nenhum dado disponível</div>
   }
 
-  return <div className={className}>Nenhum dado disponível</div>
+  if (isAdvanced) {
+    return <AdvancedMetricsDisplay data={data} />
+  }
+
+  return <BasicMetricsDisplay data={data} />
 }
 
 interface ErrorDisplayProps {

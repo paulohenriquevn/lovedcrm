@@ -27,7 +27,7 @@ export function TriggerButton({
   return (
     <button
       type="button"
-      className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+      className="flex h-10 sm:h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 touch-manipulation"
       onClick={onToggle}
     >
       <span className="flex-1 text-left">
@@ -90,7 +90,7 @@ export function DropdownContent({
   }
 
   return (
-    <div className="absolute top-full left-0 right-0 z-50 mt-1 max-h-[200px] overflow-y-auto rounded-md border border-border bg-popover shadow-lg">
+    <div className="absolute top-full left-0 right-0 z-50 mt-1 max-h-[150px] sm:max-h-[200px] overflow-y-auto rounded-md border border-border bg-popover shadow-lg">
       {/* Search input */}
       <div className="p-2 border-b border-border">
         <input
