@@ -6,6 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Loved CRM** is a complete multi-tenant CRM system designed specifically for Brazilian digital agencies. It features a modern full-stack architecture with Next.js 14 frontend, FastAPI backend, and comprehensive multi-tenancy support.
 
+### Current Branch Status
+- **Branch**: `feature/story1-2` (Pipeline Kanban Complete implementation)
+- **Base Branch**: `main` (use for PRs)
+- **Recent Focus**: WebSocket real-time collaboration and @dnd-kit drag & drop pipeline
+
+### Critical Dependencies & Versions
+- **Node.js**: >=18.0.0 (engines requirement)
+- **Python**: 3.11+ (FastAPI backend)
+- **Next.js**: 14.0.0 with App Router
+- **FastAPI**: 0.111.1 with SQLAlchemy 2.0
+- **Database**: PostgreSQL 16 with Redis caching
+- **UI Framework**: shadcn/ui + Tailwind CSS 3.4.15
+- **State Management**: Zustand + TanStack Query 5.82.0
+- **Drag & Drop**: @dnd-kit/core (Pipeline Kanban)
+- **Charts**: Recharts 2.15.4 (Pipeline metrics)
+
 ### Key Features
 
 - 📊 **Fixed Kanban Pipeline**: Lead → Contact → Proposal → Negotiation → Closed
@@ -302,6 +318,18 @@ SHOW_MEMBER_MANAGEMENT=false
 - UI adapts automatically based on SAAS_MODE configuration
 - Billing plans can be configured differently for each mode
 
+**⚠️ CRITICAL RULES FOR SAAS_MODE:**
+
+- ✅ **MUST**: Configure SAAS_MODE via environment variable (B2B/B2C)
+- ✅ **MUST**: Use organization auto-creation on registration (supports both modes)
+- ✅ **MUST**: Adapt UI based on mode (team features B2B, personal features B2C)
+- ✅ **MUST**: Maintain organization-centric isolation always (org_id universal)
+- ✅ **MUST**: Implement billing appropriate for the chosen mode
+- ❌ **MUST NOT**: Mix B2B and B2C functionalities in same deployment
+- ❌ **MUST NOT**: Break auto-organization creation (essential for both modes)
+- ❌ **MUST NOT**: Suggest user_id isolation (template uses org_id always)
+- ❌ **MUST NOT**: Ignore established SAAS_MODE configuration
+
 ## Multi-Tenancy Implementation
 
 ### Core Patterns
@@ -364,6 +392,17 @@ class YourRepository(SQLRepository):
 - **Performance optimization**: Database indexes (`migrations/014_pipeline_performance_index.sql`)
 - **WebSocket handlers**: Complete real-time collaboration system
 - **Remaining**: Pipeline-specific WebSocket endpoint (`/ws/pipeline`) and broadcasting integration
+
+### WebSocket Real-Time System (98% Complete)
+
+- **WebSocket Manager**: `api/core/websocket_manager.py` - Organization-isolated connection management
+  - Multiple connections per user support (tabs, devices)
+  - Automatic cleanup of stale connections
+  - Real-time user presence tracking
+  - Organization-scoped broadcasting
+- **Frontend Hook**: `hooks/use-pipeline-websocket.ts` - Connection management with polling fallback
+- **Endpoints**: `/ws/general?token=JWT&org_id=UUID` - General real-time endpoint
+- **Pipeline Integration**: Ready for drag & drop broadcasting (final 2% remaining)
 
 ### Communication System
 
@@ -573,42 +612,35 @@ make db-prod-migration-apply
 
 ## Current Development Status & Next Steps
 
-### Pipeline Kanban MVP (Story 1.1) - 95% Complete
+### Pipeline Kanban MVP (Story 1.1) - 98% Complete ✅
 
-**Completed:**
+**Implemented & Working:**
 
-- ✅ Drag & drop interface with @dnd-kit/core
-- ✅ Backend API endpoint `/crm/leads/{id}/stage`
-- ✅ WebSocket infrastructure (`websocket_manager.py`) with organization isolation
-- ✅ Database schema with PipelineStage enum
-- ✅ Service layer `moveLeadToStage()` implementation
-- ✅ Performance indexes (`migrations/014_pipeline_performance_index.sql`)
-  - Optimized queries: `idx_leads_org_stage`, `idx_leads_org_stage_updated`
-  - Team filtering: `idx_leads_org_assigned_user`
-  - Search optimization: `idx_leads_org_search`
-- ✅ Frontend WebSocket hook (`use-pipeline-websocket.ts`) with polling fallback
-- ✅ Multi-tenancy organization isolation
-- ✅ Component decomposition architecture with dedicated helpers
-- ✅ Advanced filtering system (`components/crm/pipeline-filters.tsx`)
-- ✅ Metrics dashboard (`components/crm/pipeline-metrics.tsx`)
-- ✅ Complete pipeline component ecosystem
+- ✅ **@dnd-kit/core**: Complete drag & drop with `PipelineKanban` component
+- ✅ **Backend API**: Full `/crm/leads/{id}/stage` endpoint with validation
+- ✅ **WebSocket Manager**: Organization-isolated real-time system (`websocket_manager.py`)
+- ✅ **Database Schema**: Consolidated migration with PipelineStage enum + indexes
+- ✅ **Service Layer**: Complete `CRMLeadService.moveLeadToStage()` implementation
+- ✅ **Multi-tenancy**: Perfect organization isolation across all pipeline operations
+- ✅ **Component Architecture**: Decomposed pattern with 10+ helper components
+- ✅ **Advanced Filtering**: Multi-select pipeline filters with real-time updates
+- ✅ **Metrics Dashboard**: Complete analytics with Recharts integration
+- ✅ **WebSocket Hook**: `use-pipeline-websocket.ts` with polling fallback
 
-**Remaining (5%):**
+**Final 2% - WebSocket Real-time Integration:**
 
-- Final WebSocket pipeline-specific endpoint `/ws/pipeline` optimization
-- E2E tests for real-time collaboration features
+- 🔧 **WebSocket Broadcasting**: Connect drag & drop events to real-time updates
+- 🧪 **E2E Testing**: Real-time collaboration test coverage
+- 📈 **Performance**: Final WebSocket connection optimizations
 
-### Pipeline Kanban Complete (Story 1.2) - Ready for Implementation
+### Pipeline Kanban Complete (Story 1.2) - Implementation Ready
 
-**Next Phase - Full Version Available:**
+**Next Phase Documentation:**
 
-- 📋 Complete implementation plan documented in `docs/plans/1.2-pipeline-kanban-versao-completa.md`
-- 🎯 32-hour detailed implementation roadmap
-- 📊 Advanced metrics with Recharts integration
-- 🔍 Comprehensive filtering system
-- 📱 Mobile-responsive design
-- ⚡ Performance optimizations with memoization
-- ✅ 99% technical confidence level
+- 📋 **Detailed Plan**: Story 1.2 documented in `docs/plans/1.1-pipeline-kanban-mvp-basico.md`
+- ⏱️ **Time Estimate**: 2-3 hours for WebSocket real-time completion
+- 🎯 **Priority**: CRITICAL - only remaining gap for MVP
+- ✅ **Technical Confidence**: 99% - all infrastructure ready
 
 ### Component Architecture Pattern
 
@@ -722,8 +754,9 @@ tests/
 ### Development Tools
 
 - `Makefile`: 50+ automation commands for development workflow
-- `check-saas-mode.sh`: Validates B2B/B2C configuration
-- `migrations/migrate`: Database migration tool with hot updates
+- `check-saas-mode.sh`: Validates B2B/B2C configuration  
+- `migrations/migrate`: Custom database migration tool with hot updates support
+- `migrations/001_consolidated_schema.sql`: Single consolidated migration replacing 14 legacy migrations
 - `docker-compose.yml`: Development environment
 - `docker-compose.test.yml`: E2E testing environment
 - `docker-compose.prod.yml`: Production environment
@@ -734,12 +767,13 @@ tests/
 
 - **Component decomposition pattern**: Many components now split into `-components.tsx` files for better maintainability
 - **WebSocket infrastructure**: Complete real-time system with organization isolation and polling fallback via `use-pipeline-websocket.ts`
-- **Pipeline Kanban MVP**: 90% complete with drag-drop, real-time updates, and performance optimization
+- **Pipeline Kanban MVP**: 95% complete with @dnd-kit/core drag-drop, real-time updates, and performance optimization
 - **Advanced hook system**: 20+ custom hooks including comprehensive WebSocket management and organization context
-- **Performance indexes**: Pipeline-specific database indexes for optimal Kanban performance (`migrations/014_pipeline_performance_index.sql`)
-- **Design tokens demo**: Complete showcase of CRM UI components and design system
+- **Database schema consolidation**: Single `001_consolidated_schema.sql` migration replacing 14 legacy migrations
+- **Performance indexes**: Pipeline-specific database indexes for optimal Kanban performance (now in consolidated schema)
+- **Design tokens demo**: Complete showcase of CRM UI components and design system  
 - **Proxy integration testing**: Complete E2E test suite for Next.js → Backend proxy validation
-- **Database schema evolution**: 38-table complete CRM schema with multi-tenant isolation
+- **Migration system evolution**: Custom `./migrate` tool with hot updates, dev/test/prod seeds separation
 
 ### Development Environment Verification
 
@@ -763,9 +797,9 @@ curl http://localhost:8000/health    # Backend health check
 - ❌ **NEVER**: Assume requirements or make speculative interpretations
 - ❌ **NEVER**: Proceed without complete validation of user inputs
 
-### Codebase Analysis Rule
+### Codebase Analysis Rule (MANDATORY)
 
-**BEFORE creating any component, service, API, or model:**
+**🔍 BEFORE creating any component, service, API, or model:**
 
 1. **SEARCH FIRST**: Use Glob/Grep/Read tools to analyze existing codebase
 2. **VERIFY EXISTS**: Check if component/service already exists
@@ -773,14 +807,28 @@ curl http://localhost:8000/health    # Backend health check
 4. **DOCUMENT**: "Analyzed X files, found Y similar, decision: evolving Z"
 5. **JUSTIFY**: Clear reasoning for evolution vs new creation
 
-### Fail-Fast Validation
+**MANDATORY VALIDATION PROCESS:**
+- ✅ **OBLIGATORY**: `Glob "**/*.tsx"` + `Grep "ComponentName"` + `Read similar files`
+- ✅ **OBLIGATORY**: Analyze existing functionality, props, patterns
+- ✅ **OBLIGATORY**: Decide: Evolve existing OR create new (with justification)
+- ✅ **OBLIGATORY**: Document: "Analysis: X components found, Y evolution applied"
+- ❌ **FORBIDDEN**: Create components/services without prior codebase analysis
+- ❌ **FORBIDDEN**: Duplicate existing functionality without extreme justification
+
+### Fail-Fast Validation (CRITICAL)
 
 **Always detect errors as early as possible:**
 
-- ✅ Validate data at input/function start/process beginning
-- ✅ Immediately halt execution when validation fails
-- ✅ Provide specific error messages with resolution guidance
-- ✅ Prevent invalid data from propagating through system
+- ✅ **MUST**: Validate data at input/function start/process beginning
+- ✅ **MUST**: Immediately halt execution when validation fails (throw exceptions, return errors)
+- ✅ **MUST**: Provide specific error messages with resolution guidance
+- ✅ **MUST**: Prevent invalid data from propagating through system
+- ✅ **MUST**: Implement UI validation with immediate user feedback
+- ✅ **MUST**: Validate API requests before processing to protect backend
+- ✅ **MUST**: Apply domain logic validation to maintain data integrity
+- ❌ **MUST NOT**: Allow invalid data to continue processing
+- ❌ **MUST NOT**: Skip validation for performance reasons
+- ❌ **MUST NOT**: Provide generic or unclear error messages
 
 ### Multi-Tenancy Security (Non-Negotiable)
 
@@ -826,9 +874,10 @@ npm run lint                  # Frontend + backend linting
 npm run typecheck            # TypeScript validation
 make backend-security        # Security scan
 
-# Database operations
-cd migrations && ./migrate apply    # Apply migrations
-cd migrations && ./migrate status   # Check status
+# Database operations  
+cd migrations && ./migrate apply    # Apply consolidated schema migration
+cd migrations && ./migrate status   # Check migration status
+cd migrations && ./migrate dev-seeds # Load dev/test seed data
 make connect-db-prod               # Production access
 
 # Testing during development
@@ -840,7 +889,7 @@ npm run test:e2e:api         # API E2E tests
 # WebSocket & Pipeline debugging
 npm run dev                  # Check WebSocket connections in browser dev tools
 make test-logs-api          # Monitor WebSocket connections in API logs
-# Pipeline Kanban WebSocket: /api/ws/pipeline?token=JWT&org_id=UUID
+# Pipeline Kanban WebSocket: /ws/general?token=JWT&org_id=UUID
 # WebSocket Manager: api/core/websocket_manager.py with organization isolation
 # Frontend Hook: hooks/use-pipeline-websocket.ts with polling fallback
 
@@ -848,6 +897,10 @@ make test-logs-api          # Monitor WebSocket connections in API logs
 make dev-start              # Complete Docker environment
 make dev-logs               # View all service logs
 make dev-stop               # Stop all services
+
+# SAAS Mode verification
+./check-saas-mode.sh        # Verify B2B/B2C configuration consistency
+make status                 # Complete project status overview
 ```
 
 ### Debugging Multi-Tenancy Issues
@@ -861,6 +914,27 @@ grep -r "get_current_organization" .     # Find dependency usage
 # Verify data isolation
 make test-run-api-auth                   # Run isolation tests
 PGPASSWORD=... psql ... -c "SELECT COUNT(*) FROM users;"  # Direct DB check
+```
+
+### Debugging WebSocket Issues
+
+```bash
+# WebSocket connection testing
+curl -i -N -H "Connection: Upgrade" -H "Upgrade: websocket" \
+  "http://localhost:8000/ws/general?token=JWT_TOKEN&org_id=ORG_UUID"
+
+# Monitor WebSocket activity
+make test-logs-api | grep -i websocket   # API WebSocket logs
+make dev-logs | grep -i websocket        # Docker WebSocket logs
+
+# Frontend WebSocket debugging (browser console)
+# Check connection status in useWebSocket hook
+console.log(websocketStatus, lastMessage, connectionAttempts)
+
+# Backend WebSocket manager debugging
+# Add to api/core/websocket_manager.py for debugging:
+logger.info(f"Active connections: {len(self.connections)}")
+logger.info(f"Org connections: {self.connections.get(org_str, {})}")
 ```
 
 ## Final Development Guidelines
@@ -885,12 +959,32 @@ When implementing new features, always:
 ### Production Readiness
 
 The codebase includes:
-- ✅ Complete 38-table database schema
+- ✅ Complete 38-table database schema (consolidated into single migration)
 - ✅ 50+ Makefile automation commands
-- ✅ Comprehensive testing infrastructure
-- ✅ Real-time WebSocket system
-- ✅ Multi-tenant security architecture
-- ✅ Production deployment on Railway
-- ✅ Advanced component decomposition patterns
+- ✅ Comprehensive testing infrastructure with 460+ tests
+- ✅ Real-time WebSocket system with organization isolation
+- ✅ Multi-tenant security architecture with header-based isolation
+- ✅ Production deployment on Railway with health monitoring
+- ✅ Advanced component decomposition patterns with @dnd-kit drag & drop
 
 **Current Focus**: Pipeline Kanban completion (Story 1.2) with 99% technical confidence and detailed 32-hour implementation plan.
+
+## Immediate Next Steps (Priority Order)
+
+### 1. Complete WebSocket Real-time Integration (2-3 hours)
+- **File**: `components/crm/pipeline-kanban.tsx`
+- **Action**: Connect drag & drop events to WebSocket broadcasting
+- **Code**: Integrate `websocket_manager.broadcast_to_organization()` with pipeline stage changes
+- **Test**: Verify real-time collaboration between browser tabs
+
+### 2. Add Pipeline-specific WebSocket Events (1 hour)
+- **File**: `hooks/use-pipeline-websocket.ts`
+- **Action**: Add pipeline-specific event handlers (`lead_moved`, `stage_updated`)
+- **Integration**: Connect to existing `moveLeadToStage` service calls
+
+### 3. E2E Test Coverage (1-2 hours)
+- **File**: `tests/e2e/api/test_pipeline_realtime.py`
+- **Action**: Add WebSocket collaboration tests
+- **Coverage**: Multi-user drag & drop scenarios
+
+This completes the Pipeline Kanban MVP and enables full real-time collaboration for digital agencies.
