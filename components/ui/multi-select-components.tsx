@@ -86,13 +86,7 @@ export function MultiSelectTrigger({
   onToggle,
   onUnselect,
 }: MultiSelectTriggerProps): React.ReactElement {
-  // eslint-disable-next-line no-console
-  console.log('🔍 MultiSelectTrigger DEBUG:', { 
-    open, 
-    selectedOptions, 
-    onToggleType: typeof onToggle,
-    placeholder
-  })
+  // Component ready
 
   return (
     <Button
@@ -100,11 +94,7 @@ export function MultiSelectTrigger({
       role="combobox"
       aria-expanded={open}
       className={cn('justify-between min-h-[2.5rem] h-auto', className)}
-      onClick={() => {
-        // eslint-disable-next-line no-console
-        console.log('🔍 MultiSelectTrigger clicked!')
-        onToggle()
-      }}
+      onClick={onToggle}
     >
       <SelectedOptionsDisplay
         selectedOptions={selectedOptions}
@@ -124,13 +114,7 @@ interface OptionListProps {
 }
 
 export function OptionList({ options, selected, onSelect }: OptionListProps): React.ReactElement {
-  // eslint-disable-next-line no-console
-  console.log('🔍 OptionList DEBUG:', { 
-    options, 
-    optionsLength: options?.length,
-    selected,
-    onSelectType: typeof onSelect
-  })
+  // Component working with simplified implementation
 
   // TEMPORARY: Simple list instead of Command for debugging
   return (
@@ -139,16 +123,12 @@ export function OptionList({ options, selected, onSelect }: OptionListProps): Re
         <div className="text-sm text-muted-foreground p-2">Nenhum item encontrado</div>
       ) : (
         options.map(option => {
-          // eslint-disable-next-line no-console
-          console.log('🔍 Rendering option:', option)
           const isSelected = selected.includes(option.value)
           return (
             <div
               key={option.value}
               className="flex items-center px-2 py-1.5 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded"
               onClick={() => {
-                // eslint-disable-next-line no-console
-                console.log('🔍 Option clicked:', option.value)
                 onSelect(option.value)
               }}
             >

@@ -36,26 +36,12 @@ export function StageFilter({
   availableStages = [],
   onChange,
 }: StageFilterProps): JSX.Element {
-  // eslint-disable-next-line no-console
-  console.log('🔍 StageFilter DEBUG:', { 
-    availableStages, 
-    availableStagesLength: availableStages?.length,
-    availableStagesType: typeof availableStages,
-    stages, 
-    stagesLength: stages?.length 
-  })
-
   const stageOptions = availableStages.map(stage => ({
     value: stage,
     label: STAGE_LABELS[stage as keyof typeof STAGE_LABELS] ?? stage,
   }))
 
-  // eslint-disable-next-line no-console
-  console.log('🔍 StageFilter stageOptions:', stageOptions)
-
   const handleChange = (values: string[]): void => {
-    // eslint-disable-next-line no-console
-    console.log('🔍 StageFilter onChange called:', values)
     onChange(values)
   }
 
@@ -328,16 +314,7 @@ export function FilterContent({
   filterOptions,
   updateFilter,
 }: FilterContentProps): JSX.Element {
-  // eslint-disable-next-line no-console
-  console.log('🔍 FilterContent DEBUG:', { 
-    isLoading, 
-    filterOptions,
-    filterOptionsType: typeof filterOptions,
-    stages: filterOptions?.stages,
-    sources: filterOptions?.sources,
-    assignedUsers: filterOptions?.assigned_users,
-    availableTags: filterOptions?.available_tags
-  })
+  // Component ready - debug logs removed
 
   if (isLoading) {
     return <div className="text-sm text-muted-foreground">Carregando opções...</div>

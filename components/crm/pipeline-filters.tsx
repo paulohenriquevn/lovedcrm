@@ -75,16 +75,7 @@ export function PipelineFiltersHorizontalPanel({
 }: PipelineFiltersHorizontalPanelProps): JSX.Element {
   const activeFilterCount = getActiveFilterCount(filters)
 
-  // eslint-disable-next-line no-console
-  console.log('🔍 PipelineFiltersHorizontalPanel DEBUG:', { 
-    isExpanded, 
-    filterOptions,
-    filterOptionsType: typeof filterOptions,
-    hasStages: !!filterOptions?.stages,
-    stagesLength: filterOptions?.stages?.length,
-    updateFilterType: typeof updateFilter,
-    isLoading 
-  })
+  // Component ready - logs removed for production
 
   return (
     <div

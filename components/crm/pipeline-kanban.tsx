@@ -33,7 +33,7 @@ export function PipelineKanban({ className }: PipelineKanbanProps): React.ReactE
 function PipelineKanbanInner({ className }: PipelineKanbanProps): React.ReactElement {
   const { user, organization } = useAuthStore()
   const [activeTab, setActiveTab] = useState<'kanban' | 'metrics' | 'advanced'>('kanban')
-  const [isFiltersExpanded, setIsFiltersExpanded] = useState(true) // Force expanded for debug
+  const [isFiltersExpanded, setIsFiltersExpanded] = useState(false)
   const [filters, setFilters] = useState<PipelineFiltersState>(createInitialFilters)
 
   // Fetch filter options with fallback
@@ -62,18 +62,13 @@ function PipelineKanbanInner({ className }: PipelineKanbanProps): React.ReactEle
   const effectiveFilterOptions = filterOptions ?? mockFilterOptions
   
   // Don't show loading if we're using mock data
-  const effectiveIsLoading = isLoadingFilters && !filterError
+  const effectiveIsLoading = isLoadingFilters && filterError === null
 
-  // eslint-disable-next-line no-console
-  console.log('🔍 PipelineKanban Filter Options DEBUG:', { 
-    filterOptions,
-    mockFilterOptions,
-    effectiveFilterOptions,
-    isLoadingFilters,
-    filterError,
-    effectiveIsLoading,
-    usingMockData: !filterOptions
-  })
+  // Log only when using mock data for development
+  if (!filterOptions && process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
+    console.log('💡 Using mock filter data (API not available)')
+  }
 
   // Use extracted data handlers
   const { stages, loading, error, reloadLeadsData, setStages, setError } = usePipelineDataHandlers()
@@ -115,22 +110,8 @@ function PipelineKanbanInner({ className }: PipelineKanbanProps): React.ReactEle
   }
 
   // Show loading state while auth is loading or while fetching data
-  // Temporarily skip auth check for debugging filters
-  if (loading) {
+  if (!isTruthy(user) || !isTruthy(organization) || loading) {
     return <LoadingState className={className} />
-  }
-
-  // TEMPORARY: Show filter debug even without auth
-  if (!isTruthy(user) || !isTruthy(organization)) {
-    return (
-      <div className="p-4">
-        <h3 className="mb-4">🔍 DEBUG MODE - Filters Without Auth</h3>
-        <div className="bg-muted/30 p-4">
-          <h4 className="mb-2">Mock Filter Options:</h4>
-          <pre>{JSON.stringify(effectiveFilterOptions, null, 2)}</pre>
-        </div>
-      </div>
-    )
   }
 
   // Show error state
