@@ -8,14 +8,6 @@ import * as React from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command'
 import { cn } from '@/lib/utils'
 
 import { type MultiSelectOption } from './multi-select'
@@ -127,17 +119,20 @@ export function OptionList({ options, selected, onSelect }: OptionListProps): Re
           return (
             <div
               key={option.value}
+              role="button"
+              tabIndex={0}
               className="flex items-center px-2 py-1.5 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded"
               onClick={() => {
                 onSelect(option.value)
               }}
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  onSelect(option.value)
+                }
+              }}
             >
-              <Check
-                className={cn(
-                  'mr-2 h-4 w-4',
-                  isSelected ? 'opacity-100' : 'opacity-0'
-                )}
-              />
+              <Check className={cn('mr-2 h-4 w-4', isSelected ? 'opacity-100' : 'opacity-0')} />
               {option.label}
             </div>
           )
