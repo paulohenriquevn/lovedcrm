@@ -2,6 +2,10 @@
 
 **🚨 QUALITY GATE FINAL - Validador obrigatório de user stories implementadas com base nos planos gerados pelo exec-story.md. Garante 100% conformidade com especificações técnicas, critérios de aceite e padrões de qualidade antes da história ser marcada como CONCLUÍDA.**
 
+**📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER REVIEW:**
+
+- ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações do projeto
+
 **Entrada:**
 
 - `story_id`: ID da história implementada (ex: "1.1", "2.3")

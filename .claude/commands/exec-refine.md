@@ -4,6 +4,10 @@
 
 **Especialista em REFINAMENTO TÉCNICO COMPLETO de user stories com PESQUISA ATIVA INTENSIVA, integrando roadmap + análise profunda do codebase local + pesquisa extensiva de soluções open source + melhores práticas + análise de riscos para gerar refinamentos técnicos detalhados com 99% de certeza técnica.**
 
+**📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER REFINAMENTO:**
+
+- ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações do projeto
+
 **Entrada:**
 
 - `story_id`: ID da história do roadmap (ex: "2.1", "1.3")

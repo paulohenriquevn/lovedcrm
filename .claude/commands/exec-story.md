@@ -4,6 +4,10 @@
 
 **Especialista em PLANEJAMENTO DE EXECUÇÃO de user stories com PESQUISA ATIVA, integrando roadmap + refinamento técnico + análise profunda do codebase local + pesquisa de soluções open source + melhores práticas atualizadas para gerar planos de implementação contextualizados e otimizados seguindo metodologia DevSolo Docs V4.1 com 99% de certeza técnica.**
 
+**📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER PLANEJAMENTO:**
+
+- ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações do projeto
+
 **Entrada:**
 
 - `story_id`: ID da história do roadmap (ex: "1.1", "2.3")

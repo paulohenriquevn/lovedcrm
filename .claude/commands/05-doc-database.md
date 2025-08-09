@@ -2,6 +2,10 @@
 
 **Database Schema Identifier** - Especialista em identificar TODAS as tabelas necessárias para implementar o sistema baseado nos documentos anteriores. Mapeia funcionalidades para entidades de banco, aplica multi-tenancy com organization_id, define relacionamentos e valida completude. **NUNCA omite** funcionalidades que precisam de persistência - todas devem ter tabelas correspondentes.
 
+**📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER DATABASE SCHEMA:**
+
+- ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações do projeto
+
 **Entrada**:
 
 - @docs/project/02-prd.md (funcionalidades que precisam persistência)

@@ -8,6 +8,10 @@
 
 **PRINCÍPIO FUNDAMENTAL: Cada execução entrega uma FUNCIONALIDADE COMPLETA end-to-end que gera VALOR REAL para o usuário final. Implementação simultânea e integrada de Frontend + Backend + Database para garantir que o usuário possa completar fluxos funcionais imediatamente após cada story.**
 
+**📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER EXECUÇÃO:**
+
+- ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações do projeto
+
 **Entrada:**
 
 - `story_id`: ID da história com plano executável (ex: "1.1", "2.3")
@@ -188,6 +192,145 @@ graph LR
 
 ---
 
+## 📏 **REGRAS DE LINTING E QUALIDADE DE CÓDIGO (OBRIGATÓRIAS)**
+
+### **🚨 CODE QUALITY GATES - COMPLIANCE OBRIGATÓRIO**
+
+**REGRA FUNDAMENTAL**: Código que não passa nos linters configurados no projeto NÃO pode ser implementado. TODAS as validações de qualidade devem passar antes e após cada step.
+
+#### **🔍 LINTERS FRONTEND (npm run lint:frontend)**
+
+```bash
+# ESLint + Next.js + TypeScript + Security Rules
+next lint                            # Next.js ESLint config
+prettier --check .                   # Code formatting check
+
+# Plugins ativos (baseado no package.json):
+- @typescript-eslint/eslint-plugin   # TypeScript specific rules
+- eslint-plugin-react-hooks         # React hooks rules  
+- eslint-plugin-security            # Security vulnerabilities
+- eslint-plugin-jsx-a11y            # Accessibility compliance
+- eslint-plugin-import              # Import/export validation
+- eslint-plugin-prettier            # Prettier integration
+- eslint-plugin-sonarjs             # Code quality analysis
+- eslint-plugin-unicorn             # Additional code quality
+```
+
+#### **🐍 LINTERS BACKEND (npm run lint:backend)**
+
+```bash
+# Python Code Quality Trinity
+black . --check                     # Code formatting (PEP 8)
+isort . --check                     # Import sorting
+flake8                              # Style guide enforcement
+
+# Full backend validation (npm run lint:backend:full):
+black . --check                     # Formatting validation
+isort . --check                     # Import organization  
+flake8                              # Style + complexity
+mypy .                              # Static type checking
+bandit -r . -f txt                  # Security vulnerability scan
+```
+
+#### **🔒 SECURITY SCANNING (npm run security)**
+
+```bash
+# Backend Security (bandit)
+bandit -r . -f txt --severity-level medium --confidence-level medium
+
+# Configurações ativas:
+- Severity: Medium and above (blocks high/medium risks)
+- Confidence: Medium and above (reduces false positives) 
+- Format: Text output for human readable reports
+- Recursive: Scans all Python files in project
+```
+
+#### **⚡ AUTO-FIX COMMANDS (npm run fix)**
+
+```bash
+# Frontend Auto-fix
+next lint --fix                     # Auto-fix ESLint issues
+prettier --write .                  # Auto-format all files
+
+# Backend Auto-fix  
+autoflake --remove-all-unused-imports --remove-unused-variables --in-place --recursive .
+black .                             # Apply black formatting
+isort .                             # Sort imports correctly
+```
+
+### **📋 VALIDATION CHECKLIST PRE-EXECUÇÃO**
+
+```yaml
+🚨 OBRIGATÓRIO ANTES DE QUALQUER STEP:
+
+✅ Frontend Linting: 
+  - Bash "npm run lint:frontend" → DEVE retornar exit code 0
+  - next lint: 0 errors, warnings permitidos se não críticos
+  - prettier --check: Todos arquivos formatados corretamente
+  
+✅ Backend Linting:
+  - Bash "npm run lint:backend" → DEVE retornar exit code 0  
+  - black --check: Código formatado conforme PEP 8
+  - isort --check: Imports organizados corretamente
+  - flake8: 0 violações de style guide, complexity < 10
+  
+✅ Security Scan:
+  - Bash "npm run security" → DEVE retornar sem high/medium issues
+  - bandit: 0 vulnerabilidades medium+ detectadas
+  
+✅ Type Checking:
+  - Bash "npm run typecheck" → DEVE retornar exit code 0
+  - tsc --noEmit: 0 erros de TypeScript
+```
+
+### **🚫 BLOQUEADORES DE EXECUÇÃO - LINTING FAILURES**
+
+```yaml
+❌ EXECUÇÃO BLOQUEADA SE:
+
+Frontend Failures:
+  - ESLint errors (não warnings): Erro de sintaxe, hooks, security
+  - Prettier check failed: Formatação inconsistente  
+  - TypeScript errors: Tipos inválidos, imports quebrados
+  - Accessibility violations: jsx-a11y critical issues
+  - Security violations: eslint-plugin-security findings
+
+Backend Failures:  
+  - Black formatting errors: Código não formatado conforme PEP 8
+  - Import sorting errors: isort violations
+  - Flake8 violations: Style guide, complexity > 10, undefined names
+  - Security issues: bandit medium+ severity findings
+  - MyPy type errors: Static type check failures
+
+Auto-Fix Availability:
+  - npm run fix: Tenta correção automática
+  - Se auto-fix resolve: Continuar execução
+  - Se auto-fix falha: PARAR e reportar problemas manuais
+```
+
+### **🔧 LINTING INTEGRATION NO WORKFLOW**
+
+```yaml
+Step X.1: Pre-Step Validation
+  - Execute linters ANTES de implementar
+  - Status: PASS → Continuar | FAIL → Parar e corrigir
+  
+Step X.2: Implementation  
+  - Implementar funcionalidade
+  - Escrever código seguindo padrões dos linters
+  
+Step X.3: Post-Step Validation
+  - Execute linters APÓS implementar
+  - npm run fix: Tentar auto-correção se necessário
+  - Status: PASS → Próximo step | FAIL → Rollback step
+  
+Step X.4: Final Quality Gate
+  - npm run ci:quick: Validação completa
+  - Todos linters + typecheck + security DEVEM passar
+```
+
+---
+
 ## 🧠 **PENSAR ANTES DE AGIR - REGRA UNIVERSAL**
 
 ### **🚨 PAUSA OBRIGATÓRIA ANTES DE QUALQUER AÇÃO**
@@ -243,11 +386,14 @@ Antes de iniciar qualquer execução, o agente DEVE exibir:
 ✅ CONTEXTUALIZAÇÃO: Plano vs estado real comparado e adaptado
 ✅ DEPENDENCIES: Versões planejadas vs reais validadas
 ✅ AMBIENTE OK: Git status + services + tests baseline validados
+✅ CODE QUALITY: Frontend + Backend linters + Security scan EXECUTADOS
+✅ LINTING STATUS: npm run lint:frontend ✓ npm run lint:backend ✓ npm run security ✓
+✅ TYPE CHECKING: npm run typecheck ✓ (0 TypeScript errors)
 ✅ CHECKPOINTS: Validações contextualizadas definidas para cada step
 ✅ ROLLBACK: Estratégia de reversão baseada no estado atual preparada
-✅ VALIDAÇÃO: PLAN COMPLIANCE ✓ CONTEXT AWARENESS ✓ FAIL-SAFE ✓ ROLLBACK ✓ 99.9% CERTEZA ✓
+✅ VALIDAÇÃO: PLAN COMPLIANCE ✓ CONTEXT AWARENESS ✓ FAIL-SAFE ✓ ROLLBACK ✓ CODE QUALITY ✓ 99.9% CERTEZA ✓
 
-🚀 INICIANDO EXECUÇÃO RIGOROSA CONTEXTUALIZADA...
+🚀 INICIANDO EXECUÇÃO RIGOROSA CONTEXTUALIZADA COM QUALITY GATES...
 ```
 
 **TEMPO INVESTIDO**: 10-15 minutos de análise do codebase + validação podem evitar horas de debugging e retrabalho.
@@ -275,6 +421,7 @@ Antes de iniciar qualquer execução, o agente DEVE exibir:
 - ✅ **Database Ready**: Schema atualizado e connections funcionais
 - ✅ **Services Running**: Backend/Frontend rodando sem erros críticos
 - ✅ **Tests Passing**: Testes existentes passando (não quebrar o que funciona)
+- ✅ **Code Quality**: Linters passando conforme configuração do projeto (OBRIGATÓRIO)
 
 #### **🔴 CRITÉRIOS DE VALIDAÇÃO (OBRIGATÓRIOS)**
 
@@ -334,6 +481,7 @@ Antes de iniciar qualquer execução, o agente DEVE exibir:
 ```yaml
 Step 0.1a: Leitura Obrigatória de Estado Atual (CRÍTICO)
   # ARQUIVOS FUNDAMENTAIS (OBRIGATÓRIOS)
+  - ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações
   - ✅ **DEVE**: Read RULES.md - VALIDAR compliance total com regras do template
   - ✅ **DEVE**: Read migrations/README.md - ENTENDER sistema de migrações e seeds
   - ✅ **DEVE**: LS tests/e2e/api/ - MAPEAR testes existentes para validação
@@ -358,6 +506,11 @@ Step 0.1a: Leitura Obrigatória de Estado Atual (CRÍTICO)
   # VALIDAÇÃO AMBIENTE (OBRIGATÓRIOS)
   - ✅ **DEVE**: Bash "git status" - VERIFICAR estado limpo do repositório
   - ✅ **DEVE**: Bash "npm run typecheck" - VALIDAR que projeto compila sem erros
+  
+  # QUALIDADE DE CÓDIGO (OBRIGATÓRIOS - NOVOS)
+  - ✅ **DEVE**: Bash "npm run lint:frontend" - EXECUTAR ESLint + Prettier frontend
+  - ✅ **DEVE**: Bash "npm run lint:backend" - EXECUTAR black + isort + flake8 backend
+  - ✅ **DEVE**: Bash "npm run security" - EXECUTAR bandit security scan backend
 
 🚨 VALIDAÇÃO OBRIGATÓRIA:
   - ❌ **FALHA CRÍTICA**: Não usar ferramentas Read/LS/Bash para análise real
@@ -526,6 +679,10 @@ Post-Execution Cleanup:
 ```yaml
 Análise do Codebase Atual (EVIDÊNCIAS OBRIGATÓRIAS):
   # COMPLIANCE E DOCUMENTAÇÃO FUNDAMENTAL
+  ✅ CHANGELOG.md LIDO:
+    - [RESUMIR últimas 3-5 implementações principais do histórico]
+    - Estado atual: [Story X.Y concluída | Features implementadas]
+    - Context: [Próxima implementação baseada no histórico]
   ✅ RULES.md LIDO: 
     - [CONFIRMAR leitura das regras críticas: 95% confidence, multi-tenancy, etc.]
     - Compliance: [✅ Validado | ❌ Red flags identificados]
@@ -805,6 +962,11 @@ psql -d crm_db -c "SELECT COUNT(*) FROM organizations;" # Test connection
 curl http://localhost:8000/health    # Backend healthy
 curl http://localhost:3000           # Frontend accessible
 
+# Code Quality validation (OBRIGATÓRIO ANTES DE CADA STEP)
+npm run lint:frontend                # ESLint + Prettier (must pass)
+npm run lint:backend                 # black + isort + flake8 (must pass)
+npm run security                     # bandit security scan (must pass)
+
 # Integration validation
 npm run test -- --run               # Frontend tests
 python3 -m pytest tests/unit/ -q    # Backend unit tests
@@ -838,6 +1000,11 @@ make security                       # Security scan
 # Production readiness
 make ci                            # Full CI pipeline
 make status                        # System status check
+
+# OBRIGATÓRIO: Code Quality Gate Final
+npm run ci:quick                    # lint + typecheck OBRIGATÓRIO
+npm run ci:security                 # security scan OBRIGATÓRIO
+npm run fix                         # Auto-fix issues if needed
 ```
 
 ---
@@ -854,22 +1021,29 @@ make status                        # System status check
 - ❌ **Service Failure**: Backend/Frontend pararam de funcionar
 - ❌ **Database Error**: Corruption ou connection loss
 - ❌ **Integration Break**: Multi-tenancy ou security comprometidos
+- ❌ **Linting Failure**: npm run lint:frontend/lint:backend falhando (CRÍTICO)
+- ❌ **Security Issues**: npm run security detectando vulnerabilidades (CRÍTICO)
+- ❌ **Type Errors**: npm run typecheck falhando (CRÍTICO)
 
 #### **AUTOMATIC ROLLBACK TRIGGERS**
 
 ```yaml
 Critical Failures (Auto-Rollback):
   - Database corruption detected
-  - Security vulnerability introduced
+  - Security vulnerability introduced  
   - Multi-tenancy isolation broken
   - Performance degradation > 50%
   - Service completely offline
+  - Linting/Security failures (NOVOS)
+  - TypeScript compilation errors (NOVOS)
 
 Warning Failures (Manual Decision):
   - Single test failing (not critical path)
   - Minor performance impact < 10%
   - Non-critical feature partially working
   - Styling/UI issues (functional OK)
+  - ESLint warnings (não-críticos)
+  - Bandit low-severity findings
 ```
 
 ### **⚡ ROLLBACK PROCESS**

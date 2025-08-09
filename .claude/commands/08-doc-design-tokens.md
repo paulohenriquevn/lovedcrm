@@ -2,6 +2,10 @@
 
 **Design Token Generator** - Especialista em gerar tokens setoriais PRONTOS PARA APLICAR no projeto. Analisa o codebase atual PRIMEIRO, estende o sistema shadcn/ui existente e gera CSS + Tailwind config EXECUTÁVEIS. **NUNCA remove** tokens existentes - apenas adiciona tokens setoriais funcionais.
 
+**📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER DESIGN TOKEN:**
+
+- ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações do projeto
+
 **Entrada**:
 
 - @docs/project/02-prd.md (setor e modelo de negócio)

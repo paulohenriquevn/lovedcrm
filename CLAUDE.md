@@ -141,11 +141,17 @@ make setup
 npm run dev
 # Frontend: http://localhost:3000
 # Backend: http://localhost:8000/docs
+# API Documentation: http://localhost:8000/docs (Swagger UI)
 
 # Alternative: Docker development
 make dev-start              # Start in background
 make dev-logs               # View logs
 make dev-stop               # Stop services
+
+# Essential daily commands
+npm run lint                # Code quality check
+npm run typecheck          # TypeScript validation
+make test-hot-migrate      # Apply schema changes (fast)
 ```
 
 ### Single Test Execution
@@ -159,6 +165,10 @@ python3 -m pytest tests/e2e/api/test_crm_leads.py::test_create_lead -v
 # Run tests with specific patterns
 python3 -m pytest -k "test_organization" -v
 npm run test:frontend -- --run --reporter=verbose components
+
+# Quick development testing
+make test-frontend-watch     # Frontend tests in watch mode
+make test-backend-unit-quick # Backend tests (fast)
 ```
 
 ### Database Management
@@ -763,6 +773,23 @@ tests/
 - `requirements.txt`: Python dependencies
 - `package.json`: Node.js dependencies with comprehensive scripts
 
+### Specialized Claude Commands
+
+The project includes specialized Claude Code commands in `.claude/commands/`:
+
+- `exec-story.md`: Story planning and execution agent with 99% technical confidence
+- `exec-refine.md`: Technical refinement agent for complex features
+- `evolve-feature.md`: Feature evolution planning with multi-tenant architecture
+- `exec-bug.md`: Bug analysis and resolution workflows
+- `exec-review.md`: Code review and quality assurance processes
+- Documentation commands: `doc-vision.md`, `doc-prd.md`, `doc-tech.md`, etc.
+
+These commands implement a sophisticated DevSolo methodology with:
+- **95% Confidence Rule**: All implementations require 95%+ certainty before proceeding
+- **Fail-Fast Validation**: Immediate error detection and halting on validation failures
+- **Codebase Analysis**: Mandatory analysis using Glob/Grep/Read tools before any changes
+- **Organization-Centric**: All features must maintain multi-tenant isolation patterns
+
 #### Recent Architectural Enhancements (2025)
 
 - **Component decomposition pattern**: Many components now split into `-components.tsx` files for better maintainability
@@ -988,3 +1015,100 @@ The codebase includes:
 - **Coverage**: Multi-user drag & drop scenarios
 
 This completes the Pipeline Kanban MVP and enables full real-time collaboration for digital agencies.
+
+## Critical Quality Criteria & Red Flags
+
+### Quality Checklist (MANDATORY before any implementation)
+
+- [ ] **95% confidence** about all requirements validated
+- [ ] **Codebase analysis** completed using Glob/Grep/Read tools
+- [ ] **Multi-tenancy isolation** correctly implemented (header-based org_id)
+- [ ] **SAAS_MODE compliance** verified (B2B/B2C configuration respected)
+- [ ] **Existing patterns** followed or evolution justified
+- [ ] **Fail-fast validation** implemented at all levels
+- [ ] **Production system** compatibility maintained
+- [ ] **Technology stack** constraints respected (Next.js 14 + FastAPI + PostgreSQL)
+
+### Red Flags - STOP IMMEDIATELY 🚨
+
+- 🚨 **Technology suggestion** outside established stack (Next.js 14 + FastAPI + PostgreSQL + Railway)
+- 🚨 **Architecture proposal** without header-based multi-tenancy (X-Org-Id + middleware)
+- 🚨 **Component/service creation** without prior codebase analysis
+- 🚨 **Requirements assumption** without 95% confidence validation
+- 🚨 **user_id isolation** suggested (template uses org_id always)
+- 🚨 **SAAS_MODE mixing** (B2B and B2C in same deployment)
+- 🚨 **Validation skipping** for any reason
+- 🚨 **Generic examples** without specific B2B or B2C context
+- 🚨 **Production system** incompatibility introduced
+
+### Evolution vs Creation Rules
+
+- ✅ **ALWAYS** evolve existing files and components
+- ✅ **ALWAYS** follow established patterns and conventions
+- ✅ **ALWAYS** maintain cohesion with existing system
+- ❌ **NEVER** create new patterns without extreme justification
+- ❌ **NEVER** reinvent solutions already implemented
+- ❌ **NEVER** break compatibility with production system
+
+**Remember: This is a multi-tenant SaaS template with 55+ production endpoints. Every change must respect the established architecture and patterns.**
+
+- ## 🚨 REGRA CRITICAL: IMPLEMENTAÇÃO FULL-STACK COMPLETA
+
+  ### ANTES DE QUALQUER FEATURE:
+
+  **PASSO 1 - ANÁLISE PRÉVIA (OBRIGATÓRIO)**
+  ```bash
+  # Execute SEMPRE antes de implementar:
+  Glob "api/routers/*.py" -> Verificar endpoints existentes
+  Grep "def (get|post|put|delete)" api/routers/ -> Listar métodos disponíveis
+  Read "api/services/relevant_service.py" -> Analisar lógica existente
+  Read "components/relevant-component.tsx" -> Analisar UI existente
+
+  PASSO 2 - VALIDAÇÃO 95% CONFIANÇA
+  - ❓ "O backend suporta EXATAMENTE o que o frontend precisa?"
+  - ❓ "O frontend pode consumir EXATAMENTE o que o backend oferece?"
+  - ❓ "Todos os campos, tipos e validações são consistentes?"
+
+  PASSO 3 - IMPLEMENTAÇÃO SEQUENCIAL
+  1. 🏗️ Backend → 2. 🧪 Teste manual → 3. 🎨 Frontend → 4. ✅ E2E
+
+  NUNCA FAÇA:
+  ❌ Implementar frontend assumindo que backend está pronto
+  ❌ Implementar backend sem validar necessidades do frontend❌ Pular a validação intermediária entre camadas
+  ❌ Criar testes para APIs que não existem
+
+  SEMPRE FAÇA:
+  ✅ Analisar sistema completo antes de começar
+  ✅ Implementar backend primeiro, depois frontend
+  ✅ Validar cada camada antes de prosseguir
+  ✅ Testar integração completa no final
+
+  ---
+
+  ## **🛡️ FRASES DE SEGURANÇA - Use Sempre**
+
+  **Para novos agentes, inclua essas frases nos prompts:**
+
+  ```markdown
+  **ANTES DE IMPLEMENTAR QUALQUER FEATURE:**
+
+  "Vou primeiro analisar o sistema completo para ter 95% de confiança sobre o que precisa ser implementado."
+
+  "Preciso verificar se o backend já suporta essa funcionalidade antes de implementar o frontend."
+
+  "Vou implementar backend primeiro, testar, e só depois implementar o frontend."
+
+  "Não vou assumir que uma camada está pronta sem validar completamente."
+
+  ---
+  ⚠️ SINAIS DE ALERTA - Pare Imediatamente
+
+  Se você ou um novo agente estiver:
+
+  ❌ Implementando frontend sem verificar backend
+  ❌ Criando testes para APIs que "deveriam existir"
+  ❌ Assumindo que "provavelmente já está implementado"
+  ❌ Focando em apenas uma camada por vez
+
+  → PARE e volte ao PASSO 1 de análise completa
+[I
