@@ -71,9 +71,5 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, [pathname, user, setUser, setIsAuthenticated, setLoading, isAuthenticated])
 
-  return (
-    <QueryProvider>
-      {children}
-    </QueryProvider>
-  )
+  return <QueryProvider>{children}</QueryProvider>
 }

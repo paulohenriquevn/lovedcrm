@@ -131,7 +131,9 @@ class SimpleAuthService:
 
         # 🔴 CRITICAL: NEVER allow tokens without org_id
         if not org_member:
-            logger.error(f"CRITICAL SECURITY: User {user.email} has no organization membership - CANNOT CREATE TOKEN")
+            logger.error(
+                f"CRITICAL SECURITY: User {user.email} has no organization membership - CANNOT CREATE TOKEN"
+            )
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="User has no organization membership",

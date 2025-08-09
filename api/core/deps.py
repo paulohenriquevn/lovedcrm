@@ -47,10 +47,12 @@ async def _validate_token_and_get_user_data(token: str, require_org: bool = Fals
 
         # 🔴 CRITICAL: ALWAYS require org_id in JWT - no exceptions for security
         if org_id is None:
-            logger.error(f"CRITICAL SECURITY: JWT missing org_id for user {user_id} - INVALID TOKEN")
+            logger.error(
+                f"CRITICAL SECURITY: JWT missing org_id for user {user_id} - INVALID TOKEN"
+            )
             raise _create_auth_exception("Invalid token: missing organization context")
 
-        # Additional validation when explicitly requested (for org-specific endpoints)  
+        # Additional validation when explicitly requested (for org-specific endpoints)
         if require_org and org_id is None:
             logger.error(f"JWT missing org_id for user {user_id} on org-required endpoint")
             raise _create_auth_exception("Invalid token: missing organization context")

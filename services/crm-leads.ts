@@ -83,6 +83,54 @@ export interface LeadSearchRequest {
   page_size?: number
 }
 
+export interface StageDistribution {
+  stage: string
+  count: number
+  percentage: number
+  total_value: number
+}
+
+export interface ConversionFunnelStage {
+  stage: string
+  leads_count: number
+  conversion_rate: number
+  drop_off_rate: number
+  avg_time_days: number
+}
+
+export interface BottleneckAnalysis {
+  detected: boolean
+  stage?: string
+  avg_time_days?: number
+  leads_stuck?: number
+  recommendations: string[]
+}
+
+export interface TrendingData {
+  period: string
+  leads_created: number
+  leads_closed: number
+  conversion_trend: number
+  value_trend: number
+}
+
+export interface ExecutiveSummary {
+  total_pipeline_value: number
+  monthly_recurring_revenue: number
+  avg_deal_size: number
+  conversion_rate: number
+  avg_sales_cycle_days: number
+  top_performing_source?: string
+}
+
+export interface AdvancedMetricsResponse {
+  stage_distribution: StageDistribution[]
+  conversion_funnel: ConversionFunnelStage[]
+  bottleneck_analysis: BottleneckAnalysis
+  trending_data: TrendingData[]
+  executive_summary: ExecutiveSummary
+}
+
 class CRMLeadsService extends BaseService {
   private readonly baseUrl = '/api/crm/leads'
 
@@ -221,6 +269,88 @@ class CRMLeadsService extends BaseService {
     if (!userId) return response.leads
 
     return response.leads.filter(lead => lead.assigned_user_id === userId)
+  }
+
+  /**
+   * Get pipeline filter options
+   */
+  async getPipelineFilters(): Promise<{
+    sources: string[]
+    assigned_users: Array<{ id: string; name: string }>
+    available_tags: string[]
+    stages: string[]
+  }> {
+    return this.get<{
+      sources: string[]
+      assigned_users: Array<{ id: string; name: string }>
+      available_tags: string[]
+      stages: string[]
+    }>(`${this.baseUrl}/pipeline/filters`)
+  }
+
+  /**
+   * Get pipeline metrics
+   */
+  async getPipelineMetrics(params?: { startDate?: string; endDate?: string }): Promise<{
+    stage_counts: Record<string, number>
+    average_stage_times: Record<string, number>
+    conversion_rate: number
+    total_pipeline_value: number
+    closed_pipeline_value: number
+    total_leads: number
+  }> {
+    const searchParams = new URLSearchParams()
+    if (params?.startDate) searchParams.append('start_date', params.startDate)
+    if (params?.endDate) searchParams.append('end_date', params.endDate)
+
+    const query = searchParams.toString()
+    const url = query
+      ? `${this.baseUrl}/pipeline/metrics?${query}`
+      : `${this.baseUrl}/pipeline/metrics`
+
+    return this.get<{
+      stage_counts: Record<string, number>
+      average_stage_times: Record<string, number>
+      conversion_rate: number
+      total_pipeline_value: number
+      closed_pipeline_value: number
+      total_leads: number
+    }>(url)
+  }
+
+  /**
+   * Get advanced pipeline metrics with 6-dimensional filtering
+   */
+  async getPipelineAdvancedMetrics(params?: {
+    startDate?: string
+    endDate?: string
+    stages?: string[]
+    sources?: string[]
+    assignedUsers?: string[]
+    tags?: string[]
+    valueMin?: number
+    valueMax?: number
+  }): Promise<AdvancedMetricsResponse> {
+    const searchParams = new URLSearchParams()
+
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined) {
+          if (Array.isArray(value)) {
+            value.forEach(v => searchParams.append(key, v))
+          } else {
+            searchParams.append(key, String(value))
+          }
+        }
+      })
+    }
+
+    const query = searchParams.toString()
+    const url = query
+      ? `${this.baseUrl}/metrics/advanced?${query}`
+      : `${this.baseUrl}/metrics/advanced`
+
+    return this.get<AdvancedMetricsResponse>(url)
   }
 }
 

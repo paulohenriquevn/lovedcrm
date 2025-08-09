@@ -50,11 +50,24 @@ export interface WebSocketConnectionData {
 // WebSocket hook interfaces
 export interface PipelineWebSocketMessage {
   type: string
-  lead?: any
+  lead?: {
+    id: string
+    name: string
+    stage?: string
+    assigned_user_id?: string
+    estimated_value?: number
+    tags?: string[]
+    source?: string
+    created_at: string
+    updated_at: string
+  }
   user_id?: string
   user_name?: string
   timestamp?: string
-  [key: string]: any
+  leadId?: string
+  stageId?: string
+  action?: string
+  data?: Record<string, unknown>
 }
 
 export interface UsePipelineWebSocketOptions {
@@ -74,8 +87,8 @@ export interface UsePipelineWebSocketOptions {
 export interface UsePipelineWebSocketReturn {
   isConnected: boolean
   connectionStatus: 'connecting' | 'connected' | 'disconnected' | 'error' | 'polling'
-  sendMessage: (message: any) => void
-  activeUsers: any[]
+  sendMessage: (message: Record<string, unknown>) => void
+  activeUsers: Array<{ user_id?: string; full_name?: string }>
   lastMessage: PipelineWebSocketMessage | null
   reconnect: () => void
   isPolling: boolean

@@ -21,6 +21,90 @@ from .config import settings
 logger = logging.getLogger(__name__)
 
 
+def _filter_websocket_loop_errors(event) -> Optional[dict]:
+    """Filter WebSocket loop errors that can cause Sentry recursion."""
+    if not event.get("exception"):
+        return event
+
+    websocket_loop_patterns = [
+        "websocket is not connected",
+        "need to call accept first",
+        "keyerror: 'transaction'",
+        "internal error in sentry_sdk",
+    ]
+
+    for exc_info in event["exception"].get("values", []):
+        exc_type = exc_info.get("type", "").lower()
+        exc_value = exc_info.get("value", "").lower()
+
+        if any(pattern in exc_value for pattern in websocket_loop_patterns):
+            logger.debug(f"Filtering WebSocket loop error from Sentry: {exc_type}")
+            return None  # Don't send to Sentry to prevent loops
+
+    return event
+
+
+def _remove_sensitive_headers(event) -> dict:
+    """Remove sensitive headers from Sentry event."""
+    if "request" not in event:
+        return event
+
+    headers = event["request"].get("headers", {})
+    sensitive_headers = ["authorization", "cookie", "x-api-key", "x-auth-token"]
+
+    for header in sensitive_headers:
+        headers.pop(header, None)
+        headers.pop(header.upper(), None)
+        headers.pop(header.title(), None)
+
+    return event
+
+
+def _remove_sensitive_extra_data(event) -> dict:
+    """Remove sensitive data from extra context."""
+    if "extra" not in event:
+        return event
+
+    sensitive_keys = ["password", "token", "secret", "key", "auth", "credential"]
+
+    for key in list(event["extra"].keys()):
+        if any(sensitive in key.lower() for sensitive in sensitive_keys):
+            event["extra"].pop(key, None)
+
+    return event
+
+
+def _create_before_send_filter():
+    """Create before_send filter function for Sentry."""
+
+    def before_send(event, hint):
+        """Filter sensitive data and prevent loops before sending to Sentry."""
+        # Filter WebSocket loop errors
+        event = _filter_websocket_loop_errors(event)
+        if event is None:
+            return None
+
+        # Remove sensitive data
+        event = _remove_sensitive_headers(event)
+        event = _remove_sensitive_extra_data(event)
+
+        return event
+
+    return before_send
+
+
+def _get_sentry_integrations():
+    """Get Sentry integrations configuration."""
+    return [
+        FastApiIntegration(transaction_style="url"),
+        SqlalchemyIntegration(),
+        LoggingIntegration(
+            level=logging.INFO,
+            event_level=logging.ERROR,
+        ),
+    ]
+
+
 def setup_sentry() -> None:
     """🔧 Configure Sentry for multi-tenant SaaS monitoring."""
     if not settings.SENTRY_DSN:
@@ -28,85 +112,17 @@ def setup_sentry() -> None:
         return
 
     try:
-        # 🔒 Multi-tenant data filtering
-        def before_send(event, hint):
-            """Filter sensitive data and prevent loops before sending to Sentry."""
-            # 🚨 ANTI-LOOP: Filter out WebSocket loop errors that can cause Sentry recursion
-            if event.get("exception"):
-                for exc_info in event["exception"].get("values", []):
-                    exc_type = exc_info.get("type", "").lower()
-                    exc_value = exc_info.get("value", "").lower()
-                    
-                    # Filter WebSocket disconnection errors that cause loops
-                    websocket_loop_patterns = [
-                        "websocket is not connected",
-                        "need to call accept first", 
-                        "keyerror: 'transaction'",
-                        "internal error in sentry_sdk",
-                    ]
-                    
-                    if any(pattern in exc_value for pattern in websocket_loop_patterns):
-                        logger.debug(f"Filtering WebSocket loop error from Sentry: {exc_type}")
-                        return None  # Don't send to Sentry to prevent loops
-            
-            # Remove sensitive data from event
-            if "request" in event:
-                headers = event["request"].get("headers", {})
-                # Remove sensitive headers
-                sensitive_headers = [
-                    "authorization",
-                    "cookie",
-                    "x-api-key",
-                    "x-auth-token",
-                ]
-                for header in sensitive_headers:
-                    headers.pop(header, None)
-                    headers.pop(header.upper(), None)
-                    headers.pop(header.title(), None)
-
-            # Remove sensitive data from extra context
-            if "extra" in event:
-                sensitive_keys = [
-                    "password",
-                    "token",
-                    "secret",
-                    "key",
-                    "auth",
-                    "credential",
-                ]
-                for key in list(event["extra"].keys()):
-                    if any(sensitive in key.lower() for sensitive in sensitive_keys):
-                        event["extra"].pop(key, None)
-
-            return event
-
-        # 🏗️ Sentry configuration with FastAPI integration
         sentry_sdk.init(
             dsn=settings.SENTRY_DSN,
             environment=settings.SENTRY_ENVIRONMENT,
             traces_sample_rate=settings.SENTRY_TRACES_SAMPLE_RATE,
             profiles_sample_rate=settings.SENTRY_PROFILES_SAMPLE_RATE,
-            before_send=before_send,
-            integrations=[
-                # FastAPI integration for request tracking
-                FastApiIntegration(
-                    transaction_style="url",  # Use URL-based transaction naming
-                ),
-                # SQLAlchemy integration for database query tracking
-                SqlalchemyIntegration(),
-                # Logging integration
-                LoggingIntegration(
-                    level=logging.INFO,  # Capture info and above
-                    event_level=logging.ERROR,  # Send errors to Sentry
-                ),
-            ],
-            # 🎯 Release tracking
+            before_send=_create_before_send_filter(),
+            integrations=_get_sentry_integrations(),
             release=f"{settings.APP_NAME}@{settings.APP_VERSION}",
-            # 🏷️ Default tags
             default_integrations=True,
-            send_default_pii=False,  # Don't send PII by default
+            send_default_pii=False,
             attach_stacktrace=True,
-            # 🔧 Performance settings
             max_breadcrumbs=50,
             debug=settings.is_development,
         )

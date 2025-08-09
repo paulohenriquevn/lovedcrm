@@ -4,6 +4,10 @@
 
 **Especialista em REFINAMENTO TÉCNICO COMPLETO de user stories com PESQUISA ATIVA INTENSIVA, integrando roadmap + análise profunda do codebase local + pesquisa extensiva de soluções open source + melhores práticas + análise de riscos para gerar refinamentos técnicos detalhados com 99% de certeza técnica.**
 
+**📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER REFINAMENTO:**
+
+- ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações do projeto
+
 **Entrada:**
 
 - `story_id`: ID da história do roadmap (ex: "2.1", "1.3")
@@ -92,6 +96,12 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 - ✅ **DEVE**: `Read .env.example` - IDENTIFICAR configurações disponíveis
 - ✅ **DEVE**: `Read docker-compose.yml` - ANALISAR services configurados
 
+### **🎨 LEITURA OBRIGATÓRIA DE ARQUIVOS DE DESIGN E JOURNEYS**
+
+- ✅ **DEVE**: `Read docs/project/04-journeys.md` - MAPEAR jornadas de usuário e fluxos completos
+- ✅ **DEVE**: `Read docs/project/07-diagrams.md` - ANALISAR diagramas técnicos e arquitetura
+- ✅ **DEVE**: `Read docs/project/10-ui-ux-designer.md` - ENTENDER padrões UI/UX e validações
+
 ### **🚨 VALIDAÇÃO OBRIGATÓRIA**
 
 - ❌ **FALHA CRÍTICA**: Não usar ferramentas Read/LS/Bash para análise real
@@ -108,6 +118,18 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 - ✅ **DEVE**: **CONTEXTUALIZAR** história com estado atual do projeto (Fase 0)
 - ❌ **NUNCA**: Interpretar história sem contexto do projeto atual
 - ❌ **NUNCA**: Assumir ou inventar dados da história não presentes no roadmap
+
+#### **🎯 FASE 1.5: CLARIFICAÇÃO DO OBJETIVO DA HISTÓRIA (OBRIGATÓRIA)**
+
+- ✅ **DEVE**: Extrair e reformular o OBJETIVO ESPECÍFICO da história
+- ✅ **DEVE**: Validar alinhamento com épico e contexto organizacional  
+- ✅ **DEVE**: Identificar o VALOR DE NEGÓCIO específico entregue
+- ✅ **DEVE**: Mapear IMPACTO esperado no usuário final
+- ✅ **DEVE**: Confirmar que objetivo é MENSURÁVEL e TESTÁVEL
+- ✅ **DEVE**: Validar que o objetivo resolve uma DOR ESPECÍFICA do usuário
+- ✅ **DEVE**: Conectar objetivo com estratégia organizacional maior
+- ❌ **NUNCA**: Aceitar objetivos genéricos ou vagos
+- ❌ **NUNCA**: Proceder sem compreender o PORQUÊ da história
 
 #### **🔍 FASE 2: PESQUISA ATIVA INTENSIVA CONTEXTUALIZADA**
 
@@ -142,7 +164,20 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 - ❌ **NUNCA**: Assumir viabilidade sem validação completa
 - ❌ **NUNCA**: Especificar soluções para problemas futuros hipotéticos
 
-#### **📁 FASE 5: AUTO-SAVE OBRIGATÓRIO**
+#### **🎨 FASE 5: DESIGN DE TELAS E DIAGRAMAS (OBRIGATÓRIA)**
+
+- ✅ **DEVE**: Mapear jornada específica da história em `04-journeys.md`
+- ✅ **DEVE**: Identificar diagramas relevantes em `07-diagrams.md`
+- ✅ **DEVE**: Aplicar padrões UI/UX de `10-ui-ux-designer.md`
+- ✅ **DEVE**: Desenhar wireframes ASCII das telas principais
+- ✅ **DEVE**: Criar diagramas de fluxo e arquitetura específicos
+- ✅ **DEVE**: Especificar componentes shadcn/ui necessários
+- ✅ **DEVE**: Definir tokens CSS setoriais a utilizar
+- ✅ **DEVE**: Mapear responsividade mobile/desktop
+- ✅ **DEVE**: Identificar micro-interações e animações
+- ✅ **DEVE**: Validar acessibilidade WCAG 2.1 AA
+
+#### **📁 FASE 6: AUTO-SAVE OBRIGATÓRIO**
 
 - ✅ **DEVE**: Salvar automaticamente em `docs/refined/[ID]-[title].md`
 - ✅ **DEVE**: Confirmar salvamento com path completo
@@ -183,6 +218,11 @@ Leitura de Arquivos Realizada:
   ✅ components/ui/: [LISTAR componentes shadcn disponíveis]
   ✅ app/[locale]/admin/: [LISTAR estrutura de rotas encontrada]
   ✅ .env.example: [IDENTIFICAR configurações principais]
+
+Leitura de Design e Jornadas Realizada:
+  ✅ docs/project/04-journeys.md: [IDENTIFICAR jornada específica da história]
+  ✅ docs/project/07-diagrams.md: [MAPEAR diagramas técnicos relevantes]
+  ✅ docs/project/10-ui-ux-designer.md: [EXTRAIR padrões UI/UX aplicáveis]
 
 ❌ FALHA CRÍTICA se qualquer item acima não tiver evidência REAL de leitura
 ```
@@ -246,6 +286,65 @@ Constraints: [constraints atuais identificados]
 
 ---
 
+## 🎯 **CLARIFICAÇÃO DO OBJETIVO DA HISTÓRIA**
+
+### **🚨 VALIDAÇÃO OBRIGATÓRIA DO OBJETIVO**
+
+```yaml
+Objetivo da História Identificado:
+  User Story Reformulada: [Como X, quero Y, para Z - versão específica e clara]
+  Problema Específico: [Dor exata que o usuário enfrenta hoje]
+  Valor de Negócio: [Benefício mensurável que será entregue]
+  Impacto no Usuário: [Como a vida do usuário melhora especificamente]
+  Contexto Organizacional: [Como se conecta com estratégia/épico maior]
+  
+Validação SMART do Objetivo:
+  ✅ Específico: [Objetivo não é genérico - descreve EXATAMENTE o que será entregue]
+  ✅ Mensurável: [Critérios claros e objetivos para medir sucesso]  
+  ✅ Alcançável: [Tecnicamente viável com o stack atual]
+  ✅ Relevante: [Alinhado com estratégia organizacional e necessidades do usuário]
+  ✅ Temporal: [Timeline e marco de entrega definidos]
+
+Conexão Estratégica:
+  Epic Relacionado: [Nome do épico e como esta história contribui]
+  OKR/Meta Organizacional: [Objetivo maior que esta história suporta]
+  Prioridade Justificada: [Por que esta história, por que agora]
+  
+Validação de Dor do Usuário:
+  Dor Atual: [Problema específico que o usuário enfrenta HOJE]
+  Evidência da Dor: [Como sabemos que este problema existe e é relevante]
+  Impacto da Não-Solução: [O que acontece se não resolvermos isto]
+  Benefício da Solução: [Como o usuário se beneficiará especificamente]
+```
+
+### **🔍 PERGUNTAS DE VALIDAÇÃO RESPONDIDAS**
+
+**1. POR QUE esta história?**
+[Resposta específica sobre a necessidade/dor que motiva]
+
+**2. POR QUE AGORA?**
+[Resposta sobre timing, urgência, oportunidade]
+
+**3. PARA QUEM exatamente?**
+[Persona específica, não genérica - "usuários" não é resposta válida]
+
+**4. QUE RESULTADO esperamos?**
+[Resultado mensurável e específico]
+
+**5. COMO vamos MEDIR o sucesso?**
+[Métricas específicas, não genéricas]
+
+### **🚨 RED FLAGS DO OBJETIVO - REJEITAR SE ENCONTRADO**
+
+- ❌ **Objetivo genérico**: "Melhorar a experiência do usuário"
+- ❌ **Sem dor específica**: "Seria legal ter essa funcionalidade"
+- ❌ **Sem métrica**: "Usuários ficarão mais satisfeitos"
+- ❌ **Sem contexto estratégico**: História isolada sem conexão maior
+- ❌ **Problema hipotético**: Dor não validada ou assumida
+- ❌ **Escopo ambíguo**: Não é claro onde a história termina
+
+---
+
 ## 🔍 **PESQUISA TÉCNICA EXAUSTIVA**
 
 ### **Soluções Open Source Pesquisadas**
@@ -293,6 +392,390 @@ Backend Files:
 Frontend Files:
   - components/ui/: [Componentes shadcn disponíveis]
   - app/[locale]/admin/: [Estrutura de rotas]
+```
+
+---
+
+## 🎨 **DESIGN DE TELAS E WIREFRAMES**
+
+### **Jornada de Usuário Mapeada**
+
+**Fonte**: docs/project/04-journeys.md - [Jornada específica identificada]
+
+#### **Persona e Contexto**
+
+- **Persona**: [Persona específica da jornada]
+- **Contexto**: [Situação de uso]
+- **Priority**: [MVP Core / Supporting / Advanced]
+
+#### **Happy Path Flow Identificado**
+
+```
+[Mapear o fluxo específico da jornada identificada]
+1. [Step 1 da jornada]
+   ↓
+2. [Step 2 da jornada]
+   ↓
+[Continue o fluxo completo]
+```
+
+### **Wireframes ASCII das Telas Principais**
+
+#### **Tela Principal da Funcionalidade**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                            [NOME DA FUNCIONALIDADE]                           │
+└─────────────────────────────────────────────────────────────────────────────────┘
+
+Desktop Layout (1024px+):
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│  Header: OrganizationBadge + User Menu + Notifications                         │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│ Sidebar │                     Main Content Area                               │
+│ Nav     │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐    │
+│ Menu    │  │   Component 1   │  │   Component 2   │  │   Component 3   │    │
+│         │  │ [shadcn/ui Card]│  │ [shadcn/ui Table│  │ [shadcn/ui Form]│    │
+│ [Menu   │  │                 │  │  w/ filters]    │  │                 │    │
+│ Items]  │  └─────────────────┘  └─────────────────┘  └─────────────────┘    │
+│         │                                                                    │
+│         │  [Action Buttons]: [Button] [Button] [Button secondary]            │
+└─────────┴────────────────────────────────────────────────────────────────────────┘
+
+Mobile Layout (320px-768px):
+┌─────────────────────────┐
+│ Header + Burger Menu    │
+├─────────────────────────┤
+│                         │
+│ ┌─────────────────────┐ │
+│ │   Component 1       │ │
+│ │ [shadcn/ui Card]    │ │
+│ │ Stack vertically    │ │
+│ └─────────────────────┘ │
+│                         │
+│ ┌─────────────────────┐ │
+│ │   Component 2       │ │
+│ │ [Mobile optimized]  │ │
+│ └─────────────────────┘ │
+│                         │
+│ [Action Buttons]        │
+│ [Stack vertically]      │
+└─────────────────────────┘
+```
+
+#### **Modal/Dialog Interactions**
+
+```
+Overlay Modal (quando aplicável):
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│ Background Dim (bg-black/50)                                                   │
+│                                                                                 │
+│                 ┌─────────────────────────────────────────┐                   │
+│                 │           Modal Title                    │ X                 │
+│                 ├─────────────────────────────────────────┤                   │
+│                 │                                         │                   │
+│                 │        Modal Content                    │                   │
+│                 │  [Form fields ou content específico]   │                   │
+│                 │                                         │                   │
+│                 ├─────────────────────────────────────────┤                   │
+│                 │    [Cancel]           [Primary Action]  │                   │
+│                 └─────────────────────────────────────────┘                   │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### **Componentes shadcn/ui Especificados**
+
+```yaml
+Componentes Necessários:
+  Core Components:
+    - Card: Container principal para conteúdo
+    - Button: Actions primários e secundários
+    - Input: Campos de formulário
+    - Label: Labels acessíveis
+    - Form: Validação e submit
+
+  Layout Components:
+    - Sheet: Mobile sidebar/drawer
+    - Tabs: Navegação entre seções
+    - Separator: Divisores visuais
+
+  Data Display:
+    - Table: Listagens e grids
+    - Badge: Status e categorias
+    - Avatar: Identificação de usuários
+
+  Feedback Components:
+    - Toast: Notificações
+    - Alert: Avisos importantes
+    - Progress: Indicadores de progresso
+
+  Interactive Components:
+    - Dialog: Modais de confirmação
+    - Select: Dropdowns
+    - Checkbox/Switch: Controles booleanos
+
+shadcn/ui Theme Tokens Aplicados:
+  - Primary: sector-primary (262 83% 58%) - Violeta CRM
+  - Secondary: sector-cta (12 100% 67%) - Laranja CTAs
+  - Success: sector-trust (160 84% 39%) - Verde confiança
+  - Muted: sector-bg (220 13% 91%) - Background neutro
+```
+
+### **Responsividade e Breakpoints**
+
+```yaml
+Breakpoint Strategy:
+  Mobile (320px - 768px):
+    - Stack components vertically
+    - Full width cards e forms
+    - Collapsible navigation (Sheet)
+    - Touch-friendly buttons (min 44px)
+
+  Tablet (768px - 1024px):
+    - 2-column grid layout
+    - Sidebar opcional (collapsible)
+    - Mixed interaction (touch + mouse)
+
+  Desktop (1024px+):
+    - 3+ column layout
+    - Fixed sidebar navigation
+    - Hover states e micro-interactions
+    - Keyboard shortcuts
+
+Tailwind Classes:
+  - Container: max-w-6xl mx-auto px-4 sm:px-6 lg:px-8
+  - Grid: grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6
+  - Typography: text-sm md:text-base lg:text-lg
+  - Spacing: p-4 md:p-6 lg:p-8
+```
+
+### **Micro-interações e Animações**
+
+```yaml
+Animation Strategy:
+  Transitions:
+    - Card hover: hover:shadow-md transition-shadow duration-150
+    - Button states: hover:bg-primary/90 transition-colors
+    - Form validation: animate-pulse para errors
+
+  Loading States:
+    - Skeleton loading para data fetching
+    - Spinner para actions críticas
+    - Progress bars para uploads/processes
+
+  Micro-interactions:
+    - Toast notifications: slide-in from top
+    - Modal: fade-in overlay + scale content
+    - Drag & drop: visual feedback + ghost elements
+```
+
+### **Acessibilidade WCAG 2.1 AA**
+
+```yaml
+Accessibility Requirements:
+  Color Contrast:
+    - sector-primary vs white: 4.8:1 (Pass AA)
+    - sector-cta vs white: 4.5:1 (Pass AA)
+    - All text meets minimum contrast ratios
+
+  Keyboard Navigation:
+    - Tab order logical e sequencial
+    - Focus indicators visíveis
+    - Escape closes modals/dropdowns
+    - Enter submits forms
+
+  Screen Reader Support:
+    - aria-label em todos os interactive elements
+    - aria-describedby para help text
+    - role attributes onde necessário
+    - alt text em images
+
+  Form Accessibility:
+    - Labels associados com inputs
+    - Error messages linked (aria-describedby)
+    - Required fields marked (aria-required)
+    - Validation feedback immediate
+```
+
+### **Estados e Validações**
+
+```yaml
+Component States:
+  Loading States:
+    - Initial load: Skeleton components
+    - Action loading: Button spinner + disabled
+    - Background sync: Subtle progress indicator
+
+  Error States:
+    - Form validation: Red border + error message
+    - Network errors: Toast notification + retry
+    - 404/403: Full page error com navigation
+
+  Success States:
+    - Form submit: Green toast confirmation
+    - Data saved: Success badge + timestamp
+    - Actions completed: Check animation
+
+  Empty States:
+    - No data: Illustration + CTA
+    - No results: Search suggestions
+    - No permissions: Upgrade prompt
+```
+
+---
+
+## 🔧 **DIAGRAMAS TÉCNICOS ESPECÍFICOS**
+
+### **Diagrama de Arquitetura da Funcionalidade**
+
+**Fonte**: docs/project/07-diagrams.md - [Diagrama específico identificado]
+
+```
+ARQUITETURA ESPECÍFICA PARA [FUNCIONALIDADE]
+═══════════════════════════════════════════
+
+[FRONTEND LAYER]
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                      Next.js 14 Frontend Components                           │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐                │
+│  │  Page Container │  │  Business Logic │  │  shadcn/ui      │                │
+│  │  [Nome].tsx     │  │  use[Feature]   │  │  Components     │                │
+│  │                 │  │  Hook           │  │                 │                │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘                │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                  │
+                       ┌──────────────────────┐
+                       │  X-Org-Id Headers    │
+                       │  JWT + Org Context   │
+                       │  API Integration     │
+                       └──────────────────────┘
+                                  │
+[BACKEND LAYER]
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                       FastAPI Backend Services                                │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐                │
+│  │  Router         │  │  Service Layer  │  │  Repository     │                │
+│  │  /[endpoint]    │  │  [Feature]      │  │  [Feature]Repo  │                │
+│  │                 │  │  Service        │  │                 │                │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘                │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                  │
+[DATABASE LAYER]
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                        PostgreSQL Schema Específico                           │
+│                                                                                 │
+│  Tabelas Envolvidas:                                                           │
+│  • [tabela_principal] (organization_id + [campos específicos])                │
+│  • [tabela_relacionada] (organization_id FK)                                  │
+│  • [tabela_audit] (org-scoped audit trail)                                    │
+│                                                                                 │
+│  🔒 Multi-Tenancy: Todas as queries com organization_id filtering             │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### **Diagrama de Fluxo de Dados**
+
+```
+DATA FLOW ESPECÍFICO PARA [FUNCIONALIDADE]
+═══════════════════════════════════════════
+
+[USER ACTION]      [FRONTEND]           [BACKEND]             [DATABASE]
+     │                  │                   │                     │
+     ├─ [Ação Usuário] ▶│                   │                     │
+     │                  ├─ GET/POST        ▶│                     │
+     │                  │   /[endpoint]     │                     │
+     │                  │   X-Org-Id: uuid  │                     │
+     │                  │                   │                     │
+     │                  │                   ├─ Validate Headers ▶│
+     │                  │                   │   & Organization    │
+     │                  │                   │                     │
+     │                  │                   ├─ Query with       ▶│
+     │                  │                   │   org_id filter    │
+     │                  │                   │                     │
+     │                  │   ◀─── Response ──│ ◀─── Results ──────│
+     │                  │                   │                     │
+     │ ◀─ UI Update ────│                   │                     │
+     │   (Real-time)    │                   │                     │
+
+Edge Cases Handled:
+• Cross-org access: 403 Forbidden + audit log
+• Concurrent updates: Optimistic locking + conflict resolution
+• Network failure: Retry logic + user feedback
+• Validation errors: Immediate user feedback + error recovery
+```
+
+### **Diagrama de Estados e Transições**
+
+```
+ESTADOS DA FUNCIONALIDADE
+══════════════════════════
+
+[ESTADO INICIAL]
+       │
+       ▼
+┌─────────────────┐
+│   Loading       │ ───── Timeout ─────▶ [ERROR STATE]
+│   (Skeleton)    │                           │
+└─────────────────┘                           │
+       │                                      │
+    Success                                   │
+       ▼                                      │
+┌─────────────────┐                           │
+│   Loaded        │ ◀── Refresh ──────────────┘
+│   (Data Ready)  │
+└─────────────────┘
+       │
+    User Action
+       ▼
+┌─────────────────┐
+│   Processing    │ ───── Success ────▶ [LOADED STATE]
+│   (Loading...)  │
+└─────────────────┘
+       │
+    Error/Failure
+       ▼
+┌─────────────────┐
+│   Error         │ ──── Retry ─────▶ [PROCESSING STATE]
+│   (Error msg +  │
+│    Retry button)│
+└─────────────────┘
+
+State Management:
+• useFeatureState() hook gerencia transições
+• Error boundaries capturam falhas críticas
+• Toast notifications para feedback imediato
+• Optimistic updates onde apropriado
+```
+
+### **Diagrama de Integração Externa (se aplicável)**
+
+```
+INTEGRAÇÕES EXTERNAS PARA [FUNCIONALIDADE]
+═══════════════════════════════════════════
+
+[CRM BACKEND]        [EXTERNAL SERVICE]        [WEBHOOK/CALLBACK]
+      │                      │                         │
+      ├─ API Call           ▶│                         │
+      │   (Auth headers)     │                         │
+      │                      │                         │
+      │                      ├─ Process Request       │
+      │                      │   (Provider logic)     │
+      │                      │                        │
+      │   ◀─── Response ─────│                        │
+      │   (Success/Error)    │                        │
+      │                      │                        │
+      │                      ├─ Async Webhook       ▶│
+      │                      │   (Status update)     │
+      │                      │                       │
+      │ ◀─── Webhook ────────┼───────────────────────┘
+      │   POST /webhooks/    │
+      │   [org_id]           │
+
+Provider Configuration per Organization:
+• Each org has independent API keys/config
+• Webhook URLs include org_id for isolation
+• Rate limiting per organization
+• Error handling per provider type
 ```
 
 ---
@@ -404,6 +887,14 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 
 ### **🚨 QUALITY GATES - REJEIÇÃO AUTOMÁTICA**
 
+#### **🎯 VALIDAÇÕES DE OBJETIVO (CRÍTICAS)**
+- ❌ **FALHA CRÍTICA se objetivo da história for genérico ou vago**
+- ❌ **FALHA CRÍTICA se não identificar dor específica do usuário**
+- ❌ **FALHA CRÍTICA se não responder às 5 perguntas de validação**
+- ❌ **FALHA CRÍTICA se não validar critérios SMART**
+- ❌ **FALHA CRÍTICA se não conectar com estratégia organizacional**
+
+#### **🔍 VALIDAÇÕES TÉCNICAS (CRÍTICAS)**
 - ❌ **FALHA CRÍTICA se não usar ferramentas Read/LS/Bash na Fase 0**
 - ❌ **FALHA CRÍTICA se template não mostrar evidências REAIS de leitura**
 - ❌ **FALHA CRÍTICA se basear refinement em suposições sobre o projeto**
@@ -413,13 +904,33 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 - ❌ **REJEIÇÃO se não reutilizar código/padrões existentes**
 - ❌ **REJEIÇÃO se adicionar over-engineering para problemas futuros**
 
+#### **🎨 VALIDAÇÕES DE DESIGN (OBRIGATÓRIAS)**
+- ❌ **REJEIÇÃO se não incluir wireframes e telas da funcionalidade**
+- ❌ **REJEIÇÃO se não mapear a jornada específica de docs/project/04-journeys.md**
+- ❌ **REJEIÇÃO se não aplicar padrões UI/UX de docs/project/10-ui-ux-designer.md**
+- ❌ **REJEIÇÃO se não criar diagramas técnicos baseados em docs/project/07-diagrams.md**
+
 ### **✅ CHECKLIST DE APROVAÇÃO**
 
+#### **🎯 Validação do Objetivo**
+- [ ] **OBJETIVO CLARO**: História tem objetivo específico, não genérico
+- [ ] **DOR ESPECÍFICA**: Problema concreto do usuário identificado
+- [ ] **SMART**: Critérios específico, mensurável, alcançável, relevante, temporal
+- [ ] **5 PERGUNTAS**: Por quê, por que agora, para quem, que resultado, como medir
+- [ ] **ESTRATÉGIA**: Conexão clara com épico/OKR organizacional
+
+#### **🔍 Validação Técnica** 
 - [ ] **KISS**: Solução mais simples que funciona escolhida
 - [ ] **YAGNI**: Escopo limitado aos requisitos atuais da história
 - [ ] **DRY**: Máxima reutilização de código/padrões existentes
-- [ ] **99% Certeza**: Pesquisa exaustiva + análise contextual completa
-- [ ] **Estado Atual**: Baseado em análise real do projeto atual
+- [ ] **99% CERTEZA**: Pesquisa exaustiva + análise contextual completa
+- [ ] **ESTADO ATUAL**: Baseado em análise real do projeto atual
+
+#### **🎨 Validação de Design**
+- [ ] **WIREFRAMES**: Telas principais desenhadas em ASCII
+- [ ] **JORNADAS**: Jornada específica mapeada de docs/project/04-journeys.md
+- [ ] **UI/UX**: Padrões aplicados de docs/project/10-ui-ux-designer.md
+- [ ] **DIAGRAMAS**: Diagramas técnicos baseados em docs/project/07-diagrams.md
 
 ---
 

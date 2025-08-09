@@ -17,7 +17,8 @@ class WebSocketManager {
   private static instance: WebSocketManager
   private ws: WebSocket | null = null
   private isConnected: boolean = false
-  private connectionStatus: 'connecting' | 'connected' | 'disconnected' | 'error' | 'polling' = 'disconnected'
+  private connectionStatus: 'connecting' | 'connected' | 'disconnected' | 'error' | 'polling' =
+    'disconnected'
   private activeUsers: any[] = []
   private lastMessage: PipelineWebSocketMessage | null = null
   private subscribers = new Set<string>()
@@ -74,11 +75,7 @@ class WebSocketManager {
   }
 
   connect(url: string, options: UsePipelineWebSocketOptions = {}) {
-    const {
-      autoReconnect = true,
-      reconnectInterval = 5000,
-      enablePollingFallback = true,
-    } = options
+    const { autoReconnect = true, reconnectInterval = 5000, enablePollingFallback = true } = options
 
     if (this.ws?.readyState === WebSocket.CONNECTING || this.ws?.readyState === WebSocket.OPEN) {
       return
@@ -95,16 +92,16 @@ class WebSocketManager {
         this.connectionStatus = 'connected'
         this.isConnected = true
         this.stopPolling()
-        
+
         if (this.reconnectTimeout) {
           clearTimeout(this.reconnectTimeout)
           this.reconnectTimeout = null
         }
-        
+
         this.notifySubscribers()
       }
 
-      ws.onmessage = (event) => {
+      ws.onmessage = event => {
         try {
           const data: PipelineWebSocketMessage = JSON.parse(event.data)
           this.lastMessage = data
@@ -120,7 +117,7 @@ class WebSocketManager {
           }
 
           // Notify all subscribers
-          this.messageHandlers.forEach((handler) => {
+          this.messageHandlers.forEach(handler => {
             try {
               handler(data)
             } catch (error) {
@@ -134,7 +131,7 @@ class WebSocketManager {
         }
       }
 
-      ws.onclose = (event) => {
+      ws.onclose = event => {
         this.connectionStatus = 'disconnected'
         this.isConnected = false
         this.activeUsers = []
@@ -181,7 +178,7 @@ class WebSocketManager {
       this.connectionStatus = 'disconnected'
       this.isConnected = false
       this.activeUsers = []
-      
+
       this.notifySubscribers()
     }
   }
@@ -240,13 +237,13 @@ export function usePipelineWebSocketShared(
   // Initialize manager on client side only
   useEffect(() => {
     managerRef.current = WebSocketManager.getInstance()
-    
+
     const updateCallback = () => {
       setState(managerRef.current!.getState())
     }
-    
+
     managerRef.current.addUpdateCallback(updateCallback)
-    
+
     return () => {
       if (managerRef.current) {
         managerRef.current.removeUpdateCallback(updateCallback)
@@ -255,40 +252,43 @@ export function usePipelineWebSocketShared(
   }, [])
 
   // Create message handler for this instance
-  const messageHandler = useCallback((data: PipelineWebSocketMessage) => {
-    switch (data.type) {
-      case 'pipeline_connection_established':
-        onConnectionEstablished?.(data)
-        break
-      case 'lead_stage_changed':
-      case 'stage_change':
-        onLeadStageChanged?.(data)
-        break
-      case 'lead_created':
-        onLeadCreated?.(data)
-        break
-      case 'lead_updated':
-        onLeadUpdated?.(data)
-        break
-      case 'lead_deleted':
-        onLeadDeleted?.(data)
-        break
-      case 'pipeline_user_activity_update':
-        onUserActivity?.(data)
-        break
-      case 'user_dragging_lead':
-        onUserDragging?.(data)
-        break
-    }
-  }, [
-    onConnectionEstablished,
-    onLeadStageChanged,
-    onLeadCreated,
-    onLeadUpdated,
-    onLeadDeleted,
-    onUserActivity,
-    onUserDragging,
-  ])
+  const messageHandler = useCallback(
+    (data: PipelineWebSocketMessage) => {
+      switch (data.type) {
+        case 'pipeline_connection_established':
+          onConnectionEstablished?.(data)
+          break
+        case 'lead_stage_changed':
+        case 'stage_change':
+          onLeadStageChanged?.(data)
+          break
+        case 'lead_created':
+          onLeadCreated?.(data)
+          break
+        case 'lead_updated':
+          onLeadUpdated?.(data)
+          break
+        case 'lead_deleted':
+          onLeadDeleted?.(data)
+          break
+        case 'pipeline_user_activity_update':
+          onUserActivity?.(data)
+          break
+        case 'user_dragging_lead':
+          onUserDragging?.(data)
+          break
+      }
+    },
+    [
+      onConnectionEstablished,
+      onLeadStageChanged,
+      onLeadCreated,
+      onLeadUpdated,
+      onLeadDeleted,
+      onUserActivity,
+      onUserDragging,
+    ]
+  )
 
   // Register subscriber once and update handler dynamically
   const messageHandlerRef = useRef(messageHandler)
@@ -298,18 +298,18 @@ export function usePipelineWebSocketShared(
     if (!managerRef.current) return
 
     const subscriberId = subscriberIdRef.current
-    
+
     // Create stable handler that uses the latest messageHandler
     const stableHandler = (data: PipelineWebSocketMessage) => {
       messageHandlerRef.current(data)
     }
-    
+
     managerRef.current.addSubscriber(subscriberId, stableHandler)
 
     return () => {
       if (managerRef.current) {
         managerRef.current.removeSubscriber(subscriberId)
-        
+
         // Only disconnect if this was the last subscriber after a delay
         setTimeout(() => {
           if (managerRef.current && managerRef.current.getState().subscriberCount === 0) {

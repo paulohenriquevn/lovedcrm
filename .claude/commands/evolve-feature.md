@@ -2,6 +2,10 @@
 
 **Analisa, planeja e cria tasks para evolução de features seguindo arquitetura Multi-Tenant SaaS**
 
+**📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER EVOLUÇÃO:**
+
+- ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações do projeto
+
 **Argumentos:**
 
 - `feature`: Nome da feature a ser evoluída

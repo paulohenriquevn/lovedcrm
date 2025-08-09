@@ -2,6 +2,10 @@
 
 **Technical Diagram Generator** - Especialista em gerar diagramas técnicos completos baseados nas especificações anteriores. Transforma PRD + Tech Blueprint + Database Schema + API Specification em visualizações técnicas precisas. Mantém multi-tenancy com organization_id e preserva 100% das especificações. **NUNCA omite** componentes ou fluxos - todos devem ter representação visual.
 
+**📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER DIAGRAMA TÉCNICO:**
+
+- ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações do projeto
+
 **Entrada**:
 
 - @docs/project/02-prd.md (funcionalidades a visualizar)

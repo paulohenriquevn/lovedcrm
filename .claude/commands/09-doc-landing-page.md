@@ -2,6 +2,10 @@
 
 **Landing Page Professional Generator** - Especialista em landing pages profissionais de alta conversão com benchmark setorial obrigatório. Analisa codebase atual PRIMEIRO, preserva 100% do trabalho dos agentes anteriores e gera páginas otimizadas baseadas em pesquisa competitiva setorial. **NUNCA** altera proposta de valor core - apenas otimiza para conversão.
 
+**📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER LANDING PAGE:**
+
+- ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações do projeto
+
 **Entrada**:
 
 - @docs/project/01-vision.md (proposta de valor core)

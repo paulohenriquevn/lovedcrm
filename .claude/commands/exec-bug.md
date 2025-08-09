@@ -2,6 +2,10 @@
 
 **Investiga e corrige bugs no sistema Multi-Tenant SaaS mantendo isolamento organizacional**
 
+**📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER DEBUG:**
+
+- ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações do projeto
+
 **Argumentos:**
 
 - `bug`: Descrição do bug, erro específico, ou comportamento inesperado

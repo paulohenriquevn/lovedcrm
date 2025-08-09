@@ -6,7 +6,7 @@ Organization-isolated real-time events for team collaboration.
 import json
 import logging
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from uuid import UUID
 
 from fastapi import (
@@ -138,7 +138,7 @@ async def _handle_websocket_disconnect_error(e: Exception, user_id: UUID) -> boo
     """Handle WebSocket disconnect-related errors and return if should break loop."""
     error_msg = str(e).lower()
     exception_type = type(e).__name__.lower()
-    
+
     # Log error but avoid Sentry loops by checking for Sentry issues
     if "sentry" not in error_msg and "sentry" not in exception_type:
         logger.error(f"Exception type: {exception_type}, message: {e}")
@@ -146,7 +146,7 @@ async def _handle_websocket_disconnect_error(e: Exception, user_id: UUID) -> boo
     # Comprehensive disconnect detection
     disconnect_keywords = [
         "disconnect",
-        "closed", 
+        "closed",
         "connection",
         "receive",
         "message has been received",
@@ -155,19 +155,18 @@ async def _handle_websocket_disconnect_error(e: Exception, user_id: UUID) -> boo
         "websocket",
         "accept first",
     ]
-    
+
     # Specific exception types that indicate disconnection
     disconnect_exceptions = [
         "runtimeerror",
-        "connectionclosederror", 
+        "connectionclosederror",
         "websocketdisconnect",
         "connectionerror",
         "connectionresetbyremote",
     ]
 
-    is_disconnect = (
-        any(keyword in error_msg for keyword in disconnect_keywords) or 
-        any(exc_type in exception_type for exc_type in disconnect_exceptions)
+    is_disconnect = any(keyword in error_msg for keyword in disconnect_keywords) or any(
+        exc_type in exception_type for exc_type in disconnect_exceptions
     )
 
     if is_disconnect:
@@ -178,81 +177,156 @@ async def _handle_websocket_disconnect_error(e: Exception, user_id: UUID) -> boo
         return True  # 🚨 SEGURANÇA: Break loop on ANY unhandled exception to prevent infinite loops
 
 
+async def _check_websocket_connection(websocket: WebSocket, user: User) -> bool:
+    """Check if WebSocket connection is still valid."""
+    if websocket.client_state.name in ["DISCONNECTED", "CLOSED"]:
+        logger.info(f"WebSocket already closed for user {user.id}")
+        return False
+    return True
+
+
+async def _receive_websocket_data(
+    websocket: WebSocket, user: User, timeout: float = 30.0
+) -> Optional[str]:
+    """Receive data from WebSocket with timeout protection."""
+    import asyncio
+
+    try:
+        return await asyncio.wait_for(websocket.receive_text(), timeout=timeout)
+    except asyncio.TimeoutError:
+        logger.warning(f"WebSocket receive timeout for user {user.id}")
+        # Send ping to check if connection is still alive
+        try:
+            await websocket.send_text(
+                json.dumps({"type": "ping", "timestamp": datetime.utcnow().isoformat()})
+            )
+            return None  # Continue loop
+        except Exception:
+            logger.info(f"WebSocket ping failed, connection closed for user {user.id}")
+            raise  # Break loop
+
+
+async def _validate_message_size(
+    data: str, user: User, organization: Organization, max_size: int
+) -> bool:
+    """Validate message size and send error if too large."""
+    if len(data) <= max_size:
+        return True
+
+    logger.warning(f"Message too large ({len(data)} bytes) from user {user.id}")
+    await websocket_manager.send_personal_message(
+        {"type": "error", "message": "Message too large"},
+        UUID(str(organization.id)),
+        UUID(str(user.id)),
+    )
+    return False
+
+
+async def _handle_json_decode_error(
+    user: User, organization: Organization, consecutive_errors: int, max_errors: int
+) -> tuple[int, bool]:
+    """Handle JSON decode error and return updated error count and should_break flag."""
+    consecutive_errors += 1
+    logger.error(f"Invalid JSON from user {user.id} (error #{consecutive_errors})")
+
+    if consecutive_errors >= max_errors:
+        logger.error(f"Too many JSON errors from user {user.id}, closing connection")
+        return consecutive_errors, True
+
+    await websocket_manager.send_personal_message(
+        {"type": "error", "message": "Invalid JSON format"},
+        UUID(str(organization.id)),
+        UUID(str(user.id)),
+    )
+    return consecutive_errors, False
+
+
+async def _process_websocket_message(
+    data: str, user: User, organization: Organization, handler_func, max_size: int
+) -> bool:
+    """Process a single WebSocket message and return success status."""
+    # Validate message size
+    if not await _validate_message_size(data, user, organization, max_size):
+        return True  # Continue loop, don't count as error
+
+    # Parse and handle message
+    try:
+        message = json.loads(data)
+        await handler_func(None, user, organization, message)  # websocket not used in handler_func
+        return True  # Success
+    except json.JSONDecodeError:
+        return False  # JSON error, handled by caller
+
+
+async def _handle_websocket_exception(
+    e: Exception, user: User, consecutive_errors: int, max_errors: int
+) -> tuple[int, bool]:
+    """Handle WebSocket exception and return updated error count and should_break flag."""
+    consecutive_errors += 1
+    should_break = await _handle_websocket_disconnect_error(e, UUID(str(user.id)))
+
+    # Circuit breaker - break after max errors or any critical error
+    if should_break or consecutive_errors >= max_errors:
+        if consecutive_errors >= max_errors:
+            logger.error(
+                f"Circuit breaker triggered for user {user.id} after {consecutive_errors} errors"
+            )
+        return consecutive_errors, True
+
+    return consecutive_errors, False
+
+
 async def _websocket_message_loop(
     websocket: WebSocket, user: User, organization: Organization, handler_func
 ):
     """Handle WebSocket message loop with circuit breaker and safety mechanisms."""
     import asyncio
-    
+
     consecutive_errors = 0
     max_consecutive_errors = 3
-    error_cooldown = 1.0  # seconds
+    error_cooldown = 1.0
     max_message_size = 1024 * 64  # 64KB limit
-    
+
     while True:
         try:
-            # 🚨 SEGURANÇA: Check WebSocket connection state
-            if websocket.client_state.name in ["DISCONNECTED", "CLOSED"]:
-                logger.info(f"WebSocket already closed for user {user.id}")
+            # Check WebSocket connection state
+            if not await _check_websocket_connection(websocket, user):
                 break
-                
-            # 🚨 SEGURANÇA: Timeout protection to prevent hanging
-            try:
-                data = await asyncio.wait_for(websocket.receive_text(), timeout=30.0)
-            except asyncio.TimeoutError:
-                logger.warning(f"WebSocket receive timeout for user {user.id}")
-                # Send ping to check if connection is still alive
-                try:
-                    await websocket.send_text(json.dumps({"type": "ping", "timestamp": datetime.utcnow().isoformat()}))
-                    continue
-                except:
-                    logger.info(f"WebSocket ping failed, connection closed for user {user.id}")
-                    break
-            
-            # 🚨 SEGURANÇA: Message size limit
-            if len(data) > max_message_size:
-                logger.warning(f"Message too large ({len(data)} bytes) from user {user.id}")
-                await websocket_manager.send_personal_message(
-                    {"type": "error", "message": "Message too large"},
-                    UUID(str(organization.id)),
-                    UUID(str(user.id)),
-                )
+
+            # Receive data with timeout protection
+            data = await _receive_websocket_data(websocket, user)
+            if data is None:
                 continue
-            
-            # Parse and handle message
-            try:
-                message = json.loads(data)
-                await handler_func(websocket, user, organization, message)
+
+            # Process message
+            success = await _process_websocket_message(
+                data, user, organization, handler_func, max_message_size
+            )
+
+            if success:
                 consecutive_errors = 0  # Reset error counter on success
-            except json.JSONDecodeError:
-                consecutive_errors += 1
-                logger.error(f"Invalid JSON from user {user.id} (error #{consecutive_errors})")
-                
-                if consecutive_errors >= max_consecutive_errors:
-                    logger.error(f"Too many JSON errors from user {user.id}, closing connection")
+            else:
+                # Handle JSON decode error
+                consecutive_errors, should_break = await _handle_json_decode_error(
+                    user, organization, consecutive_errors, max_consecutive_errors
+                )
+                if should_break:
                     await websocket.close(code=1003, reason="Too many malformed messages")
                     break
-                    
-                await websocket_manager.send_personal_message(
-                    {"type": "error", "message": "Invalid JSON format"},
-                    UUID(str(organization.id)),
-                    UUID(str(user.id)),
-                )
-                
+
         except WebSocketDisconnect:
-            logger.info(f"WebSocket client disconnected for user {user.id} in org {organization.id}")
+            logger.info(
+                f"WebSocket client disconnected for user {user.id} in org {organization.id}"
+            )
             break
-            
+
         except Exception as e:
-            consecutive_errors += 1
-            should_break = await _handle_websocket_disconnect_error(e, UUID(str(user.id)))
-            
-            # 🚨 SEGURANÇA: Circuit breaker - always break after max errors or any critical error
-            if should_break or consecutive_errors >= max_consecutive_errors:
-                if consecutive_errors >= max_consecutive_errors:
-                    logger.error(f"Circuit breaker triggered for user {user.id} after {consecutive_errors} errors")
+            consecutive_errors, should_break = await _handle_websocket_exception(
+                e, user, consecutive_errors, max_consecutive_errors
+            )
+            if should_break:
                 break
-                
+
             # Brief cooldown before retrying
             await asyncio.sleep(error_cooldown)
 
