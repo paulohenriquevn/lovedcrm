@@ -168,7 +168,7 @@
 - **Test Coverage**: 10/10 testes pipeline + 109/109 testes proxy passando
 - **Multi-tenancy**: Isolamento rigoroso validado em todos os cenários
 
-#### Story 1.2: Pipeline Kanban - Versão Completa
+#### Story 1.2: Pipeline Kanban - Versão Completa ⏳ EM ANDAMENTO
 
 **Descrição:** "Como Google Analytics do seu funil de vendas - métricas que mostram onde está o problema"
 - Analogia: Dashboard do seu carro que mostra combustível, velocidade, problemas - mas para vendas
@@ -179,7 +179,10 @@
 
 **Como** gestor comercial B2B
 **Quero** pipeline customizável com métricas em tempo real
-**Para** otimizar meu processo comercial
+**Para** otimizar meu processo comercial identificando gargalos
+
+- Status: ⏳ Plano criado em 08/01/2025 - Pronto para implementação
+- Plano: docs/plans/1.2-pipeline-kanban-versao-completa.md
 
 **Fluxo:** [Baseado em @docs/project/04-journeys.md - Extensão da Jornada "Pipeline Visual Kanban"]
 1. Gestor acessa pipeline completo e clica em "Filtros Avançados"

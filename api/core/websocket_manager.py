@@ -59,7 +59,7 @@ class WebSocketConnectionManager:
 
         # Calculate total connections
         total_connections = sum(len(ws_list) for ws_list in self.connections[org_str].values())
-        
+
         # Broadcast user joined event to organization
         await self.broadcast_to_organization(
             organization_id,
@@ -74,60 +74,85 @@ class WebSocketConnectionManager:
             exclude_user_id=user_id,
         )
 
-    def disconnect(self, organization_id: UUID, user_id: UUID, websocket: Optional[WebSocket] = None):
+    def _remove_user_connection(
+        self, org_str: str, user_str: str, websocket: Optional[WebSocket]
+    ) -> bool:
+        """Remove user connection and return whether user should be cleaned up."""
+        if websocket and websocket in self.connections[org_str][user_str]:
+            self.connections[org_str][user_str].remove(websocket)
+            return not self.connections[org_str][user_str]  # True if no connections left
+        else:
+            # Remove all connections for user
+            del self.connections[org_str][user_str]
+            return True
+
+    def _cleanup_user_data(self, org_str: str, user_str: str):
+        """Clean up user data from active users."""
+        if org_str in self.active_users and user_str in self.active_users[org_str]:
+            del self.active_users[org_str][user_str]
+
+    def _cleanup_empty_organization(self, org_str: str):
+        """Clean up empty organization rooms."""
+        if not self.connections[org_str]:
+            del self.connections[org_str]
+            if org_str in self.active_users:
+                del self.active_users[org_str]
+
+    def _broadcast_user_left_event(
+        self, organization_id: UUID, org_str: str, user_str: str, user_info: dict
+    ):
+        """Broadcast user left event to remaining organization members."""
+        if org_str not in self.connections:
+            return
+
+        remaining_total_connections = sum(
+            len(ws_list) for ws_list in self.connections[org_str].values()
+        )
+
+        # Use asyncio to run async function
+        import asyncio
+
+        try:
+            loop = asyncio.get_event_loop()
+            loop.create_task(
+                self.broadcast_to_organization(
+                    organization_id,
+                    {
+                        "type": "user_left",
+                        "user_id": user_str,
+                        "user_info": user_info,
+                        "timestamp": datetime.utcnow().isoformat(),
+                        "total_online": len(self.connections[org_str]),
+                        "total_connections": remaining_total_connections,
+                    },
+                )
+            )
+        except Exception as e:
+            logger.error(f"Failed to broadcast user_left event: {e}")
+
+    def disconnect(
+        self, organization_id: UUID, user_id: UUID, websocket: Optional[WebSocket] = None
+    ):
         """Disconnect user from organization WebSocket room."""
         org_str = str(organization_id)
         user_str = str(user_id)
 
-        if org_str in self.connections and user_str in self.connections[org_str]:
-            user_info = self.active_users.get(org_str, {}).get(user_str, {}).get("user_info", {})
+        if org_str not in self.connections or user_str not in self.connections[org_str]:
+            return
 
-            # Remove specific connection or all connections
-            if websocket and websocket in self.connections[org_str][user_str]:
-                self.connections[org_str][user_str].remove(websocket)
-                # If no connections left, clean up user
-                if not self.connections[org_str][user_str]:
-                    del self.connections[org_str][user_str]
-                    if org_str in self.active_users and user_str in self.active_users[org_str]:
-                        del self.active_users[org_str][user_str]
-            else:
-                # Remove all connections for user
-                del self.connections[org_str][user_str]
-                if org_str in self.active_users and user_str in self.active_users[org_str]:
-                    del self.active_users[org_str][user_str]
+        user_info = self.active_users.get(org_str, {}).get(user_str, {}).get("user_info", {})
 
-            # Clean up empty organization rooms
-            if not self.connections[org_str]:
-                del self.connections[org_str]
-                if org_str in self.active_users:
-                    del self.active_users[org_str]
+        # Remove connection and check if user should be cleaned up
+        should_cleanup_user = self._remove_user_connection(org_str, user_str, websocket)
 
-            logger.info(f"WebSocket disconnected: org={org_str} user={user_str}")
+        if should_cleanup_user:
+            self._cleanup_user_data(org_str, user_str)
 
-            # Broadcast user left event to remaining organization members
-            if org_str in self.connections:
-                remaining_total_connections = sum(len(ws_list) for ws_list in self.connections[org_str].values())
-                
-                # Use asyncio to run async function
-                import asyncio
+        self._cleanup_empty_organization(org_str)
+        logger.info(f"WebSocket disconnected: org={org_str} user={user_str}")
 
-                try:
-                    loop = asyncio.get_event_loop()
-                    loop.create_task(
-                        self.broadcast_to_organization(
-                            organization_id,
-                            {
-                                "type": "user_left",
-                                "user_id": user_str,
-                                "user_info": user_info,
-                                "timestamp": datetime.utcnow().isoformat(),
-                                "total_online": len(self.connections[org_str]),
-                                "total_connections": remaining_total_connections,
-                            },
-                        )
-                    )
-                except Exception as e:
-                    logger.error(f"Failed to broadcast user_left event: {e}")
+        # Broadcast user left event to remaining organization members
+        self._broadcast_user_left_event(organization_id, org_str, user_str, user_info)
 
     async def send_personal_message(
         self, message: Dict[str, Any], organization_id: UUID, user_id: UUID
@@ -139,20 +164,23 @@ class WebSocketConnectionManager:
         if org_str in self.connections and user_str in self.connections[org_str]:
             websockets = self.connections[org_str][user_str]  # Now a list
             failed_connections = []
-            
+
             for websocket in websockets:
                 try:
                     # 🚨 SEGURANÇA: Check connection state before sending
-                    if hasattr(websocket, 'client_state') and websocket.client_state.name in ["DISCONNECTED", "CLOSED"]:
+                    if hasattr(websocket, "client_state") and websocket.client_state.name in [
+                        "DISCONNECTED",
+                        "CLOSED",
+                    ]:
                         logger.warning(f"WebSocket already closed for user {user_str}, cleaning up")
                         failed_connections.append(websocket)
                         continue
-                        
+
                     await websocket.send_text(json.dumps(message))
                 except Exception as e:
                     logger.error(f"Failed to send personal message: {e}")
                     failed_connections.append(websocket)
-            
+
             # Clean up failed connections
             for failed_ws in failed_connections:
                 self.disconnect(organization_id, user_id, failed_ws)
@@ -183,10 +211,13 @@ class WebSocketConnectionManager:
             for websocket in websockets:
                 try:
                     # Check connection state before broadcasting
-                    if hasattr(websocket, 'client_state') and websocket.client_state.name in ["DISCONNECTED", "CLOSED"]:
+                    if hasattr(websocket, "client_state") and websocket.client_state.name in [
+                        "DISCONNECTED",
+                        "CLOSED",
+                    ]:
                         failed_connections.append((user_str, organization_id, websocket))
                         continue
-                    
+
                     await websocket.send_text(message_json)
                     successful_broadcasts += 1
                 except Exception as e:
@@ -220,11 +251,11 @@ class WebSocketConnectionManager:
     def get_organization_stats(self, organization_id: UUID) -> Dict[str, Any]:
         """Get real-time stats for organization."""
         org_str = str(organization_id)
-        
+
         # Count total connections across all users
         total_connections = 0
         if org_str in self.connections:
-            for user_id, websockets in self.connections[org_str].items():
+            for _user_id, websockets in self.connections[org_str].items():
                 total_connections += len(websockets)
 
         return {
