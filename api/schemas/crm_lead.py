@@ -5,7 +5,7 @@ Pydantic schemas for Lead API validation and serialization.
 
 from datetime import datetime
 from decimal import Decimal
-from typing import List, Optional
+from typing import Dict, List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, Field
@@ -154,3 +154,41 @@ class LeadAssignmentRequest(BaseModel):
         if not v or len(v) == 0:
             raise ValueError("lead_ids must contain at least one item")
         return v
+
+
+class ConversionMetricsResponse(BaseModel):
+    """Pipeline conversion metrics response."""
+
+    stage_counts: Dict[str, int] = Field(..., description="Count of leads per pipeline stage")
+    conversion_rate: float = Field(..., description="Conversion rate to closed deals (%)")
+    average_stage_times: Dict[str, float] = Field(
+        ..., description="Average days spent in each stage"
+    )
+    total_pipeline_value: Decimal = Field(..., description="Total value of all leads in pipeline")
+    closed_pipeline_value: Decimal = Field(..., description="Total value of closed leads")
+    total_leads: int = Field(..., description="Total number of leads")
+    period_start: Optional[datetime] = Field(None, description="Start date of metrics period")
+    period_end: Optional[datetime] = Field(None, description="End date of metrics period")
+
+
+class FilterOptionsResponse(BaseModel):
+    """Available filter options for pipeline."""
+
+    sources: List[str] = Field(..., description="Available lead sources")
+    assigned_users: List[Dict[str, str]] = Field(..., description="Users with assigned leads")
+    date_ranges: Dict[str, Optional[str]] = Field(..., description="Date range of leads")
+    available_tags: List[str] = Field(..., description="Available tags")
+    stages: List[str] = Field(..., description="Available pipeline stages")
+
+
+class PipelineFilters(BaseModel):
+    """Pipeline filter parameters."""
+
+    stages: Optional[List[PipelineStage]] = Field(None, description="Filter by pipeline stages")
+    sources: Optional[List[str]] = Field(None, description="Filter by lead sources")
+    assigned_users: Optional[List[UUID]] = Field(None, description="Filter by assigned users")
+    tags: Optional[List[str]] = Field(None, description="Filter by tags")
+    date_from: Optional[datetime] = Field(None, description="Filter from date")
+    date_to: Optional[datetime] = Field(None, description="Filter to date")
+    value_min: Optional[Decimal] = Field(None, ge=0, description="Minimum estimated value")
+    value_max: Optional[Decimal] = Field(None, ge=0, description="Maximum estimated value")

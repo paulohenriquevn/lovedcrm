@@ -3,6 +3,7 @@
 FastAPI router for Lead management endpoints with organizational isolation.
 """
 
+from datetime import datetime
 from typing import Optional
 from uuid import UUID
 
@@ -14,6 +15,8 @@ from api.models.crm_lead import PipelineStage
 from api.models.organization import Organization
 from api.models.user import User
 from api.schemas.crm_lead import (
+    ConversionMetricsResponse,
+    FilterOptionsResponse,
     LeadCreate,
     LeadFavoriteToggle,
     LeadListResponse,
@@ -207,3 +210,30 @@ async def delete_lead(
 
     # Return 204 No Content on successful deletion
     return None
+
+
+@router.get("/pipeline/metrics", response_model=ConversionMetricsResponse)
+async def get_pipeline_metrics(
+    start_date: Optional[datetime] = Query(None, description="Start date filter"),
+    end_date: Optional[datetime] = Query(None, description="End date filter"),
+    organization: Organization = Depends(get_current_organization),
+    db: Session = Depends(get_db),
+):
+    """Get pipeline conversion metrics and analytics.
+
+    **Required**: X-Org-Id header with valid organization ID.
+    """
+    service = CRMLeadService(db)
+    return service.get_conversion_metrics(organization, start_date, end_date)
+
+
+@router.get("/pipeline/filters", response_model=FilterOptionsResponse)
+async def get_pipeline_filters(
+    organization: Organization = Depends(get_current_organization), db: Session = Depends(get_db)
+):
+    """Get available filter options for pipeline.
+
+    **Required**: X-Org-Id header with valid organization ID.
+    """
+    service = CRMLeadService(db)
+    return service.get_filter_options(organization)

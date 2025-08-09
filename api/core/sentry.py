@@ -30,7 +30,25 @@ def setup_sentry() -> None:
     try:
         # 🔒 Multi-tenant data filtering
         def before_send(event, hint):
-            """Filter sensitive data before sending to Sentry."""
+            """Filter sensitive data and prevent loops before sending to Sentry."""
+            # 🚨 ANTI-LOOP: Filter out WebSocket loop errors that can cause Sentry recursion
+            if event.get("exception"):
+                for exc_info in event["exception"].get("values", []):
+                    exc_type = exc_info.get("type", "").lower()
+                    exc_value = exc_info.get("value", "").lower()
+                    
+                    # Filter WebSocket disconnection errors that cause loops
+                    websocket_loop_patterns = [
+                        "websocket is not connected",
+                        "need to call accept first", 
+                        "keyerror: 'transaction'",
+                        "internal error in sentry_sdk",
+                    ]
+                    
+                    if any(pattern in exc_value for pattern in websocket_loop_patterns):
+                        logger.debug(f"Filtering WebSocket loop error from Sentry: {exc_type}")
+                        return None  # Don't send to Sentry to prevent loops
+            
             # Remove sensitive data from event
             if "request" in event:
                 headers = event["request"].get("headers", {})

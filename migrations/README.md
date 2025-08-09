@@ -1,4 +1,4 @@
-# SQL Migrations - Tudo organizado em uma pasta
+# SQL Migrations & Seeds System - Loved CRM
 
 ## **COMANDOS DISPONÍVEIS:**
 
@@ -7,222 +7,255 @@
 ```bash
 ./migrate check       # Ver migrações pendentes
 ./migrate apply       # Aplicar migrações
-./migrate status      # Ver status
-./migrate init        # Criar banco do zero (DEV)
+./migrate status      # Ver status atual
+./migrate init        # Criar banco do zero (⚠️ APAGA TUDO)
 ```
 
-### **Dados:**
+### **Sistema de Seeds:**
 
 ```bash
-./migrate test-setup  # Carregar dados de teste (E2E)
-./migrate dev-seeds   # Carregar seeds de desenvolvimento
+# Seeds por ambiente
+PGPASSWORD=postgres psql -h localhost -p 5434 -U postgres -d saas_test -f seeds/dev/001_seed_base_orgs.sql
+PGPASSWORD=postgres psql -h localhost -p 5434 -U postgres -d saas_test -f seeds/dev/002_seed_dev_users.sql
+
+# Seeds de produção (apenas billing plans)
+PGPASSWORD=postgres psql -h localhost -p 5434 -U postgres -d saas_test -f seeds/prod/001_seed_production_base.sql
+
+# Seeds de teste (dados mínimos)
+PGPASSWORD=postgres psql -h localhost -p 5434 -U postgres -d saas_test -f seeds/test/001_seed_test_users.sql
+```
+
+### **Limpeza:**
+
+```bash
 ./migrate clean       # Limpar dados (mantém schema)
 ```
 
-### **Como adicionar evolução:**
+## **ESTRUTURA ATUAL (2025-08-09):**
 
-#### 1. **Criar arquivo SQL:**
+### **🎯 Schema Consolidado:**
+- `001_consolidated_schema.sql` - **SCHEMA COMPLETO** com todas as 38 tabelas do CRM
 
+### **🌱 Sistema de Seeds Organizado:**
+```
+seeds/
+├── dev/                          # Desenvolvimento
+│   ├── 001_seed_base_orgs.sql   # 3 organizações completas
+│   └── 002_seed_dev_users.sql   # 3 usuários com ownership
+├── test/                         # Testes E2E
+│   └── 001_seed_test_users.sql  # Dados mínimos para testes
+└── prod/                         # Produção
+    └── 001_seed_production_base.sql # Apenas billing plans
+```
+
+### **📚 Histórico Preservado:**
+```
+legacy_migrations/               # Backup das 14 migrations originais
+├── 001_complete_initial_schema.sql
+├── 002_crm_tables_schema.sql
+├── ...
+└── 014_pipeline_performance_index.sql
+```
+
+## **COMO ADICIONAR NOVA MIGRAÇÃO:**
+
+### 1. **Criar arquivo numerado:**
 ```bash
-# 002_add_user_age.sql
+# 002_add_new_feature.sql
 ```
 
-#### 2. **Escrever SQL puro:**
-
+### 2. **Escrever SQL com tracking obrigatório:**
 ```sql
--- 002_add_user_age.sql
--- Add age field to users
+-- 002_add_new_feature.sql
+-- Description: Add new feature to system
 
-ALTER TABLE users ADD COLUMN age INTEGER;
-CREATE INDEX IF NOT EXISTS idx_users_age ON users(age);
+-- Your changes here
+ALTER TABLE users ADD COLUMN new_field VARCHAR(100);
+CREATE INDEX IF NOT EXISTS idx_users_new_field ON users(new_field);
 
--- Record migration (SEMPRE no final)
+-- 🚨 OBRIGATÓRIO: Version tracking
 INSERT INTO schema_versions (version, description)
-VALUES (2, 'Add age field to users');
+VALUES (2, 'Add new feature to system')
+ON CONFLICT (version) DO NOTHING;
 ```
 
-#### 3. **Aplicar:**
-
+### 3. **Aplicar:**
 ```bash
 ./migrate apply
 ```
 
-## **VANTAGENS para LLM:**
+## **SISTEMA DE SEEDS - DETALHADO:**
 
-### **Alembic (complexo):**
+### **🌱 Seeds de Desenvolvimento (dev/):**
 
-```python
-def upgrade():
-    op.add_column('users', sa.Column('age', sa.Integer()))
-    op.create_index('idx_users_age', 'users', ['age'])
-```
+**001_seed_base_orgs.sql:**
+- 3 organizações completas para desenvolvimento
+- IDs fixos para testes determinísticos
+- Correção aplicada: sem `owner_id NULL` no INSERT
 
-### **Nosso sistema (simples):**
+**002_seed_dev_users.sql:**
+- 3 usuários com dados brasileiros realistas
+- Senha padrão: `DevPassword123!`
+- Ownership automático das organizações
+- Correção aplicada: sem coluna `verified_at` inexistente
 
-```sql
-ALTER TABLE users ADD COLUMN age INTEGER;
-CREATE INDEX idx_users_age ON users(age);
-INSERT INTO schema_versions VALUES (2, 'Add age field');
-```
+### **🧪 Seeds de Teste (test/):**
+- Dados mínimos para testes E2E
+- Usuário padrão: `test@example.com`
+- Organização padrão para isolamento
 
-## **Exemplos de evolução:**
+### **🏭 Seeds de Produção (prod/):**
+- **APENAS** billing plans (segurança)
+- Usuários devem se registrar normalmente
+- Setup mínimo e seguro
+
+### **📊 Tracking de Seeds:**
+- Tabela `seed_versions` rastreia aplicações
+- Versionamento independente por ambiente
+- Evita aplicações duplicadas com `ON CONFLICT`
+
+## **VANTAGENS DO SISTEMA:**
+
+### **Para LLMs:**
+- **SQL Puro** - linguagem universal, sem abstrações
+- **Numeração simples** - 001, 002, 003...
+- **Zero dependências** Python/Alembic/Django
+- **Idempotente** - seguro aplicar múltiplas vezes
+
+### **Para Desenvolvimento:**
+- **Tudo em uma pasta** - organização perfeita
+- **Seeds organizados** - dev/test/prod separados
+- **Histórico preservado** - legacy_migrations/ como backup
+- **Hot updates** - aplicar sem restart (2s vs 45s)
+
+### **Para Produção:**
+- **Schema consolidado** - deploy em uma única migração
+- **Seeds seguros** - produção apenas com dados essenciais
+- **Rastreamento completo** - schema_versions + seed_versions
+
+## **EXEMPLOS DE EVOLUÇÃO:**
 
 ### **Adicionar campo:**
-
 ```sql
--- migrations/003_add_user_bio.sql
+-- 002_add_user_bio.sql
 ALTER TABLE users ADD COLUMN bio TEXT;
-INSERT INTO schema_versions VALUES (3, 'Add bio field');
+INSERT INTO schema_versions VALUES (2, 'Add bio field to users');
 ```
 
-### **Criar tabela:**
-
+### **Criar nova tabela:**
 ```sql
--- 004_create_posts.sql
-CREATE TABLE posts (
+-- 003_create_notifications.sql
+CREATE TABLE notifications (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL,
     content TEXT,
-    user_id UUID REFERENCES users(id),
+    is_read BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_posts_user_id ON posts(user_id);
-INSERT INTO schema_versions VALUES (4, 'Create posts table');
+CREATE INDEX idx_notifications_org_user ON notifications(organization_id, user_id);
+CREATE INDEX idx_notifications_unread ON notifications(user_id, is_read) WHERE is_read = false;
+
+INSERT INTO schema_versions VALUES (3, 'Create notifications system');
 ```
 
-### **Alterar campo:**
-
+### **Adicionar seed para nova funcionalidade:**
 ```sql
--- 005_expand_user_email.sql
-ALTER TABLE users ALTER COLUMN email TYPE VARCHAR(500);
-INSERT INTO schema_versions VALUES (5, 'Expand email field size');
+-- seeds/dev/003_seed_notifications.sql
+INSERT INTO notifications (organization_id, user_id, title, content)
+VALUES 
+('01010101-0101-0101-0101-010101010101', '11111111-1111-1111-1111-111111111111', 
+ 'Bem-vindo ao CRM', 'Sua conta foi configurada com sucesso!');
+
+INSERT INTO seed_versions (version, description, environment)
+VALUES (3, 'Development notifications', 'dev')
+ON CONFLICT (version, environment) DO NOTHING;
 ```
 
-## **Regras OBRIGATÓRIAS:**
+## **REGRAS OBRIGATÓRIAS:**
 
-1. **Arquivos numerados:** `001_`, `002_`, `003_`...
-2. **SQL puro:** Sem Python, sem complexidade
-3. **SEMPRE terminar com:** `INSERT INTO schema_versions` (CRÍTICO!)
-4. **Idempotente:** Use `IF NOT EXISTS` quando possível
-5. **Uma evolução por arquivo:** Cada arquivo = uma mudança
+### **📏 Para Migrations:**
+1. **Numeração sequencial:** `001_`, `002_`, `003_`...
+2. **SQL puro:** Sem abstrações, sem Python
+3. **SEMPRE incluir version tracking:**
+   ```sql
+   INSERT INTO schema_versions (version, description)
+   VALUES (X, 'Description') ON CONFLICT (version) DO NOTHING;
+   ```
+4. **Idempotente:** Use `IF NOT EXISTS`, `ON CONFLICT` quando possível
+5. **Uma mudança por arquivo:** Atomic changes
 
-### **REGRA CRÍTICA - VERSION TRACKING:**
+### **🌱 Para Seeds:**
+1. **Organização por ambiente:** dev/test/prod separados
+2. **Versionamento:** Sempre usar `seed_versions` table
+3. **IDs determinísticos:** UUIDs fixos para dev/test
+4. **Segurança em prod:** Apenas dados essenciais
+5. **Conflito seguro:** `ON CONFLICT ... DO NOTHING`
 
-**TODA migration DEVE terminar com:**
+## **TROUBLESHOOTING:**
 
+### **🚨 "Database needs updates" permanente:**
+**CAUSA:** Migration sem version tracking
+**SOLUÇÃO:** Adicionar ao final da migration:
 ```sql
--- Record migration version (CRITICAL - always include this!)
 INSERT INTO schema_versions (version, description)
-VALUES (X, 'Description of changes')
-ON CONFLICT (version) DO NOTHING;
+VALUES (X, 'Description') ON CONFLICT (version) DO NOTHING;
 ```
 
-**SEM ISSO:** Sistema fica com "Database needs updates" forever
-**COM ISSO:** Sistema reconhece migration como aplicada
+### **❌ "Column already exists":**
+**CAUSA:** Migration aplicada mas não registrada (normal)
+**SOLUÇÃO:** Apenas registrar versão:
+```sql
+INSERT INTO schema_versions (version, description)
+VALUES (X, 'Description') ON CONFLICT (version) DO NOTHING;
+```
 
-## **Para LLM:**
+### **🔍 Seeds não aplicando:**
+**VERIFICAR:**
+1. Path correto: `seeds/environment/file.sql`
+2. Tabela `seed_versions` existe na migration principal
+3. Comando psql com parâmetros corretos
 
-**Pergunta:** "Adicione campo birth_date na tabela users"
+### **🗃️ Migration não encontrada:**
+**VERIFICAR:**
+1. Numeração sequencial (`001_`, `002_`)
+2. Arquivo na pasta `migrations/`
+3. Permissão de execução: `chmod +x migrate`
+
+## **HISTÓRICO DE CONSOLIDAÇÃO:**
+
+**🔄 2025-08-09:** Sistema completamente consolidado e limpo:
+- ✅ 14 migrations legacy → 1 migration consolidada
+- ✅ Seeds organizados por ambiente (dev/test/prod)
+- ✅ Sistema de versionamento duplo (schema + seeds)
+- ✅ Todos os testes passando após limpeza
+- ✅ Arquivos obsoletos removidos
+
+**📊 Resultado:**
+- **Antes:** 23 arquivos misturados na pasta migrations
+- **Depois:** 4 arquivos essenciais + estrutura organizada
+- **Benefício:** Deploy mais rápido, manutenção mais simples, seeds organizados
+
+## **PARA LLM - COMANDO RÁPIDO:**
+
+**Usuário:** "Adicione tabela X com campo Y"
 
 **Resposta:**
-
 ```sql
--- 006_add_birth_date.sql
-ALTER TABLE users ADD COLUMN birth_date DATE;
-INSERT INTO schema_versions VALUES (6, 'Add birth_date to users');
+-- 00X_add_table_x.sql
+CREATE TABLE x (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE,
+    y VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX idx_x_organization_id ON x(organization_id);
+INSERT INTO schema_versions VALUES (X, 'Add table x with field y');
 ```
 
-**Aplicar:**
+**Aplicar:** `./migrate apply`
 
-```bash
-./migrate apply
-```
-
-**Pronto!**
-
-## **Arquivos na pasta (CONSOLIDADA - 2025-08-03):**
-
-### **Migrações numeradas:**
-
-- `001_complete_initial_schema.sql` - **CONSOLIDATED:** Schema completo (users, orgs, invites, billing)
-- `002_...` - Próximas evoluções (futuras)
-
-### **Migrations Legacy (Backup):**
-
-- `legacy/001_initial_schema.sql` - Schema inicial original
-- `legacy/002_add_timestamps_to_organization_members.sql`
-- `legacy/003_add_password_reset_and_email_verification_fields.sql`
-- `legacy/004_create_organization_invites.sql`
-- `legacy/005_create_billing_tables.sql`
-- `legacy/006_add_must_change_password_field.sql`
-
-### **Scripts utilitários:**
-
-- `migrate` - Script principal
-- `test-setup.sql` - Dados para testes E2E
-- `dev-seeds.sql` - Seeds de desenvolvimento
-- `common-seeds.sql` - Dados base comuns
-- `clean-db.sql` - Limpar dados
-
-### **Documentação:**
-
-- `README.md` - Este guia
-- `TEMPLATE_migration.sql` - Template para novas migrations
-
-> **NOTA IMPORTANTE:** As migrations foram consolidadas para simplificar novos deployments. O schema agora é criado em uma única migration otimizada que inclui todas as funcionalidades essenciais.
-
-## **TROUBLESHOOTING**
-
-### **Problema: "Database needs updates" não sai**
-
-**CAUSA:** Migration sem version tracking
-**SOLUÇÃO:**
-
-```sql
--- Adicione no final da migration:
-INSERT INTO schema_versions (version, description)
-VALUES (X, 'Description')
-ON CONFLICT (version) DO NOTHING;
-```
-
-**COMO CORRIGIR:**
-
-```bash
-# 1. Identifique a migration problemática
-./migrate status
-
-# 2. Edite o arquivo e adicione version tracking
-# 3. Re-aplique
-./migrate apply
-```
-
-### **Problema: Erros "column already exists"**
-
-**CAUSA:** Migration aplicada mas não registrada
-**SOLUÇÃO:** Normal - apenas registre a versão
-
-```sql
--- Execute apenas:
-INSERT INTO schema_versions (version, description)
-VALUES (X, 'Description')
-ON CONFLICT (version) DO NOTHING;
-```
-
-### **Problema: Migration não encontrada**
-
-**VERIFICAR:**
-
-1. Arquivo numerado corretamente? (`001_`, `002_`)
-2. Está na pasta `migrations/`?
-3. Tem permissão de execução para `./migrate`?
-
-## **Por que é melhor:**
-
-- **TUDO EM UMA PASTA** - organização perfeita
-- **SQL PURO** - linguagem universal
-- **ZERO dependências** Python
-- **Numeração simples** - 1, 2, 3...
-- **Scripts completos** - migrações + dados + testes
-- **LLM friendly** - qualquer LLM domina SQL
-- **HOT UPDATES** - aplicar sem restart (2s vs 45s)
+**✅ Pronto!**

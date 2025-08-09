@@ -5,7 +5,7 @@
 
 import { useState, useCallback } from 'react'
 
-import { usePipelineWebSocket } from '@/hooks/use-pipeline-websocket'
+import { usePipelineWebSocketShared } from '@/hooks/use-pipeline-websocket-shared'
 
 import {
   WebSocketLeadEvent,
@@ -26,19 +26,55 @@ interface WebSocketHandlersReturn {
 }
 
 export function usePipelineWebSocketHandlers(
-  reloadLeadsData: () => Promise<void>
+  reloadLeadsData: () => Promise<void>,
+  stages: Array<any>,
+  setStages: React.Dispatch<React.SetStateAction<Array<any>>>
 ): WebSocketHandlersReturn {
   const [realtimeUsers, setRealtimeUsers] = useState<
     Array<{ user_id?: string; full_name?: string }>
   >([])
 
-  // Memoize callbacks to prevent recreation on every render
   const onLeadStageChanged = useCallback(
-    (_data: WebSocketLeadEvent) => {
-      // Real-time lead stage changed
-      void reloadLeadsData()
+    (data: WebSocketLeadEvent) => {
+      // Update stages directly without full reload for better performance
+      if (data.lead && data.lead.id) {
+        setStages(prevStages => {
+          const newStages = [...prevStages]
+          
+          // Remove lead from all stages first
+          newStages.forEach(stage => {
+            stage.leads = stage.leads.filter((lead: any) => lead.id !== data.lead.id)
+            stage.count = stage.leads.length
+          })
+          
+          // Add lead to the new stage - match by stage value
+          const targetStage = newStages.find(stage => {
+            const stageValue = data.lead.stage?.toLowerCase()
+            return (
+              stage.id?.toLowerCase() === stageValue ||
+              stage.name?.toLowerCase() === stageValue ||
+              stage.name?.toLowerCase().includes(stageValue) ||
+              (stageValue === 'lead' && stage.name?.toLowerCase().includes('lead')) ||
+              (stageValue === 'contato' && stage.name?.toLowerCase().includes('contato')) ||
+              (stageValue === 'proposta' && stage.name?.toLowerCase().includes('proposta')) ||
+              (stageValue === 'negociacao' && stage.name?.toLowerCase().includes('negociação')) ||
+              (stageValue === 'fechado' && stage.name?.toLowerCase().includes('fechado'))
+            )
+          })
+          
+          if (targetStage) {
+            targetStage.leads.push(data.lead)
+            targetStage.count = targetStage.leads.length
+          }
+          
+          return newStages
+        })
+      } else {
+        // Fallback to full reload if data is incomplete
+        void reloadLeadsData()
+      }
     },
-    [reloadLeadsData]
+    [setStages, reloadLeadsData]
   )
 
   const onLeadCreated = useCallback(
@@ -77,7 +113,7 @@ export function usePipelineWebSocketHandlers(
     setRealtimeUsers(data.active_users ?? [])
   }, [])
 
-  const { isConnected, sendMessage, activeUsers, isPolling } = usePipelineWebSocket({
+  const { isConnected, sendMessage, activeUsers, isPolling } = usePipelineWebSocketShared({
     onLeadStageChanged,
     onLeadCreated,
     onLeadUpdated,
