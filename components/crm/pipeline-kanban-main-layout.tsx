@@ -46,8 +46,8 @@ interface PipelineHandlers {
 
 interface PipelineKanbanLayoutProps {
   className?: string
-  activeTab: 'kanban' | 'metrics'
-  onTabChange: (tab: 'kanban' | 'metrics') => void
+  activeTab: 'kanban' | 'metrics' | 'advanced'
+  onTabChange: (tab: 'kanban' | 'metrics' | 'advanced') => void
   currentFilters: PipelineFiltersState
   onFiltersChange: (filters: PipelineFiltersState) => void
   filteredStages: PipelineStageDisplay[] | null

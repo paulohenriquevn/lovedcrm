@@ -192,3 +192,76 @@ class PipelineFilters(BaseModel):
     date_to: Optional[datetime] = Field(None, description="Filter to date")
     value_min: Optional[Decimal] = Field(None, ge=0, description="Minimum estimated value")
     value_max: Optional[Decimal] = Field(None, ge=0, description="Maximum estimated value")
+
+
+class AdvancedFiltersSchema(BaseModel):
+    """Advanced filtering schema for pipeline metrics."""
+
+    start_date: Optional[str] = Field(None, description="Start date filter (YYYY-MM-DD)")
+    end_date: Optional[str] = Field(None, description="End date filter (YYYY-MM-DD)")
+    stages: List[str] = Field(default_factory=list, description="Pipeline stages to include")
+    sources: List[str] = Field(default_factory=list, description="Lead sources to include")
+    assigned_users: List[str] = Field(default_factory=list, description="Assigned user IDs to include")
+    tags: List[str] = Field(default_factory=list, description="Tags to include")
+    value_min: Optional[float] = Field(None, ge=0, description="Minimum estimated value")
+    value_max: Optional[float] = Field(None, ge=0, description="Maximum estimated value")
+
+
+class StageDistribution(BaseModel):
+    """Stage distribution metrics."""
+
+    stage: str = Field(..., description="Pipeline stage name")
+    count: int = Field(..., description="Number of leads in stage")
+    percentage: float = Field(..., description="Percentage of total leads")
+    total_value: Decimal = Field(..., description="Total estimated value in stage")
+
+
+class ConversionFunnelStage(BaseModel):
+    """Conversion funnel stage data."""
+
+    stage: str = Field(..., description="Pipeline stage name")
+    leads_count: int = Field(..., description="Number of leads entering stage")
+    conversion_rate: float = Field(..., description="Conversion rate from previous stage (%)")
+    drop_off_rate: float = Field(..., description="Drop-off rate from previous stage (%)")
+    avg_time_days: float = Field(..., description="Average time spent in stage (days)")
+
+
+class BottleneckAnalysis(BaseModel):
+    """Bottleneck analysis data."""
+
+    detected: bool = Field(..., description="Whether bottleneck was detected")
+    stage: Optional[str] = Field(None, description="Stage with bottleneck")
+    avg_time_days: Optional[float] = Field(None, description="Average time in bottleneck stage")
+    leads_stuck: Optional[int] = Field(None, description="Number of leads stuck in stage")
+    recommendations: List[str] = Field(default_factory=list, description="Improvement recommendations")
+
+
+class TrendingData(BaseModel):
+    """Trending metrics data."""
+
+    period: str = Field(..., description="Time period (e.g., 'Last 30 days')")
+    leads_created: int = Field(..., description="New leads created in period")
+    leads_closed: int = Field(..., description="Leads closed in period")
+    conversion_trend: float = Field(..., description="Conversion rate trend (%)")
+    value_trend: Decimal = Field(..., description="Pipeline value trend")
+
+
+class ExecutiveSummary(BaseModel):
+    """Executive summary metrics."""
+
+    total_pipeline_value: Decimal = Field(..., description="Total pipeline value (R$)")
+    monthly_recurring_revenue: Decimal = Field(..., description="Monthly recurring revenue (R$)")
+    avg_deal_size: Decimal = Field(..., description="Average deal size (R$)")
+    conversion_rate: float = Field(..., description="Overall conversion rate (%)")
+    avg_sales_cycle_days: float = Field(..., description="Average sales cycle duration (days)")
+    top_performing_source: Optional[str] = Field(None, description="Best performing lead source")
+
+
+class AdvancedMetricsResponse(BaseModel):
+    """Advanced pipeline metrics response."""
+
+    stage_distribution: List[StageDistribution] = Field(..., description="Distribution by stage")
+    conversion_funnel: List[ConversionFunnelStage] = Field(..., description="Conversion funnel analysis")
+    bottleneck_analysis: BottleneckAnalysis = Field(..., description="Bottleneck detection results")
+    trending_data: List[TrendingData] = Field(..., description="Trending metrics over time")
+    executive_summary: ExecutiveSummary = Field(..., description="Executive summary metrics")

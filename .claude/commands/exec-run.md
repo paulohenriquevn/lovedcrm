@@ -36,33 +36,39 @@
 #### **🏗️ VERTICAL vs HORIZONTAL - EXEMPLO PRÁTICO**
 
 **❌ IMPLEMENTAÇÃO HORIZONTAL (INCORRETA)**:
+
 ```
 Story 1: Criar TODAS as tabelas do database
-Story 2: Criar TODAS as APIs do backend  
+Story 2: Criar TODAS as APIs do backend
 Story 3: Criar TODAS as telas do frontend
 Story 4: Integrar TUDO (reza para funcionar)
 ```
+
 **Resultado**: Usuário não consegue usar NADA até Story 4 ❌
 
 **✅ IMPLEMENTAÇÃO VERTICAL (CORRETA - NOSSA METODOLOGIA)**:
+
 ```
 Story 1.1: Pipeline Kanban COMPLETO (DB + API + UI + Tests)
   ↳ Usuário pode drag & drop leads entre stages ✅
-  
-Story 1.2: WebSocket Real-time COMPLETO (Backend + Frontend)  
+
+Story 1.2: WebSocket Real-time COMPLETO (Backend + Frontend)
   ↳ Usuário vê updates em tempo real ✅
-  
+
 Story 2.1: WhatsApp Integration COMPLETO (DB + API + UI)
   ↳ Usuário pode enviar mensagens WhatsApp ✅
 ```
+
 **Resultado**: Usuário tem VALOR REAL após cada story ✅
 
 #### **🎯 ANALOGIA SIMPLES: CONSTRUÇÃO DE CASA**
 
 **❌ Horizontal**: Fazer TODA fundação → TODO cimento → TODA fiação → TODA pintura
+
 - Você não pode morar até TUDO estar pronto (6 meses)
 
-**✅ Vertical**: Construir UM QUARTO COMPLETO → Depois OUTRO QUARTO COMPLETO  
+**✅ Vertical**: Construir UM QUARTO COMPLETO → Depois OUTRO QUARTO COMPLETO
+
 - Você pode morar no primeiro quarto enquanto constrói o segundo (1 mês)
 
 #### **🏗️ ARQUITETURA DE IMPLEMENTAÇÃO VERTICAL**
@@ -76,7 +82,7 @@ Frontend Layer:
   - API Integration (Services)
   - Navigation & Routing
 
-Backend Layer:  
+Backend Layer:
   - Database Models (SQLAlchemy)
   - API Endpoints (FastAPI)
   - Business Logic (Services)
@@ -84,7 +90,7 @@ Backend Layer:
 
 Integration Layer:
   - End-to-End Tests
-  - Multi-tenant validation  
+  - Multi-tenant validation
   - Performance optimization
   - Security compliance
 
@@ -100,7 +106,7 @@ Imagine um cirurgião que:
 
 - **Segue protocolo RIGOROSO** (plano do exec-story.md)
 - **Completa PROCEDIMENTO INTEIRO** (vertical slice completa)
-- **Valida CADA passo** antes de prosseguir  
+- **Valida CADA passo** antes de prosseguir
 - **Para IMEDIATAMENTE** se algo não está conforme esperado
 - **Não improvisa** - apenas executa o que foi planejado
 - **Documenta TUDO** para auditoria posterior
@@ -119,7 +125,7 @@ Imagine um cirurgião que:
    -- Criar/atualizar tabelas crm_leads + pipeline stages
    -- RESULTADO: Database ready para kanban
    ```
-4. **STEP 2**: Backend APIs + Services  
+4. **STEP 2**: Backend APIs + Services
    ```python
    # Implementar /crm/leads/{id}/stage endpoint
    # RESULTADO: API funcional para mover leads
@@ -142,14 +148,13 @@ Imagine um cirurgião que:
 #### **💎 VALOR ENTREGUE AO USUÁRIO FINAL**
 
 ```yaml
-Antes da Execução:
-  ❌ Usuário NÃO pode gerenciar pipeline de vendas
+Antes da Execução: ❌ Usuário NÃO pode gerenciar pipeline de vendas
   ❌ Leads ficam desorganizados
   ❌ Sem visualização de funil de vendas
 
 Após Execução (Valor Real Entregue):
   ✅ Usuário pode drag & drop leads entre stages
-  ✅ Pipeline visual funcionando completamente  
+  ✅ Pipeline visual funcionando completamente
   ✅ Funil de vendas organizado e utilizável
   ✅ Workflow de vendas melhorado IMEDIATAMENTE
 ```
@@ -163,7 +168,7 @@ Após Execução (Valor Real Entregue):
 - **Step-by-Step**: Cada passo validado antes do próximo
 - **Integration-First**: Testa integração entre camadas em cada step
 - **Fail-Safe**: Para imediatamente em qualquer erro
-- **Roll-back Ready**: Pode reverter mudanças se necessário  
+- **Roll-back Ready**: Pode reverter mudanças se necessário
 - **100% Rastreável**: Cada ação documentada e validada
 - **User-Centric**: Foco em entregar valor utilizável, não código isolado
 
@@ -207,7 +212,7 @@ prettier --check .                   # Code formatting check
 
 # Plugins ativos (baseado no package.json):
 - @typescript-eslint/eslint-plugin   # TypeScript specific rules
-- eslint-plugin-react-hooks         # React hooks rules  
+- eslint-plugin-react-hooks         # React hooks rules
 - eslint-plugin-security            # Security vulnerabilities
 - eslint-plugin-jsx-a11y            # Accessibility compliance
 - eslint-plugin-import              # Import/export validation
@@ -226,7 +231,7 @@ flake8                              # Style guide enforcement
 
 # Full backend validation (npm run lint:backend:full):
 black . --check                     # Formatting validation
-isort . --check                     # Import organization  
+isort . --check                     # Import organization
 flake8                              # Style + complexity
 mypy .                              # Static type checking
 bandit -r . -f txt                  # Security vulnerability scan
@@ -240,7 +245,7 @@ bandit -r . -f txt --severity-level medium --confidence-level medium
 
 # Configurações ativas:
 - Severity: Medium and above (blocks high/medium risks)
-- Confidence: Medium and above (reduces false positives) 
+- Confidence: Medium and above (reduces false positives)
 - Format: Text output for human readable reports
 - Recursive: Scans all Python files in project
 ```
@@ -252,7 +257,7 @@ bandit -r . -f txt --severity-level medium --confidence-level medium
 next lint --fix                     # Auto-fix ESLint issues
 prettier --write .                  # Auto-format all files
 
-# Backend Auto-fix  
+# Backend Auto-fix
 autoflake --remove-all-unused-imports --remove-unused-variables --in-place --recursive .
 black .                             # Apply black formatting
 isort .                             # Sort imports correctly
@@ -263,21 +268,21 @@ isort .                             # Sort imports correctly
 ```yaml
 🚨 OBRIGATÓRIO ANTES DE QUALQUER STEP:
 
-✅ Frontend Linting: 
+✅ Frontend Linting:
   - Bash "npm run lint:frontend" → DEVE retornar exit code 0
   - next lint: 0 errors, warnings permitidos se não críticos
   - prettier --check: Todos arquivos formatados corretamente
-  
+
 ✅ Backend Linting:
-  - Bash "npm run lint:backend" → DEVE retornar exit code 0  
+  - Bash "npm run lint:backend" → DEVE retornar exit code 0
   - black --check: Código formatado conforme PEP 8
   - isort --check: Imports organizados corretamente
   - flake8: 0 violações de style guide, complexity < 10
-  
+
 ✅ Security Scan:
   - Bash "npm run security" → DEVE retornar sem high/medium issues
   - bandit: 0 vulnerabilidades medium+ detectadas
-  
+
 ✅ Type Checking:
   - Bash "npm run typecheck" → DEVE retornar exit code 0
   - tsc --noEmit: 0 erros de TypeScript
@@ -290,12 +295,12 @@ isort .                             # Sort imports correctly
 
 Frontend Failures:
   - ESLint errors (não warnings): Erro de sintaxe, hooks, security
-  - Prettier check failed: Formatação inconsistente  
+  - Prettier check failed: Formatação inconsistente
   - TypeScript errors: Tipos inválidos, imports quebrados
   - Accessibility violations: jsx-a11y critical issues
   - Security violations: eslint-plugin-security findings
 
-Backend Failures:  
+Backend Failures:
   - Black formatting errors: Código não formatado conforme PEP 8
   - Import sorting errors: isort violations
   - Flake8 violations: Style guide, complexity > 10, undefined names
@@ -314,16 +319,16 @@ Auto-Fix Availability:
 Step X.1: Pre-Step Validation
   - Execute linters ANTES de implementar
   - Status: PASS → Continuar | FAIL → Parar e corrigir
-  
-Step X.2: Implementation  
+
+Step X.2: Implementation
   - Implementar funcionalidade
   - Escrever código seguindo padrões dos linters
-  
+
 Step X.3: Post-Step Validation
   - Execute linters APÓS implementar
   - npm run fix: Tentar auto-correção se necessário
   - Status: PASS → Próximo step | FAIL → Rollback step
-  
+
 Step X.4: Final Quality Gate
   - npm run ci:quick: Validação completa
   - Todos linters + typecheck + security DEVEM passar
@@ -381,7 +386,7 @@ Antes de iniciar qualquer execução, o agente DEVE exibir:
 🧠 ANALISANDO CODEBASE REAL E VALIDANDO CRITÉRIOS DE EXECUÇÃO...
 
 ✅ CODEBASE ANALISADO: requirements.txt + package.json + migrations status LIDOS
-✅ ARQUIVOS MAPEADOS: api/models/ + api/services/ + components/ui/ CATALOGADOS  
+✅ ARQUIVOS MAPEADOS: api/models/ + api/services/ + components/ui/ CATALOGADOS
 ✅ PLANO ENCONTRADO: docs/plans/[ID]-[nome].md
 ✅ CONTEXTUALIZAÇÃO: Plano vs estado real comparado e adaptado
 ✅ DEPENDENCIES: Versões planejadas vs reais validadas
@@ -485,28 +490,28 @@ Step 0.1a: Leitura Obrigatória de Estado Atual (CRÍTICO)
   - ✅ **DEVE**: Read RULES.md - VALIDAR compliance total com regras do template
   - ✅ **DEVE**: Read migrations/README.md - ENTENDER sistema de migrações e seeds
   - ✅ **DEVE**: LS tests/e2e/api/ - MAPEAR testes existentes para validação
-  
+
   # DEPENDÊNCIAS E VERSÕES (OBRIGATÓRIOS)
   - ✅ **DEVE**: Read requirements.txt - LISTAR todas bibliotecas Python + versões REAIS
-  - ✅ **DEVE**: Read package.json - LISTAR todas bibliotecas Frontend + versões REAIS  
-  
+  - ✅ **DEVE**: Read package.json - LISTAR todas bibliotecas Frontend + versões REAIS
+
   # ESTADO DO SCHEMA E DATABASE (OBRIGATÓRIOS)
   - ✅ **DEVE**: Bash "cd migrations && ./migrate status" - VERIFICAR versão atual do schema
   - ✅ **DEVE**: Read migrations/001_consolidated_schema.sql (parcial) - ENTENDER estrutura DB
-  
+
   # ARQUITETURA BACKEND (OBRIGATÓRIOS)
   - ✅ **DEVE**: LS api/models/ - MAPEAR todos models existentes REAIS
   - ✅ **DEVE**: LS api/services/ - MAPEAR todos services existentes REAIS
   - ✅ **DEVE**: LS api/routers/ - MAPEAR todos routers existentes REAIS
-  
+
   # ARQUITETURA FRONTEND (OBRIGATÓRIOS)
   - ✅ **DEVE**: LS components/ui/ - CATALOGAR componentes shadcn/ui disponíveis REAIS
   - ✅ **DEVE**: LS app/[locale]/admin/ - MAPEAR estrutura de rotas existentes REAIS
-  
+
   # VALIDAÇÃO AMBIENTE (OBRIGATÓRIOS)
   - ✅ **DEVE**: Bash "git status" - VERIFICAR estado limpo do repositório
   - ✅ **DEVE**: Bash "npm run typecheck" - VALIDAR que projeto compila sem erros
-  
+
   # QUALIDADE DE CÓDIGO (OBRIGATÓRIOS - NOVOS)
   - ✅ **DEVE**: Bash "npm run lint:frontend" - EXECUTAR ESLint + Prettier frontend
   - ✅ **DEVE**: Bash "npm run lint:backend" - EXECUTAR black + isort + flake8 backend
@@ -528,7 +533,7 @@ Step 0.2: Validar Plano vs Codebase Real
   - Cross-Reference: Validar steps do plano vs arquivos REAIS encontrados
   - Dependencies Check: Comparar deps do plano vs requirements.txt/package.json REAIS
   - Files Check: Verificar se arquivos mencionados no plano existem ou precisam ser criados
-  
+
   🚨 FAIL CONDITION: Plano não existe, formato inválido, ou conflita com estado real → PARAR
 ```
 
@@ -541,7 +546,7 @@ Step 0.3: Adaptar Plano ao Estado Atual do Codebase
   - Files Status: Mapear arquivos que existem vs precisam ser criados/modificados
   - Conflicts Detection: Identificar conflitos entre plano e código atual
   - Context Adaptation: Ajustar steps do plano baseado no estado REAL encontrado
-  
+
   🚨 FAIL CONDITION: Conflitos críticos não resolvidos → PARAR E REPORTAR ADAPTAÇÕES NECESSÁRIAS
 ```
 
@@ -554,7 +559,7 @@ Step 0.4: Environment Health Check (Baseado na Análise Real)
   - Database: Schema version vs migração necessária no plano
   - Services: Backend/frontend funcionais para implementação
   - Tests Baseline: Executar testes existentes para garantir baseline limpo
-  
+
   🚨 FAIL CONDITION: Qualquer validação falhar → PARAR E REPORTAR COM CONTEXTO REAL
 ```
 
@@ -567,7 +572,7 @@ Step 0.5: Setup Validation Checkpoints (Baseados no Estado Real)
   - Setup Rollback Points: Identificar pontos de reversão baseados no estado atual
   - Prepare Final Validation: Critérios de aceite adaptados ao codebase real
   - Context Adjustments: Ajustar validações baseado na análise do codebase
-  
+
   🚨 FAIL CONDITION: Validações incompletas ou não adaptadas ao contexto → SOLICITAR CLARIFICAÇÃO
 ```
 
@@ -582,7 +587,7 @@ For Each Step in Plan:
     - Execute: Comandos exatos conforme plano
     - Validate: Critério de sucesso atendido?
     - Checkpoint: Documentar resultado
-    
+
     🚨 FAIL CONDITION: Qualquer validação falhar → PARAR EXECUÇÃO
     🔄 SUCCESS CONDITION: Critério atendido → Prosseguir próximo step
 ```
@@ -595,7 +600,7 @@ Real-time Documentation:
   - Capturar outputs/resultados
   - Documentar validações realizadas
   - Timestamp cada checkpoint
-  
+
   📝 Purpose: Auditoria completa da execução
 ```
 
@@ -609,7 +614,7 @@ Final Validation:
   - Technical Criteria: Especificações técnicas implementadas
   - Performance: Benchmarks atingidos
   - Security: Multi-tenancy e security validados
-  
+
   🚨 FAIL CONDITION: Qualquer critério não atendido → ROLLBACK PLAN
 ```
 
@@ -621,7 +626,7 @@ Integration Tests:
   - Cross-Browser: Compatibilidade validada
   - Multi-Tenant: Organization isolation testado
   - Performance: Response times dentro do esperado
-  
+
   📊 Success Metrics: Todos testes passando + performance OK
 ```
 
@@ -635,7 +640,7 @@ Automatic Documentation:
   - Update Roadmap: Status história marcado como concluído
   - Execution Report: Relatório completo da execução
   - Timestamp: Data/hora de conclusão registrada
-  
+
   📋 Format: Seguir template padrão do projeto
 ```
 
@@ -647,7 +652,7 @@ Post-Execution Cleanup:
   - Reset development databases se necessário
   - Clear cache se aplicável
   - Validate environment ready for next task
-  
+
   🧹 Purpose: Deixar ambiente limpo para próximas execuções
 ```
 
@@ -657,7 +662,7 @@ Post-Execution Cleanup:
 
 ### **Estrutura de Execução: RIGOROUS STEP-BY-STEP IMPLEMENTATION**
 
-```markdown
+````markdown
 # EXECUÇÃO COMPLETA: [ID] - [TÍTULO]
 
 ## 📊 Status da Execução
@@ -683,7 +688,7 @@ Análise do Codebase Atual (EVIDÊNCIAS OBRIGATÓRIAS):
     - [RESUMIR últimas 3-5 implementações principais do histórico]
     - Estado atual: [Story X.Y concluída | Features implementadas]
     - Context: [Próxima implementação baseada no histórico]
-  ✅ RULES.md LIDO: 
+  ✅ RULES.md LIDO:
     - [CONFIRMAR leitura das regras críticas: 95% confidence, multi-tenancy, etc.]
     - Compliance: [✅ Validado | ❌ Red flags identificados]
   ✅ migrations/README.md LIDO:
@@ -692,32 +697,32 @@ Análise do Codebase Atual (EVIDÊNCIAS OBRIGATÓRIAS):
   ✅ tests/e2e/api/ MAPEADO:
     - [LISTAR principais arquivos de teste disponíveis]
     - Testes relevantes: [test_multi_tenant_isolation.py, etc.]
-  
-  # DEPENDÊNCIAS E VERSÕES  
-  ✅ requirements.txt LIDO: 
+
+  # DEPENDÊNCIAS E VERSÕES
+  ✅ requirements.txt LIDO:
     - [LER E COLAR conteúdo principal das dependências Python]
     - Versões REAIS: FastAPI==[versão], SQLAlchemy==[versão], etc.
   ✅ package.json LIDO:
-    - [LER E COLAR versões principais das dependências Frontend] 
+    - [LER E COLAR versões principais das dependências Frontend]
     - Versões REAIS: Next.js==[versão], React==[versão], etc.
-    
+
   # ESTADO DO DATABASE
-  ✅ Migration status EXECUTADO: 
+  ✅ Migration status EXECUTADO:
     - [EXECUTAR "cd migrations && ./migrate status" e COLAR resultado]
     - Current version: [X], Available: [Y], Pending: [Z]
   ✅ Schema structure ANALISADO:
     - [READ parcial migrations/001_consolidated_schema.sql para entender tabelas]
     - Tabelas principais: [organizations, users, crm_leads, etc.]
-  
+
   # ARQUITETURA MAPEADA
-  ✅ api/models/ MAPEADO: 
+  ✅ api/models/ MAPEADO:
     - [LISTAR todos .py files REAIS encontrados no diretório]
     - Total models: [X] arquivos identificados
   ✅ api/services/ MAPEADO:
     - [LISTAR todos .py files REAIS encontrados no diretório]
     - Total services: [X] arquivos identificados
   ✅ api/routers/ MAPEADO:
-    - [LISTAR todos .py files REAIS encontrados no diretório]  
+    - [LISTAR todos .py files REAIS encontrados no diretório]
     - Total routers: [X] arquivos identificados
   ✅ components/ui/ CATALOGADO:
     - [LISTAR componentes shadcn/ui REAIS disponíveis]
@@ -728,6 +733,7 @@ Análise do Codebase Atual (EVIDÊNCIAS OBRIGATÓRIAS):
 
 ❌ FALHA CRÍTICA se qualquer item acima não tiver evidência REAL de leitura
 ```
+````
 
 ### **✅ CRITÉRIOS CONTEXTUALIZADOS VALIDADOS**
 
@@ -769,6 +775,7 @@ Plano Carregado vs Codebase Real:
 **Tempo Estimado**: [X] min | **Tempo Real**: [Y] min
 
 **Comandos Executados**:
+
 ```bash
 # Comandos exatos conforme plano
 [comando1]
@@ -776,11 +783,13 @@ Plano Carregado vs Codebase Real:
 ```
 
 **Output**:
+
 ```
 [Output real dos comandos]
 ```
 
 **Validação**:
+
 - ✅ **Critério 1**: [Descrição] - ATENDIDO
 - ✅ **Critério 2**: [Descrição] - ATENDIDO
 - ❌ **Critério 3**: [Descrição] - FALHOU → [Ação corretiva]
@@ -802,7 +811,7 @@ Plano Carregado vs Codebase Real:
 ```yaml
 Roadmap Criteria (Original - VALOR PARA USUÁRIO):
   ✅ [Critério 1 do roadmap]: Implementado, testado e UTILIZÁVEL pelo usuário
-  ✅ [Critério 2 do roadmap]: Implementado, testado e UTILIZÁVEL pelo usuário  
+  ✅ [Critério 2 do roadmap]: Implementado, testado e UTILIZÁVEL pelo usuário
   ✅ [Critério N do roadmap]: Implementado, testado e UTILIZÁVEL pelo usuário
 
 Technical Criteria (do Plano - INTEGRAÇÃO VERTICAL):
@@ -905,11 +914,13 @@ Relatório de Execução:
 **Duração**: [X]h [Y]min (vs [Z]h estimado)
 
 **🎯 VALOR REAL ENTREGUE AO USUÁRIO FINAL**:
+
 - ✅ [Feature 1]: Implementada, testada e UTILIZÁVEL (Frontend + Backend + DB)
 - ✅ [Feature 2]: Implementada, testada e UTILIZÁVEL (Frontend + Backend + DB)
 - ✅ [Feature N]: Implementada, testada e UTILIZÁVEL (Frontend + Backend + DB)
 
 **🏗️ VERTICAL SLICE ARCHITECTURE VALIDADA**:
+
 - ✅ **Frontend Layer**: UI responsiva, componentes funcionais, UX otimizada
 - ✅ **Backend Layer**: APIs funcionais, business logic, multi-tenancy
 - ✅ **Database Layer**: Schema atualizado, queries otimizadas, dados íntegros
@@ -917,6 +928,7 @@ Relatório de Execução:
 - ✅ **Testing Layer**: Testes unitários + integração + E2E passando
 
 **🔒 QUALIDADE E COMPLIANCE GARANTIDA**:
+
 - ✅ **100% Plan Compliance**: Implementação seguiu plano exato
 - ✅ **Zero Regression**: Funcionalidades existentes preservadas
 - ✅ **Multi-Tenant Safe**: Organization isolation validado em todas camadas
@@ -925,11 +937,13 @@ Relatório de Execução:
 - ✅ **Production Ready**: Feature pronta para uso imediato em produção
 
 **💎 IMPACTO NO USUÁRIO**:
+
 - ✅ **Workflow Melhorado**: Usuário tem nova capacidade funcional
 - ✅ **Produtividade Aumentada**: Processo otimizado e utilizável
 - ✅ **Experiência Aprimorada**: Interface e interação funcionais
 
 **Próximos Passos**:
+
 - 🚀 **Deploy Ready**: Implementação pode ser deployada
 - 📋 **Documentation**: CHANGELOG e roadmap atualizados
 - 🧪 **Testing**: Testes passando, coverage mantido/melhorado
@@ -940,7 +954,8 @@ Relatório de Execução:
 **🎉 EXECUÇÃO RIGOROSA CONCLUÍDA COM SUCESSO**
 
 ---
-```
+
+````
 
 ---
 
@@ -954,7 +969,7 @@ git status                           # Must be clean
 npm run typecheck                    # Must pass
 python3 -c "import api.main"        # Must import
 
-# Database validation  
+# Database validation
 cd migrations && ./migrate status    # Check schema version
 psql -d crm_db -c "SELECT COUNT(*) FROM organizations;" # Test connection
 
@@ -971,7 +986,7 @@ npm run security                     # bandit security scan (must pass)
 npm run test -- --run               # Frontend tests
 python3 -m pytest tests/unit/ -q    # Backend unit tests
 python3 -m pytest tests/e2e/ -k "isolation" # Multi-tenant tests
-```
+````
 
 ### **Rollback Commands (Emergency)**
 
@@ -1030,7 +1045,7 @@ npm run fix                         # Auto-fix issues if needed
 ```yaml
 Critical Failures (Auto-Rollback):
   - Database corruption detected
-  - Security vulnerability introduced  
+  - Security vulnerability introduced
   - Multi-tenancy isolation broken
   - Performance degradation > 50%
   - Service completely offline

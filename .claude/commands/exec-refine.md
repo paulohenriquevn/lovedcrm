@@ -119,6 +119,18 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 - ❌ **NUNCA**: Interpretar história sem contexto do projeto atual
 - ❌ **NUNCA**: Assumir ou inventar dados da história não presentes no roadmap
 
+#### **🎯 FASE 1.5: CLARIFICAÇÃO DO OBJETIVO DA HISTÓRIA (OBRIGATÓRIA)**
+
+- ✅ **DEVE**: Extrair e reformular o OBJETIVO ESPECÍFICO da história
+- ✅ **DEVE**: Validar alinhamento com épico e contexto organizacional  
+- ✅ **DEVE**: Identificar o VALOR DE NEGÓCIO específico entregue
+- ✅ **DEVE**: Mapear IMPACTO esperado no usuário final
+- ✅ **DEVE**: Confirmar que objetivo é MENSURÁVEL e TESTÁVEL
+- ✅ **DEVE**: Validar que o objetivo resolve uma DOR ESPECÍFICA do usuário
+- ✅ **DEVE**: Conectar objetivo com estratégia organizacional maior
+- ❌ **NUNCA**: Aceitar objetivos genéricos ou vagos
+- ❌ **NUNCA**: Proceder sem compreender o PORQUÊ da história
+
 #### **🔍 FASE 2: PESQUISA ATIVA INTENSIVA CONTEXTUALIZADA**
 
 - ✅ **DEVE**: Pesquisar soluções **COMPATÍVEIS** com versões atuais (Fase 0)
@@ -274,6 +286,65 @@ Constraints: [constraints atuais identificados]
 
 ---
 
+## 🎯 **CLARIFICAÇÃO DO OBJETIVO DA HISTÓRIA**
+
+### **🚨 VALIDAÇÃO OBRIGATÓRIA DO OBJETIVO**
+
+```yaml
+Objetivo da História Identificado:
+  User Story Reformulada: [Como X, quero Y, para Z - versão específica e clara]
+  Problema Específico: [Dor exata que o usuário enfrenta hoje]
+  Valor de Negócio: [Benefício mensurável que será entregue]
+  Impacto no Usuário: [Como a vida do usuário melhora especificamente]
+  Contexto Organizacional: [Como se conecta com estratégia/épico maior]
+  
+Validação SMART do Objetivo:
+  ✅ Específico: [Objetivo não é genérico - descreve EXATAMENTE o que será entregue]
+  ✅ Mensurável: [Critérios claros e objetivos para medir sucesso]  
+  ✅ Alcançável: [Tecnicamente viável com o stack atual]
+  ✅ Relevante: [Alinhado com estratégia organizacional e necessidades do usuário]
+  ✅ Temporal: [Timeline e marco de entrega definidos]
+
+Conexão Estratégica:
+  Epic Relacionado: [Nome do épico e como esta história contribui]
+  OKR/Meta Organizacional: [Objetivo maior que esta história suporta]
+  Prioridade Justificada: [Por que esta história, por que agora]
+  
+Validação de Dor do Usuário:
+  Dor Atual: [Problema específico que o usuário enfrenta HOJE]
+  Evidência da Dor: [Como sabemos que este problema existe e é relevante]
+  Impacto da Não-Solução: [O que acontece se não resolvermos isto]
+  Benefício da Solução: [Como o usuário se beneficiará especificamente]
+```
+
+### **🔍 PERGUNTAS DE VALIDAÇÃO RESPONDIDAS**
+
+**1. POR QUE esta história?**
+[Resposta específica sobre a necessidade/dor que motiva]
+
+**2. POR QUE AGORA?**
+[Resposta sobre timing, urgência, oportunidade]
+
+**3. PARA QUEM exatamente?**
+[Persona específica, não genérica - "usuários" não é resposta válida]
+
+**4. QUE RESULTADO esperamos?**
+[Resultado mensurável e específico]
+
+**5. COMO vamos MEDIR o sucesso?**
+[Métricas específicas, não genéricas]
+
+### **🚨 RED FLAGS DO OBJETIVO - REJEITAR SE ENCONTRADO**
+
+- ❌ **Objetivo genérico**: "Melhorar a experiência do usuário"
+- ❌ **Sem dor específica**: "Seria legal ter essa funcionalidade"
+- ❌ **Sem métrica**: "Usuários ficarão mais satisfeitos"
+- ❌ **Sem contexto estratégico**: História isolada sem conexão maior
+- ❌ **Problema hipotético**: Dor não validada ou assumida
+- ❌ **Escopo ambíguo**: Não é claro onde a história termina
+
+---
+
 ## 🔍 **PESQUISA TÉCNICA EXAUSTIVA**
 
 ### **Soluções Open Source Pesquisadas**
@@ -332,11 +403,13 @@ Frontend Files:
 **Fonte**: docs/project/04-journeys.md - [Jornada específica identificada]
 
 #### **Persona e Contexto**
+
 - **Persona**: [Persona específica da jornada]
 - **Contexto**: [Situação de uso]
 - **Priority**: [MVP Core / Supporting / Advanced]
 
 #### **Happy Path Flow Identificado**
+
 ```
 [Mapear o fluxo específico da jornada identificada]
 1. [Step 1 da jornada]
@@ -349,6 +422,7 @@ Frontend Files:
 ### **Wireframes ASCII das Telas Principais**
 
 #### **Tela Principal da Funcionalidade**
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                            [NOME DA FUNCIONALIDADE]                           │
@@ -390,6 +464,7 @@ Mobile Layout (320px-768px):
 ```
 
 #### **Modal/Dialog Interactions**
+
 ```
 Overlay Modal (quando aplicável):
 ┌─────────────────────────────────────────────────────────────────────────────────┐
@@ -418,22 +493,22 @@ Componentes Necessários:
     - Input: Campos de formulário
     - Label: Labels acessíveis
     - Form: Validação e submit
-    
+
   Layout Components:
     - Sheet: Mobile sidebar/drawer
     - Tabs: Navegação entre seções
     - Separator: Divisores visuais
-    
+
   Data Display:
     - Table: Listagens e grids
     - Badge: Status e categorias
     - Avatar: Identificação de usuários
-    
+
   Feedback Components:
     - Toast: Notificações
     - Alert: Avisos importantes
     - Progress: Indicadores de progresso
-    
+
   Interactive Components:
     - Dialog: Modais de confirmação
     - Select: Dropdowns
@@ -455,12 +530,12 @@ Breakpoint Strategy:
     - Full width cards e forms
     - Collapsible navigation (Sheet)
     - Touch-friendly buttons (min 44px)
-    
+
   Tablet (768px - 1024px):
     - 2-column grid layout
     - Sidebar opcional (collapsible)
     - Mixed interaction (touch + mouse)
-    
+
   Desktop (1024px+):
     - 3+ column layout
     - Fixed sidebar navigation
@@ -482,12 +557,12 @@ Animation Strategy:
     - Card hover: hover:shadow-md transition-shadow duration-150
     - Button states: hover:bg-primary/90 transition-colors
     - Form validation: animate-pulse para errors
-    
+
   Loading States:
     - Skeleton loading para data fetching
     - Spinner para actions críticas
     - Progress bars para uploads/processes
-    
+
   Micro-interactions:
     - Toast notifications: slide-in from top
     - Modal: fade-in overlay + scale content
@@ -502,19 +577,19 @@ Accessibility Requirements:
     - sector-primary vs white: 4.8:1 (Pass AA)
     - sector-cta vs white: 4.5:1 (Pass AA)
     - All text meets minimum contrast ratios
-    
+
   Keyboard Navigation:
     - Tab order logical e sequencial
     - Focus indicators visíveis
     - Escape closes modals/dropdowns
     - Enter submits forms
-    
+
   Screen Reader Support:
     - aria-label em todos os interactive elements
     - aria-describedby para help text
     - role attributes onde necessário
     - alt text em images
-    
+
   Form Accessibility:
     - Labels associados com inputs
     - Error messages linked (aria-describedby)
@@ -530,17 +605,17 @@ Component States:
     - Initial load: Skeleton components
     - Action loading: Button spinner + disabled
     - Background sync: Subtle progress indicator
-    
+
   Error States:
     - Form validation: Red border + error message
     - Network errors: Toast notification + retry
     - 404/403: Full page error com navigation
-    
+
   Success States:
     - Form submit: Green toast confirmation
     - Data saved: Success badge + timestamp
     - Actions completed: Check animation
-    
+
   Empty States:
     - No data: Illustration + CTA
     - No results: Search suggestions
@@ -812,6 +887,14 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 
 ### **🚨 QUALITY GATES - REJEIÇÃO AUTOMÁTICA**
 
+#### **🎯 VALIDAÇÕES DE OBJETIVO (CRÍTICAS)**
+- ❌ **FALHA CRÍTICA se objetivo da história for genérico ou vago**
+- ❌ **FALHA CRÍTICA se não identificar dor específica do usuário**
+- ❌ **FALHA CRÍTICA se não responder às 5 perguntas de validação**
+- ❌ **FALHA CRÍTICA se não validar critérios SMART**
+- ❌ **FALHA CRÍTICA se não conectar com estratégia organizacional**
+
+#### **🔍 VALIDAÇÕES TÉCNICAS (CRÍTICAS)**
 - ❌ **FALHA CRÍTICA se não usar ferramentas Read/LS/Bash na Fase 0**
 - ❌ **FALHA CRÍTICA se template não mostrar evidências REAIS de leitura**
 - ❌ **FALHA CRÍTICA se basear refinement em suposições sobre o projeto**
@@ -820,6 +903,8 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 - ❌ **REJEIÇÃO se propor soluções complexas quando simples funcionam**
 - ❌ **REJEIÇÃO se não reutilizar código/padrões existentes**
 - ❌ **REJEIÇÃO se adicionar over-engineering para problemas futuros**
+
+#### **🎨 VALIDAÇÕES DE DESIGN (OBRIGATÓRIAS)**
 - ❌ **REJEIÇÃO se não incluir wireframes e telas da funcionalidade**
 - ❌ **REJEIÇÃO se não mapear a jornada específica de docs/project/04-journeys.md**
 - ❌ **REJEIÇÃO se não aplicar padrões UI/UX de docs/project/10-ui-ux-designer.md**
@@ -827,11 +912,25 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 
 ### **✅ CHECKLIST DE APROVAÇÃO**
 
+#### **🎯 Validação do Objetivo**
+- [ ] **OBJETIVO CLARO**: História tem objetivo específico, não genérico
+- [ ] **DOR ESPECÍFICA**: Problema concreto do usuário identificado
+- [ ] **SMART**: Critérios específico, mensurável, alcançável, relevante, temporal
+- [ ] **5 PERGUNTAS**: Por quê, por que agora, para quem, que resultado, como medir
+- [ ] **ESTRATÉGIA**: Conexão clara com épico/OKR organizacional
+
+#### **🔍 Validação Técnica** 
 - [ ] **KISS**: Solução mais simples que funciona escolhida
 - [ ] **YAGNI**: Escopo limitado aos requisitos atuais da história
 - [ ] **DRY**: Máxima reutilização de código/padrões existentes
-- [ ] **99% Certeza**: Pesquisa exaustiva + análise contextual completa
-- [ ] **Estado Atual**: Baseado em análise real do projeto atual
+- [ ] **99% CERTEZA**: Pesquisa exaustiva + análise contextual completa
+- [ ] **ESTADO ATUAL**: Baseado em análise real do projeto atual
+
+#### **🎨 Validação de Design**
+- [ ] **WIREFRAMES**: Telas principais desenhadas em ASCII
+- [ ] **JORNADAS**: Jornada específica mapeada de docs/project/04-journeys.md
+- [ ] **UI/UX**: Padrões aplicados de docs/project/10-ui-ux-designer.md
+- [ ] **DIAGRAMAS**: Diagramas técnicos baseados em docs/project/07-diagrams.md
 
 ---
 

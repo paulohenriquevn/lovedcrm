@@ -4,7 +4,7 @@ FastAPI router for Lead management endpoints with organizational isolation.
 """
 
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, status
@@ -15,6 +15,8 @@ from api.models.crm_lead import PipelineStage
 from api.models.organization import Organization
 from api.models.user import User
 from api.schemas.crm_lead import (
+    AdvancedFiltersSchema,
+    AdvancedMetricsResponse,
     ConversionMetricsResponse,
     FilterOptionsResponse,
     LeadCreate,
@@ -237,3 +239,44 @@ async def get_pipeline_filters(
     """
     service = CRMLeadService(db)
     return service.get_filter_options(organization)
+
+
+@router.get("/metrics/advanced", response_model=AdvancedMetricsResponse)
+async def get_advanced_pipeline_metrics(
+    start_date: Optional[str] = Query(None, description="Start date filter (YYYY-MM-DD)"),
+    end_date: Optional[str] = Query(None, description="End date filter (YYYY-MM-DD)"),
+    stages: List[str] = Query(default=[], description="Pipeline stages to include"),
+    sources: List[str] = Query(default=[], description="Lead sources to include"),
+    assigned_users: List[str] = Query(default=[], description="Assigned user IDs to include"),
+    tags: List[str] = Query(default=[], description="Tags to include"),
+    value_min: Optional[float] = Query(None, ge=0, description="Minimum estimated value"),
+    value_max: Optional[float] = Query(None, ge=0, description="Maximum estimated value"),
+    organization: Organization = Depends(get_current_organization),
+    db: Session = Depends(get_db),
+):
+    """Get advanced pipeline metrics with 6-dimensional filtering.
+
+    Advanced analytics including:
+    - Stage distribution with percentages and values
+    - Conversion funnel analysis with drop-off rates
+    - Bottleneck detection with recommendations
+    - Trending metrics over time periods
+    - Executive summary with KPIs
+
+    **Required**: X-Org-Id header with valid organization ID.
+    """
+    service = CRMLeadService(db)
+
+    # Build advanced filters schema
+    filters = AdvancedFiltersSchema(
+        start_date=start_date,
+        end_date=end_date,
+        stages=stages,
+        sources=sources,
+        assigned_users=assigned_users,
+        tags=tags,
+        value_min=value_min,
+        value_max=value_max,
+    )
+
+    return await service.get_advanced_metrics(UUID(str(organization.id)), filters)

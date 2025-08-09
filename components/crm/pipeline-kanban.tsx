@@ -29,7 +29,7 @@ export function PipelineKanban({ className }: PipelineKanbanProps): React.ReactE
 
 function PipelineKanbanInner({ className }: PipelineKanbanProps): React.ReactElement {
   const { user, organization } = useAuthStore()
-  const [activeTab, setActiveTab] = useState<'kanban' | 'metrics'>('kanban')
+  const [activeTab, setActiveTab] = useState<'kanban' | 'metrics' | 'advanced'>('kanban')
   const [currentFilters, setCurrentFilters] = useState<PipelineFiltersState>({
     stages: [],
     sources: [],

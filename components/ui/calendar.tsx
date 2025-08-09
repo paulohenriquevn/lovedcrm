@@ -18,7 +18,12 @@ function ChevronRightIcon(): React.ReactElement {
   return <ChevronRight className="h-4 w-4" />
 }
 
-function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps): React.ReactElement {
+function Calendar({
+  className,
+  classNames,
+  showOutsideDays = true,
+  ...props
+}: CalendarProps): React.ReactElement {
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -53,11 +58,11 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         dayDisabled: 'text-muted-foreground opacity-50',
         dayRangeMiddle: 'aria-selected:bg-accent aria-selected:text-accent-foreground',
         dayHidden: 'invisible',
-        ...classNames
+        ...classNames,
       }}
       components={{
         IconLeft: ChevronLeftIcon,
-        IconRight: ChevronRightIcon
+        IconRight: ChevronRightIcon,
       }}
       {...props}
     />

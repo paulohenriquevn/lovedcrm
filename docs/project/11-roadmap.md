@@ -56,9 +56,10 @@
 #### Story 0.1: Database Schema Completo ✅ CONCLUÍDO (08/01/2025)
 
 **Descrição:** "Como construir a fundação de um prédio antes de erguer as paredes"
+
 - Analogia: Sem uma fundação sólida, qualquer construção cai
 - Para CFO: Investimento inicial essencial - evita retrabalho custoso futuro
-- Para CTO: Base arquitetural que suporta escala e performance 
+- Para CTO: Base arquitetural que suporta escala e performance
 - Para PM/PO: Infraestrutura invisível mas crítica para todas as funcionalidades
 - Para Stakeholders: "Data warehouse" seguro onde todas as informações do CRM ficam organizadas
 
@@ -108,7 +109,8 @@
 #### Story 1.1: Pipeline Kanban - MVP Básico ✅ CONCLUÍDO (08/01/2025)
 
 **Descrição:** "Como um quadro físico de Post-its, mas digital e colaborativo em tempo real"
-- Analogia: Post-its físicos que toda agência usa, mas digital e sincronizado entre toda a equipe 
+
+- Analogia: Post-its físicos que toda agência usa, mas digital e sincronizado entre toda a equipe
 - Para CFO: Visibilidade imediata de onde estão travados R$ 200k+ em negociações (ROI: -40% perda de leads)
 - Para CTO: WebSocket real-time + performance < 50ms + arquitetura escalável para 1000+ leads
 - Para PM/PO: Primeira jornada crítica funcionando - gestores podem gerenciar funil visualmente
@@ -119,6 +121,7 @@
 **Para** visualizar meu funil de vendas
 
 **Fluxo:** [Baseado em @docs/project/04-journeys.md - Jornada "Pipeline Visual Kanban"]
+
 1. Gestor faz login no sistema e seleciona organização
 2. Dashboard carrega com dados filtrados por organization_id
 3. Pipeline Kanban aparece com 5 estágios (Lead → Contact → Proposal → Negotiation → Closed)
@@ -158,12 +161,13 @@
 **Definição de Pronto:**
 
 - ✅ Interface funcional com 5 estágios padrão (Lead → Contact → Proposal → Negotiation → Closed) ✅ **COMPLETO**
-- ✅ Drag-drop movendo leads entre estágios ✅ **COMPLETO** 
+- ✅ Drag-drop movendo leads entre estágios ✅ **COMPLETO**
 - ✅ Multi-tenancy: apenas estágios/leads da organização visíveis ✅ **VALIDADO**
 - ✅ Real-time updates via WebSocket ✅ **FUNCIONAL** entre múltiplas abas/usuários
 
 **🏆 Resultado Alcançado:**
-- **WebSocket Real-time**: Updates instantâneos entre usuários (`/ws/pipeline`) 
+
+- **WebSocket Real-time**: Updates instantâneos entre usuários (`/ws/pipeline`)
 - **Performance Otimizada**: 4 indexes de database + < 50ms de latência
 - **Test Coverage**: 10/10 testes pipeline + 109/109 testes proxy passando
 - **Multi-tenancy**: Isolamento rigoroso validado em todos os cenários
@@ -171,8 +175,9 @@
 #### Story 1.2: Pipeline Kanban - Versão Completa ⏳ EM ANDAMENTO
 
 **Descrição:** "Como Google Analytics do seu funil de vendas - métricas que mostram onde está o problema"
+
 - Analogia: Dashboard do seu carro que mostra combustível, velocidade, problemas - mas para vendas
-- Para CFO: Relatórios executivos instantâneos - taxa conversão 15% vs 5% (mostra onde investir)  
+- Para CFO: Relatórios executivos instantâneos - taxa conversão 15% vs 5% (mostra onde investir)
 - Para CTO: Performance mantida com filtros complexos + responsividade mobile + arquitetura extensível
 - Para PM/PO: Métricas de produto que mostram onde usuários estão travando no funil
 - Para Stakeholders: "Termômetro do negócio" - saúde das vendas em tempo real com gráficos claros
@@ -185,6 +190,7 @@
 - Plano: docs/plans/1.2-pipeline-kanban-versao-completa.md
 
 **Fluxo:** [Baseado em @docs/project/04-journeys.md - Extensão da Jornada "Pipeline Visual Kanban"]
+
 1. Gestor acessa pipeline completo e clica em "Filtros Avançados"
 2. Sistema apresenta 6 filtros simultâneos (período, origem, responsável, tags, valor, estágio)
 3. Gestor seleciona múltiplos filtros (ex: "Últimos 30 dias" + "Leads > R$ 10k")
@@ -198,18 +204,18 @@
 
 **Critérios de Aceite Técnicos:**
 
-- [ ] **Frontend**: Filtros avançados + métricas de conversão + responsividade 
-- [ ] **Backend**: APIs completas + validações + WebSocket broadcasting 
-- [ ] **Database**: Índices otimizados + constraints + audit trail 
+- [ ] **Frontend**: Filtros avançados + métricas de conversão + responsividade
+- [ ] **Backend**: APIs completas + validações + WebSocket broadcasting
+- [ ] **Database**: Índices otimizados + constraints + audit trail
 - [ ] **Tests**: Cobertura completa + casos edge + performance tests
 
 **Critérios de Aceite Não-Técnicos:**
 
-- [ ] **Business Analytics**: Taxa conversão visível por estágio (identifica gargalos) 
+- [ ] **Business Analytics**: Taxa conversão visível por estágio (identifica gargalos)
 - [ ] **Executive Reporting**: Gráficos que CFO entende (R$ pipeline, tempo médio por estágio)
-- [ ] **Mobile Experience**: Gestores podem ver funil no celular (responsividade total) 
-- [ ] **Filtering Power**: 6 filtros simultâneos (origem, período, responsável, tags, valor, estágio) 
-- [ ] **Performance Maintenance**: Filtros complexos mantêm < 500ms response time 
+- [ ] **Mobile Experience**: Gestores podem ver funil no celular (responsividade total)
+- [ ] **Filtering Power**: 6 filtros simultâneos (origem, período, responsável, tags, valor, estágio)
+- [ ] **Performance Maintenance**: Filtros complexos mantêm < 500ms response time
 
 **Arquivos de Referência para Implementação:**
 
@@ -220,11 +226,12 @@
 **Definição de Pronto:**
 
 - ✅ Filtros avançados por 6 dimensões (estágio, origem, responsável, tags, período, valor)
-- ✅ Métricas de conversão em tempo real com gráficos Recharts 
-- ✅ Interface responsiva com tabs Kanban/Métricas 
-- ✅ Performance otimizada com memoização React 
+- ✅ Métricas de conversão em tempo real com gráficos Recharts
+- ✅ Interface responsiva com tabs Kanban/Métricas
+- ✅ Performance otimizada com memoização React
 
 **🏆 Resultado Alcançado:**
+
 - **Métricas Completas**: Taxa conversão, tempo médio por estágio, valor pipeline (Bar, Pie, Line charts)
 - **Filtros Avançados**: Multi-select com 6 dimensões + date range + valor estimado
 - **Design Responsivo**: Mobile-first com breakpoints otimizados + tabs interface
@@ -233,6 +240,7 @@
 #### Story 1.3: Pipeline Kanban - Melhorias UX (2 dias)
 
 **Descrição:** "Como polir um iPhone - funcionalidade pronta, agora deixar lindo de usar"
+
 - Analogia: Carro funciona, agora instalar ar condicionado, bancos de couro, som - experiência premium
 - Para CFO: Zero investimento adicional - só refinamento que aumenta satisfação do cliente
 - Para CTO: CSS animations + micro-interactions - sem impacto na arquitetura/performance
@@ -244,6 +252,7 @@
 **Para** ter experiência de uso superior
 
 **Fluxo:** [Baseado em @docs/project/10-ui-ux-designer.md - Melhorias UX identificadas]
+
 1. Gestor inicia drag de um lead card do pipeline
 2. Card imediatamente apresenta ghost effect (opacidade 0.5 + rotação 2°)
 3. Durante arraste, outros cards mostram hover states sutis quando lead passa sobre eles
@@ -285,9 +294,10 @@
 #### Sprint 0: Infrastructure Setup (2 semanas - Pré-requisito)
 
 **Descrição:** "Infraestrutura Node.js + Redis para suportar WhatsApp dual provider (Web API + Business API)"
+
 - Problema real: WhatsApp integrations precisam Node.js service + Redis session management (documentado no PRD)
 - Para CFO: Evita R$ 50k retrabalho - architecture correta desde início suporta Business API migration
-- Para CTO: Railway Node.js deployment + Redis enhancement + webhook infrastructure + organization routing  
+- Para CTO: Railway Node.js deployment + Redis enhancement + webhook infrastructure + organization routing
 - Para PM/PO: Base técnica para WhatsApp Web API (QR code) + Business API (oficial) functioning
 - Para Stakeholders: "Central de comunicação" - sistema que vai processar todas mensagens WhatsApp organizacionalmente isoladas
 
@@ -374,6 +384,7 @@ class WhatsAppProviderManager {
 #### Story 2.1: WhatsApp Web Provider Implementation (2 semanas)
 
 **Descrição:** "Integração nativa do WhatsApp no CRM - elimina 89.88% perda de leads por fragmentação de ferramentas"
+
 - Problema real: Agências digitais brasileiras perdem 40%+ leads porque conversas ficam no WhatsApp e pipeline nas planilhas
 - Para CFO: Recupera R$ 180k/ano em vendas perdidas (dados do PRD: 89.88% gap entre WhatsApp usage e CRM integrado)
 - Para CTO: Dual provider architecture - WhatsApp Web API (QR code, setup imediato) + Business API (oficial, compliance)
@@ -385,6 +396,7 @@ class WhatsAppProviderManager {
 **Para** manter contexto da conversa
 
 **Fluxo:** [Baseado em @docs/project/04-journeys.md - Jornada "WhatsApp Business Integration"]
+
 1. Admin acessa configurações de integração e escolhe "WhatsApp Web API"
 2. Sistema gera QR Code único para a organização
 3. Admin escaneia QR Code com WhatsApp no celular
@@ -583,6 +595,7 @@ class TwilioWhatsAppProvider implements WhatsAppProvider {
 #### Story 3.1: Lead Management - MVP Básico (3 dias)
 
 **Descrição:** "Captura automática de leads + qualificação inteligente - foco apenas nos leads promissores"
+
 - Problema real: Agências capturam leads de Facebook Ads, Google Ads, site, WhatsApp mas ficam dispersos (PRD: "captura automática + qualificação inteligente")
 - Para CFO: Lead scoring 0-100 permite foco nos 20% leads que geram 80% das vendas (aumenta conversão 300%)
 - Para CTO: Multi-source capture + deduplication engine + ML scoring pipeline + organization isolation
@@ -594,6 +607,7 @@ class TwilioWhatsAppProvider implements WhatsAppProvider {
 **Para** centralizar oportunidades
 
 **Fluxo:** [Baseado em @docs/project/04-journeys.md - Jornada "Lead Management & Scoring"]
+
 1. Lead chega via formulário do site/Facebook Ads/Google Ads/referência
 2. Sistema recebe lead e faz automatic deduplication check (email/phone)
 3. Se novo: Sistema calcula ML Lead Scoring (0-100 score) baseado em dados
@@ -615,7 +629,7 @@ class TwilioWhatsAppProvider implements WhatsAppProvider {
 
 **Critérios de Aceite Não-Técnicos:**
 
-- [ ] **Lead Quality**: Score accuracy > 80% in identifying high-value leads  
+- [ ] **Lead Quality**: Score accuracy > 80% in identifying high-value leads
 - [ ] **Deduplication**: Zero duplicate leads mesmo com multiple sources
 - [ ] **Auto-Assignment**: Round-robin distribution + workload balancing funcionando
 - [ ] **Business Impact**: Equipes focam apenas leads score > 70 (top 20%)
@@ -689,6 +703,7 @@ class TwilioWhatsAppProvider implements WhatsAppProvider {
 **Para** garantir segurança de dados
 
 **Fluxo:** [Baseado em @docs/project/04-journeys.md - Jornada "Multi-Tenancy & Organization Management"]
+
 1. Agency Founder faz registration no sistema
 2. Sistema cria organization automaticamente com unique org_id
 3. Founder recebe initial admin role assignment para sua organização
@@ -820,6 +835,7 @@ interface VoIPProvider {
 #### Story 5.1: Telnyx Economy Provider Plugin (5 dias)
 
 **Descrição:** "VoIP integrado com Telnyx - economia de 30-70% vs Twilio mantendo mesma qualidade de chamadas"
+
 - Problema real: Agências gastam R$ 2k-5k/mês em Twilio quando Telnyx oferece mesma funcionalidade por muito menos
 - Para CFO: ROI imediato - economia 30-70% (PRD confirma: Telnyx é "TwiML compatible" = migração em 5 minutos)
 - Para CTO: SIP protocol + call recording + webhook events + provider abstraction interface
@@ -831,6 +847,7 @@ interface VoIPProvider {
 **Para** manter histórico unificado com otimização de custos
 
 **Fluxo:** [Baseado em @docs/project/04-journeys.md - Jornada "VoIP Integration (Dual Provider)"]
+
 1. Admin acessa Provider Settings e vê Cost Calculator comparativo
 2. Admin seleciona Telnyx baseado em budget/features (30-70% economia vs Twilio)
 3. Sistema inicia Configuration Wizard guiado para Telnyx
@@ -982,6 +999,7 @@ interface VoIPProvider {
 **Para** agilizar comunicação
 
 **Fluxo:** [Baseado em @docs/project/04-journeys.md - Jornada "Template Management & Automation"]
+
 1. Admin/Manager acessa template library e clica em "Criar Template"
 2. Sistema apresenta categorias (greeting, follow-up, objection, closing)
 3. Admin escreve template e insere variáveis ({{lead_name}}, {{company}}, {{value}})
@@ -1049,7 +1067,8 @@ interface VoIPProvider {
 #### Story 7.1: IA Conversational - MVP Básico (7 days)
 
 **Descrição:** "Chatbot OpenAI GPT-4 que qualifica leads automaticamente 24/7 - treinado para agências digitais brasileiras"
-- Problema real: Agências perdem leads que chegam fora do horário ou precisam qualificação básica (PRD: "chatbot treinado para agências digitais")  
+
+- Problema real: Agências perdem leads que chegam fora do horário ou precisam qualificação básica (PRD: "chatbot treinado para agências digitais")
 - Para CFO: IA trabalha 24/7 qualificando leads - converte 15-20% leads que seriam perdidos (ROI 300%+)
 - Para CTO: OpenAI GPT-4 integration + org-specific training + conversation context + human handoff quando score > 80
 - Para PM/PO: Interface chat similar WhatsApp + botão "passar para humano" + qualification questionnaire + score visual
@@ -1060,6 +1079,7 @@ interface VoIPProvider {
 **Para** focar apenas nos leads qualificados
 
 **Fluxo:** [Baseado em @docs/project/04-journeys.md - Jornada "AI Conversational & Lead Qualification"]
+
 1. Lead inicia conversation via WhatsApp/Web chat fora do horário comercial
 2. IA responde instantaneamente em < 2 segundos com saudação personalizada
 3. IA inicia qualification questionnaire dinâmico baseado no industry
@@ -1319,7 +1339,7 @@ interface VoIPProvider {
 
 ### ÉPICO 1: PIPELINE VISUAL KANBAN ✅ MVP CONCLUÍDO
 
-- **Métricas**: ✅ **< 50ms latency** drag-drop (superou meta de 100ms) + database otimizado 
+- **Métricas**: ✅ **< 50ms latency** drag-drop (superou meta de 100ms) + database otimizado
 - **Jornada validada**: ✅ **Pipeline Kanban Journey** (Commercial Manager) funcionando
 - **Valor demonstrável**: ✅ **Gestão visual real-time** + WebSocket broadcasting + multi-user collaboration
 - **Story 1.1**: ✅ **100% COMPLETO** - Drag-drop + real-time + performance otimizada
@@ -1464,6 +1484,7 @@ Para todas as stories, deve atender:
 - **Week 20**: Full Feature Set → Market ready
 
 **🎯 STATUS ATUAL: SEMANA 2 - PIPELINE MVP ENTREGUE**
+
 - ✅ **Value Delivered**: Sistema Pipeline Kanban funcional com real-time collaboration
 - ✅ **Technical Achievement**: WebSocket + Performance otimizada + 100% test coverage
 - 🚀 **Ready for**: Próxima story (Pipeline versão completa) ou WhatsApp Infrastructure

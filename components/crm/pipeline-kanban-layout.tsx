@@ -3,7 +3,7 @@
  * Extracted layout components for better maintainability
  */
 
-import { BarChart3, Kanban } from 'lucide-react'
+import { BarChart3, Kanban, TrendingUp } from 'lucide-react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -14,13 +14,16 @@ import { PipelineMetrics } from './pipeline-metrics'
 import type { PipelineStageDisplay } from './pipeline-types'
 
 interface TabNavigationProps {
-  activeTab: 'kanban' | 'metrics'
-  onTabChange: (tab: 'kanban' | 'metrics') => void
+  activeTab: 'kanban' | 'metrics' | 'advanced'
+  onTabChange: (tab: 'kanban' | 'metrics' | 'advanced') => void
 }
 
 export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps): JSX.Element {
   return (
-    <Tabs value={activeTab} onValueChange={value => onTabChange(value as 'kanban' | 'metrics')}>
+    <Tabs
+      value={activeTab}
+      onValueChange={value => onTabChange(value as 'kanban' | 'metrics' | 'advanced')}
+    >
       <TabsList className="w-full sm:w-auto">
         <TabsTrigger value="kanban" className="flex items-center gap-2 flex-1 sm:flex-initial">
           <Kanban className="h-4 w-4" />
@@ -29,6 +32,10 @@ export function TabNavigation({ activeTab, onTabChange }: TabNavigationProps): J
         <TabsTrigger value="metrics" className="flex items-center gap-2 flex-1 sm:flex-initial">
           <BarChart3 className="h-4 w-4" />
           <span className="hidden sm:inline">Métricas</span>
+        </TabsTrigger>
+        <TabsTrigger value="advanced" className="flex items-center gap-2 flex-1 sm:flex-initial">
+          <TrendingUp className="h-4 w-4" />
+          <span className="hidden sm:inline">Avançado</span>
         </TabsTrigger>
       </TabsList>
     </Tabs>
@@ -61,8 +68,8 @@ export function HeaderControls({
 }
 
 interface PipelineHeaderProps {
-  activeTab: 'kanban' | 'metrics'
-  onTabChange: (tab: 'kanban' | 'metrics') => void
+  activeTab: 'kanban' | 'metrics' | 'advanced'
+  onTabChange: (tab: 'kanban' | 'metrics' | 'advanced') => void
   onFiltersChange: (filters: PipelineFiltersState) => void
   isConnected: boolean
   isPolling: boolean
@@ -140,8 +147,23 @@ export function MetricsView({ dateFrom, dateTo }: MetricsViewProps): JSX.Element
   return <PipelineMetrics startDate={dateFrom?.toISOString()} endDate={dateTo?.toISOString()} />
 }
 
+interface AdvancedMetricsViewProps {
+  filters: PipelineFiltersState
+}
+
+export function AdvancedMetricsView({ filters }: AdvancedMetricsViewProps): JSX.Element {
+  return (
+    <PipelineMetrics
+      startDate={filters.dateFrom?.toISOString()}
+      endDate={filters.dateTo?.toISOString()}
+      filters={filters}
+      enableAdvanced
+    />
+  )
+}
+
 interface PipelineContentProps {
-  activeTab: 'kanban' | 'metrics'
+  activeTab: 'kanban' | 'metrics' | 'advanced'
   filteredStages: PipelineStageDisplay[] | null
   pipelineHandlers: {
     handleDragStart: (leadId: string) => void
@@ -176,6 +198,10 @@ export function PipelineContent({
 
       <TabsContent value="metrics" className="h-full mt-0">
         <MetricsView dateFrom={currentFilters.dateFrom} dateTo={currentFilters.dateTo} />
+      </TabsContent>
+
+      <TabsContent value="advanced" className="h-full mt-0">
+        <AdvancedMetricsView filters={currentFilters} />
       </TabsContent>
     </Tabs>
   )

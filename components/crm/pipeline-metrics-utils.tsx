@@ -75,8 +75,8 @@ export function MetricsLoadingSkeleton({ className }: { className?: string }): J
     <div className={className}>
       <div className="grid gap-6">
         <div className="grid gap-4 md:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Card key={`skeleton-card-${i}`}>
+          {Array.from({ length: 4 }, (_, i) => ({ id: `skeleton-${i}` })).map(item => (
+            <Card key={item.id}>
               <CardHeader>
                 <Skeleton className="h-6 w-24" />
               </CardHeader>

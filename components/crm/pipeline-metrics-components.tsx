@@ -176,8 +176,8 @@ export function PipelineDistributionChart({ data }: PipelineDistributionChartPro
               fill="#8884d8"
               dataKey="count"
             >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.fill} />
+              {data.map((entry: { stage: string; fill: string }) => (
+                <Cell key={entry.stage} fill={entry.fill} />
               ))}
             </Pie>
             <Tooltip />

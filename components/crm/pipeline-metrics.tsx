@@ -1,101 +1,86 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
-import { AlertCircle } from 'lucide-react'
-
-import { Card, CardContent } from '@/components/ui/card'
-import { crmLeadsService } from '@/services/crm-leads'
-
+import { AdvancedMetricsDisplay } from './pipeline-advanced-metrics'
+import { BasicMetricsDisplay } from './pipeline-basic-metrics'
 import {
-  MetricsCards,
-  StageDistributionChart,
-  AverageStageTimeChart,
-  PipelineDistributionChart,
-} from './pipeline-metrics-components'
-import {
-  MetricsLoadingSkeleton,
-  createStageChartData,
-  createStageTimeData,
-} from './pipeline-metrics-utils'
+  useBasicMetrics,
+  useAdvancedMetrics,
+  type PipelineFiltersState,
+} from './pipeline-metrics-hooks'
+import { MetricsLoadingSkeleton } from './pipeline-metrics-utils'
 
 interface PipelineMetricsProps {
   startDate?: string
   endDate?: string
   className?: string
-}
-
-interface MetricsResponse {
-  stage_counts: Record<string, number>
-  average_stage_times: Record<string, number>
-  conversion_rate: number
-  total_pipeline_value: number
-  closed_pipeline_value: number
-  total_leads: number
+  filters?: PipelineFiltersState
+  enableAdvanced?: boolean
 }
 
 export function PipelineMetrics({
   startDate,
   endDate,
   className,
+  filters,
+  enableAdvanced = false,
 }: PipelineMetricsProps): JSX.Element {
-  const {
-    data: metrics,
-    isLoading,
-    error,
-  } = useQuery<MetricsResponse>({
-    queryKey: ['pipeline-metrics', startDate, endDate],
-    queryFn: () => crmLeadsService.getPipelineMetrics({ startDate, endDate }),
-    refetchInterval: 60_000, // Refresh every minute
+  const basicMetricsQuery = useBasicMetrics({
+    startDate,
+    endDate,
+    enabled: !enableAdvanced,
   })
+
+  const advancedMetricsQuery = useAdvancedMetrics({
+    startDate,
+    endDate,
+    filters,
+    enabled: enableAdvanced,
+  })
+
+  const isLoading = enableAdvanced ? advancedMetricsQuery.isLoading : basicMetricsQuery.isLoading
+  const error = enableAdvanced ? advancedMetricsQuery.error : basicMetricsQuery.error
 
   if (isLoading) {
     return <MetricsLoadingSkeleton className={className} />
   }
 
   if (error) {
+    return <ErrorDisplay error={error} />
+  }
+
+  if (enableAdvanced && advancedMetricsQuery.data) {
     return (
       <div className={className}>
-        <Card>
-          <CardContent className="flex items-center gap-2 p-6">
-            <AlertCircle className="h-5 w-5 text-red-500" />
-            <p className="text-red-600">Erro ao carregar métricas do pipeline</p>
-          </CardContent>
-        </Card>
+        <AdvancedMetricsDisplay data={advancedMetricsQuery.data} />
       </div>
     )
   }
 
-  if (!metrics) {
-    return <div className={className} />
+  if (basicMetricsQuery.data) {
+    return (
+      <div className={className}>
+        <BasicMetricsDisplay data={basicMetricsQuery.data} />
+      </div>
+    )
   }
 
-  const stageChartData = createStageChartData(metrics.stage_counts)
-  const stageTimeData = createStageTimeData(metrics.average_stage_times)
+  return <div className={className}>Nenhum dado disponível</div>
+}
 
-  const conversionRate = metrics.conversion_rate ?? 0
-  const pipelineValue = metrics.total_pipeline_value ?? 0
-  const closedValue = metrics.closed_pipeline_value ?? 0
+interface ErrorDisplayProps {
+  error: Error | null
+}
 
+function ErrorDisplay({ error }: ErrorDisplayProps): JSX.Element {
   return (
-    <div className={className}>
-      <div className="grid gap-6">
-        {/* Key Metrics Cards */}
-        <MetricsCards
-          totalLeads={metrics.total_leads ?? 0}
-          conversionRate={conversionRate}
-          pipelineValue={pipelineValue}
-          closedValue={closedValue}
-        />
-
-        {/* Charts */}
-        <div className="grid gap-4 md:grid-cols-2">
-          <StageDistributionChart data={stageChartData} />
-          <AverageStageTimeChart data={stageTimeData} />
-        </div>
-
-        {/* Pipeline Distribution Chart */}
-        <PipelineDistributionChart data={stageChartData} />
+    <div className="flex items-center justify-center p-8">
+      <div className="text-center space-y-2">
+        <p className="text-sm text-muted-foreground">
+          Erro ao carregar métricas: {error?.message ?? 'Erro desconhecido'}
+        </p>
       </div>
     </div>
   )
 }
+
+export { type PipelineFiltersState } from './pipeline-metrics-hooks'

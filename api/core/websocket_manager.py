@@ -20,7 +20,7 @@ class WebSocketConnectionManager:
     Ensures real-time events are only broadcast within the same organization.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the WebSocket connection manager."""
         # Organization-scoped connections: {org_id: {user_id: [WebSocket1, WebSocket2, ...]}}
         self.connections: Dict[str, Dict[str, List[WebSocket]]] = {}
@@ -29,7 +29,7 @@ class WebSocketConnectionManager:
 
     async def connect(
         self, websocket: WebSocket, organization_id: UUID, user_id: UUID, user_info: Dict[str, Any]
-    ):
+    ) -> None:
         """Connect user to organization-specific WebSocket room."""
         await websocket.accept()
 
@@ -86,12 +86,12 @@ class WebSocketConnectionManager:
             del self.connections[org_str][user_str]
             return True
 
-    def _cleanup_user_data(self, org_str: str, user_str: str):
+    def _cleanup_user_data(self, org_str: str, user_str: str) -> None:
         """Clean up user data from active users."""
         if org_str in self.active_users and user_str in self.active_users[org_str]:
             del self.active_users[org_str][user_str]
 
-    def _cleanup_empty_organization(self, org_str: str):
+    def _cleanup_empty_organization(self, org_str: str) -> None:
         """Clean up empty organization rooms."""
         if not self.connections[org_str]:
             del self.connections[org_str]
@@ -99,8 +99,8 @@ class WebSocketConnectionManager:
                 del self.active_users[org_str]
 
     def _broadcast_user_left_event(
-        self, organization_id: UUID, org_str: str, user_str: str, user_info: dict
-    ):
+        self, organization_id: UUID, org_str: str, user_str: str, user_info: Dict[str, Any]
+    ) -> None:
         """Broadcast user left event to remaining organization members."""
         if org_str not in self.connections:
             return
@@ -132,7 +132,7 @@ class WebSocketConnectionManager:
 
     def disconnect(
         self, organization_id: UUID, user_id: UUID, websocket: Optional[WebSocket] = None
-    ):
+    ) -> None:
         """Disconnect user from organization WebSocket room."""
         org_str = str(organization_id)
         user_str = str(user_id)
@@ -156,7 +156,7 @@ class WebSocketConnectionManager:
 
     async def send_personal_message(
         self, message: Dict[str, Any], organization_id: UUID, user_id: UUID
-    ):
+    ) -> None:
         """Send message to specific user within organization."""
         org_str = str(organization_id)
         user_str = str(user_id)
@@ -187,7 +187,7 @@ class WebSocketConnectionManager:
 
     async def broadcast_to_organization(
         self, organization_id: UUID, message: Dict[str, Any], exclude_user_id: Optional[UUID] = None
-    ):
+    ) -> None:
         """Broadcast message to all users in organization (except excluded user)."""
         org_str = str(organization_id)
         exclude_str = str(exclude_user_id) if exclude_user_id else None
