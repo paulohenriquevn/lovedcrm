@@ -168,7 +168,7 @@
 - **Test Coverage**: 10/10 testes pipeline + 109/109 testes proxy passando
 - **Multi-tenancy**: Isolamento rigoroso validado em todos os cenários
 
-#### Story 1.2: Pipeline Kanban - Versão Completa EM ANDAMENTO (08/01/2025)
+#### Story 1.2: Pipeline Kanban - Versão Completa
 
 **Descrição:** "Como Google Analytics do seu funil de vendas - métricas que mostram onde está o problema"
 - Analogia: Dashboard do seu carro que mostra combustível, velocidade, problemas - mas para vendas
@@ -192,9 +192,6 @@
 8. Sistema sugere ações baseadas nos dados (mais follow-ups, templates específicos)
 9. Gestor pode alternar entre visão Kanban e Métricas seamlessly
 10. Interface responsiva funciona perfeitamente no mobile para acompanhamento
-
-- Status: **EM ANDAMENTO** em 08/01/2025
-- Plano: docs/plans/1.2-pipeline-kanban-versao-completa.md
 
 **Critérios de Aceite Técnicos:**
 

@@ -53,7 +53,7 @@ function PipelineKanbanInner({ className }: PipelineKanbanProps): React.ReactEle
 
   // Use extracted WebSocket handlers
   const { isConnected, isPolling, activeUsers, sendMessage } =
-    usePipelineWebSocketHandlers(reloadLeadsData)
+    usePipelineWebSocketHandlers(reloadLeadsData, stages, setStages)
 
   // Use extracted pipeline handlers
   const pipelineHandlers = usePipelineHandlers(reloadLeadsData)

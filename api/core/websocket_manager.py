@@ -22,8 +22,8 @@ class WebSocketConnectionManager:
 
     def __init__(self):
         """Initialize the WebSocket connection manager."""
-        # Organization-scoped connections: {org_id: {user_id: WebSocket}}
-        self.connections: Dict[str, Dict[str, WebSocket]] = {}
+        # Organization-scoped connections: {org_id: {user_id: [WebSocket1, WebSocket2, ...]}}
+        self.connections: Dict[str, Dict[str, List[WebSocket]]] = {}
         # Track active users per organization: {org_id: {user_id: {last_seen, user_info}}}
         self.active_users: Dict[str, Dict[str, Dict[str, Any]]] = {}
 
@@ -41,8 +41,12 @@ class WebSocketConnectionManager:
             self.connections[org_str] = {}
             self.active_users[org_str] = {}
 
-        # Add connection
-        self.connections[org_str][user_str] = websocket
+        # Initialize user connections list if not exists
+        if user_str not in self.connections[org_str]:
+            self.connections[org_str][user_str] = []
+
+        # Add connection to user's list
+        self.connections[org_str][user_str].append(websocket)
 
         # Track user activity
         self.active_users[org_str][user_str] = {
@@ -51,16 +55,11 @@ class WebSocketConnectionManager:
             "connected_at": datetime.utcnow().isoformat(),
         }
 
-        logger.info(
-            "User connected to organization WebSocket",
-            extra={
-                "organization_id": org_str,
-                "user_id": user_str,
-                "user_name": user_info.get("full_name", "Unknown"),
-                "total_org_connections": len(self.connections[org_str]),
-            },
-        )
+        logger.info(f"WebSocket connected: org={org_str} user={user_str}")
 
+        # Calculate total connections
+        total_connections = sum(len(ws_list) for ws_list in self.connections[org_str].values())
+        
         # Broadcast user joined event to organization
         await self.broadcast_to_organization(
             organization_id,
@@ -70,11 +69,12 @@ class WebSocketConnectionManager:
                 "user_info": user_info,
                 "timestamp": datetime.utcnow().isoformat(),
                 "total_online": len(self.connections[org_str]),
+                "total_connections": total_connections,
             },
             exclude_user_id=user_id,
         )
 
-    def disconnect(self, organization_id: UUID, user_id: UUID):
+    def disconnect(self, organization_id: UUID, user_id: UUID, websocket: Optional[WebSocket] = None):
         """Disconnect user from organization WebSocket room."""
         org_str = str(organization_id)
         user_str = str(user_id)
@@ -82,12 +82,19 @@ class WebSocketConnectionManager:
         if org_str in self.connections and user_str in self.connections[org_str]:
             user_info = self.active_users.get(org_str, {}).get(user_str, {}).get("user_info", {})
 
-            # Remove connection
-            del self.connections[org_str][user_str]
-
-            # Remove from active users
-            if org_str in self.active_users and user_str in self.active_users[org_str]:
-                del self.active_users[org_str][user_str]
+            # Remove specific connection or all connections
+            if websocket and websocket in self.connections[org_str][user_str]:
+                self.connections[org_str][user_str].remove(websocket)
+                # If no connections left, clean up user
+                if not self.connections[org_str][user_str]:
+                    del self.connections[org_str][user_str]
+                    if org_str in self.active_users and user_str in self.active_users[org_str]:
+                        del self.active_users[org_str][user_str]
+            else:
+                # Remove all connections for user
+                del self.connections[org_str][user_str]
+                if org_str in self.active_users and user_str in self.active_users[org_str]:
+                    del self.active_users[org_str][user_str]
 
             # Clean up empty organization rooms
             if not self.connections[org_str]:
@@ -95,18 +102,12 @@ class WebSocketConnectionManager:
                 if org_str in self.active_users:
                     del self.active_users[org_str]
 
-            logger.info(
-                "User disconnected from organization WebSocket",
-                extra={
-                    "organization_id": org_str,
-                    "user_id": user_str,
-                    "user_name": user_info.get("full_name", "Unknown"),
-                    "remaining_connections": len(self.connections.get(org_str, {})),
-                },
-            )
+            logger.info(f"WebSocket disconnected: org={org_str} user={user_str}")
 
             # Broadcast user left event to remaining organization members
             if org_str in self.connections:
+                remaining_total_connections = sum(len(ws_list) for ws_list in self.connections[org_str].values())
+                
                 # Use asyncio to run async function
                 import asyncio
 
@@ -121,6 +122,7 @@ class WebSocketConnectionManager:
                                 "user_info": user_info,
                                 "timestamp": datetime.utcnow().isoformat(),
                                 "total_online": len(self.connections[org_str]),
+                                "total_connections": remaining_total_connections,
                             },
                         )
                     )
@@ -135,20 +137,25 @@ class WebSocketConnectionManager:
         user_str = str(user_id)
 
         if org_str in self.connections and user_str in self.connections[org_str]:
-            websocket = self.connections[org_str][user_str]
-            try:
-                # 🚨 SEGURANÇA: Check connection state before sending
-                if hasattr(websocket, 'client_state') and websocket.client_state.name in ["DISCONNECTED", "CLOSED"]:
-                    logger.warning(f"WebSocket already closed for user {user_str}, cleaning up")
-                    self.disconnect(organization_id, user_id)
-                    return
-                    
-                await websocket.send_text(json.dumps(message))
-                logger.debug(f"Personal message sent to user {user_str} in org {org_str}")
-            except Exception as e:
-                logger.error(f"Failed to send personal message: {e}")
-                # Remove failed connection
-                self.disconnect(organization_id, user_id)
+            websockets = self.connections[org_str][user_str]  # Now a list
+            failed_connections = []
+            
+            for websocket in websockets:
+                try:
+                    # 🚨 SEGURANÇA: Check connection state before sending
+                    if hasattr(websocket, 'client_state') and websocket.client_state.name in ["DISCONNECTED", "CLOSED"]:
+                        logger.warning(f"WebSocket already closed for user {user_str}, cleaning up")
+                        failed_connections.append(websocket)
+                        continue
+                        
+                    await websocket.send_text(json.dumps(message))
+                except Exception as e:
+                    logger.error(f"Failed to send personal message: {e}")
+                    failed_connections.append(websocket)
+            
+            # Clean up failed connections
+            for failed_ws in failed_connections:
+                self.disconnect(organization_id, user_id, failed_ws)
 
     async def broadcast_to_organization(
         self, organization_id: UUID, message: Dict[str, Any], exclude_user_id: Optional[UUID] = None
@@ -157,62 +164,38 @@ class WebSocketConnectionManager:
         org_str = str(organization_id)
         exclude_str = str(exclude_user_id) if exclude_user_id else None
 
-        logger.debug(f"Broadcasting to org {org_str}, exclude_user: {exclude_str}")
-        logger.debug(f"Available connections: {list(self.connections.keys())}")
-
         if org_str not in self.connections:
-            logger.warning(f"No connections for organization {org_str}")
             return
 
         # Add organization context to message
         message["organization_id"] = org_str
         message_json = json.dumps(message)
 
-        connected_users = list(self.connections[org_str].keys())
-        logger.debug(f"Connected users in org {org_str}: {connected_users}")
-
         failed_connections = []
         successful_broadcasts = 0
 
-        for user_str, websocket in self.connections[org_str].items():
+        for user_str, websockets in self.connections[org_str].items():
             # Skip excluded user
             if exclude_str and user_str == exclude_str:
-                logger.debug(f"Skipping excluded user {user_str}")
                 continue
 
-            try:
-                # 🚨 SEGURANÇA: Check connection state before broadcasting
-                if hasattr(websocket, 'client_state') and websocket.client_state.name in ["DISCONNECTED", "CLOSED"]:
-                    logger.warning(f"WebSocket already closed for user {user_str} during broadcast")
-                    failed_connections.append((user_str, organization_id))
-                    continue
-                
-                logger.debug(f"Sending message to user {user_str}")
-                await websocket.send_text(message_json)
-                successful_broadcasts += 1
-                logger.debug(f"Successfully sent message to user {user_str}")
-            except Exception as e:
-                logger.error(f"Failed to broadcast to user {user_str}: {e}")
-                failed_connections.append((user_str, organization_id))
-
-        logger.info(
-            f"Broadcast completed: {successful_broadcasts} successful, {len(failed_connections)} failed"
-        )
+            # Send to all WebSocket connections for this user
+            for websocket in websockets:
+                try:
+                    # Check connection state before broadcasting
+                    if hasattr(websocket, 'client_state') and websocket.client_state.name in ["DISCONNECTED", "CLOSED"]:
+                        failed_connections.append((user_str, organization_id, websocket))
+                        continue
+                    
+                    await websocket.send_text(message_json)
+                    successful_broadcasts += 1
+                except Exception as e:
+                    logger.error(f"Failed to broadcast to user {user_str}: {e}")
+                    failed_connections.append((user_str, organization_id, websocket))
 
         # Clean up failed connections
-        for user_str, org_id in failed_connections:
-            self.disconnect(org_id, UUID(user_str))
-
-        logger.info(
-            "Broadcast completed",
-            extra={
-                "organization_id": org_str,
-                "message_type": message.get("type", "unknown"),
-                "successful_broadcasts": successful_broadcasts,
-                "failed_connections": len(failed_connections),
-                "excluded_user": exclude_str,
-            },
-        )
+        for user_str, org_id, websocket in failed_connections:
+            self.disconnect(org_id, UUID(user_str), websocket)
 
     def get_active_users(self, organization_id: UUID) -> List[Dict[str, Any]]:
         """Get list of active users in organization."""
@@ -237,10 +220,16 @@ class WebSocketConnectionManager:
     def get_organization_stats(self, organization_id: UUID) -> Dict[str, Any]:
         """Get real-time stats for organization."""
         org_str = str(organization_id)
+        
+        # Count total connections across all users
+        total_connections = 0
+        if org_str in self.connections:
+            for user_id, websockets in self.connections[org_str].items():
+                total_connections += len(websockets)
 
         return {
             "organization_id": org_str,
-            "total_connections": len(self.connections.get(org_str, {})),
+            "total_connections": total_connections,
             "active_users": len(self.active_users.get(org_str, {})),
             "connected_users": self.get_active_users(organization_id),
         }

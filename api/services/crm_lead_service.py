@@ -98,9 +98,6 @@ class CRMLeadService:
                         organization.id,
                         event_message,  # No exclude_user_id - everyone gets the event
                     )
-                    logger.debug(
-                        f"Successfully broadcasted lead_created event to org {organization.id}"
-                    )
                 except Exception as broadcast_error:
                     logger.error(f"Failed to broadcast lead creation event: {broadcast_error}")
 
@@ -495,13 +492,20 @@ class CRMLeadService:
                 "id": str(lead.id),
                 "name": lead.name,
                 "email": lead.email,
+                "phone": lead.phone,
                 "stage": stage_data.stage.value
                 if hasattr(stage_data.stage, "value")
                 else stage_data.stage,
                 "previous_stage": lead.stage.value if hasattr(lead.stage, "value") else lead.stage,
-                "estimated_value": str(lead.estimated_value) if lead.estimated_value else None,
+                "estimated_value": float(lead.estimated_value) if lead.estimated_value else None,
+                "source": lead.source,
+                "assigned_user_id": str(lead.assigned_user_id) if lead.assigned_user_id else None,
                 "organization_id": str(organization.id),
-                "notes": stage_data.notes,
+                "notes": lead.notes,
+                "is_favorite": getattr(lead, "is_favorite", False),
+                "created_at": lead.created_at.isoformat() if lead.created_at else None,
+                "updated_at": lead.updated_at.isoformat() if lead.updated_at else None,
+                "tags": getattr(lead, "tags", []),
             }
 
             # Import here to avoid circular imports
@@ -517,9 +521,6 @@ class CRMLeadService:
             # Broadcast to all organization members
             try:
                 await websocket_manager.broadcast_to_organization(organization.id, event_message)
-                logger.debug(
-                    f"Successfully broadcasted lead_stage_changed event to org {organization.id}"
-                )
             except Exception as broadcast_error:
                 logger.error(f"Failed to broadcast lead stage change event: {broadcast_error}")
 
