@@ -1,4 +1,5 @@
 'use client'
+/* eslint-disable max-lines */
 
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
@@ -10,15 +11,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { MultiSelect } from '@/components/ui/multi-select'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 
 import type { PipelineFiltersState } from './pipeline-filters-types'
-
-interface User {
-  id: string
-  name: string
-}
 
 const STAGE_LABELS = {
   lead: 'Lead',
@@ -27,6 +22,8 @@ const STAGE_LABELS = {
   negociacao: 'Negociação',
   fechado: 'Fechado',
 } as const
+
+const NO_OPTIONS_CLASS = 'text-xs text-muted-foreground p-2 border rounded'
 
 interface StageFilterProps {
   stages: string[]
@@ -39,10 +36,40 @@ export function StageFilter({
   availableStages = [],
   onChange,
 }: StageFilterProps): JSX.Element {
+  // eslint-disable-next-line no-console
+  console.log('🔍 StageFilter DEBUG:', { 
+    availableStages, 
+    availableStagesLength: availableStages?.length,
+    availableStagesType: typeof availableStages,
+    stages, 
+    stagesLength: stages?.length 
+  })
+
   const stageOptions = availableStages.map(stage => ({
     value: stage,
     label: STAGE_LABELS[stage as keyof typeof STAGE_LABELS] ?? stage,
   }))
+
+  // eslint-disable-next-line no-console
+  console.log('🔍 StageFilter stageOptions:', stageOptions)
+
+  const handleChange = (values: string[]): void => {
+    // eslint-disable-next-line no-console
+    console.log('🔍 StageFilter onChange called:', values)
+    onChange(values)
+  }
+
+  // Show loading or no options message
+  if (availableStages.length === 0) {
+    return (
+      <div className="space-y-2">
+        <Label>Estágios</Label>
+        <div className={NO_OPTIONS_CLASS}>
+          Nenhum estágio disponível
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-2">
@@ -50,7 +77,7 @@ export function StageFilter({
       <MultiSelect
         options={stageOptions}
         selected={stages}
-        onChange={onChange}
+        onChange={handleChange}
         placeholder="Selecionar estágios..."
       />
     </div>
@@ -73,6 +100,18 @@ export function SourceFilter({
     label: source,
   }))
 
+  // Show loading or no options message
+  if (availableSources.length === 0) {
+    return (
+      <div className="space-y-2">
+        <Label>Origem</Label>
+        <div className={NO_OPTIONS_CLASS}>
+          Nenhuma origem disponível
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-2">
       <Label>Origem</Label>
@@ -88,7 +127,7 @@ export function SourceFilter({
 
 interface AssignedUserFilterProps {
   assignedUsers: string[]
-  availableUsers?: User[]
+  availableUsers?: Array<{ id: string; name: string }>
   onChange: (users: string[]) => void
 }
 
@@ -101,6 +140,18 @@ export function AssignedUserFilter({
     value: user.id,
     label: user.name,
   }))
+
+  // Show loading or no options message
+  if (availableUsers.length === 0) {
+    return (
+      <div className="space-y-2">
+        <Label>Responsável</Label>
+        <div className={NO_OPTIONS_CLASS}>
+          Nenhum responsável disponível
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-2">
@@ -126,6 +177,18 @@ export function TagFilter({ tags, availableTags = [], onChange }: TagFilterProps
     value: tag,
     label: tag,
   }))
+
+  // Show loading or no options message
+  if (availableTags.length === 0) {
+    return (
+      <div className="space-y-2">
+        <Label>Tags</Label>
+        <div className={NO_OPTIONS_CLASS}>
+          Nenhuma tag disponível
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-2">
@@ -250,7 +313,7 @@ interface FilterContentProps {
   filterOptions?: {
     stages?: string[]
     sources?: string[]
-    assigned_users?: User[]
+    assigned_users?: Array<{ id: string; name: string }>
     available_tags?: string[]
   }
   updateFilter: <K extends keyof PipelineFiltersState>(
@@ -265,19 +328,28 @@ export function FilterContent({
   filterOptions,
   updateFilter,
 }: FilterContentProps): JSX.Element {
+  // eslint-disable-next-line no-console
+  console.log('🔍 FilterContent DEBUG:', { 
+    isLoading, 
+    filterOptions,
+    filterOptionsType: typeof filterOptions,
+    stages: filterOptions?.stages,
+    sources: filterOptions?.sources,
+    assignedUsers: filterOptions?.assigned_users,
+    availableTags: filterOptions?.available_tags
+  })
+
   if (isLoading) {
     return <div className="text-sm text-muted-foreground">Carregando opções...</div>
   }
 
   return (
-    <div className="space-y-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <StageFilter
         stages={filters.stages}
         availableStages={filterOptions?.stages}
         onChange={values => updateFilter('stages', values)}
       />
-
-      <Separator />
 
       <SourceFilter
         sources={filters.sources}
@@ -285,15 +357,11 @@ export function FilterContent({
         onChange={values => updateFilter('sources', values)}
       />
 
-      <Separator />
-
       <AssignedUserFilter
         assignedUsers={filters.assignedUsers}
         availableUsers={filterOptions?.assigned_users}
         onChange={values => updateFilter('assignedUsers', values)}
       />
-
-      <Separator />
 
       <TagFilter
         tags={filters.tags}
@@ -301,16 +369,12 @@ export function FilterContent({
         onChange={values => updateFilter('tags', values)}
       />
 
-      <Separator />
-
       <DateRangeFilter
         dateFrom={filters.dateFrom}
         dateTo={filters.dateTo}
         onDateFromChange={date => updateFilter('dateFrom', date)}
         onDateToChange={date => updateFilter('dateTo', date)}
       />
-
-      <Separator />
 
       <ValueRangeFilter
         valueMin={filters.valueMin}

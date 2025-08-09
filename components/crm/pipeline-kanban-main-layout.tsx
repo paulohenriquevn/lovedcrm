@@ -6,7 +6,7 @@
 import { cn } from '@/lib/utils'
 
 import { PipelineModals } from './pipeline-kanban-helpers'
-import { PipelineHeader, PipelineContent } from './pipeline-kanban-layout'
+import { PipelineLayoutWithFilters } from './pipeline-kanban-layout'
 
 import type { PipelineFiltersState } from './pipeline-filters-types'
 import type { PipelineStageDisplay } from './pipeline-types'
@@ -56,6 +56,21 @@ interface PipelineKanbanLayoutProps {
   isConnected: boolean
   isPolling: boolean
   activeUsers: string[]
+  isFiltersExpanded: boolean
+  onToggleFilters: () => void
+  filters: PipelineFiltersState
+  filterOptions?: {
+    stages?: string[]
+    sources?: string[]
+    assigned_users?: Array<{ id: string; name: string }>
+    available_tags?: string[]
+  }
+  updateFilter: <K extends keyof PipelineFiltersState>(
+    key: K,
+    value: PipelineFiltersState[K]
+  ) => void
+  onClearAllFilters: () => void
+  isLoadingFilters: boolean
 }
 
 export function PipelineKanbanLayout({
@@ -70,26 +85,36 @@ export function PipelineKanbanLayout({
   isConnected,
   isPolling,
   activeUsers,
+  isFiltersExpanded,
+  onToggleFilters,
+  filters,
+  filterOptions,
+  updateFilter,
+  onClearAllFilters,
+  isLoadingFilters,
 }: PipelineKanbanLayoutProps): JSX.Element {
   return (
     <div className={cn('h-full', className)}>
-      <PipelineHeader
+      <PipelineLayoutWithFilters
         activeTab={activeTab}
         onTabChange={onTabChange}
         onFiltersChange={onFiltersChange}
         isConnected={isConnected}
         isPolling={isPolling}
         activeUsers={activeUsers}
-      />
-
-      <PipelineContent
-        activeTab={activeTab}
+        isFiltersExpanded={isFiltersExpanded}
+        onToggleFilters={onToggleFilters}
         filteredStages={filteredStages}
         pipelineHandlers={pipelineHandlers}
         onDrop={(stageId: string) => {
           void onDragDrop(stageId)
         }}
         currentFilters={currentFilters}
+        filters={filters}
+        filterOptions={filterOptions}
+        updateFilter={updateFilter}
+        onClearAllFilters={onClearAllFilters}
+        isLoadingFilters={isLoadingFilters}
       />
 
       <PipelineModals

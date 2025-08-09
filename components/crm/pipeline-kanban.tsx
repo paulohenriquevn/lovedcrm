@@ -6,11 +6,14 @@
  */
 'use client'
 
+import { useQuery } from '@tanstack/react-query'
 import { useState, useMemo } from 'react'
 
+import { crmLeadsService } from '@/services/crm-leads'
 import { useAuthStore } from '@/stores/auth'
 
 import { usePipelineDataHandlers } from './pipeline-data-handlers'
+import { createInitialFilters, createFilterUpdater } from './pipeline-filters-utils'
 import { usePipelineHandlers } from './pipeline-handlers'
 import { LoadingState, ErrorState } from './pipeline-kanban-helpers'
 import { PipelineKanbanLayout } from './pipeline-kanban-main-layout'
@@ -30,15 +33,46 @@ export function PipelineKanban({ className }: PipelineKanbanProps): React.ReactE
 function PipelineKanbanInner({ className }: PipelineKanbanProps): React.ReactElement {
   const { user, organization } = useAuthStore()
   const [activeTab, setActiveTab] = useState<'kanban' | 'metrics' | 'advanced'>('kanban')
-  const [currentFilters, setCurrentFilters] = useState<PipelineFiltersState>({
-    stages: [],
-    sources: [],
-    assignedUsers: [],
-    tags: [],
-    dateFrom: null,
-    dateTo: null,
-    valueMin: '',
-    valueMax: '',
+  const [isFiltersExpanded, setIsFiltersExpanded] = useState(true) // Force expanded for debug
+  const [filters, setFilters] = useState<PipelineFiltersState>(createInitialFilters)
+
+  // Fetch filter options with fallback
+  const { data: filterOptions, isLoading: isLoadingFilters, error: filterError } = useQuery({
+    queryKey: ['pipeline-filter-options'],
+    queryFn: () => crmLeadsService.getPipelineFilters(),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: false, // Don't retry on failure, use mock data
+  })
+
+  // Fallback mock data when API is not available
+  const mockFilterOptions = {
+    stages: ['lead', 'contato', 'proposta', 'negociacao', 'fechado'],
+    sources: ['Website', 'WhatsApp', 'Facebook', 'Instagram', 'Indicação', 'Google'],
+    // eslint-disable-next-line camelcase
+    assigned_users: [
+      { id: '1', name: 'João Silva' },
+      { id: '2', name: 'Maria Santos' },
+      { id: '3', name: 'Pedro Costa' },
+    ],
+    // eslint-disable-next-line camelcase
+    available_tags: ['Urgente', 'VIP', 'Prospecção', 'Reativação', 'Newsletter'],
+  }
+
+  // Use API data or fallback to mock data for development
+  const effectiveFilterOptions = filterOptions ?? mockFilterOptions
+  
+  // Don't show loading if we're using mock data
+  const effectiveIsLoading = isLoadingFilters && !filterError
+
+  // eslint-disable-next-line no-console
+  console.log('🔍 PipelineKanban Filter Options DEBUG:', { 
+    filterOptions,
+    mockFilterOptions,
+    effectiveFilterOptions,
+    isLoadingFilters,
+    filterError,
+    effectiveIsLoading,
+    usingMockData: !filterOptions
   })
 
   // Use extracted data handlers
@@ -56,8 +90,12 @@ function PipelineKanbanInner({ className }: PipelineKanbanProps): React.ReactEle
 
   // Apply filters to stages data
   const filteredStages = useMemo(() => {
-    return applyFiltersToStages(stages, currentFilters)
-  }, [stages, currentFilters])
+    return applyFiltersToStages(stages, filters)
+  }, [stages, filters])
+
+  // Filter utilities
+  const updateFilter = createFilterUpdater(setFilters)
+  const clearAllFilters = (): void => setFilters(createInitialFilters())
 
   const handleDragDrop = async (targetStageId: string): Promise<void> => {
     if (isTruthy(pipelineHandlers.draggedLead)) {
@@ -77,8 +115,22 @@ function PipelineKanbanInner({ className }: PipelineKanbanProps): React.ReactEle
   }
 
   // Show loading state while auth is loading or while fetching data
-  if (!isTruthy(user) || !isTruthy(organization) || loading) {
+  // Temporarily skip auth check for debugging filters
+  if (loading) {
     return <LoadingState className={className} />
+  }
+
+  // TEMPORARY: Show filter debug even without auth
+  if (!isTruthy(user) || !isTruthy(organization)) {
+    return (
+      <div className="p-4">
+        <h3 className="mb-4">🔍 DEBUG MODE - Filters Without Auth</h3>
+        <div className="bg-muted/30 p-4">
+          <h4 className="mb-2">Mock Filter Options:</h4>
+          <pre>{JSON.stringify(effectiveFilterOptions, null, 2)}</pre>
+        </div>
+      </div>
+    )
   }
 
   // Show error state
@@ -91,8 +143,8 @@ function PipelineKanbanInner({ className }: PipelineKanbanProps): React.ReactEle
       className={className}
       activeTab={activeTab}
       onTabChange={setActiveTab}
-      currentFilters={currentFilters}
-      onFiltersChange={setCurrentFilters}
+      currentFilters={filters}
+      onFiltersChange={setFilters}
       filteredStages={filteredStages}
       pipelineHandlers={pipelineHandlers}
       onDragDrop={(stageId: string) => {
@@ -101,6 +153,13 @@ function PipelineKanbanInner({ className }: PipelineKanbanProps): React.ReactEle
       isConnected={isConnected}
       isPolling={isPolling}
       activeUsers={activeUsers}
+      isFiltersExpanded={isFiltersExpanded}
+      onToggleFilters={() => setIsFiltersExpanded(!isFiltersExpanded)}
+      filters={filters}
+      filterOptions={effectiveFilterOptions}
+      updateFilter={updateFilter}
+      onClearAllFilters={clearAllFilters}
+      isLoadingFilters={effectiveIsLoading}
     />
   )
 }

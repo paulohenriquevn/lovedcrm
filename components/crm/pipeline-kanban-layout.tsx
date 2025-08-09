@@ -7,7 +7,11 @@ import { BarChart3, Kanban, TrendingUp } from 'lucide-react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import { PipelineFilters, type PipelineFiltersState } from './pipeline-filters'
+import {
+  PipelineFilters,
+  PipelineFiltersHorizontalPanel,
+  type PipelineFiltersState,
+} from './pipeline-filters'
 import { ConnectionStatusHeader, StageColumn } from './pipeline-kanban-helpers'
 import { PipelineMetrics } from './pipeline-metrics'
 
@@ -47,6 +51,8 @@ interface HeaderControlsProps {
   isConnected: boolean
   isPolling: boolean
   activeUsers: string[]
+  isFiltersExpanded: boolean
+  onToggleFilters: () => void
 }
 
 export function HeaderControls({
@@ -54,10 +60,16 @@ export function HeaderControls({
   isConnected,
   isPolling,
   activeUsers,
+  isFiltersExpanded,
+  onToggleFilters,
 }: HeaderControlsProps): JSX.Element {
   return (
     <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-      <PipelineFilters onFiltersChange={onFiltersChange} />
+      <PipelineFilters
+        onFiltersChange={onFiltersChange}
+        isExpanded={isFiltersExpanded}
+        onToggleExpanded={onToggleFilters}
+      />
       <ConnectionStatusHeader
         isConnected={isConnected}
         isPolling={isPolling}
@@ -74,6 +86,8 @@ interface PipelineHeaderProps {
   isConnected: boolean
   isPolling: boolean
   activeUsers: string[]
+  isFiltersExpanded: boolean
+  onToggleFilters: () => void
 }
 
 export function PipelineHeader({
@@ -83,6 +97,8 @@ export function PipelineHeader({
   isConnected,
   isPolling,
   activeUsers,
+  isFiltersExpanded,
+  onToggleFilters,
 }: PipelineHeaderProps): JSX.Element {
   return (
     <div className="flex items-center justify-between mb-4 flex-col sm:flex-row gap-4 sm:gap-0">
@@ -92,6 +108,8 @@ export function PipelineHeader({
         isConnected={isConnected}
         isPolling={isPolling}
         activeUsers={activeUsers}
+        isFiltersExpanded={isFiltersExpanded}
+        onToggleFilters={onToggleFilters}
       />
     </div>
   )
@@ -204,5 +222,98 @@ export function PipelineContent({
         <AdvancedMetricsView filters={currentFilters} />
       </TabsContent>
     </Tabs>
+  )
+}
+
+// Novo componente que engloba toda a estrutura com filtros horizontais
+interface PipelineLayoutWithFiltersProps {
+  activeTab: 'kanban' | 'metrics' | 'advanced'
+  onTabChange: (tab: 'kanban' | 'metrics' | 'advanced') => void
+  onFiltersChange: (filters: PipelineFiltersState) => void
+  isConnected: boolean
+  isPolling: boolean
+  activeUsers: string[]
+  isFiltersExpanded: boolean
+  onToggleFilters: () => void
+  filteredStages: PipelineStageDisplay[] | null
+  pipelineHandlers: {
+    handleDragStart: (leadId: string) => void
+    handleAddLead: (stageId: string) => void
+    handleViewDetails: (leadId: string) => void
+    handleEditLead: (leadId: string) => void
+    handleSendEmail: (leadId: string) => void
+    handleRemoveLead: (leadId: string) => void
+    handleCall: (leadId: string) => void
+    handleWhatsApp: (leadId: string) => void
+  }
+  onDrop: (stageId: string) => void
+  currentFilters: PipelineFiltersState
+  filters: PipelineFiltersState
+  filterOptions?: {
+    stages?: string[]
+    sources?: string[]
+    assigned_users?: Array<{ id: string; name: string }>
+    available_tags?: string[]
+  }
+  updateFilter: <K extends keyof PipelineFiltersState>(
+    key: K,
+    value: PipelineFiltersState[K]
+  ) => void
+  onClearAllFilters: () => void
+  isLoadingFilters: boolean
+}
+
+export function PipelineLayoutWithFilters({
+  activeTab,
+  onTabChange,
+  onFiltersChange,
+  isConnected,
+  isPolling,
+  activeUsers,
+  isFiltersExpanded,
+  onToggleFilters,
+  filteredStages,
+  pipelineHandlers,
+  onDrop,
+  currentFilters,
+  filters,
+  filterOptions,
+  updateFilter,
+  onClearAllFilters,
+  isLoadingFilters,
+}: PipelineLayoutWithFiltersProps): JSX.Element {
+  return (
+    <div className="h-full">
+      {/* Header com tabs e botão de filtros */}
+      <PipelineHeader
+        activeTab={activeTab}
+        onTabChange={onTabChange}
+        onFiltersChange={onFiltersChange}
+        isConnected={isConnected}
+        isPolling={isPolling}
+        activeUsers={activeUsers}
+        isFiltersExpanded={isFiltersExpanded}
+        onToggleFilters={onToggleFilters}
+      />
+
+      {/* Painel Horizontal de Filtros */}
+      <PipelineFiltersHorizontalPanel
+        isExpanded={isFiltersExpanded}
+        filters={filters}
+        filterOptions={filterOptions}
+        updateFilter={updateFilter}
+        onClearAll={onClearAllFilters}
+        isLoading={isLoadingFilters}
+      />
+
+      {/* Conteúdo principal (Kanban, Métricas, etc) */}
+      <PipelineContent
+        activeTab={activeTab}
+        filteredStages={filteredStages}
+        pipelineHandlers={pipelineHandlers}
+        onDrop={onDrop}
+        currentFilters={currentFilters}
+      />
+    </div>
   )
 }

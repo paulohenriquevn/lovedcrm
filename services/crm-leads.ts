@@ -275,15 +275,17 @@ class CRMLeadsService extends BaseService {
    * Get pipeline filter options
    */
   async getPipelineFilters(): Promise<{
-    sources: Array<{ label: string; value: string }>
-    users: Array<{ label: string; value: string }>
-    tags: Array<{ label: string; value: string }>
+    sources: string[]
+    assigned_users: Array<{ id: string; name: string }>
+    available_tags: string[]
+    stages: string[]
   }> {
     return this.get<{
-      sources: Array<{ label: string; value: string }>
-      users: Array<{ label: string; value: string }>
-      tags: Array<{ label: string; value: string }>
-    }>(`${this.baseUrl}/filters`)
+      sources: string[]
+      assigned_users: Array<{ id: string; name: string }>
+      available_tags: string[]
+      stages: string[]
+    }>(`${this.baseUrl}/pipeline/filters`)
   }
 
   /**
@@ -302,7 +304,9 @@ class CRMLeadsService extends BaseService {
     if (params?.endDate) searchParams.append('end_date', params.endDate)
 
     const query = searchParams.toString()
-    const url = query ? `${this.baseUrl}/pipeline/metrics?${query}` : `${this.baseUrl}/pipeline/metrics`
+    const url = query
+      ? `${this.baseUrl}/pipeline/metrics?${query}`
+      : `${this.baseUrl}/pipeline/metrics`
 
     return this.get<{
       stage_counts: Record<string, number>
@@ -342,7 +346,9 @@ class CRMLeadsService extends BaseService {
     }
 
     const query = searchParams.toString()
-    const url = query ? `${this.baseUrl}/metrics/advanced?${query}` : `${this.baseUrl}/metrics/advanced`
+    const url = query
+      ? `${this.baseUrl}/metrics/advanced?${query}`
+      : `${this.baseUrl}/metrics/advanced`
 
     return this.get<AdvancedMetricsResponse>(url)
   }

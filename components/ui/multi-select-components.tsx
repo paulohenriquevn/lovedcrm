@@ -86,13 +86,25 @@ export function MultiSelectTrigger({
   onToggle,
   onUnselect,
 }: MultiSelectTriggerProps): React.ReactElement {
+  // eslint-disable-next-line no-console
+  console.log('🔍 MultiSelectTrigger DEBUG:', { 
+    open, 
+    selectedOptions, 
+    onToggleType: typeof onToggle,
+    placeholder
+  })
+
   return (
     <Button
       variant="outline"
       role="combobox"
       aria-expanded={open}
       className={cn('justify-between min-h-[2.5rem] h-auto', className)}
-      onClick={onToggle}
+      onClick={() => {
+        // eslint-disable-next-line no-console
+        console.log('🔍 MultiSelectTrigger clicked!')
+        onToggle()
+      }}
     >
       <SelectedOptionsDisplay
         selectedOptions={selectedOptions}
@@ -112,29 +124,80 @@ interface OptionListProps {
 }
 
 export function OptionList({ options, selected, onSelect }: OptionListProps): React.ReactElement {
+  // eslint-disable-next-line no-console
+  console.log('🔍 OptionList DEBUG:', { 
+    options, 
+    optionsLength: options?.length,
+    selected,
+    onSelectType: typeof onSelect
+  })
+
+  // TEMPORARY: Simple list instead of Command for debugging
+  return (
+    <div className="p-2 max-h-[200px] overflow-y-auto">
+      {options.length === 0 ? (
+        <div className="text-sm text-muted-foreground p-2">Nenhum item encontrado</div>
+      ) : (
+        options.map(option => {
+          // eslint-disable-next-line no-console
+          console.log('🔍 Rendering option:', option)
+          const isSelected = selected.includes(option.value)
+          return (
+            <div
+              key={option.value}
+              className="flex items-center px-2 py-1.5 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground rounded"
+              onClick={() => {
+                // eslint-disable-next-line no-console
+                console.log('🔍 Option clicked:', option.value)
+                onSelect(option.value)
+              }}
+            >
+              <Check
+                className={cn(
+                  'mr-2 h-4 w-4',
+                  isSelected ? 'opacity-100' : 'opacity-0'
+                )}
+              />
+              {option.label}
+            </div>
+          )
+        })
+      )}
+    </div>
+  )
+
+  // Original Command implementation (commented for debugging)
+  /*
   return (
     <Command>
       <CommandInput placeholder="Buscar..." />
       <CommandEmpty>Nenhum item encontrado.</CommandEmpty>
       <CommandList>
         <CommandGroup>
-          {options.map(option => (
-            <CommandItem
-              key={option.value}
-              value={option.value}
-              onSelect={() => onSelect(option.value)}
-            >
-              <Check
-                className={cn(
-                  'mr-2 h-4 w-4',
-                  selected.includes(option.value) ? 'opacity-100' : 'opacity-0'
-                )}
-              />
-              {option.label}
-            </CommandItem>
-          ))}
+          {options.map(option => {
+            console.log('🔍 Rendering option:', option)
+            return (
+              <CommandItem
+                key={option.value}
+                value={option.value}
+                onSelect={() => {
+                  console.log('🔍 Option clicked:', option.value)
+                  onSelect(option.value)
+                }}
+              >
+                <Check
+                  className={cn(
+                    'mr-2 h-4 w-4',
+                    selected.includes(option.value) ? 'opacity-100' : 'opacity-0'
+                  )}
+                />
+                {option.label}
+              </CommandItem>
+            )
+          })}
         </CommandGroup>
       </CommandList>
     </Command>
   )
+  */
 }

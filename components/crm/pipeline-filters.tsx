@@ -1,67 +1,125 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
 import { useState, useEffect } from 'react'
 
-import { Card } from '@/components/ui/card'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { crmLeadsService } from '@/services/crm-leads'
+import { cn } from '@/lib/utils'
 
-import { FilterContentWrapper, FilterHeader, FilterTrigger } from './pipeline-filters-components'
-import {
-  createInitialFilters,
-  getActiveFilterCount,
-  createFilterUpdater,
-} from './pipeline-filters-utils'
+import { FilterContentWrapper, FilterTrigger } from './pipeline-filters-components'
+import { createInitialFilters, getActiveFilterCount } from './pipeline-filters-utils'
 
 import type { PipelineFiltersState } from './pipeline-filters-types'
 
 interface PipelineFiltersProps {
   onFiltersChange: (filters: PipelineFiltersState) => void
   className?: string
+  isExpanded?: boolean
+  onToggleExpanded?: () => void
 }
 
-export function PipelineFilters({ onFiltersChange, className }: PipelineFiltersProps): JSX.Element {
-  const [isOpen, setIsOpen] = useState(false)
+export function PipelineFilters({
+  onFiltersChange,
+  className,
+  isExpanded = false,
+  onToggleExpanded,
+}: PipelineFiltersProps): JSX.Element {
   const [filters, setFilters] = useState<PipelineFiltersState>(createInitialFilters)
 
-  const { data: filterOptions, isLoading } = useQuery({
-    queryKey: ['pipeline-filter-options'],
-    queryFn: () => crmLeadsService.getPipelineFilters(),
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  })
+  // Prevent lint warning - setFilters is used in the horizontal panel component
+  void setFilters
 
   // Notify parent when filters change
   useEffect(() => {
     onFiltersChange(filters)
   }, [filters, onFiltersChange])
 
-  const updateFilter = createFilterUpdater(setFilters)
-  const clearAllFilters = (): void => setFilters(createInitialFilters())
   const activeFilterCount = getActiveFilterCount(filters)
 
   return (
-    <div className={className}>
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger asChild>
-          <FilterTrigger activeFilterCount={activeFilterCount} />
-        </PopoverTrigger>
-        <PopoverContent className="w-96" align="start">
-          <Card className="border-0 shadow-none">
-            <FilterHeader
-              activeFilterCount={activeFilterCount}
-              onClearAll={clearAllFilters}
-              onClose={() => setIsOpen(false)}
-            />
-            <FilterContentWrapper
-              isLoading={isLoading}
-              filters={filters}
-              filterOptions={filterOptions}
-              updateFilter={updateFilter}
-            />
-          </Card>
-        </PopoverContent>
-      </Popover>
+    <>
+      {/* Filter Trigger Button (apenas o botão, painel fica separado) */}
+      <FilterTrigger
+        activeFilterCount={activeFilterCount}
+        onClick={onToggleExpanded}
+        isExpanded={isExpanded}
+        className={className}
+      />
+    </>
+  )
+}
+
+// Componente do Painel Horizontal de Filtros
+interface PipelineFiltersHorizontalPanelProps {
+  isExpanded: boolean
+  filters: PipelineFiltersState
+  filterOptions?: {
+    stages?: string[]
+    sources?: string[]
+    assigned_users?: Array<{ id: string; name: string }>
+    available_tags?: string[]
+  }
+  updateFilter: <K extends keyof PipelineFiltersState>(
+    key: K,
+    value: PipelineFiltersState[K]
+  ) => void
+  onClearAll: () => void
+  isLoading: boolean
+}
+
+export function PipelineFiltersHorizontalPanel({
+  isExpanded,
+  filters,
+  filterOptions,
+  updateFilter,
+  onClearAll,
+  isLoading,
+}: PipelineFiltersHorizontalPanelProps): JSX.Element {
+  const activeFilterCount = getActiveFilterCount(filters)
+
+  // eslint-disable-next-line no-console
+  console.log('🔍 PipelineFiltersHorizontalPanel DEBUG:', { 
+    isExpanded, 
+    filterOptions,
+    filterOptionsType: typeof filterOptions,
+    hasStages: !!filterOptions?.stages,
+    stagesLength: filterOptions?.stages?.length,
+    updateFilterType: typeof updateFilter,
+    isLoading 
+  })
+
+  return (
+    <div
+      className={cn(
+        'w-full overflow-hidden transition-all duration-300 ease-out',
+        'border-b border-border',
+        isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+      )}
+    >
+      <div className="bg-muted/30 p-4">
+        {/* Header do painel com botão limpar */}
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-medium text-foreground">Filtros Ativos</h3>
+          {activeFilterCount > 0 && (
+            <button
+              type="button"
+              onClick={onClearAll}
+              className="text-xs text-muted-foreground hover:text-foreground underline transition-colors"
+            >
+              Limpar todos ({activeFilterCount})
+            </button>
+          )}
+        </div>
+
+        {isLoading ? (
+          <div className="text-sm text-muted-foreground">Carregando opções...</div>
+        ) : (
+          <FilterContentWrapper
+            isLoading={isLoading}
+            filters={filters}
+            filterOptions={filterOptions}
+            updateFilter={updateFilter}
+          />
+        )}
+      </div>
     </div>
   )
 }

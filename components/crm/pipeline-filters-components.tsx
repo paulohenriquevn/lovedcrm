@@ -1,10 +1,11 @@
 'use client'
 
 import { X } from 'lucide-react'
+import * as React from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { CardHeader, CardTitle } from '@/components/ui/card'
 
 import { FilterContent } from './pipeline-filters-sections'
 
@@ -42,11 +43,16 @@ export function FilterHeader({
 
 interface FilterTriggerProps {
   activeFilterCount: number
+  isExpanded?: boolean
+  onClick?: () => void
 }
 
-export function FilterTrigger({ activeFilterCount }: FilterTriggerProps): JSX.Element {
+export const FilterTrigger = React.forwardRef<
+  HTMLButtonElement,
+  FilterTriggerProps & React.ButtonHTMLAttributes<HTMLButtonElement>
+>(({ activeFilterCount, isExpanded = false, onClick, ...props }, ref) => {
   return (
-    <Button variant="outline" className="relative">
+    <Button ref={ref} variant="outline" className="relative" onClick={onClick} {...props}>
       <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
           strokeLinecap="round"
@@ -56,6 +62,17 @@ export function FilterTrigger({ activeFilterCount }: FilterTriggerProps): JSX.El
         />
       </svg>
       Filtros
+      {/* Chevron indicator */}
+      <svg
+        className={`ml-2 h-4 w-4 transition-transform duration-200 ${
+          isExpanded ? 'rotate-180' : ''
+        }`}
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
       {activeFilterCount > 0 && (
         <Badge variant="secondary" className="ml-2 h-5 w-5 p-0 flex items-center justify-center">
           {activeFilterCount}
@@ -63,7 +80,9 @@ export function FilterTrigger({ activeFilterCount }: FilterTriggerProps): JSX.El
       )}
     </Button>
   )
-}
+})
+
+FilterTrigger.displayName = 'FilterTrigger'
 
 interface FilterContentWrapperProps {
   isLoading: boolean
@@ -87,21 +106,15 @@ export function FilterContentWrapper({
   updateFilter,
 }: FilterContentWrapperProps): JSX.Element {
   if (isLoading) {
-    return (
-      <CardContent className="space-y-4">
-        <div className="text-sm text-muted-foreground">Carregando opções...</div>
-      </CardContent>
-    )
+    return <div className="text-sm text-muted-foreground">Carregando opções...</div>
   }
 
   return (
-    <CardContent className="space-y-4">
-      <FilterContent
-        isLoading={isLoading}
-        filters={filters}
-        filterOptions={filterOptions}
-        updateFilter={updateFilter}
-      />
-    </CardContent>
+    <FilterContent
+      isLoading={isLoading}
+      filters={filters}
+      filterOptions={filterOptions}
+      updateFilter={updateFilter}
+    />
   )
 }
