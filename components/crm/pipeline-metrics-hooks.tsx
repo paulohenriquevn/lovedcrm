@@ -4,16 +4,9 @@ import { useQuery } from '@tanstack/react-query'
 
 import { crmLeadsService, type AdvancedMetricsResponse } from '@/services/crm-leads'
 
-export interface PipelineFiltersState {
-  stages?: string[]
-  sources?: string[]
-  assignedUsers?: string[]
-  tags?: string[]
-  valueMin?: string
-  valueMax?: string
-  dateFrom?: Date
-  dateTo?: Date
-}
+import type { PipelineFiltersState } from './pipeline-filters-types'
+
+export type { PipelineFiltersState } from './pipeline-filters-types'
 
 interface MetricsResponse {
   stage_counts: Record<string, number>

@@ -39,7 +39,7 @@ class ErrorBoundaryClass extends Component<Props, State> {
     }
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Capture error with Sentry and get event ID
     const eventId = Sentry.captureException(error, {
       contexts: {
@@ -139,7 +139,7 @@ class ErrorBoundaryClass extends Component<Props, State> {
     )
   }
 
-  render(): ReactNode {
+  override render(): ReactNode {
     const { hasError } = this.state
     const { fallback, children } = this.props
 

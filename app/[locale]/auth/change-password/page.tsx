@@ -80,7 +80,7 @@ export default function ChangePasswordPage(): JSX.Element {
   }, [email, router])
 
   if (email === null || email === undefined || email === '') {
-    return null // Will redirect
+    return <div /> // Will redirect
   }
 
   return (

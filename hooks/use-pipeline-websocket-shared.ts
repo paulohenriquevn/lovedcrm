@@ -228,10 +228,11 @@ export function usePipelineWebSocketShared(
   const managerRef = useRef<WebSocketManager>()
   const [state, setState] = useState({
     isConnected: false,
-    connectionStatus: 'disconnected' as const,
-    activeUsers: [],
-    lastMessage: null,
+    connectionStatus: 'disconnected' as 'disconnected' | 'connecting' | 'connected' | 'error' | 'polling',
+    activeUsers: [] as any[],
+    lastMessage: null as PipelineWebSocketMessage | null,
     isPolling: false,
+    subscriberCount: 0,
   })
 
   // Initialize manager on client side only

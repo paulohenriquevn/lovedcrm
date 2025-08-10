@@ -145,7 +145,7 @@ function KanbanPipelineStage({
         )}
       </div>
       <p className="text-xs opacity-75 mb-auto">{config.description}</p>
-      <InteractiveHint interactive={interactive} />
+      <InteractiveHint interactive={interactive ?? false} />
     </div>
   )
 }

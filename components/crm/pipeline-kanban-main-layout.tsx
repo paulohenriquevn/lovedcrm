@@ -9,34 +9,29 @@ import { PipelineLayoutWithFilters } from './pipeline-layout-components'
 import { PipelineModals } from './pipeline-modal-components'
 
 import type { PipelineFiltersState } from './pipeline-filters-types'
-import type { PipelineStageDisplay } from './pipeline-types'
-
-interface LeadBase {
-  id: string
-  name: string
-  stage?: string
-}
+import type { PipelineStageDisplay, DragParams } from './pipeline-types'
+import type { Lead, PipelineStage } from '@/services/crm-leads'
 
 interface PipelineHandlers {
-  draggedLead: LeadBase | null
-  handleDragStart: (leadId: string) => void
-  handleDrop: (params: { stageId: string; leadId: string }) => Promise<void>
-  handleAddLead: (stageId: string) => void
-  handleViewDetails: (leadId: string) => void
-  handleEditLead: (leadId: string) => void
-  handleSendEmail: (leadId: string) => void
-  handleRemoveLead: (leadId: string) => void
-  handleCall: (leadId: string) => void
-  handleWhatsApp: (leadId: string) => void
+  draggedLead: Lead | null
+  handleDragStart: (lead: Lead) => void
+  handleDrop: (params: DragParams) => Promise<void>
+  handleAddLead: (stageId?: string) => void
+  handleViewDetails: (lead: Lead) => void
+  handleEditLead: (lead: Lead) => void
+  handleSendEmail: (lead: Lead) => void
+  handleRemoveLead: (lead: Lead) => void
+  handleCall: (lead: Lead) => void
+  handleWhatsApp: (lead: Lead) => void
   isCreateModalOpen: boolean
   handleCreateModalClose: () => void
   handleCreateSuccess: () => void
-  createModalStage: string | null
+  createModalStage: PipelineStage | null
   isDetailsModalOpen: boolean
   handleModalClose: () => void
-  selectedLead: LeadBase | null
-  handleEditFromDetails: () => void
-  handleDeleteFromDetails: () => void
+  selectedLead: Lead | null
+  handleEditFromDetails: (lead: Lead) => void
+  handleDeleteFromDetails: (lead: Lead) => void
   handleFavoriteToggle: () => void
   isEditModalOpen: boolean
   handleEditSuccess: () => void
@@ -55,7 +50,7 @@ interface PipelineKanbanLayoutProps {
   onDragDrop: (stageId: string) => void
   isConnected: boolean
   isPolling: boolean
-  activeUsers: string[]
+  activeUsers: Array<{ user_id?: string; full_name?: string }>
   isFiltersExpanded: boolean
   onToggleFilters: () => void
   filters: PipelineFiltersState

@@ -3,8 +3,8 @@
 import { AlertTriangle } from 'lucide-react'
 import * as React from 'react'
 
-import { User } from '@/types/auth'
 import { Organization } from '@/types/organization'
+import { User } from '@/types/user'
 
 import { DeleteAccountSection } from './DeleteAccountSection'
 import { DeleteOrganizationSection } from './DeleteOrganizationSection'

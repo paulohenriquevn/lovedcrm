@@ -1,5 +1,6 @@
 import { BarChart3, Layers, MessageCircle, Palette, Smartphone, Sparkles } from 'lucide-react'
 
+import { TimelineEntry } from '@/components/crm/timeline-utils'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { AIDemo } from './AIDemo'
@@ -14,7 +15,7 @@ interface DemoTabsProps {
   selectedStage: 'lead' | 'contact' | 'proposal' | 'negotiation' | 'closed'
   onTierChange: (tier: 'free' | 'pro' | 'enterprise') => void
   onStageChange: (stage: 'lead' | 'contact' | 'proposal' | 'negotiation' | 'closed') => void
-  demoTimelineEntries: unknown[]
+  demoTimelineEntries: TimelineEntry[]
 }
 
 export function DemoTabs({

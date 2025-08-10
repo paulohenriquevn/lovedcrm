@@ -9,7 +9,7 @@ import { usePipelineWebSocketShared } from '@/hooks/use-pipeline-websocket-share
 
 import { useWebSocketCallbacks } from './pipeline-websocket-callbacks'
 
-import type { StageData } from './pipeline-websocket-utils'
+import type { PipelineStageDisplay } from './pipeline-types'
 
 interface WebSocketHandlersReturn {
   isConnected: boolean
@@ -24,8 +24,8 @@ interface WebSocketHandlersReturn {
 
 export function usePipelineWebSocketHandlers(
   reloadLeadsData: () => Promise<void>,
-  stages: StageData[],
-  setStages: React.Dispatch<React.SetStateAction<StageData[]>>
+  stages: PipelineStageDisplay[],
+  setStages: React.Dispatch<React.SetStateAction<PipelineStageDisplay[]>>
 ): WebSocketHandlersReturn {
   const [realtimeUsers, setRealtimeUsers] = useState<
     Array<{ user_id?: string; full_name?: string }>

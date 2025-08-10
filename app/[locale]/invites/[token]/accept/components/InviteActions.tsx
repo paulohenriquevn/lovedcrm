@@ -144,7 +144,7 @@ export function InviteActions({ token, inviteInfo }: InviteActionsProps): JSX.El
   const { processing, handleAcceptInvite, handleRejectInvite } = useInviteLogic(token, inviteInfo)
 
   if (!inviteInfo || inviteInfo.is_expired) {
-    return null
+    return <div />
   }
 
   return (

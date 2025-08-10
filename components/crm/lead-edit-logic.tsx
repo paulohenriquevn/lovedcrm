@@ -76,7 +76,7 @@ function buildMetadataFields(
   }
 
   if (data.estimatedValue !== lead.estimated_value) {
-    updates.estimatedValue = data.estimatedValue
+    updates.estimated_value = data.estimatedValue
   }
 
   if (JSON.stringify(currentTags) !== JSON.stringify(lead.tags ?? [])) {

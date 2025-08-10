@@ -8,7 +8,7 @@ import { useCallback, useEffect } from 'react'
 import * as Sentry from '@sentry/nextjs'
 
 import { useOrgContext } from '@/hooks/use-org-context'
-import { useAuthStore } from '@/stores/auth-store'
+import { useAuthStore } from '@/stores/auth'
 
 interface SentryUser {
   id?: string
@@ -162,7 +162,7 @@ export function useSentryContext() {
       setOrganizationContext({
         id: organization.id,
         name: organization.name,
-        plan: organization.plan,
+        plan: organization.subscription?.plan_name,
       })
     }
   }, [organization, setOrganizationContext])
@@ -172,7 +172,7 @@ export function useSentryContext() {
       setUserContext({
         id: user.id,
         email: user.email,
-        role: user.role,
+        role: 'user',
         organizationId: organization?.id,
       })
     } else {

@@ -288,9 +288,9 @@ export function PipelineGhostOverlay({
       {isDragging && draggedLead ? (
         <motion.div
           key="ghost-overlay"
-          initial={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
+          initial={reducedMotion ? undefined : { opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
+          exit={reducedMotion ? undefined : { opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.15 }}
           className="fixed inset-0 pointer-events-none z-50"
           style={{ pointerEvents: 'none' }}

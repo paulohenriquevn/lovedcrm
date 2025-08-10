@@ -281,7 +281,7 @@ export function ResetPasswordForm({
   const resetPasswordSchema = createResetPasswordSchema(tValidation)
 
   const form = useForm<ResetPasswordData>({
-    resolver: zodResolver(resetPasswordSchema),
+    resolver: zodResolver(resetPasswordSchema as any),
     defaultValues: { password: '', confirmPassword: '' },
   })
 

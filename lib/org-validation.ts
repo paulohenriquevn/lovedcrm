@@ -300,7 +300,7 @@ function validateRoleErrors(
     return null
   }
 
-  return checkRolePermissions(requiredRole, user as User, organization as Organization)
+  return checkRolePermissions(requiredRole!, user as User, organization as Organization)
 }
 
 /**

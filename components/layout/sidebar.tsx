@@ -256,10 +256,13 @@ export function Sidebar({ className }: SidebarProps): JSX.Element {
   const currentOrg = organization ?? {
     id: '',
     name: 'Organização',
+    slug: '',
+    owner_id: '',
+    is_active: true,
+    max_members: '10',
+    created_at: '',
+    updated_at: '',
     tier: 'free',
-    ownerId: '',
-    createdAt: '',
-    updatedAt: '',
   }
 
   const toggleCollapsed = (): void => {

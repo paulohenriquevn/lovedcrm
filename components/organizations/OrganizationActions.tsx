@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
-
-import type { OrganizationRole } from '@/types/organization'
+import { OrganizationRole } from '@/types/organization'
 
 // Helper functions to safely compare roles
 const isOwner = (role: string | OrganizationRole): boolean => String(role) === 'owner'
@@ -17,7 +16,7 @@ const handleAddMember = (
 }
 
 interface OrganizationActionsProps {
-  userRole: OrganizationRole
+  userRole: OrganizationRole | string
   onAddMember: (data: { email: string; role: OrganizationRole }) => void
   onDeleteOrganization: () => void
   isUpdating: boolean

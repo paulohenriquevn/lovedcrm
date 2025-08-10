@@ -46,7 +46,7 @@ function OrganizationHeaderEditing({
     if (error === null) {
       onSave({
         name: name.trim(),
-        description: description.trim() || null,
+        description: description.trim() || undefined,
       })
     }
   }

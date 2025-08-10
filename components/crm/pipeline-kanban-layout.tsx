@@ -81,7 +81,7 @@ interface PipelineHeaderProps {
   onTabChange: (tab: 'kanban' | 'metrics' | 'advanced') => void
   isConnected: boolean
   isPolling: boolean
-  activeUsers: string[]
+  activeUsers: Array<{ user_id?: string; full_name?: string }>
   isFiltersExpanded: boolean
   onToggleFilters: () => void
 }
@@ -97,9 +97,9 @@ export function PipelineHeader({
 }: PipelineHeaderProps): JSX.Element {
   const activeUsersData = activeUsers.map((user, index) => ({
     // eslint-disable-next-line camelcase
-    user_id: `user-${index}`,
+    user_id: user.user_id ?? `user-${index}`,
     // eslint-disable-next-line camelcase
-    full_name: user,
+    full_name: user.full_name,
   }))
 
   return (
@@ -111,10 +111,7 @@ export function PipelineHeader({
       />
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <TabNavigation activeTab={activeTab} onTabChange={onTabChange} />
-        <HeaderControls
-          onToggleFilters={onToggleFilters}
-          isFiltersExpanded={isFiltersExpanded}
-        />
+        <HeaderControls onToggleFilters={onToggleFilters} isFiltersExpanded={isFiltersExpanded} />
       </div>
     </div>
   )
@@ -123,14 +120,14 @@ export function PipelineHeader({
 interface KanbanBoardProps {
   filteredStages: PipelineStageDisplay[]
   pipelineHandlers: {
-    handleDragStart: (leadId: string) => void
-    handleAddLead: (stageId: string) => void
-    handleViewDetails: (leadId: string) => void
-    handleEditLead: (leadId: string) => void
-    handleSendEmail: (leadId: string) => void
-    handleRemoveLead: (leadId: string) => void
-    handleCall: (leadId: string) => void
-    handleWhatsApp: (leadId: string) => void
+    handleDragStart: (lead: Lead) => void
+    handleAddLead: (stageId?: string) => void
+    handleViewDetails: (lead: Lead) => void
+    handleEditLead: (lead: Lead) => void
+    handleSendEmail: (lead: Lead) => void
+    handleRemoveLead: (lead: Lead) => void
+    handleCall: (lead: Lead) => void
+    handleWhatsApp: (lead: Lead) => void
   }
   onDrop: (stageId: string) => void
   draggedLead?: Lead | null

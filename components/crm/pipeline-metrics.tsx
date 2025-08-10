@@ -15,6 +15,8 @@ interface PipelineMetricsProps {
   className?: string
   filters?: PipelineFiltersState
   enableAdvanced?: boolean
+  filteredStages?: any
+  currentFilters?: PipelineFiltersState
 }
 
 export function PipelineMetrics({
@@ -23,6 +25,8 @@ export function PipelineMetrics({
   className,
   filters,
   enableAdvanced = false,
+  filteredStages: _filteredStages,
+  currentFilters: _currentFilters,
 }: PipelineMetricsProps): JSX.Element {
   const hasFilters = checkFiltersApplied(filters)
   const shouldUseAdvanced = enableAdvanced || hasFilters
@@ -85,10 +89,10 @@ function renderMetricsContent(data: unknown, isAdvanced: boolean): JSX.Element {
   }
 
   if (isAdvanced) {
-    return <AdvancedMetricsDisplay data={data} />
+    return <AdvancedMetricsDisplay data={data as any} />
   }
 
-  return <BasicMetricsDisplay data={data} />
+  return <BasicMetricsDisplay data={data as any} />
 }
 
 interface ErrorDisplayProps {

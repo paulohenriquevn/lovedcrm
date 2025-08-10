@@ -2,10 +2,10 @@ import { useState } from 'react'
 
 import { Organization, OrganizationUpdate } from '@/types/organization'
 
-// Helper function to safely trim and return null for empty strings
-function trimOrNull(value?: string): string | null {
+// Helper function to safely trim and return undefined for empty strings
+function trimOrUndefined(value?: string): string | undefined {
   const trimmed = value?.trim()
-  return trimmed !== null && trimmed !== undefined && trimmed !== '' ? trimmed : null
+  return trimmed !== null && trimmed !== undefined && trimmed !== '' ? trimmed : undefined
 }
 
 export function useOrganizationFormState(
@@ -53,15 +53,15 @@ export function useOrganizationFormState(
   }
 
   const handleSave = (): void => {
-    const trimmedName = trimOrNull(formData.name)
-    if (trimmedName === null) {
+    const trimmedName = trimOrUndefined(formData.name)
+    if (trimmedName === undefined) {
       return
     }
 
     const updateData: OrganizationUpdate = {
       name: trimmedName,
-      description: trimOrNull(formData.description),
-      website: trimOrNull(formData.website),
+      description: trimOrUndefined(formData.description),
+      website: trimOrUndefined(formData.website),
     }
 
     onSubmit(updateData)

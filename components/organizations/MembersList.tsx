@@ -42,7 +42,7 @@ function MemberItem({
 
 interface MembersListProps {
   members: OrganizationMember[]
-  userRole: OrganizationRole
+  userRole: OrganizationRole | string
   onRemoveMember: (id: string) => void
   isUpdating: boolean
   isLoadingMembers: boolean
@@ -69,7 +69,7 @@ export function MembersList({
               <MemberItem
                 key={member.id}
                 member={member}
-                userRole={userRole}
+                userRole={userRole as OrganizationRole}
                 onRemoveMember={onRemoveMember}
                 isUpdating={isUpdating}
               />

@@ -6,6 +6,8 @@ import { useEffect } from 'react'
 import { QueryProvider } from '@/components/providers/query-provider'
 import { useAuthStore } from '@/stores/auth'
 
+import type { User } from '@/types/user'
+
 interface AuthProviderProps {
   children: React.ReactNode
 }
@@ -28,7 +30,7 @@ function shouldLoadUser(user: unknown, isAuthenticated: boolean): boolean {
 
 // Helper function to handle user authentication
 async function handleUserAuth(authActions: {
-  setUser: (user: unknown) => void
+  setUser: (user: User | null) => void
   setIsAuthenticated: (auth: boolean) => void
   setLoading: (loading: boolean) => void
 }): Promise<void> {

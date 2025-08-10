@@ -59,7 +59,7 @@ export function ActivityItem({
         )}
         <div className="relative flex space-x-3">
           <div>
-            <ActivityIcon type={activity.type} />
+            <ActivityIcon type={activity.type ?? 'unknown'} />
           </div>
           <ActivityContent activity={activity} />
         </div>

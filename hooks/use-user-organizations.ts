@@ -5,7 +5,6 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useAuthStore } from '@/stores/auth'
-import { organizationsService } from '@/services/organizations'
 import type { Organization } from '@/types/organization'
 
 export interface UserOrganization extends Organization {

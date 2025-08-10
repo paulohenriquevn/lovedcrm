@@ -2,23 +2,14 @@ import { useEffect } from 'react'
 
 import { useAuthStore } from '@/stores/auth'
 import { useSettingsStore } from '@/stores/settings'
+import { UserPreferences } from '@/types/user'
 
-interface DefaultPreferences {
-  theme: string
-  notificationsEmail: boolean
-  notificationsPush: boolean
-  notificationsSms: boolean
-  marketingEmails: boolean
-  language: string
-  timezone: string
-}
-
-const DEFAULT_PREFERENCES: DefaultPreferences = {
+const DEFAULT_PREFERENCES: UserPreferences = {
   theme: 'system',
-  notificationsEmail: true,
-  notificationsPush: true,
-  notificationsSms: false,
-  marketingEmails: false,
+  notifications_email: true,
+  notifications_push: true,
+  notifications_sms: false,
+  marketing_emails: false,
   language: 'pt-BR',
   timezone: 'America/Sao_Paulo',
 }

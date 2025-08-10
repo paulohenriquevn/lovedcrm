@@ -5,13 +5,10 @@
 
 import { Badge } from '@/components/ui/badge'
 
-interface Organization {
-  id: string
-  name: string
-  tier: string
-  ownerId: string
-  createdAt: string
-  updatedAt: string
+import type { Organization } from '@/types/organization'
+
+interface ExtendedOrganization extends Organization {
+  tier?: string
 }
 
 function getTierDisplayName(tier = 'free'): string {
@@ -24,7 +21,7 @@ function getTierShortName(tier = 'FREE'): string {
 
 interface SidebarFooterProps {
   collapsed: boolean
-  currentOrg: Organization
+  currentOrg: ExtendedOrganization
   memberCount: number
   memberLoading: boolean
 }

@@ -7,6 +7,89 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.
 
 ## [Unreleased]
 
+## [Story 2.0] - Em Desenvolvimento
+
+### 🔄 [STORY 2.0] - Multi-Provider Foundation - EM PLANEJAMENTO
+
+**Epic 2 - Infrastructure & Communication Systems**: Base para múltiplos providers de comunicação com hot-swap capability
+
+**Objetivo**: Evoluir infraestrutura existente de `OrganizationIntegration` para suportar múltiplos providers por tipo (WhatsApp, VoIP) com switching sem downtime.
+
+### 📋 Planejamento Técnico [STORY 2.0]
+
+**Descoberta Importante**: Já existe infraestrutura robusta em `api/models/crm_organization_integration.py`:
+
+- ✅ Multi-tenancy com `organization_id` completo
+- ✅ Enum `IntegrationProvider` (WhatsApp, VoIP, etc)
+- ✅ Status management (Active, Inactive, Error, Pending)
+- ✅ Credenciais encriptadas + webhook secrets
+- ✅ Metadata JSONB + factory methods
+
+**Estratégia**: **EVOLUIR** (não recriar) infraestrutura existente
+
+### 🎯 Acceptance Criteria Definidos [STORY 2.0]
+
+#### Backend Foundation
+
+- [ ] Extensão do modelo `OrganizationIntegration` para múltiplos providers
+- [ ] Provider service layer usando infraestrutura existente
+- [ ] Hot-swap capability com atomic operations
+- [ ] Migration incremental preservando dados existentes
+
+#### Frontend Integration
+
+- [ ] Provider selection UI integrada com modelo existente
+- [ ] Cost calculator usando metadata JSONB
+- [ ] Migration wizard com progress tracking
+- [ ] Real-time status usando websocket existente
+
+#### Multi-Tenancy & Security
+
+- [ ] Organization isolation usando padrões existentes
+- [ ] Audit trail para provider switches (opcional)
+- [ ] Security validation usando middleware existente
+
+### 🔧 Plano de Implementação [STORY 2.0]
+
+**Effort Estimado**: 3-4 dias (reduzido de 5-7 devido à infraestrutura existente)
+
+**Fase 1**: Extensão do Modelo Existente (1 dia)
+
+- Adicionar campos `provider_name`, `is_primary`, `priority`
+- Remover constraint única para permitir múltiplos providers
+- Adicionar métodos `get_primary_provider()`, `switch_to_primary()`
+
+**Fase 2**: Provider Service Layer (1 dia)
+
+- Service usando modelo existente
+- Endpoints seguindo padrões do projeto
+- Cost comparison usando metadata JSONB
+
+**Fase 3**: Frontend Integration (1 dia)
+
+- UI components usando shadcn/ui existente
+- Integration com useOrgContext hook
+- Provider switching wizard
+
+**Fase 4**: Testing & Quality (1 dia)
+
+- Testes usando infraestrutura existente
+- Validação de organization isolation
+- Performance testing
+
+### 🔗 References [STORY 2.0]
+
+- **Technical Refinement**: `docs/refined/2.0-multi-provider-foundation.md`
+- **Execution Plan**: `docs/plans/2.0-multi-provider-foundation.md`
+- **Existing Infrastructure**: `api/models/crm_organization_integration.py`
+- **Roadmap Story**: `docs/project/11-roadmap.md` - Story 2.0
+
+### 🚀 Next Steps
+
+**Próximo**: Iniciar implementação com extensão do modelo existente + migration incremental
+
+---
+
 ## [Story 1.3] - 2025-08-10
 
 ### ✨ Added [STORY 1.3] - CONCLUÍDO EM 10/08/2025

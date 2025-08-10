@@ -1,34 +1,15 @@
 import { AdvancedTabContent } from '@/components/settings/tabs/AdvancedTabContent'
 import { BillingTabContent } from '@/components/settings/tabs/BillingTabContent'
-import { NotificationsTabContent } from '@/components/settings/tabs/NotificationsTabContent'
+import { NotificationsTabContent, type NotificationPreferencesData } from '@/components/settings/tabs/NotificationsTabContent'
 import { OrganizationTabContent } from '@/components/settings/tabs/OrganizationTabContent'
 import { PreferencesTabContent } from '@/components/settings/tabs/PreferencesTabContent'
 import { ProfileTabContent } from '@/components/settings/tabs/ProfileTabContent'
 import { SecurityTabContent } from '@/components/settings/tabs/SecurityTabContent'
 import { Card, CardContent } from '@/components/ui/card'
+import { Organization } from '@/types/organization'
+import { User, UserPreferences } from '@/types/user'
 
-interface User {
-  id: string
-  email: string
-  full_name?: string
-  avatar_url?: string
-}
 
-interface Preferences {
-  theme: string
-  notificationsEmail: boolean
-  notificationsPush: boolean
-  notificationsSms: boolean
-  marketingEmails: boolean
-  language: string
-  timezone: string
-}
-
-interface Organization {
-  id: string
-  name: string
-  updatedAt: string
-}
 
 interface Permissions {
   canEditOrganization: boolean
@@ -39,14 +20,14 @@ interface Permissions {
 interface SettingsTabRendererProps {
   activeTab: string
   profile: User | null
-  preferences: Preferences | null
+  preferences: UserPreferences | null
   organization: Organization | null
   permissions: Permissions
   userRole?: string
   isUpdatingOrg: boolean
   onUpdateProfile: (data: Partial<User>) => Promise<void>
-  onUpdatePreferences: (data: Partial<Preferences>) => Promise<void>
-  onSaveNotificationPreferences: (data: Partial<Preferences>) => Promise<void>
+  onUpdatePreferences: (data: Partial<UserPreferences>) => Promise<void>
+  onSaveNotificationPreferences: (data: Partial<UserPreferences>) => Promise<void>
   onChangePassword: () => void
   onUpdateOrganization: (data: Partial<Organization>) => Promise<void>
   onChangePlan: (planSlug: string) => void
@@ -66,9 +47,9 @@ function renderProfileTab({
   onChangePassword,
 }: {
   profile: User | null
-  preferences: Preferences | null
+  preferences: UserPreferences | null
   onUpdateProfile: (data: Partial<User>) => Promise<void>
-  onUpdatePreferences: (data: Partial<Preferences>) => Promise<void>
+  onUpdatePreferences: (data: Partial<UserPreferences>) => Promise<void>
   onChangePassword: () => void
 }): JSX.Element {
   return (
@@ -158,7 +139,18 @@ export function SettingsTabRenderer(props: SettingsTabRendererProps): JSX.Elemen
       return <SecurityTabContent onChangePassword={onChangePassword} />
     }
     case 'notifications': {
-      return <NotificationsTabContent onSavePreferences={onSaveNotificationPreferences} />
+      const handleNotificationSave = async (data: NotificationPreferencesData): Promise<void> => {
+        // Convert NotificationPreferencesData to Partial<UserPreferences>
+        const userPreferencesData: Partial<UserPreferences> = {
+          notifications_email: data.notificationsEmail,
+          notifications_push: data.notificationsPush,
+          notifications_sms: data.notificationsSms,
+          marketing_emails: data.marketingEmails,
+          // Add other mappings as needed
+        }
+        return onSaveNotificationPreferences(userPreferencesData)
+      }
+      return <NotificationsTabContent onSavePreferences={handleNotificationSave} />
     }
     case 'preferences': {
       return (

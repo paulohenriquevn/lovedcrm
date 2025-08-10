@@ -9,24 +9,7 @@ import { logger } from '@/lib/logger'
 import { dashboardService } from '@/services/admin'
 import { useDashboardStore } from '@/stores/admin'
 
-interface DashboardStats {
-  totalUsers: number
-  activeUsers: number
-  totalRevenue: number
-  monthlyRevenue: number
-  totalOrganizations: number
-  newSignups: number
-  conversionRate: number
-  churnRate: number
-}
-
-interface Activity {
-  id: string
-  type: 'user_signup' | 'payment' | 'subscription' | 'organization'
-  title: string
-  description: string
-  timestamp: string
-}
+import type { AdminStats, AdminActivity } from '@/types/admin'
 
 export function DashboardContainer(): JSX.Element {
   /**
@@ -76,8 +59,8 @@ export function DashboardContainer(): JSX.Element {
 }
 
 interface DashboardContentProps {
-  stats: DashboardStats | null
-  recentActivities: Activity[]
+  stats: AdminStats | null
+  recentActivities: AdminActivity[]
   isLoading: boolean
   error: string | null
   onRefresh: () => void

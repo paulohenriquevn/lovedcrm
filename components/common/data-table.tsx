@@ -71,7 +71,7 @@ function DataTableSkeleton<TData>({ columns }: { columns: Column<TData>[] }): JS
   )
 }
 
-function DataTableContent<TData>({
+function DataTableContent<TData extends object>({
   data,
   columns,
   emptyMessage,
@@ -138,7 +138,7 @@ function DataTableContent<TData>({
   )
 }
 
-export function DataTable<TData>({
+export function DataTable<TData extends object>({
   data,
   columns,
   pagination,

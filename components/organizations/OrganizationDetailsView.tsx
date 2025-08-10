@@ -55,7 +55,6 @@ export function OrganizationDetailsView({
       />
 
       <InviteManagement
-        organizationId={organization.id}
         userRole={userRole}
         isUpdating={isUpdating}
       />

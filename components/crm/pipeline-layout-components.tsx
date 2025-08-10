@@ -13,21 +13,22 @@ import type { Lead } from '@/services/crm-leads'
 interface PipelineLayoutWithFiltersProps {
   activeTab: 'kanban' | 'metrics' | 'advanced'
   onTabChange: (tab: 'kanban' | 'metrics' | 'advanced') => void
+  onFiltersChange: (filters: PipelineFiltersState) => void
   isConnected: boolean
   isPolling: boolean
-  activeUsers: string[]
+  activeUsers: Array<{ user_id?: string; full_name?: string }>
   isFiltersExpanded: boolean
   onToggleFilters: () => void
   filteredStages: PipelineStageDisplay[] | null
   pipelineHandlers: {
-    handleDragStart: (leadId: string) => void
-    handleAddLead: (stageId: string) => void
-    handleViewDetails: (leadId: string) => void
-    handleEditLead: (leadId: string) => void
-    handleSendEmail: (leadId: string) => void
-    handleRemoveLead: (leadId: string) => void
-    handleCall: (leadId: string) => void
-    handleWhatsApp: (leadId: string) => void
+    handleDragStart: (lead: Lead) => void
+    handleAddLead: (stageId?: string) => void
+    handleViewDetails: (lead: Lead) => void
+    handleEditLead: (lead: Lead) => void
+    handleSendEmail: (lead: Lead) => void
+    handleRemoveLead: (lead: Lead) => void
+    handleCall: (lead: Lead) => void
+    handleWhatsApp: (lead: Lead) => void
     draggedLead?: Lead | null
     isDragging?: boolean
   }
@@ -51,6 +52,7 @@ interface PipelineLayoutWithFiltersProps {
 export function PipelineLayoutWithFilters({
   activeTab,
   onTabChange,
+  onFiltersChange: _onFiltersChange,
   isConnected,
   isPolling,
   activeUsers,

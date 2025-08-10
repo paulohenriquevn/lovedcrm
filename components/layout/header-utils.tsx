@@ -51,7 +51,7 @@ export function getUserInitials(user: { fullName?: string; email?: string } | nu
     return 'U'
   }
 
-  if (Boolean(user.fullName) && user.fullName.length > 0) {
+  if (Boolean(user.fullName) && user.fullName && user.fullName.length > 0) {
     return user.fullName
       .split(' ')
       .map(n => n[0])
@@ -59,7 +59,11 @@ export function getUserInitials(user: { fullName?: string; email?: string } | nu
       .slice(0, 2)
   }
 
-  return Boolean(user.email) && user.email.length > 0 ? user.email[0].toUpperCase() : 'U'
+  if (user.email && user.email.length > 0) {
+    const firstChar = user.email[0]
+    return firstChar ? firstChar.toUpperCase() : 'U'
+  }
+  return 'U'
 }
 
 export function formatMemberCount(count: number, isLoading: boolean): string {

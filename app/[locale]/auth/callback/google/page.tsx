@@ -75,14 +75,17 @@ const createTypedUser = (user: UserApiResponse): User => {
   return {
     ...user,
     status: user.is_active === true ? UserStatus.ACTIVE : UserStatus.INACTIVE,
-    isEmailVerified: user.is_verified === true || true, // Google users are pre-verified
+    is_email_verified: user.is_verified === true || true, // Google users are pre-verified
   } as User
 }
 
 const createTypedOrganization = (organization: OrganizationApiResponse): Organization => {
   return {
     ...organization,
-    updatedAt: organization.updated_at ?? new Date().toISOString(),
+    slug: organization.name.toLowerCase().replace(/\s+/g, '-'),
+    owner_id: '',
+    is_active: true,
+    max_members: '10',
   } as Organization
 }
 

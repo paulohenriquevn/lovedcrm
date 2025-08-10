@@ -29,7 +29,7 @@ export function PipelineModals({
   isCreateModalOpen: boolean
   onCreateModalClose: () => void
   onCreateSuccess: () => void
-  createModalStage: PipelineStage
+  createModalStage: PipelineStage | null
   isDetailsModalOpen: boolean
   onModalClose: () => void
   selectedLead: Lead | null
@@ -47,7 +47,7 @@ export function PipelineModals({
         isOpen={isCreateModalOpen}
         onClose={onCreateModalClose}
         onSuccess={onCreateSuccess}
-        initialStage={createModalStage}
+        initialStage={createModalStage ?? undefined}
       />
       <LeadDetailsModal
         isOpen={isDetailsModalOpen}

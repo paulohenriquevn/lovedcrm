@@ -8,7 +8,24 @@ import { NextResponse } from 'next/server'
 export async function GET() {
   try {
     // Basic health check - can be extended
-    const healthData = {
+    const healthData: {
+      status: string
+      service: string
+      timestamp: string
+      environment: string
+      railway: {
+        service_name: string
+        environment: string
+        deployment_id: string
+      }
+      backend_url: string
+      backend?: {
+        status: string
+        reachable: boolean
+        http_code?: number
+        error?: string
+      }
+    } = {
       status: 'healthy',
       service: 'frontend',
       timestamp: new Date().toISOString(),

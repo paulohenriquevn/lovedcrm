@@ -54,14 +54,14 @@ function AuthLoadingSpinner(): JSX.Element {
   )
 }
 
-export function AuthGuard({ children }: AuthGuardProps): JSX.Element {
-  const { user, isAuthenticated, loading } = useAuthStore()
+export function AuthGuard({ children }: AuthGuardProps): React.ReactNode {
+  const { user, isAuthenticated, isLoading } = useAuthStore()
   const router = useRouter()
   const pathname = usePathname()
 
   useEffect(() => {
     // Wait for auth state to load
-    if (loading === true) {
+    if (isLoading === true) {
       return
     }
 
@@ -77,10 +77,10 @@ export function AuthGuard({ children }: AuthGuardProps): JSX.Element {
     if (isAuthenticated && user && isPublicRoute(pathWithoutLocale)) {
       handleAuthenticatedUserOnAuthPage(router)
     }
-  }, [user, isAuthenticated, loading, router, pathname])
+  }, [user, isAuthenticated, isLoading, router, pathname])
 
   // Show loading spinner while auth state is being determined
-  if (loading === true) {
+  if (isLoading === true) {
     return <AuthLoadingSpinner />
   }
 

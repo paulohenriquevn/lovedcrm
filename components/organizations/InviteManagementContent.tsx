@@ -45,6 +45,7 @@ export function InviteManagementContent({
       const timer = setTimeout(clearError, 5000)
       return () => clearTimeout(timer)
     }
+    return undefined
   }, [error, clearError])
 
   const handleCreateInvite = (data: Parameters<typeof createInvite>[0]): void => {

@@ -1,20 +1,11 @@
 import { LoadingSkeleton } from '@/components/settings/LoadingSkeleton'
 import { PreferencesForm } from '@/components/settings/PreferencesForm'
 import { Card, CardContent } from '@/components/ui/card'
-
-interface Preferences {
-  theme: string
-  notificationsEmail: boolean
-  notificationsPush: boolean
-  notificationsSms: boolean
-  marketingEmails: boolean
-  language: string
-  timezone: string
-}
+import { UserPreferences } from '@/types/user'
 
 interface PreferencesTabContentProps {
-  preferences: Preferences | null
-  onUpdatePreferences: (data: Preferences) => Promise<void>
+  preferences: UserPreferences | null
+  onUpdatePreferences: (data: UserPreferences) => Promise<void>
 }
 
 export function PreferencesTabContent({

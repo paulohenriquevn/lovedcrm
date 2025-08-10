@@ -17,7 +17,7 @@ interface PipelineHandlersReturn {
   draggedLead: Lead | null
   selectedLead: Lead | null
   isCreateModalOpen: boolean
-  createModalStage: PipelineStage
+  createModalStage: PipelineStage | null
   isDetailsModalOpen: boolean
   isEditModalOpen: boolean
   isDeleteDialogOpen: boolean

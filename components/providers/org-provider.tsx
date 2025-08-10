@@ -141,7 +141,7 @@ class OrgErrorBoundary extends Component<{ children: React.ReactNode }, OrgError
     }
   }
 
-  componentDidCatch(error: Error, _errorInfo: React.ErrorInfo): void {
+  override componentDidCatch(error: Error, _errorInfo: React.ErrorInfo): void {
     // Log para analytics se disponível
     if (typeof window !== 'undefined') {
       const windowWithGtag = window as Window & {
@@ -156,7 +156,7 @@ class OrgErrorBoundary extends Component<{ children: React.ReactNode }, OrgError
     }
   }
 
-  render(): React.ReactNode {
+  override render(): React.ReactNode {
     const { hasError, error } = this.state
     const { children } = this.props
 

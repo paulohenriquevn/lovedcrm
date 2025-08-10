@@ -50,7 +50,7 @@ interface TagsFieldProps {
   onTagInputChange: (value: string) => void
   onAddTag: (tag: string) => void
   onRemoveTag: (tag: string) => void
-  onTagKeyPress: (e: React.KeyboardEvent) => void
+  onTagKeyPress: (e: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
 interface EstimatedValueFieldProps {

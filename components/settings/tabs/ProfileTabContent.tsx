@@ -1,28 +1,12 @@
 import { LoadingSkeleton } from '@/components/settings/LoadingSkeleton'
 import { ProfileSettingsView } from '@/components/settings/ProfileSettingsView'
-
-interface User {
-  id: string
-  email: string
-  full_name?: string
-  avatar_url?: string
-}
-
-interface Preferences {
-  theme: string
-  notificationsEmail: boolean
-  notificationsPush: boolean
-  notificationsSms: boolean
-  marketingEmails: boolean
-  language: string
-  timezone: string
-}
+import { User, UserPreferences } from '@/types/user'
 
 interface ProfileTabContentProps {
   profile: User | null
-  preferences: Preferences | null
+  preferences: UserPreferences | null
   onUpdateProfile: (data: Partial<User>) => Promise<void>
-  onUpdatePreferences: (data: Partial<Preferences>) => Promise<void>
+  onUpdatePreferences: (data: Partial<UserPreferences>) => Promise<void>
   onChangePassword: () => void
 }
 

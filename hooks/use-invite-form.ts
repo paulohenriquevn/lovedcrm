@@ -47,7 +47,7 @@ function validateForm(formData: OrganizationInviteCreate, canInviteAdmins: boole
   }
 
   // Message validation
-  if (Boolean(formData.message) && formData.message.trim().length < 10) {
+  if (formData.message && formData.message.trim().length < 10) {
     errors.message = 'Mensagem deve ter pelo menos 10 caracteres'
   }
 

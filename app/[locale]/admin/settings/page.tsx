@@ -59,7 +59,7 @@ export default function SettingsPage(): JSX.Element {
             preferences={preferences}
             organization={organization}
             permissions={permissions}
-            userRole={userRole}
+            userRole={userRole ?? undefined}
             isUpdatingOrg={handlers.isUpdatingOrg}
             onUpdateProfile={handlers.handleUpdateProfile}
             onUpdatePreferences={handlers.handleUpdatePreferences}

@@ -4,7 +4,6 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { staggerItem, cardHoverVariants } from '@/hooks/use-scroll-animation'
-import { getImageProps } from '@/lib/images'
 
 interface CoreFeature {
   icon: React.ComponentType<{ className?: string }>
@@ -16,8 +15,8 @@ interface CoreFeature {
   image: {
     src: string
     alt: string
-    width: number
-    height: number
+    credit: string
+    photographer: string
   }
 }
 
@@ -34,7 +33,7 @@ export function CoreFeatureCard({ feature }: CoreFeatureCardProps): React.ReactE
           {/* Background Image */}
           <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-500">
             <Image
-              {...getImageProps(feature.image, 400, 300)}
+              src={feature.image.src}
               fill
               className="object-cover"
               sizes="400px"

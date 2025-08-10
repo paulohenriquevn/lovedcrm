@@ -56,7 +56,7 @@ export function LeadDeleteDialog({
   onClose,
   onSuccess,
   lead,
-}: LeadDeleteDialogProps): React.ReactElement {
+}: LeadDeleteDialogProps): React.ReactElement | null {
   const [isDeleting, setIsDeleting] = useState(false)
   const { toast } = useToast()
 

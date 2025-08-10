@@ -10,17 +10,13 @@ import { usersService, type BackendUser } from '@/services/users'
 import { useAuthStore } from '@/stores/auth'
 import { useOrganizationsStore } from '@/stores/organizations'
 import { useUsersStore } from '@/stores/users'
-import { UserStatus, type UserUpdate, type User, type UserResponse } from '@/types/user'
+import { type UserUpdate, type User, type UserResponse } from '@/types/user'
 
 // Helper function to validate and clean string values
 function cleanStringValue(value: string | null | undefined): string | undefined {
   return value !== null && value !== undefined && value !== '' ? value : undefined
 }
 
-// Helper function to get user status
-function getUserStatus(isActive: unknown): UserStatus {
-  return Boolean(isActive) === true ? UserStatus.ACTIVE : UserStatus.INACTIVE
-}
 
 // Helper function to transform BackendUser to User
 function transformBackendUser(backendUser: BackendUser): User {
@@ -32,9 +28,9 @@ function transformBackendUser(backendUser: BackendUser): User {
     phone: cleanStringValue(backendUser.phone),
     // eslint-disable-next-line camelcase
     avatar_url: cleanStringValue(backendUser.avatar_url),
-    status: getUserStatus(backendUser.is_active),
+    status: backendUser.status,
     // eslint-disable-next-line camelcase
-    is_email_verified: backendUser.is_verified === true,
+    is_email_verified: backendUser.is_email_verified,
     timezone: cleanStringValue(backendUser.timezone),
     language: cleanStringValue(backendUser.language),
     // eslint-disable-next-line camelcase
@@ -78,7 +74,17 @@ function useUserDetailsData(userId: string): {
     isUpdating,
     setIsUpdating,
     loadUserDetails,
-    updateUser: updateCurrentUser,
+    updateUser: (id: string, data: UserResponse) => {
+      // Convert UserResponse to Partial<User> for the store
+      const updates: Partial<User> = {
+        full_name: data.full_name,
+        phone: data.phone,
+        avatar_url: data.avatar_url,
+        timezone: data.timezone,
+        language: data.language,
+      }
+      updateCurrentUser(updates)
+    },
     setSelectedUser,
   }
 }

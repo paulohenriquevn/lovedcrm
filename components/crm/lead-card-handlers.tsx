@@ -56,9 +56,9 @@ export function LeadCardWrapper({
   return (
     <motion.div
       layout={!reducedMotion}
-      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
+      initial={reducedMotion ? undefined : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={reducedMotion ? false : { opacity: 0, y: -20 }}
+      exit={reducedMotion ? undefined : { opacity: 0, y: -20 }}
       transition={{ duration: 0.15, ease: 'easeOut' }}
       className="w-full"
     >

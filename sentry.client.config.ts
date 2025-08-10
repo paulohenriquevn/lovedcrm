@@ -48,9 +48,6 @@ if (SENTRY_DSN) {
         // Mask all text and inputs for privacy
         maskAllText: true,
         maskAllInputs: true,
-        // Only record replay for errors in production
-        sessionSampleRate: process.env.NODE_ENV === 'production' ? 0.01 : 0.1,
-        errorSampleRate: 1.0,
       }),
     ],
 

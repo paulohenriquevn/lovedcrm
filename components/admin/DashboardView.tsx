@@ -185,8 +185,8 @@ export function DashboardView({
 
   return (
     <div className="space-y-6">
-      {Boolean(stats) && <StatsCards stats={stats} />}
-      {Boolean(metrics) && <SystemMetrics metrics={metrics} />}
+      {stats !== null && <StatsCards stats={stats} />}
+      {metrics !== null && <SystemMetrics metrics={metrics} />}
       {activities.length > 0 && <ActivitiesList activities={activities} />}
     </div>
   )

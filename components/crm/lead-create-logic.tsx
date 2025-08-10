@@ -45,7 +45,7 @@ function prepareLeadData(data: LeadCreateForm, currentTags: string[]): LeadCreat
     phone: normalizeStringValue(data.phone),
     stage: data.stage,
     source: normalizeStringValue(data.source) ?? 'Website',
-    estimatedValue: data.estimatedValue ?? undefined,
+    estimated_value: data.estimatedValue ?? undefined,
     tags: currentTags.length > 0 ? currentTags : undefined,
     notes: normalizeStringValue(data.notes),
   }

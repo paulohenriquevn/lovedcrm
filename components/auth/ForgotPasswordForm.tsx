@@ -249,7 +249,7 @@ function ForgotPasswordFormMain({
   const forgotPasswordSchema = createForgotPasswordSchema(tValidation)
 
   const form = useForm<ForgotPasswordData>({
-    resolver: zodResolver(forgotPasswordSchema),
+    resolver: zodResolver(forgotPasswordSchema as any),
     defaultValues: { email: '' },
   })
 

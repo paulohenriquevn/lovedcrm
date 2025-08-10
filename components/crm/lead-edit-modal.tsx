@@ -99,9 +99,9 @@ export function LeadEditModal({
               isLoading={isLoading}
               currentTags={tagManager.currentTags}
               tagInput={tagManager.tagInput}
-              handleTagInputChange={tagManager.setTagInput}
-              handleAddTag={tagManager.addTag}
-              handleRemoveTag={tagManager.removeTag}
+              onTagInputChange={tagManager.setTagInput}
+              onAddTag={tagManager.addTag}
+              onRemoveTag={tagManager.removeTag}
               onTagKeyPress={tagManager.handleTagInputKeyDown}
             />
 

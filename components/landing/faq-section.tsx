@@ -177,8 +177,7 @@ export function FAQSection(): React.ReactElement {
     )
   }
 
-  const activeCategoryData =
-    faqCategories.find(cat => cat.id === activeCategory) ?? faqCategories[0]
+  const activeCategoryData = faqCategories.find(cat => cat.id === activeCategory) ?? faqCategories[0] ?? null
 
   return (
     <section className="py-20 px-4 bg-gradient-to-b from-background to-muted/20">
@@ -222,12 +221,14 @@ export function FAQSection(): React.ReactElement {
           </motion.div>
 
           <motion.div variants={staggerItem} className="lg:w-3/4 w-full">
-            <FAQContent
-              activeCategoryData={activeCategoryData}
-              activeCategory={activeCategory}
-              openItems={openItems}
-              toggleItem={toggleItem}
-            />
+            {activeCategoryData !== null && (
+              <FAQContent
+                activeCategoryData={activeCategoryData}
+                activeCategory={activeCategory}
+                openItems={openItems}
+                toggleItem={toggleItem}
+              />
+            )}
           </motion.div>
         </motion.div>
 

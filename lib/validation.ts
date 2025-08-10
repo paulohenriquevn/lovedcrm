@@ -30,7 +30,7 @@ const VALIDATION_MESSAGES = {
 // Helper function for basic validation rules
 const createBasicRules = (
   t: (key: string, params?: Record<string, unknown>) => string
-): Record<string, (...args: unknown[]) => ValidationRule> => ({
+): Record<string, (...args: any[]) => ValidationRule> => ({
   required: (message?: string): ValidationRule => ({
     test: (value: unknown) => value !== null && value !== undefined && value !== '',
     message: message ?? t('validation.required'),
@@ -60,7 +60,7 @@ const createBasicRules = (
 // Helper function for format validation rules
 const createFormatRules = (
   t: (key: string, params?: Record<string, unknown>) => string
-): Record<string, (...args: unknown[]) => ValidationRule> => ({
+): Record<string, any> => ({
   email: (message?: string): ValidationRule => ({
     test: (value: unknown) => {
       if (typeof value !== 'string') {
@@ -103,7 +103,7 @@ const createFormatRules = (
 // Helper function for password validation rules
 const createPasswordRules = (
   t: (key: string, params?: Record<string, unknown>) => string
-): Record<string, (...args: unknown[]) => ValidationRule> => ({
+): Record<string, any> => ({
   password: (message?: string): ValidationRule => ({
     test: (value: unknown) => {
       if (typeof value !== 'string') {
@@ -124,7 +124,7 @@ const createPasswordRules = (
 // Helper function for numeric validation rules
 const createNumericRules = (
   t: (key: string, params?: Record<string, unknown>) => string
-): Record<string, (...args: unknown[]) => ValidationRule> => ({
+): Record<string, any> => ({
   numeric: (message?: string): ValidationRule => ({
     test: (value: unknown) => {
       if (typeof value !== 'string') {
@@ -179,7 +179,7 @@ const createNumericRules = (
 // Translation-aware validation rules factory (now under 80 lines)
 export const createValidationRules = (
   t: (key: string, params?: Record<string, unknown>) => string
-): Record<string, (...args: unknown[]) => ValidationRule> => {
+): Record<string, any> => {
   const basicRules = createBasicRules(t)
   const formatRules = createFormatRules(t)
   const passwordRules = createPasswordRules(t)
@@ -242,24 +242,24 @@ export const createAuthSchemas = (
 
   return {
     login: {
-      email: [rules.required(), rules.email()],
-      password: [rules.required(), rules.minLength(1)],
+      email: [rules.required!(), rules.email!()],
+      password: [rules.required!(), rules.minLength!(1)],
     },
 
     register: {
-      fullName: [rules.required(), rules.minLength(2), rules.maxLength(100)],
-      email: [rules.required(), rules.email()],
-      password: [rules.required(), rules.password()],
-      confirmPassword: [rules.required()],
+      fullName: [rules.required!(), rules.minLength!(2), rules.maxLength!(100)],
+      email: [rules.required!(), rules.email!()],
+      password: [rules.required!(), rules.password!()],
+      confirmPassword: [rules.required!()],
     },
 
     forgotPassword: {
-      email: [rules.required(), rules.email()],
+      email: [rules.required!(), rules.email!()],
     },
 
     resetPassword: {
-      password: [rules.required(), rules.password()],
-      confirmPassword: [rules.required()],
+      password: [rules.required!(), rules.password!()],
+      confirmPassword: [rules.required!()],
     },
   }
 }

@@ -54,7 +54,7 @@ async function updateMemberRoleLocal({
   setMembers: React.Dispatch<React.SetStateAction<OrganizationMember[]>>
   toast: UseTeamActionsProps['toast']
 }): Promise<void> {
-  await membersService.updateMemberRole(member.user_id, newRole)
+  await membersService.updateMemberRole(member.user_id, { role: newRole })
 
   updateMemberRoleInState(setMembers, member.user_id, newRole)
 

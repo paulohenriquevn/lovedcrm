@@ -158,7 +158,7 @@ export function TimelineStats({
 }): React.ReactElement {
   const stats: Record<string, number> = { total: 0 }
   for (const entry of entries) {
-    stats.total++
+    stats.total = (stats.total ?? 0) + 1
     const currentCount = stats[entry.type] ?? 0
     stats[entry.type] = currentCount + 1
   }

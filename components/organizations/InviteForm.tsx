@@ -19,7 +19,7 @@ export function InviteForm({ onSubmit, isSubmitting, userRole }: InviteFormProps
     useInviteForm({
       onSubmit,
       userRole,
-      isSubmitting,
+      _isSubmitting: isSubmitting,
     })
 
   if (!isOpen) {

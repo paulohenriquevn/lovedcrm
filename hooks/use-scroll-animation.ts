@@ -10,13 +10,13 @@ import { useRef } from 'react'
 
 export function useScrollAnimation(once = true, margin = '-100px') {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once, margin })
+  const isInView = useInView(ref, { once, margin: margin as any })
 
   return { ref, isInView }
 }
 
 // Animation variants for consistent scroll animations
-export const scrollAnimationVariants = {
+export const scrollAnimationVariants: any = {
   hidden: {
     opacity: 0,
     y: 50,
@@ -32,7 +32,7 @@ export const scrollAnimationVariants = {
 }
 
 // Stagger variants for multiple elements
-export const staggerContainer = {
+export const staggerContainer: any = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -43,7 +43,7 @@ export const staggerContainer = {
   },
 }
 
-export const staggerItem = {
+export const staggerItem: any = {
   hidden: {
     opacity: 0,
     y: 30,
@@ -53,19 +53,19 @@ export const staggerItem = {
     y: 0,
     transition: {
       duration: 0.5,
-      ease: 'easeOut',
+      ease: [0.25, 0.1, 0.25, 1],
     },
   },
 }
 
 // Hero specific animations
-export const heroAnimations = {
+export const heroAnimations: any = {
   badge: {
     hidden: { opacity: 0, scale: 0.8 },
     visible: {
       opacity: 1,
       scale: 1,
-      transition: { duration: 0.5, ease: 'easeOut' },
+      transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
     },
   },
   title: {
@@ -73,7 +73,7 @@ export const heroAnimations = {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.7, ease: 'easeOut', delay: 0.2 },
+      transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay: 0.2 },
     },
   },
   subtitle: {
@@ -81,7 +81,7 @@ export const heroAnimations = {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: 'easeOut', delay: 0.4 },
+      transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 0.4 },
     },
   },
   buttons: {
@@ -89,7 +89,7 @@ export const heroAnimations = {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: 'easeOut', delay: 0.6 },
+      transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.6 },
     },
   },
   trustIndicators: {
@@ -105,13 +105,13 @@ export const heroAnimations = {
       opacity: 1,
       scale: 1,
       y: 0,
-      transition: { duration: 0.8, ease: 'easeOut', delay: 1.0 },
+      transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1], delay: 1.0 },
     },
   },
 }
 
 // Card hover animations
-export const cardHoverVariants = {
+export const cardHoverVariants: any = {
   rest: {
     scale: 1,
     boxShadow: '0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -1px rgba(0, 0, 0, 0.06)',
@@ -121,13 +121,13 @@ export const cardHoverVariants = {
     boxShadow: '0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 10px 10px -5px rgba(0, 0, 0, 0.04)',
     transition: {
       duration: 0.2,
-      ease: 'easeOut',
+      ease: [0.25, 0.1, 0.25, 1],
     },
   },
 }
 
 // Enhanced button interaction variants
-export const buttonPressVariants = {
+export const buttonPressVariants: any = {
   rest: {
     scale: 1,
     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
@@ -137,7 +137,7 @@ export const buttonPressVariants = {
     boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
     transition: {
       duration: 0.2,
-      ease: 'easeOut',
+      ease: [0.25, 0.1, 0.25, 1],
     },
   },
   press: {
@@ -145,20 +145,20 @@ export const buttonPressVariants = {
     boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
     transition: {
       duration: 0.1,
-      ease: 'easeInOut',
+      ease: [0.42, 0, 0.58, 1],
     },
   },
 }
 
 // Enhanced card hover variants with subtle animations
-export const enhancedCardHoverVariants = {
+export const enhancedCardHoverVariants: any = {
   rest: {
     scale: 1,
     y: 0,
     boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
     transition: {
       duration: 0.2,
-      ease: 'easeOut',
+      ease: [0.25, 0.1, 0.25, 1],
     },
   },
   hover: {
@@ -167,26 +167,26 @@ export const enhancedCardHoverVariants = {
     boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
     transition: {
       duration: 0.3,
-      ease: 'easeOut',
+      ease: [0.25, 0.1, 0.25, 1],
     },
   },
 }
 
 // Badge hover animation
-export const badgeHoverVariants = {
+export const badgeHoverVariants: any = {
   rest: { scale: 1 },
   hover: {
     scale: 1.1,
     rotate: [0, -1, 1, 0],
     transition: {
       duration: 0.3,
-      ease: 'easeInOut',
+      ease: [0.42, 0, 0.58, 1],
     },
   },
 }
 
 // Icon bounce animation
-export const iconBounceVariants = {
+export const iconBounceVariants: any = {
   rest: { y: 0 },
   hover: {
     y: [0, -2, 0],
@@ -199,7 +199,7 @@ export const iconBounceVariants = {
 }
 
 // Magnetic hover effect for interactive elements
-export const magneticHoverVariants = {
+export const magneticHoverVariants: any = {
   rest: { x: 0, y: 0 },
   hover: {
     x: [0, 1, -1, 0],

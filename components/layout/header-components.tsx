@@ -200,9 +200,9 @@ export function UserMenu({
           </Avatar>
           <div className="hidden md:flex flex-col items-start">
             <span className="text-sm font-medium truncate max-w-32">{displayName}</span>
-            {Boolean(user?.role) && (
+            {user?.role !== null && user?.role !== undefined && (
               <Badge
-                className={`${getRoleBadgeStyle(user.role ?? '')} text-xs`}
+                className={`${getRoleBadgeStyle(user.role)} text-xs`}
                 variant="secondary"
               >
                 {user.role}

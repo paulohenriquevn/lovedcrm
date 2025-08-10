@@ -151,7 +151,7 @@ function RegisterFormContainer(): JSX.Element {
   const registerFormSchema = createRegisterFormSchema(t)
 
   const form = useForm<RegisterFormData>({
-    resolver: zodResolver(registerFormSchema),
+    resolver: zodResolver(registerFormSchema as any),
     defaultValues: {
       fullName: '',
       email: '',

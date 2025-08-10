@@ -55,7 +55,9 @@ export function ActiveUsersDisplay({
             title={String(activeUser.full_name ?? 'Usuário ativo')}
           >
             <span className="text-xs font-medium">
-              {String(activeUser.full_name ?? 'U').charAt(0).toUpperCase()}
+              {String(activeUser.full_name ?? 'U')
+                .charAt(0)
+                .toUpperCase()}
             </span>
           </div>
         ))}

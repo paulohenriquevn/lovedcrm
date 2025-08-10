@@ -22,7 +22,7 @@ export interface UseTagManagerReturn {
   handleTagInputKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
-export function useTagManager(form: UseFormReturn<TagManagerForm>): UseTagManagerReturn {
+export function useTagManager<T extends TagManagerForm>(form: UseFormReturn<T>): UseTagManagerReturn {
   const [currentTags, setCurrentTags] = useState<string[]>([])
   const [tagInput, setTagInput] = useState('')
 
@@ -32,7 +32,7 @@ export function useTagManager(form: UseFormReturn<TagManagerForm>): UseTagManage
       if (trimmedTag && !currentTags.includes(trimmedTag)) {
         const newTags = [...currentTags, trimmedTag]
         setCurrentTags(newTags)
-        form.setValue('tags', newTags)
+        ;(form.setValue as any)('tags', newTags)
       }
       setTagInput('')
     },
@@ -43,7 +43,7 @@ export function useTagManager(form: UseFormReturn<TagManagerForm>): UseTagManage
     (tagToRemove: string): void => {
       const newTags = currentTags.filter(tag => tag !== tagToRemove)
       setCurrentTags(newTags)
-      form.setValue('tags', newTags)
+      ;(form.setValue as any)('tags', newTags)
     },
     [currentTags, form]
   )

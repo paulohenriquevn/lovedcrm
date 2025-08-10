@@ -261,7 +261,7 @@ export function SecuritySettingsView({ onChangePassword }: SecuritySettingsViewP
         isOpen={is2FAModalOpen}
         onClose={() => setIs2FAModalOpen(false)}
         isEnabled={twoFactorEnabled}
-        onEnable2FA={() => Promise.resolve({ qrCode: 'mock', secret: 'mock' })}
+        onEnable2FA={() => Promise.resolve({ qr_code: 'mock', secret: 'mock' })}
         onConfirm2FA={() => Promise.resolve()}
         onDisable2FA={() => Promise.resolve()}
       />
