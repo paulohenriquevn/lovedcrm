@@ -67,7 +67,7 @@ graph LR
     A[Novo desenvolvedor] --> B[/exec-context]
     B --> C[Contexto completo]
     C --> D[exec-refine/story/run]
-    
+
     E[Projeto complexo] --> B
     F[Onboarding] --> B
     G[Auditoria técnica] --> B
@@ -212,7 +212,7 @@ Antes de iniciar qualquer contextualização, o agente DEVE exibir:
 ```bash
 # OBRIGATÓRIO: Usar ferramentas reais para mapear estado atual
 Read package.json          # → Extrair versões exatas Frontend
-Read requirements.txt       # → Extrair versões exatas Backend  
+Read requirements.txt       # → Extrair versões exatas Backend
 Read .env.example          # → Mapear variáveis de ambiente
 Read next.config.js        # → Analisar configurações Frontend
 Read pyproject.toml        # → Configurações Python (se existir)
@@ -222,18 +222,18 @@ Read pyproject.toml        # → Configurações Python (se existir)
 Dependencies Mapeadas:
   Frontend:
     Next.js: [versão EXATA encontrada]
-    React: [versão EXATA encontrada]  
+    React: [versão EXATA encontrada]
     TypeScript: [versão EXATA encontrada]
     shadcn/ui: [componentes instalados]
     TanStack Query: [versão para data fetching]
     Zustand: [versão para state management]
-    
+
   Backend:
     FastAPI: [versão EXATA encontrada]
     SQLAlchemy: [versão EXATA encontrada]
     PostgreSQL: [driver e versão]
     Redis: [versão para cache/sessions]
-    
+
   Build/Deploy:
     Node: [versão mínima requerida]
     Python: [versão mínima requerida]
@@ -255,14 +255,14 @@ Read .github/workflows/    # → CI/CD se existir
 Environment Configuration:
   Development:
     Database: [PostgreSQL local + configurações]
-    Cache: [Redis local + configurações] 
+    Cache: [Redis local + configurações]
     Ports: [Frontend:3000, Backend:8000]
-    
+
   Production:
     Platform: [Railway/Vercel/outros]
     Database: [PostgreSQL prod + configurações]
     Environment Variables: [Lista de variáveis necessárias]
-    
+
   Security:
     JWT: [Configurações de autenticação]
     CORS: [Configurações de CORS]
@@ -292,18 +292,18 @@ Project Structure Mapeada:
     hooks/: [Custom hooks]
     services/: [API services]
     types/: [TypeScript types]
-    
+
   Backend (FastAPI):
     api/core/: [Core infrastructure]
     api/models/: [SQLAlchemy models]
-    api/schemas/: [Pydantic schemas]  
+    api/schemas/: [Pydantic schemas]
     api/repositories/: [Data access layer]
     api/services/: [Business logic]
     api/routers/: [API endpoints]
-    
+
   Database:
     migrations/: [Database migrations]
-    
+
   Documentation:
     docs/project/: [Project documentation]
     docs/plans/: [Implementation plans]
@@ -327,12 +327,12 @@ Architectural Patterns Identificados:
     Implementation: [organization_id FK em todos models]
     Middleware: [api/core/organization_middleware.py]
     Frontend Context: [useOrgContext hook]
-    
+
   Clean Architecture:
     Layers: [Router → Service → Repository → Model]
     Dependency Injection: [FastAPI Depends pattern]
     Error Handling: [HTTPException pattern]
-    
+
   Frontend Patterns:
     Data Fetching: [TanStack Query pattern]
     State Management: [Zustand stores]
@@ -354,18 +354,18 @@ LS api/models/                              # → Todos os models
 ```yaml
 Database Schema Mapeado:
   Tables Count: [X tabelas identificadas]
-  
+
   Core Tables:
     users: [Estrutura + relacionamentos]
-    organizations: [Estrutura + relacionamentos] 
+    organizations: [Estrutura + relacionamentos]
     organization_members: [Estrutura + relacionamentos]
-    
+
   Feature Tables:
     crm_leads: [Estrutura + relacionamentos]
     crm_communications: [Estrutura + relacionamentos]
     billing_subscriptions: [Estrutura + relacionamentos]
     [... outras tabelas mapeadas]
-    
+
   Multi-Tenancy Implementation:
     Organization Isolation: [organization_id FK em todas tabelas]
     Indexes: [Índices para performance multi-tenant]
@@ -377,24 +377,24 @@ Database Schema Mapeado:
 ```bash
 # OBRIGATÓRIO: Mapear todos os models
 Read api/models/user.py           # → Model principal de usuário
-Read api/models/organization.py   # → Model de organização  
+Read api/models/organization.py   # → Model de organização
 Read api/models/crm_lead.py      # → Model de CRM leads
 ```
 
 ```yaml
 Models e Relacionamentos:
   SQLAlchemy Version: [Versão identificada]
-  
+
   User Model:
     Fields: [Lista de campos]
     Relationships: [Relacionamentos identificados]
     Multi-Tenancy: [Como implementa org isolation]
-    
+
   Organization Model:
     Fields: [Lista de campos]
     Relationships: [Relacionamentos identificados]
     Owner Pattern: [Como ownership é implementado]
-    
+
   CRM Lead Model:
     Fields: [Lista de campos]
     Pipeline Stages: [Como stages são implementados]
@@ -418,18 +418,18 @@ API Endpoints Mapeados:
     POST /auth/register: [Registro de usuário]
     POST /auth/login: [Login]
     POST /auth/logout: [Logout]
-    
+
   Organizations:
     GET /organizations/: [Listar organizações do usuário]
     POST /organizations/: [Criar organização]
-    
+
   CRM Leads:
     GET /crm/leads/: [Listar leads da organização]
     POST /crm/leads/: [Criar lead]
     PUT /crm/leads/{id}: [Atualizar lead]
-    
+
   [... outros endpoints mapeados]
-  
+
   Multi-Tenancy Compliance:
     Organization Middleware: [Aplicado em quais endpoints]
     Header Validation: [X-Org-Id obrigatório]
@@ -441,7 +441,7 @@ API Endpoints Mapeados:
 ```bash
 # OBRIGATÓRIO: Mapear camada de negócio
 LS api/services/              # → Todos os services
-LS api/repositories/          # → Todos os repositories  
+LS api/repositories/          # → Todos os repositories
 Read api/repositories/base.py # → Base repository pattern
 ```
 
@@ -451,12 +451,12 @@ Business Logic Layer:
     Base Service: [Pattern base se existir]
     Organization Context: [Como org context é passado]
     Error Handling: [Pattern de tratamento de erros]
-    
-  Repository Pattern:  
+
+  Repository Pattern:
     Base Repository: [BaseRepository implementation]
     Organization Filtering: [Como org filtering é implementado]
     Query Optimization: [Patterns de performance]
-    
+
   Dependency Injection:
     FastAPI Depends: [Como DI é implementado]
     Database Sessions: [Como sessions são gerenciadas]
@@ -476,19 +476,19 @@ LS app/[locale]/admin/       # → Admin pages structure
 
 ```yaml
 Frontend Architecture:
-  UI Framework: 
+  UI Framework:
     shadcn/ui Components: [Lista completa de componentes instalados]
     Tailwind CSS: [Configuração e customizações]
     Lucide Icons: [Biblioteca de ícones usada]
-    
+
   Component Structure:
     UI Components: [components/ui/ - shadcn exclusivos]
     Feature Components: [components/[feature]/ - específicos]
     Layout Components: [components/layout/ - layouts]
-    
+
   Pages Structure:
     App Router: [app/[locale]/ - Next.js 14]
-    Admin Routes: [app/[locale]/admin/ - admin área] 
+    Admin Routes: [app/[locale]/admin/ - admin área]
     Auth Routes: [app/[locale]/auth/ - autenticação]
     Public Routes: [app/[locale]/landing/ - público]
 ```
@@ -508,12 +508,12 @@ Frontend Data Layer:
     BaseService: [Pattern base com X-Org-Id headers]
     Type Safety: [Como TypeScript é usado]
     Error Handling: [Pattern de tratamento de erros]
-    
+
   State Management:
     Zustand Stores: [stores/ - estado global]
     TanStack Query: [Cache e sincronização de dados]
     Organization Context: [useOrgContext hook]
-    
+
   Custom Hooks:
     Data Fetching: [Hooks para API calls]
     Organization Context: [Multi-tenancy hooks]
@@ -537,12 +537,12 @@ Project Evolution:
     Recent Features: [Features implementadas recentemente]
     Technical Decisions: [Decisões técnicas documentadas]
     Architecture Changes: [Mudanças arquiteturais]
-    
+
   Git History:
     Recent Commits: [Últimos commits significativos]
     Active Development: [Áreas em desenvolvimento ativo]
     Stability: [Estabilidade da codebase]
-    
+
   Roadmap Status:
     Completed Stories: [Histórias concluídas]
     Current Focus: [Foco atual de desenvolvimento]
@@ -564,12 +564,12 @@ Documentation Coverage:
     CLAUDE.md: [Regras e padrões definidos]
     README.md: [Overview e instruções de setup]
     Technical Docs: [docs/project/ - documentação técnica]
-    
+
   Development Guides:
     Architecture: [Padrões arquiteturais documentados]
     Multi-Tenancy: [Guias de implementação multi-tenant]
     API Guidelines: [Padrões de API documentados]
-    
+
   Quality Standards:
     Code Standards: [Padrões de código definidos]
     Testing Requirements: [Requisitos de teste]
@@ -585,13 +585,13 @@ Project Technical Context:
   Status: [Production-ready | In Development | Early Stage]
   Maturity: [Arquitetura estabelecida, padrões definidos]
   Complexity: [Nível de complexidade técnica]
-  
+
   Core Capabilities:
     Multi-Tenancy: [Header-based isolation implementado]
     Authentication: [JWT com org context]
     API Coverage: [60+ endpoints production-ready]
     Frontend: [Admin área completa com shadcn/ui]
-    
+
   Development Readiness:
     Setup Complexity: [Nível de dificuldade para setup]
     Documentation: [Qualidade e completude da documentação]
@@ -608,13 +608,13 @@ Critical Patterns for Development:
     - X-Org-Id header validation em TODOS os endpoints protegidos
     - shadcn/ui exclusivo para componentes UI
     - BaseService pattern para API calls frontend
-    
+
   Architecture Decisions:
     - Clean Architecture: Router → Service → Repository → Model
     - Multi-tenancy: Header-based com middleware validation
     - Frontend: App Router Next.js 14 com TypeScript
     - Database: PostgreSQL com SQLAlchemy 2.0
-    
+
   Quality Standards:
     - 95% confidence rule para implementações
     - Evidence-based development (Read/LS/Bash)
@@ -628,7 +628,7 @@ Critical Patterns for Development:
 
 ### **Estrutura do Contexto: COMPLETE PROJECT CONTEXTUALIZATION**
 
-```markdown
+````markdown
 # CONTEXTO COMPLETO DO PROJETO: [NOME-DO-PROJETO]
 
 ## 📊 Status da Análise Contextual
@@ -654,19 +654,20 @@ Project Identity:
   Nome: [Nome extraído do package.json/README]
   Tipo: [SaaS Multi-tenant B2B/B2C]
   Status: [Production-ready | In Development | MVP]
-  
+
 Stack Principal:
   Frontend: Next.js [versão] + TypeScript + shadcn/ui
-  Backend: FastAPI [versão] + SQLAlchemy [versão] 
+  Backend: FastAPI [versão] + SQLAlchemy [versão]
   Database: PostgreSQL + Redis
   Deploy: Railway/[plataforma identificada]
-  
+
 Core Philosophy:
   - Multi-tenancy: Header-based organization isolation
   - Clean Architecture: Layered backend with DI
   - Type Safety: Full TypeScript + Pydantic
   - UI Framework: shadcn/ui components exclusively
 ```
+````
 
 ### **🎯 PROPÓSITO E DOMÍNIO**
 
@@ -675,12 +676,12 @@ Business Domain: [Domínio de negócio identificado]
   Primary Use Case: [Caso de uso principal]
   Target Users: [Usuários alvo]
   Core Value Prop: [Proposta de valor principal]
-  
+
 Key Features Implemented:
   - [Feature 1 identificada no código]
-  - [Feature 2 identificada no código]  
+  - [Feature 2 identificada no código]
   - [Feature 3 identificada no código]
-  
+
 Current Development Focus:
   - [Área de desenvolvimento ativa]
   - [Features in progress]
@@ -700,17 +701,17 @@ Core Framework:
   - next: [versão EXATA encontrada]
   - react: [versão EXATA encontrada]
   - typescript: [versão EXATA encontrada]
-  
+
 UI & Styling:
   - @radix-ui/*: [versões de componentes shadcn]
   - tailwindcss: [versão EXATA]
   - lucide-react: [versão para ícones]
-  
+
 Data & State:
   - @tanstack/react-query: [versão para data fetching]
   - zustand: [versão para state management]
   - react-hook-form: [versão para forms]
-  
+
 Development:
   - @types/*: [versões dos tipos TypeScript]
   - eslint: [versão e configurações]
@@ -724,17 +725,17 @@ Core Framework:
   - fastapi: [versão EXATA encontrada]
   - uvicorn: [versão do server]
   - python: [versão mínima requerida]
-  
+
 Database:
   - sqlalchemy: [versão EXATA]
   - alembic: [versão para migrations]
   - psycopg2: [driver PostgreSQL]
-  
+
 Authentication & Security:
   - python-jose: [JWT handling]
   - passlib: [password hashing]
   - python-multipart: [form handling]
-  
+
 Development:
   - pytest: [versão para testes]
   - black: [code formatting]
@@ -747,19 +748,19 @@ Development:
 
 ```yaml
 Local Development:
-  Frontend: 
+  Frontend:
     Port: 3000
     Command: npm run dev / next dev
-    
+
   Backend:
-    Port: 8000  
+    Port: 8000
     Command: uvicorn api.main:app --reload
-    
+
   Database:
     PostgreSQL: localhost:5432 via Docker
     Redis: localhost:6379 via Docker
     Migrations: ./migrate apply
-    
+
 Environment Variables (.env.example LIDO):
   - DATABASE_URL: [formato identificado]
   - SECRET_KEY: [padrão identificado]
@@ -767,21 +768,21 @@ Environment Variables (.env.example LIDO):
   - [outras vars críticas...]
 ```
 
-#### **Production Environment**  
+#### **Production Environment**
 
 ```yaml
 Deployment Platform: [Railway/Vercel/outros identificado]
-  
+
 Production Config:
   Frontend: [deployment config identificado]
-  Backend: [deployment config identificado] 
+  Backend: [deployment config identificado]
   Database: [PostgreSQL production config]
-  
+
 Health Checks:
   - Backend: /health endpoint
   - Database: Migration status
   - Cache: Redis connectivity
-  
+
 Environment Variables Production:
   - [variáveis críticas para produção]
   - [secrets e configurações sensíveis]
@@ -797,35 +798,35 @@ Environment Variables Production:
 api/ [Backend root - ESTRUTURA REAL LIDA]:
   core/:
     - config.py: [configurações globais]
-    - database.py: [SQLAlchemy setup] 
+    - database.py: [SQLAlchemy setup]
     - deps.py: [dependency injection]
     - security.py: [JWT e autenticação]
     - organization_middleware.py: [multi-tenancy CRÍTICO]
-    
+
   models/:
     - user.py: [User model + relacionamentos]
     - organization.py: [Organization + multi-tenancy]
     - crm_lead.py: [CRM leads + pipeline]
     - [outros models identificados...]
-    
+
   schemas/:
     - auth.py: [Pydantic schemas para auth]
     - organization.py: [Schemas de organização]
     - crm_lead.py: [Schemas de CRM]
     - [outros schemas identificados...]
-    
+
   repositories/:
     - base.py: [BaseRepository pattern]
-    - user_repository.py: [User data access]  
+    - user_repository.py: [User data access]
     - crm_lead_repository.py: [CRM data access]
     - [outros repositories identificados...]
-    
+
   services/:
     - auth.py: [Business logic de auth]
     - organization_service.py: [Business logic org]
     - crm_lead_service.py: [Business logic CRM]
     - [outros services identificados...]
-    
+
   routers/:
     - auth.py: [Endpoints de autenticação]
     - organizations.py: [Endpoints de org]
@@ -838,20 +839,20 @@ api/ [Backend root - ESTRUTURA REAL LIDA]:
 ```yaml
 Organization Isolation Strategy:
   Method: Header-based isolation via X-Org-Id
-  
+
   Middleware: api/core/organization_middleware.py
     Function: Valida X-Org-Id header em TODOS endpoints protegidos
     Security: JWT org_id DEVE casar com X-Org-Id header
-    
+
   Models Pattern:
     ALL Models: organization_id FK obrigatório
     Indexes: organization_id index em TODAS as tabelas
     Queries: SEMPRE filtradas por organization_id
-    
-  Dependencies: api/core/deps.py  
+
+  Dependencies: api/core/deps.py
     get_current_organization(): Dependency injetável
     Organization context: Automático em todos endpoints
-    
+
   Repository Pattern:
     Base filtering: Todos queries incluem organization_id
     Isolation testing: Testes automáticos de isolamento
@@ -862,35 +863,35 @@ Organization Isolation Strategy:
 
 ```yaml
 Schema Analysis (migrations/001_consolidated_schema.sql LIDO):
-  
+
   Total Tables: [X tabelas identificadas]
-  
+
   Core Multi-Tenant Tables:
     users:
       - id: UUID primary key
       - organization_id: UUID FK (nullable para users sem org)
       - [campos específicos identificados...]
-      
-    organizations:  
+
+    organizations:
       - id: UUID primary key
       - owner_id: UUID FK para users
       - [campos específicos identificados...]
-      
+
     organization_members:
       - organization_id: UUID FK
-      - user_id: UUID FK  
+      - user_id: UUID FK
       - role: Enum (owner, admin, member)
       - [campos específicos identificados...]
-  
+
   Feature Tables:
     crm_leads:
       - id: UUID primary key
       - organization_id: UUID FK [OBRIGATÓRIO]
       - stage: Pipeline stage
       - [campos específicos identificados...]
-      
+
     [outras tabelas mapeadas com organization_id...]
-    
+
   Indexes Strategy:
     - organization_id index em TODAS tabelas multi-tenant
     - Composite indexes para queries de performance
@@ -905,20 +906,20 @@ Authentication Endpoints (/auth):
   POST /auth/login: User login
   POST /auth/logout: User logout
   GET /auth/me: Current user profile
-  
-Organization Endpoints (/organizations):  
+
+Organization Endpoints (/organizations):
   GET /organizations/: List user organizations
   POST /organizations/: Create organization
   GET /organizations/{id}: Get organization details
   PUT /organizations/{id}: Update organization
-  
+
 CRM Endpoints (/crm):
   GET /crm/leads/: List organization leads
   POST /crm/leads/: Create lead
   GET /crm/leads/{id}: Get lead details
   PUT /crm/leads/{id}: Update lead
   DELETE /crm/leads/{id}: Delete lead
-  
+
 [outros endpoints identificados e catalogados...]
 
 Multi-Tenancy Compliance:
@@ -935,7 +936,7 @@ Multi-Tenancy Compliance:
 
 ```yaml
 Frontend Structure (REAL LIDA):
-  
+
   app/ [App Router Next.js 14]:
     [locale]/ [Internationalization]:
       admin/ [Admin área multi-tenant]:
@@ -947,34 +948,34 @@ Frontend Structure (REAL LIDA):
           - page.tsx: [Settings page]
         team/: [Team management]
           - page.tsx: [Team page]
-        
+
       auth/ [Authentication]:
         login/: [Login page]
         register/: [Registration page]
-        
+
       landing/: [Public marketing]
         - page.tsx: [Landing page]
-  
+
   components/:
     ui/: [shadcn/ui components EXCLUSIVOS]
       - button.tsx: [Button component]
       - card.tsx: [Card component]
       - input.tsx: [Input component]
       - [outros componentes shadcn identificados...]
-      
+
     crm/: [CRM feature components]
       - pipeline-kanban.tsx: [Kanban pipeline]
       - lead-create-modal.tsx: [Lead creation]
       - [outros components CRM identificados...]
-      
+
     auth/: [Auth components]
       - login-form.tsx: [Login form]
       - register-form.tsx: [Register form]
       - [outros components auth identificados...]
-      
+
     layout/: [Layout components]
       - header.tsx: [App header]
-      - sidebar.tsx: [Admin sidebar] 
+      - sidebar.tsx: [Admin sidebar]
       - [outros layout components...]
 ```
 
@@ -988,23 +989,23 @@ Services Layer (services/ MAPEADOS):
     - crm-leads.ts: CRMLeadsService para leads
     - organizations.ts: OrganizationsService
     - [outros services identificados...]
-    
+
   Type Safety:
     - TypeScript strict mode
     - API response types definidos
     - Form validation types
-    
+
 State Management (stores/ + hooks/):
   Zustand Stores:
     - auth.ts: Authentication state
     - organizations.ts: Organization context
     - [outros stores identificados...]
-    
+
   Custom Hooks:
     - use-org-context.ts: Organization context [CRÍTICO]
     - use-auth.ts: Authentication hook
     - [outros hooks identificados...]
-    
+
   TanStack Query:
     - API caching automático
     - Background refetching
@@ -1015,21 +1016,21 @@ State Management (stores/ + hooks/):
 
 ```yaml
 UI Framework: shadcn/ui EXCLUSIVO
-  
+
   shadcn/ui Components Instalados:
     - [Lista EXATA dos componentes instalados em components/ui/]
     - Button: [botões padronizados]
     - Card: [cards de conteúdo]
-    - Input: [inputs de formulário]  
+    - Input: [inputs de formulário]
     - Dialog: [modals e dialogs]
     - [outros components identificados...]
-    
+
   Customization Policy:
     - ZERO customizações CSS
     - APENAS componentes oficiais shadcn/ui
     - Tailwind classes para layout
     - Lucide icons para iconografia
-    
+
   Component Decomposition:
     Pattern: [feature]/[component]-[helpers].tsx
     Example: crm/pipeline-kanban-layout.tsx
@@ -1044,21 +1045,21 @@ UI Framework: shadcn/ui EXCLUSIVO
 
 ```yaml
 Project Maturity Assessment:
-  
+
   Overall Status: [Production-ready | MVP | In Development]
-    - Database Schema: [X tables] ✅ Consolidado 
+    - Database Schema: [X tables] ✅ Consolidado
     - API Endpoints: [X endpoints] ✅ Production-ready
     - Frontend Components: [X components] ✅ shadcn/ui compliant
     - Multi-tenancy: ✅ Header-based isolation implementado
     - Authentication: ✅ JWT com org context
     - Deployment: ✅ Railway production deployment
-  
+
   Code Quality:
     - TypeScript Coverage: [%] identificado
     - Test Coverage: [information from tests/ analysis]
     - Linting: ESLint + Prettier configurado
     - Code Standards: Black + isort + mypy (backend)
-    
+
   Documentation Coverage:
     - CLAUDE.md: ✅ Padrões e regras definidos
     - README.md: ✅ Setup e overview
@@ -1070,19 +1071,18 @@ Project Maturity Assessment:
 
 ```yaml
 Current Development Focus (baseado em CHANGELOG + Git history):
-  
   Recently Completed:
     - [Features recentes do CHANGELOG]
     - [Commits significativos recentes]
-    
+
   In Progress:
     - [Áreas de desenvolvimento ativo identificadas]
     - [Features em construção]
-    
+
   Next Priorities (baseado no roadmap):
     - [Próximas histórias do roadmap]
     - [Melhorias técnicas planejadas]
-    
+
   Technical Debt:
     - [Áreas que precisam refatoração]
     - [Melhorias de performance identificadas]
@@ -1101,17 +1101,17 @@ Multi-Tenancy Rules (NON-NEGOTIABLE):
   2. ALL models MUST include organization_id FK
   3. ALL queries MUST filter by organization_id
   4. NEVER trust client-provided org_id without validation
-  
+
 Code Quality Rules:
   1. 95% confidence rule: Never proceed without evidence
   2. Evidence-based development: Always use Read/LS/Bash
   3. KISS/YAGNI/DRY principles: Non-negotiable
   4. TypeScript strict mode: Required everywhere
-  
+
 UI/UX Rules:
   1. shadcn/ui components ONLY: No custom CSS components
   2. Tailwind classes for layout: No custom CSS
-  3. Lucide icons exclusively: Consistent iconography  
+  3. Lucide icons exclusively: Consistent iconography
   4. Component decomposition: Scalable architecture
 ```
 
@@ -1124,28 +1124,28 @@ Backend Patterns:
     - Services: Business logic + validation
     - Repositories: Data access + org filtering
     - Models: SQLAlchemy + relationships
-    
+
   Error Handling:
     - HTTPException with specific status codes
     - Structured error responses
     - Logging with context
-    
+
   Dependency Injection:
     - FastAPI Depends pattern
     - get_current_organization: Always use
     - Database sessions: Proper lifecycle management
-    
+
 Frontend Patterns:
   Component Architecture:
     - Feature-based organization
     - Decomposition for complex components
     - Custom hooks for logic separation
-    
+
   Data Flow:
     - TanStack Query for server state
     - Zustand for client state
     - Form validation with react-hook-form
-    
+
   Type Safety:
     - API response types
     - Form validation schemas
@@ -1180,7 +1180,7 @@ cd migrations && ./migrate status    # Check migration status
 ```bash
 # Testing
 npm run test:frontend        # Frontend unit tests
-python3 -m pytest           # Backend unit tests  
+python3 -m pytest           # Backend unit tests
 npm run test:e2e            # E2E tests (Playwright)
 
 # Code Quality
@@ -1214,18 +1214,15 @@ make db-prod-status                  # Production DB health check
 ### **🚨 SECURITY CRITICAL**
 
 ```yaml
-Multi-Tenancy Security:
-  NEVER bypass organization_id filtering
+Multi-Tenancy Security: NEVER bypass organization_id filtering
   ALWAYS validate X-Org-Id header on protected routes
   NEVER trust client-provided organization context
-  
-Authentication Security:
-  JWT tokens MUST include org_id claim
+
+Authentication Security: JWT tokens MUST include org_id claim
   Session management via Redis required
   Password hashing with proper salt rounds
-  
-Database Security:
-  ALL queries MUST include organization_id filter
+
+Database Security: ALL queries MUST include organization_id filter
   Prevent SQL injection via SQLAlchemy ORM
   Connection pooling for performance + security
 ```
@@ -1237,12 +1234,12 @@ Database Performance:
   organization_id indexes: Required on ALL tables
   Query optimization: Monitor N+1 query problems
   Connection pooling: Configured for multi-tenancy
-  
+
 Frontend Performance:
   Component memoization: Where appropriate
   Image optimization: Next.js built-in optimization
   Bundle analysis: Monitor bundle size growth
-  
+
 API Performance:
   Response caching: Redis integration
   Pagination: Required for list endpoints
@@ -1254,10 +1251,10 @@ API Performance:
 ```yaml
 Common Issues:
   Missing X-Org-Id: API calls fail with 400
-  Wrong org context: Data isolation violations  
+  Wrong org context: Data isolation violations
   Dependency conflicts: Lock file versions
   Migration issues: Always backup before apply
-  
+
 Debugging Tips:
   Multi-tenancy: Check organization_id in ALL queries
   API errors: Validate headers and authentication
@@ -1278,7 +1275,7 @@ Onboarding Checklist:
   3. Explorar codebase: Seguir patterns identificados
   4. Implementar feature simples: Seguir workflow exec-*
   5. Code review: Validar conformidade com padrões
-  
+
 Key Files to Understand:
   - api/core/organization_middleware.py: Multi-tenancy core
   - components/providers/auth-provider.tsx: Auth context
@@ -1291,10 +1288,10 @@ Key Files to Understand:
 ```yaml
 Development Workflow:
   1. exec-refine: Technical refinement for complex features
-  2. exec-story: Detailed execution planning  
+  2. exec-story: Detailed execution planning
   3. Implementation: Following generated plans
   4. exec-review: Quality gate validation
-  
+
 Quality Gates:
   - Multi-tenancy compliance: Mandatory
   - Test coverage: Maintain existing levels
@@ -1312,21 +1309,21 @@ Quality Gates:
 Contextualization Completed:
   Timestamp: [YYYY-MM-DD HH:MM:SS]
   Duration: [X minutes]
-  
+
 Files Analyzed:
   Configuration: [X arquivos] ✅
-  Backend Code: [X arquivos] ✅  
+  Backend Code: [X arquivos] ✅
   Frontend Code: [X arquivos] ✅
   Database Schema: [X arquivos] ✅
   Documentation: [X arquivos] ✅
-  
+
 Evidence Collected:
   Dependencies: [X frontend + X backend] ✅
   Endpoints: [X endpoints catalogados] ✅
   Components: [X components mapeados] ✅
   Models: [X models analisados] ✅
   Migrations: [versão atual identificada] ✅
-  
+
 Context Accuracy: 99% (baseado em análise real do codebase)
 Ready for Development: ✅ Contexto completo disponível
 ```
@@ -1338,12 +1335,12 @@ Context Saved:
   Path: docs/context/PROJECT-CONTEXT-[TIMESTAMP].md
   Size: [X] KB
   Status: ✅ Arquivo salvo com sucesso
-  
+
 CHANGELOG Updated:
-  Path: CHANGELOG.md (raiz do projeto) 
+  Path: CHANGELOG.md (raiz do projeto)
   Entry: ## [Context] - [YYYY-MM-DD]
   Status: ✅ Entrada de contextualização adicionada
-  
+
 Validation:
   File Access: ✅ Arquivo criado e acessível
   Content Complete: ✅ Todas seções preenchidas
@@ -1358,10 +1355,10 @@ Usage Recommendations:
   - Onboarding Guide: Para novos desenvolvedores
   - Architecture Reference: Para decisões técnicas
   - Quality Baseline: Para manter padrões estabelecidos
-  
+
 Next Steps:
   - Development: Use context para exec-refine/story informados
-  - Updates: Re-run exec-context após mudanças significativas  
+  - Updates: Re-run exec-context após mudanças significativas
   - Sharing: Document disponível para toda a equipe
   - Evolution: Context evolui com o projeto
 ```
@@ -1373,7 +1370,8 @@ Next Steps:
 **🎯 PRONTO PARA DESENVOLVIMENTO**: Com este contexto completo, qualquer desenvolvedor pode executar exec-refine, exec-story, exec-run com máxima confiança e aderência aos padrões estabelecidos do projeto.
 
 ---
-```
+
+````
 
 ---
 
@@ -1471,7 +1469,7 @@ Step 5: Confirmar Salvamento
   - Output: "✅ CONTEXTO SALVO: docs/context/PROJECT-CONTEXT-[timestamp].md"
   - Output: "✅ CHANGELOG ATUALIZADO: CHANGELOG.md"
   - Validation: Ambos arquivos salvos com sucesso
-```
+````
 
 #### **📝 FORMATO CHANGELOG PARA CONTEXTO**
 
@@ -1482,7 +1480,7 @@ Step 5: Confirmar Salvamento
 
 - **Complete Context Generated**: Full project analysis and documentation
 - **Architecture Mapped**: [X] directories, [X] files analyzed
-- **Dependencies Catalogued**: [X] frontend + [X] backend dependencies  
+- **Dependencies Catalogued**: [X] frontend + [X] backend dependencies
 - **API Endpoints Documented**: [X] endpoints across [X] routers
 - **Database Schema Analyzed**: [X] tables with full relationships
 - **Components Catalogued**: [X] UI components + [X] feature components

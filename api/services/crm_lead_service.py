@@ -645,7 +645,7 @@ class CRMLeadService:
                 extra={
                     "organization_id": str(org_id),
                     "filters": filters.model_dump(),
-                }
+                },
             )
 
             # Base query with existing organization filtering
@@ -655,9 +655,7 @@ class CRMLeadService:
             filtered_query = self._apply_advanced_filters(base_query, filters)
             leads = filtered_query.all()
 
-            logger.debug(
-                f"Advanced metrics query returned {len(leads)} leads for org {org_id}"
-            )
+            logger.debug(f"Advanced metrics query returned {len(leads)} leads for org {org_id}")
 
             # Calculate all metric components
             stage_distribution = self._get_stage_distribution(leads)
@@ -725,6 +723,7 @@ class CRMLeadService:
         """Apply tag filtering to query."""
         if filters.tags:
             from sqlalchemy import func
+
             for tag in filters.tags:
                 query = query.filter(func.array_position(Lead.tags, tag) > 0)
         return query
@@ -743,7 +742,7 @@ class CRMLeadService:
             start_date = self._parse_date(filters.start_date, "start")
             if start_date:
                 query = query.filter(Lead.created_at >= start_date)
-        
+
         if filters.end_date:
             end_date = self._parse_date(filters.end_date, "end")
             if end_date:
@@ -870,8 +869,7 @@ class CRMLeadService:
         """Detect pipeline bottlenecks."""
         if not leads:
             return BottleneckAnalysis(
-                detected=False,
-                recommendations=["Insufficient data for bottleneck analysis"]
+                detected=False, recommendations=["Insufficient data for bottleneck analysis"]
             )
 
         # Get average stage times
@@ -904,10 +902,13 @@ class CRMLeadService:
                 "Review lead qualification criteria",
                 "Implement stage-specific templates and workflows",
                 "Consider automating follow-up processes",
-                "Analyze successful conversions for best practices"
+                "Analyze successful conversions for best practices",
             ]
         else:
-            recommendations = ["Pipeline flow is optimized", "Continue monitoring stage performance"]
+            recommendations = [
+                "Pipeline flow is optimized",
+                "Continue monitoring stage performance",
+            ]
 
         return BottleneckAnalysis(
             detected=bottleneck_stage is not None,
@@ -976,9 +977,7 @@ class CRMLeadService:
         closed_value = sum(lead.estimated_value or Decimal("0.00") for lead in closed_leads)
 
         # Calculate average deal size
-        avg_deal_size = (
-            total_value / len(leads) if leads else Decimal("0.00")
-        )
+        avg_deal_size = total_value / len(leads) if leads else Decimal("0.00")
 
         # Calculate conversion rate
         conversion_rate = (len(closed_leads) / len(leads)) * 100 if leads else 0.0

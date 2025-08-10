@@ -1,0 +1,88 @@
+/* Pipeline UX Enhancement Tokens - Loved CRM */
+/* Micro-interaction tokens */
+:root {
+  --micro-hover-scale: 1.02;
+  --micro-duration: 150ms;
+  --micro-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --ghost-opacity: 0.5;
+  --ghost-rotation: 2deg;
+  --drop-duration: 250ms;
+}
+
+/* Pipeline card enhancements */
+.pipeline-card-enhanced {
+  transition:
+    transform var(--micro-duration) var(--micro-easing),
+    box-shadow var(--micro-duration) var(--micro-easing),
+    border-color var(--micro-duration) var(--micro-easing);
+  will-change: transform, box-shadow, border-color;
+}
+
+.pipeline-card-enhanced:hover {
+  transform: scale(var(--micro-hover-scale));
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-color: hsl(var(--sector-primary) / 0.2);
+}
+
+/* Ghost element styling */
+.drag-ghost {
+  opacity: var(--ghost-opacity);
+  transform: rotate(var(--ghost-rotation));
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* Drop zone enhancements */
+.drop-zone-active {
+  border-color: hsl(var(--sector-primary) / 0.5);
+  background-color: hsl(var(--sector-primary) / 0.05);
+  border-width: 2px;
+  border-style: dashed;
+}
+
+/* Button micro-interactions */
+.btn-enhanced {
+  transition: transform var(--micro-duration) var(--micro-easing);
+}
+
+.btn-enhanced:hover {
+  transform: scale(1.05);
+}
+
+.btn-enhanced:active {
+  transform: scale(0.98);
+}
+
+/* Loading states */
+.skeleton-stagger {
+  animation-delay: calc(var(--stagger-index, 0) * 100ms);
+}
+
+/* Hardware acceleration for smooth animations */
+.transform-gpu {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .pipeline-card-enhanced,
+  .drag-ghost,
+  .btn-enhanced {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .pipeline-card-enhanced:hover {
+    background-color: hsl(var(--accent) / 0.1);
+    transform: none !important;
+  }
+}
+
+/* Dark theme adjustments */
+@media (prefers-color-scheme: dark) {
+  .pipeline-card-enhanced:hover {
+    box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.1);
+  }
+}

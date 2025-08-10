@@ -122,7 +122,7 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 #### **🎯 FASE 1.5: CLARIFICAÇÃO DO OBJETIVO DA HISTÓRIA (OBRIGATÓRIA)**
 
 - ✅ **DEVE**: Extrair e reformular o OBJETIVO ESPECÍFICO da história
-- ✅ **DEVE**: Validar alinhamento com épico e contexto organizacional  
+- ✅ **DEVE**: Validar alinhamento com épico e contexto organizacional
 - ✅ **DEVE**: Identificar o VALOR DE NEGÓCIO específico entregue
 - ✅ **DEVE**: Mapear IMPACTO esperado no usuário final
 - ✅ **DEVE**: Confirmar que objetivo é MENSURÁVEL e TESTÁVEL
@@ -297,19 +297,21 @@ Objetivo da História Identificado:
   Valor de Negócio: [Benefício mensurável que será entregue]
   Impacto no Usuário: [Como a vida do usuário melhora especificamente]
   Contexto Organizacional: [Como se conecta com estratégia/épico maior]
-  
+
 Validação SMART do Objetivo:
-  ✅ Específico: [Objetivo não é genérico - descreve EXATAMENTE o que será entregue]
-  ✅ Mensurável: [Critérios claros e objetivos para medir sucesso]  
+  ✅ Específico:
+    [Objetivo não é genérico - descreve EXATAMENTE o que será entregue]
+  ✅ Mensurável: [Critérios claros e objetivos para medir sucesso]
   ✅ Alcançável: [Tecnicamente viável com o stack atual]
-  ✅ Relevante: [Alinhado com estratégia organizacional e necessidades do usuário]
+  ✅ Relevante:
+    [Alinhado com estratégia organizacional e necessidades do usuário]
   ✅ Temporal: [Timeline e marco de entrega definidos]
 
 Conexão Estratégica:
   Epic Relacionado: [Nome do épico e como esta história contribui]
   OKR/Meta Organizacional: [Objetivo maior que esta história suporta]
   Prioridade Justificada: [Por que esta história, por que agora]
-  
+
 Validação de Dor do Usuário:
   Dor Atual: [Problema específico que o usuário enfrenta HOJE]
   Evidência da Dor: [Como sabemos que este problema existe e é relevante]
@@ -888,6 +890,7 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 ### **🚨 QUALITY GATES - REJEIÇÃO AUTOMÁTICA**
 
 #### **🎯 VALIDAÇÕES DE OBJETIVO (CRÍTICAS)**
+
 - ❌ **FALHA CRÍTICA se objetivo da história for genérico ou vago**
 - ❌ **FALHA CRÍTICA se não identificar dor específica do usuário**
 - ❌ **FALHA CRÍTICA se não responder às 5 perguntas de validação**
@@ -895,6 +898,7 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 - ❌ **FALHA CRÍTICA se não conectar com estratégia organizacional**
 
 #### **🔍 VALIDAÇÕES TÉCNICAS (CRÍTICAS)**
+
 - ❌ **FALHA CRÍTICA se não usar ferramentas Read/LS/Bash na Fase 0**
 - ❌ **FALHA CRÍTICA se template não mostrar evidências REAIS de leitura**
 - ❌ **FALHA CRÍTICA se basear refinement em suposições sobre o projeto**
@@ -905,6 +909,7 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 - ❌ **REJEIÇÃO se adicionar over-engineering para problemas futuros**
 
 #### **🎨 VALIDAÇÕES DE DESIGN (OBRIGATÓRIAS)**
+
 - ❌ **REJEIÇÃO se não incluir wireframes e telas da funcionalidade**
 - ❌ **REJEIÇÃO se não mapear a jornada específica de docs/project/04-journeys.md**
 - ❌ **REJEIÇÃO se não aplicar padrões UI/UX de docs/project/10-ui-ux-designer.md**
@@ -913,13 +918,15 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 ### **✅ CHECKLIST DE APROVAÇÃO**
 
 #### **🎯 Validação do Objetivo**
+
 - [ ] **OBJETIVO CLARO**: História tem objetivo específico, não genérico
 - [ ] **DOR ESPECÍFICA**: Problema concreto do usuário identificado
 - [ ] **SMART**: Critérios específico, mensurável, alcançável, relevante, temporal
 - [ ] **5 PERGUNTAS**: Por quê, por que agora, para quem, que resultado, como medir
 - [ ] **ESTRATÉGIA**: Conexão clara com épico/OKR organizacional
 
-#### **🔍 Validação Técnica** 
+#### **🔍 Validação Técnica**
+
 - [ ] **KISS**: Solução mais simples que funciona escolhida
 - [ ] **YAGNI**: Escopo limitado aos requisitos atuais da história
 - [ ] **DRY**: Máxima reutilização de código/padrões existentes
@@ -927,6 +934,7 @@ Próximo: Execute /exec-story "[ID]" para plano de implementação
 - [ ] **ESTADO ATUAL**: Baseado em análise real do projeto atual
 
 #### **🎨 Validação de Design**
+
 - [ ] **WIREFRAMES**: Telas principais desenhadas em ASCII
 - [ ] **JORNADAS**: Jornada específica mapeada de docs/project/04-journeys.md
 - [ ] **UI/UX**: Padrões aplicados de docs/project/10-ui-ux-designer.md

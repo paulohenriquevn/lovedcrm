@@ -50,9 +50,7 @@ export function StageFilter({
     return (
       <div className="space-y-2">
         <Label>Estágios</Label>
-        <div className={NO_OPTIONS_CLASS}>
-          Nenhum estágio disponível
-        </div>
+        <div className={NO_OPTIONS_CLASS}>Nenhum estágio disponível</div>
       </div>
     )
   }
@@ -91,9 +89,7 @@ export function SourceFilter({
     return (
       <div className="space-y-2">
         <Label>Origem</Label>
-        <div className={NO_OPTIONS_CLASS}>
-          Nenhuma origem disponível
-        </div>
+        <div className={NO_OPTIONS_CLASS}>Nenhuma origem disponível</div>
       </div>
     )
   }
@@ -132,9 +128,7 @@ export function AssignedUserFilter({
     return (
       <div className="space-y-2">
         <Label>Responsável</Label>
-        <div className={NO_OPTIONS_CLASS}>
-          Nenhum responsável disponível
-        </div>
+        <div className={NO_OPTIONS_CLASS}>Nenhum responsável disponível</div>
       </div>
     )
   }
@@ -169,9 +163,7 @@ export function TagFilter({ tags, availableTags = [], onChange }: TagFilterProps
     return (
       <div className="space-y-2">
         <Label>Tags</Label>
-        <div className={NO_OPTIONS_CLASS}>
-          Nenhuma tag disponível
-        </div>
+        <div className={NO_OPTIONS_CLASS}>Nenhuma tag disponível</div>
       </div>
     )
   }

@@ -243,25 +243,25 @@ Análise do Story ID [ID]:
 **VALIDAÇÃO SMART (OBRIGATÓRIA)**:
 
 ```yaml
-✅ Específico (Specific): 
-   Pergunta: "O objetivo é claro e bem definido?"
-   Resposta: [SIM/NÃO + justificativa]
+✅ Específico (Specific):
+  Pergunta: "O objetivo é claro e bem definido?"
+  Resposta: [SIM/NÃO + justificativa]
 
-✅ Mensurável (Measurable): 
-   Pergunta: "Posso verificar objetivamente quando está completo?"
-   Resposta: [SIM/NÃO + critérios de verificação]
+✅ Mensurável (Measurable):
+  Pergunta: "Posso verificar objetivamente quando está completo?"
+  Resposta: [SIM/NÃO + critérios de verificação]
 
-✅ Alcançável (Achievable): 
-   Pergunta: "É tecnicamente viável com os recursos atuais?"
-   Resposta: [SIM/NÃO + análise de viabilidade]
+✅ Alcançável (Achievable):
+  Pergunta: "É tecnicamente viável com os recursos atuais?"
+  Resposta: [SIM/NÃO + análise de viabilidade]
 
-✅ Relevante (Relevant): 
-   Pergunta: "Alinha com os objetivos do produto/negócio?"
-   Resposta: [SIM/NÃO + conexão com valor de negócio]
+✅ Relevante (Relevant):
+  Pergunta: "Alinha com os objetivos do produto/negócio?"
+  Resposta: [SIM/NÃO + conexão com valor de negócio]
 
-✅ Temporal (Time-bound): 
-   Pergunta: "Tem escopo bem definido para uma sprint/iteração?"
-   Resposta: [SIM/NÃO + estimativa de complexidade]
+✅ Temporal (Time-bound):
+  Pergunta: "Tem escopo bem definido para uma sprint/iteração?"
+  Resposta: [SIM/NÃO + estimativa de complexidade]
 ```
 
 #### **🚨 5 PERGUNTAS CRÍTICAS DE VALIDAÇÃO**
@@ -302,17 +302,17 @@ RED FLAGS CRÍTICOS (= HISTÓRIA VAGA/GENÉRICA):
    - "Otimizar performance"
    - "Aumentar produtividade"
    - "Facilitar uso do sistema"
-   
+
 🚩 Objetivos Técnicos Sem Contexto de Negócio:
    - "Implementar API REST"
    - "Criar componente React"
    - "Adicionar validação"
-   
+
 🚩 Escopo Indefinido:
    - "Desenvolver dashboard" (qual dashboard? para quê?)
    - "Integrar sistema" (qual sistema? como? por quê?)
    - "Adicionar filtros" (quais filtros? para que use case?)
-   
+
 🚩 Critérios Vagos:
    - "Sistema deve ser intuitivo"
    - "Interface deve ser responsiva"
@@ -333,20 +333,19 @@ HISTÓRIA ORIGINAL:
   ID: [story-id]
   Título: [título original]
   User Story: [Como... Eu quero... Para que...]
-  
+
 ANÁLISE DE PROBLEMAS DETECTADOS:
   Red Flag 1: [Problema específico identificado]
   Red Flag 2: [Outro problema identificado]
-  
+
 CLARIFICAÇÃO NECESSÁRIA:
-  
   OBJETIVO CLARIFICADO:
     Contexto Específico: [Em que situação específica isso acontece?]
     Usuário Real: [Que tipo específico de usuário enfrenta este problema?]
     Problema Concreto: [Qual problema específico precisa ser resolvido?]
     Solução Esperada: [O que especificamente deve ser implementado?]
     Valor Mensurável: [Como medir se a solução funcionou?]
-  
+
   VALIDAÇÃO DA CLARIFICAÇÃO:
     ✅ Específico: [Objetivo agora é específico e claro]
     ✅ Mensurável: [Posso verificar objetivamente quando completo]
@@ -360,8 +359,7 @@ CLARIFICAÇÃO NECESSÁRIA:
 **A história só pode prosseguir para planejamento técnico SE:**
 
 ```yaml
-APROVAÇÃO OBRIGATÓRIA:
-  ✅ Passou na validação SMART (todos 5 critérios = SIM)
+APROVAÇÃO OBRIGATÓRIA: ✅ Passou na validação SMART (todos 5 critérios = SIM)
   ✅ Respondeu às 5 perguntas críticas com respostas específicas
   ✅ ZERO red flags detectados OU red flags clarificados
   ✅ Objetivo é específico, não genérico
@@ -369,8 +367,7 @@ APROVAÇÃO OBRIGATÓRIA:
   ✅ Usuário alvo é específico e identificado
   ✅ Critérios de aceite são objetivamente verificáveis
 
-BLOQUEIO AUTOMÁTICO SE:
-  ❌ Qualquer critério SMART = NÃO
+BLOQUEIO AUTOMÁTICO SE: ❌ Qualquer critério SMART = NÃO
   ❌ Qualquer pergunta crítica sem resposta específica
   ❌ Red flags não resolvidos
   ❌ Objetivo permanece genérico após clarificação
@@ -418,15 +415,15 @@ PARAR PROCESSO IMEDIATAMENTE:
 
 1. Informar ao usuário:
    "🚨 OBJETIVO DA HISTÓRIA PROBLEMÁTICO DETECTADO"
-   
+
 2. Detalhar problemas específicos:
    "❌ Red Flag: [problema detectado]"
    "❌ Validação SMART falhou em: [critério específico]"
-   
+
 3. Solicitar clarificação:
    "🔧 NECESSÁRIA CLARIFICAÇÃO antes de prosseguir com planejamento técnico"
    "📋 Favor esclarecer: [pontos específicos que precisam esclarecimento]"
-   
+
 4. Aguardar confirmação/correção:
    "⏳ Aguardando clarificação do objetivo antes de gerar plano de execução..."
 ```
