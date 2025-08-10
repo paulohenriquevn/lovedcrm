@@ -1,10 +1,12 @@
 /**
  * Pipeline Handlers
  * Event handlers and business logic for pipeline operations
+ * Enhanced with toast notifications for user feedback
  */
 
 import { useState } from 'react'
 
+import { toast } from '@/hooks/use-toast'
 import { Lead, PipelineStage } from '@/services/crm-leads'
 
 import { usePipelineDragLogic } from './pipeline-drag-logic'
@@ -54,8 +56,17 @@ function hasValidPhone(lead: Lead): boolean {
 function openEmailClient(lead: Lead): void {
   if (hasValidEmail(lead)) {
     window.open(`mailto:${lead.email}`, '_blank')
+    toast({
+      title: 'Email aberto',
+      description: `Cliente de email aberto para ${lead.name}`,
+      variant: 'default',
+    })
   } else {
-    alert(`Lead ${lead.name} não possui email cadastrado`)
+    toast({
+      title: 'Email não encontrado',
+      description: `Lead ${lead.name} não possui email cadastrado`,
+      variant: 'destructive',
+    })
   }
 }
 
@@ -63,8 +74,17 @@ function openEmailClient(lead: Lead): void {
 function initiatePhoneCall(lead: Lead): void {
   if (hasValidPhone(lead) && typeof lead.phone === 'string') {
     window.open(`tel:${lead.phone}`, '_self')
+    toast({
+      title: 'Ligação iniciada',
+      description: `Discando para ${lead.name}`,
+      variant: 'default',
+    })
   } else {
-    alert(`Lead ${lead.name} não possui telefone cadastrado`)
+    toast({
+      title: 'Telefone não encontrado',
+      description: `Lead ${lead.name} não possui telefone cadastrado`,
+      variant: 'destructive',
+    })
   }
 }
 
@@ -74,8 +94,17 @@ function openWhatsApp(lead: Lead): void {
     const cleanPhone = lead.phone.replaceAll(/\D/g, '')
     const message = encodeURIComponent(`Olá ${lead.name}, tudo bem?`)
     window.open(`https://wa.me/55${cleanPhone}?text=${message}`, '_blank')
+    toast({
+      title: 'WhatsApp aberto',
+      description: `Conversa iniciada com ${lead.name}`,
+      variant: 'default',
+    })
   } else {
-    alert(`Lead ${lead.name} não possui telefone cadastrado`)
+    toast({
+      title: 'WhatsApp indisponível',
+      description: `Lead ${lead.name} não possui telefone cadastrado`,
+      variant: 'destructive',
+    })
   }
 }
 
@@ -134,9 +163,61 @@ function useModalStates(): {
   }
 }
 
+// Helper function to create success handlers
+function createSuccessHandlers(reloadLeadsData: () => Promise<void>): {
+  handleCreateSuccess: () => void
+  handleEditSuccess: () => void
+  handleDeleteSuccess: () => void
+  handleFavoriteToggle: () => void
+} {
+  const handleCreateSuccess = (): void => {
+    void reloadLeadsData()
+    toast({
+      title: 'Lead criado com sucesso',
+      description: 'O novo lead foi adicionado ao pipeline',
+      variant: 'default',
+    })
+  }
+
+  const handleEditSuccess = (): void => {
+    void reloadLeadsData()
+    toast({
+      title: 'Lead atualizado',
+      description: 'As informações foram salvas com sucesso',
+      variant: 'default',
+    })
+  }
+
+  const handleDeleteSuccess = (): void => {
+    void reloadLeadsData()
+    toast({
+      title: 'Lead removido',
+      description: 'O lead foi removido do pipeline',
+      variant: 'default',
+    })
+  }
+
+  const handleFavoriteToggle = (): void => {
+    void reloadLeadsData()
+    toast({
+      title: 'Favorito atualizado',
+      description: 'Status de favorito foi atualizado',
+      variant: 'default',
+    })
+  }
+
+  return {
+    handleCreateSuccess,
+    handleEditSuccess,
+    handleDeleteSuccess,
+    handleFavoriteToggle,
+  }
+}
+
 export function usePipelineHandlers(reloadLeadsData: () => Promise<void>): PipelineHandlersReturn {
   const { modalState, modalActions } = useModalStates()
   const { draggedLead, handleDragStart, handleDrop } = usePipelineDragLogic(reloadLeadsData)
+  const successHandlers = createSuccessHandlers(reloadLeadsData)
 
   const handleAddLead = (stageId?: string): void => {
     const targetStage =
@@ -145,28 +226,12 @@ export function usePipelineHandlers(reloadLeadsData: () => Promise<void>): Pipel
     modalActions.setIsCreateModalOpen(true)
   }
 
-  const handleCreateSuccess = (): void => {
-    void reloadLeadsData()
-  }
-
   const handleModalClose = (): void => {
     modalActions.closeAllModals()
   }
 
   const handleCreateModalClose = (): void => {
     modalActions.setIsCreateModalOpen(false)
-  }
-
-  const handleEditSuccess = (): void => {
-    void reloadLeadsData()
-  }
-
-  const handleDeleteSuccess = (): void => {
-    void reloadLeadsData()
-  }
-
-  const handleFavoriteToggle = (): void => {
-    void reloadLeadsData()
   }
 
   const handleEditFromDetails = (lead: Lead): void => {
@@ -210,12 +275,9 @@ export function usePipelineHandlers(reloadLeadsData: () => Promise<void>): Pipel
     handleDragStart,
     handleDrop,
     handleAddLead,
-    handleCreateSuccess,
+    ...successHandlers,
     handleModalClose,
     handleCreateModalClose,
-    handleEditSuccess,
-    handleDeleteSuccess,
-    handleFavoriteToggle,
     handleEditFromDetails,
     handleDeleteFromDetails,
     handleViewDetails,

@@ -201,7 +201,9 @@ class AdvancedFiltersSchema(BaseModel):
     end_date: Optional[str] = Field(None, description="End date filter (YYYY-MM-DD)")
     stages: List[str] = Field(default_factory=list, description="Pipeline stages to include")
     sources: List[str] = Field(default_factory=list, description="Lead sources to include")
-    assigned_users: List[str] = Field(default_factory=list, description="Assigned user IDs to include")
+    assigned_users: List[str] = Field(
+        default_factory=list, description="Assigned user IDs to include"
+    )
     tags: List[str] = Field(default_factory=list, description="Tags to include")
     value_min: Optional[float] = Field(None, ge=0, description="Minimum estimated value")
     value_max: Optional[float] = Field(None, ge=0, description="Maximum estimated value")
@@ -233,7 +235,9 @@ class BottleneckAnalysis(BaseModel):
     stage: Optional[str] = Field(None, description="Stage with bottleneck")
     avg_time_days: Optional[float] = Field(None, description="Average time in bottleneck stage")
     leads_stuck: Optional[int] = Field(None, description="Number of leads stuck in stage")
-    recommendations: List[str] = Field(default_factory=list, description="Improvement recommendations")
+    recommendations: List[str] = Field(
+        default_factory=list, description="Improvement recommendations"
+    )
 
 
 class TrendingData(BaseModel):
@@ -261,7 +265,9 @@ class AdvancedMetricsResponse(BaseModel):
     """Advanced pipeline metrics response."""
 
     stage_distribution: List[StageDistribution] = Field(..., description="Distribution by stage")
-    conversion_funnel: List[ConversionFunnelStage] = Field(..., description="Conversion funnel analysis")
+    conversion_funnel: List[ConversionFunnelStage] = Field(
+        ..., description="Conversion funnel analysis"
+    )
     bottleneck_analysis: BottleneckAnalysis = Field(..., description="Bottleneck detection results")
     trending_data: List[TrendingData] = Field(..., description="Trending metrics over time")
     executive_summary: ExecutiveSummary = Field(..., description="Executive summary metrics")

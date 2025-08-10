@@ -1,16 +1,20 @@
 /**
  * Pipeline Drag Logic
  * Extracted drag and drop logic for pipeline operations
+ * Enhanced with UX improvements and haptic feedback
  */
 
 import { useState } from 'react'
 
+import { toast } from '@/hooks/use-toast'
 import { default as crmLeadsService, Lead, PipelineStage } from '@/services/crm-leads'
 
 import { PipelineStageDisplay, DragParams } from './pipeline-types'
+import { useUXEnhancements } from './pipeline-ux-enhancements'
 
 interface DragLogicReturn {
   draggedLead: Lead | null
+  isDragging: boolean
   handleDragStart: (lead: Lead) => void
   handleDrop: (params: DragParams) => Promise<void>
 }
@@ -110,10 +114,14 @@ function createDragHelpers(reloadLeadsData: () => Promise<void>): {
 
 export function usePipelineDragLogic(reloadLeadsData: () => Promise<void>): DragLogicReturn {
   const [draggedLead, setDraggedLead] = useState<Lead | null>(null)
+  const [isDragging, setIsDragging] = useState(false)
+  const { triggerHaptic } = useUXEnhancements()
   const helpers = createDragHelpers(reloadLeadsData)
 
   const handleDragStart = (lead: Lead): void => {
     setDraggedLead(lead)
+    setIsDragging(true)
+    triggerHaptic([50]) // Haptic feedback on drag start
   }
 
   const handleDrop = async ({
@@ -123,6 +131,7 @@ export function usePipelineDragLogic(reloadLeadsData: () => Promise<void>): Drag
     setError,
   }: DragParams): Promise<void> => {
     if (draggedLead === null || draggedLead === undefined) {
+      setIsDragging(false)
       return
     }
 
@@ -131,10 +140,14 @@ export function usePipelineDragLogic(reloadLeadsData: () => Promise<void>): Drag
 
     if (currentStage === targetStage) {
       setDraggedLead(null)
+      setIsDragging(false)
       return
     }
 
     try {
+      // Success haptic feedback
+      triggerHaptic([50, 50, 100])
+
       await helpers.performLeadMove({
         lead: draggedLead,
         targetStage,
@@ -143,15 +156,33 @@ export function usePipelineDragLogic(reloadLeadsData: () => Promise<void>): Drag
         sendMessage,
       })
       void reloadLeadsData()
+
+      // Success toast notification
+      toast({
+        title: 'Lead movido com sucesso',
+        description: `${draggedLead.name} foi movido para ${targetStage}`,
+        variant: 'default',
+      })
     } catch (error) {
+      // Error haptic feedback
+      triggerHaptic([200, 100, 200])
       helpers.handleDropError(error, setError)
+
+      // Error toast notification
+      toast({
+        title: 'Erro ao mover lead',
+        description: 'Não foi possível mover o lead. Tente novamente.',
+        variant: 'destructive',
+      })
     } finally {
       setDraggedLead(null)
+      setIsDragging(false)
     }
   }
 
   return {
     draggedLead,
+    isDragging,
     handleDragStart,
     handleDrop,
   }

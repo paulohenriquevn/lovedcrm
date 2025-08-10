@@ -5,8 +5,8 @@
 
 import { cn } from '@/lib/utils'
 
-import { PipelineModals } from './pipeline-kanban-helpers'
-import { PipelineLayoutWithFilters } from './pipeline-kanban-layout'
+import { PipelineLayoutWithFilters } from './pipeline-layout-components'
+import { PipelineModals } from './pipeline-modal-components'
 
 import type { PipelineFiltersState } from './pipeline-filters-types'
 import type { PipelineStageDisplay } from './pipeline-types'

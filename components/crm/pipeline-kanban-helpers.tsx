@@ -1,56 +1,28 @@
 /**
  * Pipeline Kanban Helper Components
  * Extracted helper components to reduce file complexity
+ * Enhanced with UX improvements and drop zone animations
  */
-import { Plus, AlertCircle } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Plus } from 'lucide-react'
+import { useState } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { Lead, PipelineStage } from '@/services/crm-leads'
+import { Lead } from '@/services/crm-leads'
 
 import { LeadCard } from './lead-card-components'
-import { LeadCreateModal } from './lead-create-modal'
-import { LeadDeleteDialog } from './lead-delete-dialog'
-import { LeadDetailsModal } from './lead-details-modal'
-import { LeadEditModal } from './lead-edit-modal'
 import { PipelineStageDisplay } from './pipeline-types'
+import { useUXEnhancements } from './pipeline-ux-enhancements'
 
 const handleDragOver = (e: React.DragEvent): void => {
   e.preventDefault()
 }
 
-export function LoadingState({ className }: { className?: string }): React.ReactElement {
-  return (
-    <div className={cn('h-full flex items-center justify-center', className)}>
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4" />
-        <p className="text-muted-foreground">Carregando pipeline...</p>
-      </div>
-    </div>
-  )
-}
-
-export function ErrorState({
-  error,
-  className,
-}: {
-  error: string
-  className?: string
-}): React.ReactElement {
-  return (
-    <div className={cn('h-full flex items-center justify-center', className)}>
-      <div className="text-center">
-        <AlertCircle className="h-8 w-8 text-red-500 mx-auto mb-4" />
-        <p className="text-red-600 mb-4">{error}</p>
-        <Button type="button" variant="outline" onClick={() => window.location.reload()}>
-          Tentar novamente
-        </Button>
-      </div>
-    </div>
-  )
-}
+// Loading and Error states moved to separate file
+export { LoadingState, ErrorState } from './pipeline-loading-components'
 
 export function StageHeader({
   stage,
@@ -103,6 +75,130 @@ export function AddLeadCard({ onAddLead }: { onAddLead: () => void }): React.Rea
   )
 }
 
+function useDragHandlers(
+  setIsDropZoneActive: React.Dispatch<React.SetStateAction<boolean>>,
+  onDrop: (stageId: string) => void,
+  stageId: string
+): {
+  handleDragEnter: (e: React.DragEvent) => void
+  handleDragLeave: (e: React.DragEvent) => void
+  handleDropEnhanced: (e: React.DragEvent) => void
+} {
+  const handleDragEnter = (e: React.DragEvent): void => {
+    e.preventDefault()
+    setIsDropZoneActive(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent): void => {
+    e.preventDefault()
+    if (e.currentTarget.contains(e.relatedTarget as Node)) {
+      return
+    }
+    setIsDropZoneActive(false)
+  }
+
+  const handleDropEnhanced = (e: React.DragEvent): void => {
+    e.preventDefault()
+    setIsDropZoneActive(false)
+    onDrop(stageId)
+  }
+
+  return { handleDragEnter, handleDragLeave, handleDropEnhanced }
+}
+
+function StageLeadsList({
+  leads,
+  onDragStart,
+  onViewDetails,
+  onEditLead,
+  onSendEmail,
+  onRemoveLead,
+  onCall,
+  onWhatsApp,
+  draggedLead,
+  reducedMotion,
+}: {
+  leads: Lead[]
+  onDragStart: (lead: Lead) => void
+  onViewDetails: (lead: Lead) => void
+  onEditLead: (lead: Lead) => void
+  onSendEmail: (lead: Lead) => void
+  onRemoveLead: (lead: Lead) => void
+  onCall: (lead: Lead) => void
+  onWhatsApp: (lead: Lead) => void
+  draggedLead: Lead | null
+  reducedMotion: boolean
+}): React.ReactElement {
+  return (
+    <>
+      {leads.map((lead, index) => (
+        <motion.div
+          key={lead.id}
+          initial={reducedMotion ? false : { opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.15,
+            delay: reducedMotion ? 0 : index * 0.05,
+          }}
+        >
+          <LeadCard
+            lead={lead}
+            onDragStart={onDragStart}
+            onViewDetails={onViewDetails}
+            onEditLead={onEditLead}
+            onSendEmail={onSendEmail}
+            onRemoveLead={onRemoveLead}
+            onCall={onCall}
+            onWhatsApp={onWhatsApp}
+            isDragging={draggedLead?.id === lead.id}
+          />
+        </motion.div>
+      ))}
+    </>
+  )
+}
+
+function StageDropZone({
+  isDropZoneActive,
+  reducedMotion,
+  onDragEnter,
+  onDragLeave,
+  onDrop,
+  children,
+}: {
+  isDropZoneActive: boolean
+  reducedMotion: boolean
+  onDragEnter: (e: React.DragEvent) => void
+  onDragLeave: (e: React.DragEvent) => void
+  onDrop: (e: React.DragEvent) => void
+  children: React.ReactNode
+}): React.ReactElement {
+  return (
+    <motion.div
+      className={cn(
+        'w-[320px] flex-shrink-0 transition-all duration-200',
+        isDropZoneActive && 'drop-zone-active',
+        reducedMotion ? '' : isDropZoneActive && 'animate-pulse'
+      )}
+      animate={
+        reducedMotion || !isDropZoneActive
+          ? {}
+          : {
+              borderColor: 'hsl(var(--sector-primary) / 0.5)',
+              backgroundColor: 'hsl(var(--sector-primary) / 0.05)',
+            }
+      }
+      transition={{ duration: 0.15 }}
+      onDragOver={handleDragOver}
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
+      onDrop={onDrop}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
 export function StageColumn({
   stage,
   onDragStart,
@@ -114,6 +210,7 @@ export function StageColumn({
   onRemoveLead,
   onCall,
   onWhatsApp,
+  draggedLead = null,
 }: {
   stage: PipelineStageDisplay
   onDragStart: (lead: Lead) => void
@@ -125,176 +222,99 @@ export function StageColumn({
   onRemoveLead: (lead: Lead) => void
   onCall: (lead: Lead) => void
   onWhatsApp: (lead: Lead) => void
+  draggedLead?: Lead | null
 }): React.ReactElement {
+  const [isDropZoneActive, setIsDropZoneActive] = useState(false)
+  const { detectReducedMotion } = useUXEnhancements()
+  const reducedMotion = detectReducedMotion()
+  const { handleDragEnter, handleDragLeave, handleDropEnhanced } = useDragHandlers(
+    setIsDropZoneActive,
+    onDrop,
+    stage.id
+  )
+
   return (
-    <div
-      className="w-[320px] flex-shrink-0"
-      onDragOver={handleDragOver}
-      onDrop={() => onDrop(stage.id)}
+    <StageDropZone
+      isDropZoneActive={isDropZoneActive}
+      reducedMotion={reducedMotion}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDropEnhanced}
     >
       <StageHeader stage={stage} onAddLead={() => onAddLead(stage.id)} />
-      <div className="space-y-3 min-h-[600px]">
-        {stage.leads.map(lead => (
-          <LeadCard
-            key={lead.id}
-            lead={lead}
-            onDragStart={onDragStart}
-            onViewDetails={onViewDetails}
-            onEditLead={onEditLead}
-            onSendEmail={onSendEmail}
-            onRemoveLead={onRemoveLead}
-            onCall={onCall}
-            onWhatsApp={onWhatsApp}
-          />
-        ))}
+      <motion.div
+        className="space-y-3 min-h-[600px] p-2 rounded-lg border-2 border-transparent"
+        animate={
+          !isDropZoneActive || reducedMotion
+            ? {}
+            : {
+                borderStyle: 'dashed',
+                borderColor: 'hsl(var(--sector-primary) / 0.3)',
+              }
+        }
+        transition={{ duration: 0.15 }}
+      >
+        <StageLeadsList
+          leads={stage.leads}
+          onDragStart={onDragStart}
+          onViewDetails={onViewDetails}
+          onEditLead={onEditLead}
+          onSendEmail={onSendEmail}
+          onRemoveLead={onRemoveLead}
+          onCall={onCall}
+          onWhatsApp={onWhatsApp}
+          draggedLead={draggedLead}
+          reducedMotion={reducedMotion}
+        />
         <AddLeadCard onAddLead={() => onAddLead(stage.id)} />
-      </div>
-    </div>
+      </motion.div>
+    </StageDropZone>
   )
 }
 
-// Helper component for connection status indicator
-export function ConnectionStatusIndicator({
-  isConnected,
-  isPolling,
+// Ghost overlay component for drag operations
+export function PipelineGhostOverlay({
+  draggedLead,
+  isDragging,
 }: {
-  isConnected: boolean
-  isPolling: boolean
+  draggedLead: Lead | null
+  isDragging: boolean
 }): React.ReactElement {
-  return (
-    <div className="flex items-center gap-2">
-      <div
-        className={cn(
-          'h-2 w-2 rounded-full',
-          isConnected ? 'bg-emerald-500' : isPolling ? 'bg-amber-500' : 'bg-red-500'
-        )}
-      />
-      <span className="text-xs text-muted-foreground">
-        {isConnected
-          ? 'Conectado - Updates em tempo real'
-          : isPolling
-            ? 'Modo Fallback - Updates via polling'
-            : 'Desconectado - Sem updates automáticos'}
-      </span>
-    </div>
-  )
-}
-
-// Helper component for active users display
-export function ActiveUsersDisplay({
-  activeUsers,
-}: {
-  activeUsers: { user_id?: string; full_name?: string }[]
-}): React.ReactElement | null {
-  if (activeUsers.length === 0) {
-    return null
-  }
+  const { detectReducedMotion } = useUXEnhancements()
+  const reducedMotion = detectReducedMotion()
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-xs text-muted-foreground">
-        {activeUsers.length} {activeUsers.length === 1 ? 'usuário ativo' : 'usuários ativos'}
-      </span>
-      <div className="flex -space-x-1">
-        {activeUsers.slice(0, 3).map((activeUser, index) => (
+    <AnimatePresence>
+      {isDragging && draggedLead ? (
+        <motion.div
+          key="ghost-overlay"
+          initial={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.15 }}
+          className="fixed inset-0 pointer-events-none z-50"
+          style={{ pointerEvents: 'none' }}
+        >
           <div
-            key={activeUser.user_id ?? `user-${index}`}
-            className="h-6 w-6 rounded-full bg-primary/20 border border-background flex items-center justify-center"
-            title={activeUser.full_name ?? 'Usuário ativo'}
+            className={cn(
+              'drag-ghost absolute top-4 left-4 w-64',
+              reducedMotion ? '' : 'rotate-2 shadow-2xl'
+            )}
           >
-            <span className="text-xs font-medium">
-              {(activeUser.full_name ?? 'U').charAt(0).toUpperCase()}
-            </span>
+            <LeadCard
+              lead={draggedLead}
+              onDragStart={() => {}}
+              onViewDetails={() => {}}
+              onEditLead={() => {}}
+              onSendEmail={() => {}}
+              onRemoveLead={() => {}}
+              onCall={() => {}}
+              onWhatsApp={() => {}}
+              isDragging
+            />
           </div>
-        ))}
-        {activeUsers.length > 3 && (
-          <div className="h-6 w-6 rounded-full bg-muted border border-background flex items-center justify-center">
-            <span className="text-xs">+{activeUsers.length - 3}</span>
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
-// Helper component for connection status header
-export function ConnectionStatusHeader({
-  isConnected,
-  isPolling,
-  activeUsers,
-}: {
-  isConnected: boolean
-  isPolling: boolean
-  activeUsers: { user_id?: string; full_name?: string }[]
-}): React.ReactElement {
-  return (
-    <div className="flex items-center justify-between mb-4 p-2 bg-muted/30 rounded-lg">
-      <ConnectionStatusIndicator isConnected={isConnected} isPolling={isPolling} />
-      <ActiveUsersDisplay activeUsers={activeUsers} />
-    </div>
-  )
-}
-
-// Helper component for modals section
-export function PipelineModals({
-  isCreateModalOpen,
-  onCreateModalClose,
-  onCreateSuccess,
-  createModalStage,
-  isDetailsModalOpen,
-  onModalClose,
-  selectedLead,
-  onEditFromDetails,
-  onDeleteFromDetails,
-  onFavoriteToggle,
-  isEditModalOpen,
-  onEditSuccess,
-  isDeleteDialogOpen,
-  onDeleteSuccess,
-}: {
-  isCreateModalOpen: boolean
-  onCreateModalClose: () => void
-  onCreateSuccess: () => void
-  createModalStage: PipelineStage
-  isDetailsModalOpen: boolean
-  onModalClose: () => void
-  selectedLead: Lead | null
-  onEditFromDetails: (lead: Lead) => void
-  onDeleteFromDetails: (lead: Lead) => void
-  onFavoriteToggle: () => void
-  isEditModalOpen: boolean
-  onEditSuccess: () => void
-  isDeleteDialogOpen: boolean
-  onDeleteSuccess: () => void
-}): React.ReactElement {
-  return (
-    <>
-      <LeadCreateModal
-        isOpen={isCreateModalOpen}
-        onClose={onCreateModalClose}
-        onSuccess={onCreateSuccess}
-        initialStage={createModalStage}
-      />
-      <LeadDetailsModal
-        isOpen={isDetailsModalOpen}
-        onClose={onModalClose}
-        lead={selectedLead}
-        onEdit={onEditFromDetails}
-        onDelete={onDeleteFromDetails}
-        onFavoriteToggle={onFavoriteToggle}
-      />
-      <LeadEditModal
-        isOpen={isEditModalOpen}
-        onClose={onModalClose}
-        onSuccess={onEditSuccess}
-        lead={selectedLead}
-      />
-      <LeadDeleteDialog
-        isOpen={isDeleteDialogOpen}
-        onClose={onModalClose}
-        onSuccess={onDeleteSuccess}
-        lead={selectedLead}
-      />
-    </>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
   )
 }

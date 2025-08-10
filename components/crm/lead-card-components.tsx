@@ -1,6 +1,7 @@
 /**
  * Lead Card Components
  * Individual components for rendering lead cards in the pipeline
+ * Enhanced with micro-interactions and UX improvements
  */
 
 import {
@@ -15,15 +16,17 @@ import {
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import { CardContent } from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { cn } from '@/lib/utils'
 import { Lead } from '@/services/crm-leads'
 
+import { useLeadCardHandlers, LeadCardWrapper } from './lead-card-handlers'
 import {
   STAGE_DISPLAY_CONFIG,
   getPriorityFromValue,
@@ -34,6 +37,7 @@ import {
   LeadContactInfo,
   LeadTagsDisplay,
 } from './lead-card-utils'
+import { useUXEnhancements, useEnhancedButton } from './pipeline-ux-enhancements'
 
 function LeadCardHeader({
   lead,
@@ -141,6 +145,21 @@ function LeadCardFooter({
   onCall: (lead: Lead) => void
   onWhatsApp: (lead: Lead) => void
 }): React.ReactElement {
+  const { detectReducedMotion } = useUXEnhancements()
+  const reducedMotion = detectReducedMotion()
+
+  const callButton = useEnhancedButton({
+    onClick: () => onCall(lead),
+    hapticPattern: [25],
+    reducedMotion,
+  })
+
+  const whatsAppButton = useEnhancedButton({
+    onClick: () => onWhatsApp(lead),
+    hapticPattern: [25],
+    reducedMotion,
+  })
+
   return (
     <div>
       {/* Footer */}
@@ -171,14 +190,14 @@ function LeadCardFooter({
         </div>
       )}
 
-      {/* Quick Actions */}
+      {/* Quick Actions with Enhanced UX */}
       <div className="mt-3 flex gap-1">
         <Button
           type="button"
           size="sm"
           variant="outline"
-          className="flex-1 h-7 text-xs"
-          onClick={() => onCall(lead)}
+          className={cn('flex-1 h-7 text-xs', callButton.className)}
+          onClick={callButton.handleClick}
         >
           <Phone className="mr-1 h-3 w-3" />
           Ligar
@@ -187,8 +206,8 @@ function LeadCardFooter({
           type="button"
           size="sm"
           variant="outline"
-          className="flex-1 h-7 text-xs"
-          onClick={() => onWhatsApp(lead)}
+          className={cn('flex-1 h-7 text-xs', whatsAppButton.className)}
+          onClick={whatsAppButton.handleClick}
         >
           <MessageCircle className="mr-1 h-3 w-3" />
           WhatsApp
@@ -207,6 +226,7 @@ export function LeadCard({
   onRemoveLead,
   onCall,
   onWhatsApp,
+  isDragging = false,
 }: {
   lead: Lead
   onDragStart: (lead: Lead) => void
@@ -216,14 +236,20 @@ export function LeadCard({
   onRemoveLead: (lead: Lead) => void
   onCall: (lead: Lead) => void
   onWhatsApp: (lead: Lead) => void
+  isDragging?: boolean
 }): React.ReactElement {
   const priority = getPriorityFromValue(lead.estimated_value)
+  const { hoverClasses, detectReducedMotion } = useUXEnhancements()
+  const reducedMotion = detectReducedMotion()
+  const { handleDragStart, handleCardClick } = useLeadCardHandlers(lead, onDragStart, onViewDetails)
 
   return (
-    <Card
-      className="cursor-grab hover:shadow-md transition-shadow active:cursor-grabbing w-full"
-      draggable
-      onDragStart={() => onDragStart(lead)}
+    <LeadCardWrapper
+      reducedMotion={reducedMotion}
+      hoverClasses={hoverClasses}
+      isDragging={isDragging}
+      onDragStart={handleDragStart}
+      onClick={handleCardClick}
     >
       <CardContent className="p-4">
         <LeadCardHeader
@@ -235,8 +261,19 @@ export function LeadCard({
           onRemoveLead={onRemoveLead}
         />
         <LeadCardContent lead={lead} />
-        <LeadCardFooter lead={lead} onCall={onCall} onWhatsApp={onWhatsApp} />
+        <div
+          onClick={e => e.stopPropagation()}
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.stopPropagation()
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          <LeadCardFooter lead={lead} onCall={onCall} onWhatsApp={onWhatsApp} />
+        </div>
       </CardContent>
-    </Card>
+    </LeadCardWrapper>
   )
 }
