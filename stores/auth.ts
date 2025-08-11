@@ -212,8 +212,9 @@ export const useAuthStore = create<AuthState>()(
               user: {
                 ...response.user,
                 status: (response.user.status as UserStatus) ?? UserStatus.ACTIVE,
-                is_email_verified: response.user.is_email_verified ?? response.user.is_verified ?? false
-              }
+                is_email_verified:
+                  response.user.is_email_verified ?? response.user.is_verified ?? false,
+              },
             }
           } catch (error) {
             set({

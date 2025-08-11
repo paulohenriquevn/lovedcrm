@@ -6,13 +6,40 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 import { Users, BarChart3 } from 'lucide-react'
 import { useState } from 'react'
 
 import { useScrollAnimation, staggerContainer, staggerItem } from '@/hooks/use-scroll-animation'
 
 import { PricingCard, PricingHeader, PricingFooter } from './pricing-components'
+
+// Local fallback variants with proper typing
+const fallbackStaggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+}
+
+const fallbackStaggerItem: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  },
+}
 
 const pricingPlans = [
   {
@@ -110,16 +137,16 @@ export function PricingSection(): JSX.Element {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        variants={staggerContainer}
+        variants={staggerContainer ?? fallbackStaggerContainer}
       >
         <PricingHeader isYearly={isYearly} onToggle={handleToggle} />
 
         <motion.div
           className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12"
-          variants={staggerContainer}
+          variants={staggerContainer ?? fallbackStaggerContainer}
         >
           {pricingPlans.map((plan, index) => (
-            <motion.div key={plan.id} variants={staggerItem}>
+            <motion.div key={plan.id} variants={staggerItem ?? fallbackStaggerItem}>
               <PricingCard plan={plan} isYearly={isYearly} index={index} />
             </motion.div>
           ))}

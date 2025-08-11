@@ -228,7 +228,12 @@ export function usePipelineWebSocketShared(
   const managerRef = useRef<WebSocketManager>()
   const [state, setState] = useState({
     isConnected: false,
-    connectionStatus: 'disconnected' as 'disconnected' | 'connecting' | 'connected' | 'error' | 'polling',
+    connectionStatus: 'disconnected' as
+      | 'disconnected'
+      | 'connecting'
+      | 'connected'
+      | 'error'
+      | 'polling',
     activeUsers: [] as any[],
     lastMessage: null as PipelineWebSocketMessage | null,
     isPolling: false,

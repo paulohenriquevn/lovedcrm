@@ -5,12 +5,28 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 import { CheckCircle } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { staggerItem } from '@/hooks/use-scroll-animation'
+
+// Local fallback variant with proper typing
+const fallbackStaggerItem: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  },
+}
 
 interface Problem {
   icon: React.ComponentType<{ className?: string }>
@@ -38,7 +54,7 @@ export function ProblemCard({ problem }: ProblemCardProps): JSX.Element {
   const Icon = problem.icon
 
   return (
-    <motion.div variants={staggerItem}>
+    <motion.div variants={staggerItem ?? fallbackStaggerItem}>
       <Card className="h-full border-red-200 hover:border-red-300 transition-colors duration-300">
         <CardContent className="p-6">
           <div className="flex items-start gap-4">
@@ -74,7 +90,7 @@ export function SolutionCard({ solution }: SolutionCardProps): JSX.Element {
   const Icon = solution.icon
 
   return (
-    <motion.div variants={staggerItem}>
+    <motion.div variants={staggerItem ?? fallbackStaggerItem}>
       <Card className="h-full border-emerald-200 hover:border-emerald-300 transition-colors duration-300 bg-gradient-to-b from-emerald-50/50 to-white">
         <CardContent className="p-6">
           <div className="flex items-start gap-4 mb-4">

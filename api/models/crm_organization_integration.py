@@ -5,18 +5,19 @@ Gerenciamento de integrações externas com isolamento organizacional.
 
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 from uuid import UUID, uuid4
 
 from sqlalchemy import (
     UUID as SA_UUID,
+    Boolean,
     CheckConstraint,
     Column,
     DateTime,
     ForeignKey,
+    Integer,
     String,
     Text,
-    UniqueConstraint,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
@@ -76,6 +77,11 @@ class OrganizationIntegration(Base):
     # Integration metadata and configuration
     integration_metadata: Dict[str, Any] = Column("metadata", JSONB, nullable=False, default=dict)
 
+    # Multi-Provider Foundation Fields
+    provider_name: str = Column(String(100), nullable=False, default="Default Provider")
+    is_primary: bool = Column(Boolean, nullable=False, default=False)
+    priority: int = Column(Integer, nullable=False, default=0)
+
     # Sync tracking
     last_sync_at: Optional[datetime] = Column(DateTime(timezone=True), nullable=True)
 
@@ -87,12 +93,10 @@ class OrganizationIntegration(Base):
         DateTime(timezone=True), nullable=False, default=func.now(), onupdate=func.now()
     )
 
-    # Table constraints
+    # Table constraints (Multi-Provider: removed unique constraint)
     __table_args__ = (
-        # One integration per provider per organization
-        UniqueConstraint(
-            "organization_id", "provider", name="uq_organization_integrations_org_provider"
-        ),
+        # Priority must be non-negative
+        CheckConstraint(priority >= 0, name="chk_organization_integrations_priority_positive"),
         # Status validation
         CheckConstraint(
             status.in_(
@@ -129,6 +133,11 @@ class OrganizationIntegration(Base):
     def has_error(self) -> bool:
         """Check if integration has error status."""
         return self.status == IntegrationStatus.ERROR
+
+    @property
+    def is_primary_provider(self) -> bool:
+        """Check if this is the primary provider for its type."""
+        return self.is_primary
 
     @property
     def is_whatsapp(self) -> bool:
@@ -202,6 +211,91 @@ class OrganizationIntegration(Base):
             del self.integration_metadata["error_timestamp"]
         self.updated_at = func.now()
 
+    async def switch_to_primary(self, db) -> bool:
+        """Make this provider primary for its type and organization.
+
+        Performs atomic hot-swap with zero downtime.
+
+        Args:
+            db: SQLAlchemy session for database operations
+
+        Returns:
+            bool: True if switch was successful
+
+        Raises:
+            Exception: If atomic operation fails
+        """
+        from sqlalchemy.orm import Session
+
+        if not isinstance(db, Session):
+            raise ValueError("db must be SQLAlchemy Session instance")
+
+        try:
+            # Remove primary flag from other providers of same type (atomic)
+            db.query(OrganizationIntegration).filter(
+                OrganizationIntegration.organization_id == self.organization_id,
+                OrganizationIntegration.provider == self.provider,
+                OrganizationIntegration.id != self.id,
+            ).update({"is_primary": False})
+
+            # Set this as primary
+            self.is_primary = True
+            self.status = IntegrationStatus.ACTIVE
+            self.updated_at = func.now()
+
+            db.commit()
+            return True
+
+        except Exception:
+            db.rollback()
+            raise
+
+    @classmethod
+    def get_primary_provider(
+        cls, db, org_id: UUID, provider_type: "IntegrationProvider"
+    ) -> Optional["OrganizationIntegration"]:
+        """Get primary provider for organization and type.
+
+        Args:
+            db: SQLAlchemy session
+            org_id: Organization UUID
+            provider_type: Provider type enum
+
+        Returns:
+            Primary provider or None if not found
+        """
+        return (
+            db.query(cls)
+            .filter(
+                cls.organization_id == org_id,
+                cls.provider == provider_type,
+                cls.is_primary == True,
+                cls.status == IntegrationStatus.ACTIVE,
+            )
+            .first()
+        )
+
+    @classmethod
+    def get_all_providers(
+        cls, db, org_id: UUID, provider_type: "IntegrationProvider"
+    ) -> List["OrganizationIntegration"]:
+        """Get all providers for organization and type.
+
+        Args:
+            db: SQLAlchemy session
+            org_id: Organization UUID
+            provider_type: Provider type enum
+
+        Returns:
+            List of providers ordered by priority (desc) then created_at
+        """
+        return (
+            db.query(cls)
+            .filter(cls.organization_id == org_id, cls.provider == provider_type)
+            .order_by(cls.priority.desc(), cls.created_at)
+            .all()
+        )
+
     @classmethod
     def create_whatsapp_integration(
         cls,
@@ -209,8 +303,11 @@ class OrganizationIntegration(Base):
         encrypted_credentials: str,
         webhook_secret: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
+        provider_name: str = "WhatsApp Default",
+        is_primary: bool = False,
+        priority: int = 0,
     ) -> "OrganizationIntegration":
-        """Factory method for WhatsApp integration."""
+        """Factory method for WhatsApp integration with multi-provider support."""
         return cls(
             organization_id=organization_id,
             provider=IntegrationProvider.WHATSAPP,
@@ -218,6 +315,9 @@ class OrganizationIntegration(Base):
             webhook_secret=webhook_secret,
             status=IntegrationStatus.PENDING,
             integration_metadata=metadata or {},
+            provider_name=provider_name,
+            is_primary=is_primary,
+            priority=priority,
         )
 
     @classmethod
@@ -227,10 +327,16 @@ class OrganizationIntegration(Base):
         provider: str,  # 'gmail' or 'outlook'
         encrypted_credentials: str,
         metadata: Optional[Dict[str, Any]] = None,
+        provider_name: Optional[str] = None,
+        is_primary: bool = False,
+        priority: int = 0,
     ) -> "OrganizationIntegration":
-        """Factory method for email integrations."""
+        """Factory method for email integrations with multi-provider support."""
         if provider not in ["gmail", "outlook"]:
             raise ValueError("Provider must be 'gmail' or 'outlook'")
+
+        if provider_name is None:
+            provider_name = f"{provider.title()} Default"
 
         return cls(
             organization_id=organization_id,
@@ -240,6 +346,9 @@ class OrganizationIntegration(Base):
             encrypted_credentials=encrypted_credentials,
             status=IntegrationStatus.PENDING,
             integration_metadata=metadata or {},
+            provider_name=provider_name,
+            is_primary=is_primary,
+            priority=priority,
         )
 
     @classmethod
@@ -250,10 +359,16 @@ class OrganizationIntegration(Base):
         encrypted_credentials: str,
         webhook_secret: Optional[str] = None,
         metadata: Optional[Dict[str, Any]] = None,
+        provider_name: Optional[str] = None,
+        is_primary: bool = False,
+        priority: int = 0,
     ) -> "OrganizationIntegration":
-        """Factory method for VoIP integrations."""
+        """Factory method for VoIP integrations with multi-provider support."""
         if provider not in ["twilio", "voip_provider"]:
             raise ValueError("Provider must be 'twilio' or 'voip_provider'")
+
+        if provider_name is None:
+            provider_name = f"{provider.title()} Default"
 
         return cls(
             organization_id=organization_id,
@@ -264,4 +379,7 @@ class OrganizationIntegration(Base):
             webhook_secret=webhook_secret,
             status=IntegrationStatus.PENDING,
             integration_metadata=metadata or {},
+            provider_name=provider_name,
+            is_primary=is_primary,
+            priority=priority,
         )

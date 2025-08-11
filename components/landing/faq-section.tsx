@@ -177,7 +177,8 @@ export function FAQSection(): React.ReactElement {
     )
   }
 
-  const activeCategoryData = faqCategories.find(cat => cat.id === activeCategory) ?? faqCategories[0] ?? null
+  const activeCategoryData =
+    faqCategories.find(cat => cat.id === activeCategory) ?? faqCategories[0] ?? null
 
   return (
     <section className="py-20 px-4 bg-gradient-to-b from-background to-muted/20">

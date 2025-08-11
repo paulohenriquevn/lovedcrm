@@ -27,10 +27,17 @@ const VALIDATION_MESSAGES = {
   PASSWORD_REQUIRED: 'validation.password.required',
 } as const
 
+// Basic validation rule factory type
+interface BasicRuleFactory {
+  required: (message?: string) => ValidationRule
+  minLength: (min: number, message?: string) => ValidationRule
+  maxLength: (max: number, message?: string) => ValidationRule
+}
+
 // Helper function for basic validation rules
 const createBasicRules = (
   t: (key: string, params?: Record<string, unknown>) => string
-): Record<string, (...args: any[]) => ValidationRule> => ({
+): BasicRuleFactory => ({
   required: (message?: string): ValidationRule => ({
     test: (value: unknown) => value !== null && value !== undefined && value !== '',
     message: message ?? t('validation.required'),
@@ -57,10 +64,17 @@ const createBasicRules = (
   }),
 })
 
+// Format validation rule factory type
+interface FormatRuleFactory {
+  email: (message?: string) => ValidationRule
+  phone: (message?: string) => ValidationRule
+  url: (message?: string) => ValidationRule
+}
+
 // Helper function for format validation rules
 const createFormatRules = (
   t: (key: string, params?: Record<string, unknown>) => string
-): Record<string, any> => ({
+): FormatRuleFactory => ({
   email: (message?: string): ValidationRule => ({
     test: (value: unknown) => {
       if (typeof value !== 'string') {
@@ -100,10 +114,16 @@ const createFormatRules = (
   }),
 })
 
+// Password validation rule factory type
+interface PasswordRuleFactory {
+  password: (message?: string) => ValidationRule
+  confirmPassword: (originalPassword: string, message?: string) => ValidationRule
+}
+
 // Helper function for password validation rules
 const createPasswordRules = (
   t: (key: string, params?: Record<string, unknown>) => string
-): Record<string, any> => ({
+): PasswordRuleFactory => ({
   password: (message?: string): ValidationRule => ({
     test: (value: unknown) => {
       if (typeof value !== 'string') {
@@ -121,10 +141,19 @@ const createPasswordRules = (
   }),
 })
 
+// Numeric validation rule factory type
+interface NumericRuleFactory {
+  numeric: (message?: string) => ValidationRule
+  decimal: (message?: string) => ValidationRule
+  min: (min: number, message?: string) => ValidationRule
+  max: (max: number, message?: string) => ValidationRule
+  range: (min: number, max: number, message?: string) => ValidationRule
+}
+
 // Helper function for numeric validation rules
 const createNumericRules = (
   t: (key: string, params?: Record<string, unknown>) => string
-): Record<string, any> => ({
+): NumericRuleFactory => ({
   numeric: (message?: string): ValidationRule => ({
     test: (value: unknown) => {
       if (typeof value !== 'string') {
@@ -176,10 +205,16 @@ const createNumericRules = (
   }),
 })
 
+// Complete validation rule factory type
+type ValidationRuleFactory = BasicRuleFactory &
+  FormatRuleFactory &
+  PasswordRuleFactory &
+  NumericRuleFactory
+
 // Translation-aware validation rules factory (now under 80 lines)
 export const createValidationRules = (
   t: (key: string, params?: Record<string, unknown>) => string
-): Record<string, any> => {
+): ValidationRuleFactory => {
   const basicRules = createBasicRules(t)
   const formatRules = createFormatRules(t)
   const passwordRules = createPasswordRules(t)
@@ -190,7 +225,7 @@ export const createValidationRules = (
     ...formatRules,
     ...passwordRules,
     ...numericRules,
-  }
+  } as ValidationRuleFactory
 }
 
 // Legacy validation rules for backward compatibility
@@ -242,24 +277,24 @@ export const createAuthSchemas = (
 
   return {
     login: {
-      email: [rules.required!(), rules.email!()],
-      password: [rules.required!(), rules.minLength!(1)],
+      email: [rules.required(), rules.email()],
+      password: [rules.required(), rules.minLength(1)],
     },
 
     register: {
-      fullName: [rules.required!(), rules.minLength!(2), rules.maxLength!(100)],
-      email: [rules.required!(), rules.email!()],
-      password: [rules.required!(), rules.password!()],
-      confirmPassword: [rules.required!()],
+      fullName: [rules.required(), rules.minLength(2), rules.maxLength(100)],
+      email: [rules.required(), rules.email()],
+      password: [rules.required(), rules.password()],
+      confirmPassword: [rules.required()],
     },
 
     forgotPassword: {
-      email: [rules.required!(), rules.email!()],
+      email: [rules.required(), rules.email()],
     },
 
     resetPassword: {
-      password: [rules.required!(), rules.password!()],
-      confirmPassword: [rules.required!()],
+      password: [rules.required(), rules.password()],
+      confirmPassword: [rules.required()],
     },
   }
 }

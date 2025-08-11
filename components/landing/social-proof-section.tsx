@@ -6,7 +6,7 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 import { TrendingUp, Users, Award, Calendar } from 'lucide-react'
 import { useState } from 'react'
 
@@ -19,6 +19,18 @@ import {
   SocialProofMetrics,
   SocialProofFooter,
 } from './social-proof-components'
+
+// Local fallback variant with proper typing
+const fallbackStaggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+}
 
 const testimonials = [
   {
@@ -112,7 +124,7 @@ export function SocialProofSection(): JSX.Element {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          variants={staggerContainer}
+          variants={staggerContainer ?? fallbackStaggerContainer}
         >
           <SocialProofMetrics metrics={metrics} />
 

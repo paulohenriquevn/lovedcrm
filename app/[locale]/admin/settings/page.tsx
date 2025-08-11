@@ -46,6 +46,7 @@ export default function SettingsPage(): JSX.Element {
             canEditOrganization: permissions.canEditOrganization,
             canManageBilling: permissions.canManageBilling,
             canViewAdvancedSettings: permissions.canViewAdvancedSettings,
+            canManageProviders: permissions.canManageProviders,
           }}
         />
       </div>
@@ -58,7 +59,12 @@ export default function SettingsPage(): JSX.Element {
             profile={profile}
             preferences={preferences}
             organization={organization}
-            permissions={permissions}
+            permissions={{
+              canEditOrganization: permissions.canEditOrganization,
+              canManageBilling: permissions.canManageBilling,
+              canViewAdvancedSettings: permissions.canViewAdvancedSettings,
+              canManageProviders: permissions.canManageProviders,
+            }}
             userRole={userRole ?? undefined}
             isUpdatingOrg={handlers.isUpdatingOrg}
             onUpdateProfile={handlers.handleUpdateProfile}

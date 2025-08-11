@@ -17,7 +17,6 @@ function cleanStringValue(value: string | null | undefined): string | undefined 
   return value !== null && value !== undefined && value !== '' ? value : undefined
 }
 
-
 // Helper function to transform BackendUser to User
 function transformBackendUser(backendUser: BackendUser): User {
   return {

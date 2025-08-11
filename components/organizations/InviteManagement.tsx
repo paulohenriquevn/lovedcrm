@@ -13,7 +13,10 @@ interface InviteManagementProps {
   isUpdating: boolean
 }
 
-export function InviteManagement({ userRole, isUpdating }: InviteManagementProps): JSX.Element | null {
+export function InviteManagement({
+  userRole,
+  isUpdating,
+}: InviteManagementProps): JSX.Element | null {
   const canManageInvites = userRole === 'owner' || userRole === 'admin'
   const { refreshInvites, loading } = useInvitesList({ canManageInvites })
 

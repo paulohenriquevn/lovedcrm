@@ -6,7 +6,7 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 import { MessageSquare, FileSpreadsheet, Users, Bot, BarChart3 } from 'lucide-react'
 
 import { useScrollAnimation, staggerContainer } from '@/hooks/use-scroll-animation'
@@ -18,6 +18,18 @@ import {
   TransformationBridge,
   ProblemSolutionFooter,
 } from './problem-solution-components'
+
+// Local fallback variant with proper typing
+const fallbackStaggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+}
 
 const problems = [
   {
@@ -107,7 +119,7 @@ export function ProblemSolutionSection(): JSX.Element {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          variants={staggerContainer}
+          variants={staggerContainer ?? fallbackStaggerContainer}
         >
           {problems.map((problem, index) => (
             <ProblemCard key={problem.title} problem={problem} index={index} />
@@ -121,7 +133,7 @@ export function ProblemSolutionSection(): JSX.Element {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          variants={staggerContainer}
+          variants={staggerContainer ?? fallbackStaggerContainer}
         >
           {solutions.map((solution, index) => (
             <SolutionCard key={solution.title} solution={solution} index={index} />

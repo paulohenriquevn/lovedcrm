@@ -18,6 +18,7 @@ export interface Permissions {
   canDeleteOrganization: boolean
   canViewAdvancedSettings: boolean
   canManageSettings: boolean
+  canManageProviders: boolean
 }
 
 /**
@@ -46,6 +47,7 @@ function calculatePermissions(role: UserRole | null): Permissions {
         canDeleteOrganization: true,
         canViewAdvancedSettings: true,
         canManageSettings: true,
+        canManageProviders: true,
       }
     }
 
@@ -57,6 +59,7 @@ function calculatePermissions(role: UserRole | null): Permissions {
         canDeleteOrganization: false,
         canViewAdvancedSettings: true,
         canManageSettings: true,
+        canManageProviders: true,
       }
     }
 
@@ -68,6 +71,7 @@ function calculatePermissions(role: UserRole | null): Permissions {
         canDeleteOrganization: false,
         canViewAdvancedSettings: false,
         canManageSettings: true, // Can manage their own settings
+        canManageProviders: false, // Members cannot manage providers
       }
     }
 
@@ -79,6 +83,7 @@ function calculatePermissions(role: UserRole | null): Permissions {
         canDeleteOrganization: false,
         canViewAdvancedSettings: false,
         canManageSettings: false,
+        canManageProviders: false,
       }
     }
   }

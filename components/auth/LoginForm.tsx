@@ -25,7 +25,10 @@ import { GoogleLoginButton } from './GoogleLoginButton'
 // Zod schema for validation
 const createLoginFormSchema = (
   t: (key: string) => string
-): z.ZodSchema<{ email: string; password: string }> =>
+): z.ZodObject<{
+  email: z.ZodString
+  password: z.ZodString
+}> =>
   z.object({
     email: z.string().email(t('emailInvalid')),
     password: z.string().min(6, t('passwordMinLength')),
@@ -255,7 +258,7 @@ export function LoginForm({
   type LoginFormData = z.infer<typeof loginFormSchema>
 
   const form = useForm<LoginFormData>({
-    resolver: zodResolver(loginFormSchema as any),
+    resolver: zodResolver(loginFormSchema),
     defaultValues: { email: '', password: '' },
   })
 

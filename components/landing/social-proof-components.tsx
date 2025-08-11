@@ -5,7 +5,7 @@
 
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, type Variants } from 'framer-motion'
 import { Star, Quote, TrendingUp, Users, Award, MapPin } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -16,6 +16,22 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { staggerItem } from '@/hooks/use-scroll-animation'
 import { companyLogos, getImageProps } from '@/lib/images'
+
+// Local fallback variant with proper typing
+const fallbackStaggerItem: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  },
+}
 
 interface Testimonial {
   id: number
@@ -42,7 +58,7 @@ interface TestimonialCardProps {
 
 export function TestimonialCard({ testimonial }: TestimonialCardProps): JSX.Element {
   return (
-    <motion.div variants={staggerItem}>
+    <motion.div variants={staggerItem ?? fallbackStaggerItem}>
       <Card className="h-full hover:shadow-lg transition-shadow duration-300">
         <CardContent className="p-6">
           <div className="flex items-center gap-4 mb-4">
@@ -119,7 +135,7 @@ export function MetricCard({
   color,
 }: MetricCardProps): JSX.Element {
   return (
-    <motion.div variants={staggerItem}>
+    <motion.div variants={staggerItem ?? fallbackStaggerItem}>
       <Card className="text-center hover:shadow-md transition-shadow duration-300">
         <CardContent className="p-6">
           <div className={`inline-flex p-3 rounded-full mb-4 ${color}`}>

@@ -1,4 +1,4 @@
-import { User, Settings, CreditCard, Shield, Bell, Database, Building } from 'lucide-react'
+import { User, Settings, CreditCard, Shield, Bell, Database, Building, Plug } from 'lucide-react'
 
 interface SettingsTabsViewProps {
   activeTab: string
@@ -7,6 +7,7 @@ interface SettingsTabsViewProps {
     canEditOrganization: boolean
     canManageBilling: boolean
     canViewAdvancedSettings: boolean
+    canManageProviders?: boolean
   }
 }
 
@@ -46,6 +47,13 @@ const SETTINGS_TABS = [
     icon: Building,
     description: 'Informações e configurações da organização',
     requiredFeature: 'user_management', // Professional+ feature
+  },
+  {
+    id: 'providers',
+    label: 'Provedores',
+    icon: Plug,
+    description: 'Gerencie provedores de WhatsApp e comunicação',
+    requiredFeature: 'integrations', // Professional+ feature
   },
   {
     id: 'billing',

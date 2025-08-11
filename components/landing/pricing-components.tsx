@@ -5,7 +5,7 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 import { Check, Star, Zap, Crown, ArrowRight } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
@@ -13,6 +13,40 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Switch } from '@/components/ui/switch'
 import { enhancedCardHoverVariants, iconBounceVariants } from '@/hooks/use-scroll-animation'
+
+// Local fallback variants with proper typing
+const fallbackEnhancedCardHoverVariants: Variants = {
+  rest: {
+    scale: 1,
+    y: 0,
+    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+    transition: {
+      duration: 0.2,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  },
+  hover: {
+    scale: 1.02,
+    y: -4,
+    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+    transition: {
+      duration: 0.3,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  },
+}
+
+const fallbackIconBounceVariants: Variants = {
+  rest: { y: 0 },
+  hover: {
+    y: [0, -2, 0],
+    transition: {
+      duration: 0.4,
+      repeat: Number.POSITIVE_INFINITY,
+      repeatType: 'loop' as const,
+    },
+  },
+}
 
 interface PricingPlan {
   id: string
@@ -109,7 +143,7 @@ export function PricingCard({ plan, isYearly }: PricingCardProps): JSX.Element {
   return (
     <motion.div
       className={`relative ${plan.popular === true ? 'md:scale-105 z-10' : ''}`}
-      variants={enhancedCardHoverVariants}
+      variants={enhancedCardHoverVariants ?? fallbackEnhancedCardHoverVariants}
       initial="rest"
       whileHover="hover"
       whileTap="press"
@@ -131,7 +165,7 @@ export function PricingCard({ plan, isYearly }: PricingCardProps): JSX.Element {
           <p className={`text-center ${TEXT_MUTED_FOREGROUND_CLASS} mb-6`}>{plan.description}</p>
 
           <motion.div
-            variants={iconBounceVariants}
+            variants={iconBounceVariants ?? fallbackIconBounceVariants}
             whileHover="hover"
             whileTap="press"
             className="mb-6"

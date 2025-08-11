@@ -201,10 +201,7 @@ export function UserMenu({
           <div className="hidden md:flex flex-col items-start">
             <span className="text-sm font-medium truncate max-w-32">{displayName}</span>
             {user?.role !== null && user?.role !== undefined && (
-              <Badge
-                className={`${getRoleBadgeStyle(user.role)} text-xs`}
-                variant="secondary"
-              >
+              <Badge className={`${getRoleBadgeStyle(user.role)} text-xs`} variant="secondary">
                 {user.role}
               </Badge>
             )}

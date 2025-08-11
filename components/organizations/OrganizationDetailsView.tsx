@@ -54,10 +54,7 @@ export function OrganizationDetailsView({
         isLoadingMembers={isLoadingMembers}
       />
 
-      <InviteManagement
-        userRole={userRole}
-        isUpdating={isUpdating}
-      />
+      <InviteManagement userRole={userRole} isUpdating={isUpdating} />
 
       <OrganizationActions
         userRole={userRole}

@@ -3,11 +3,15 @@
 import { AdvancedMetricsDisplay } from './pipeline-advanced-metrics'
 import { BasicMetricsDisplay } from './pipeline-basic-metrics'
 import {
-  useBasicMetrics,
   useAdvancedMetrics,
+  useBasicMetrics,
+  type MetricsResponse,
   type PipelineFiltersState,
 } from './pipeline-metrics-hooks'
 import { MetricsLoadingSkeleton } from './pipeline-metrics-utils'
+
+import type { PipelineStageDisplay } from './pipeline-types'
+import type { AdvancedMetricsResponse } from '@/services/crm-leads'
 
 interface PipelineMetricsProps {
   startDate?: string
@@ -15,7 +19,7 @@ interface PipelineMetricsProps {
   className?: string
   filters?: PipelineFiltersState
   enableAdvanced?: boolean
-  filteredStages?: any
+  filteredStages?: PipelineStageDisplay[] | null
   currentFilters?: PipelineFiltersState
 }
 
@@ -89,10 +93,10 @@ function renderMetricsContent(data: unknown, isAdvanced: boolean): JSX.Element {
   }
 
   if (isAdvanced) {
-    return <AdvancedMetricsDisplay data={data as any} />
+    return <AdvancedMetricsDisplay data={data as AdvancedMetricsResponse} />
   }
 
-  return <BasicMetricsDisplay data={data as any} />
+  return <BasicMetricsDisplay data={data as MetricsResponse} />
 }
 
 interface ErrorDisplayProps {

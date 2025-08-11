@@ -1,20 +1,23 @@
 import { AdvancedTabContent } from '@/components/settings/tabs/AdvancedTabContent'
 import { BillingTabContent } from '@/components/settings/tabs/BillingTabContent'
-import { NotificationsTabContent, type NotificationPreferencesData } from '@/components/settings/tabs/NotificationsTabContent'
+import {
+  NotificationsTabContent,
+  type NotificationPreferencesData,
+} from '@/components/settings/tabs/NotificationsTabContent'
 import { OrganizationTabContent } from '@/components/settings/tabs/OrganizationTabContent'
 import { PreferencesTabContent } from '@/components/settings/tabs/PreferencesTabContent'
 import { ProfileTabContent } from '@/components/settings/tabs/ProfileTabContent'
+import { ProvidersTabContent } from '@/components/settings/tabs/ProvidersTabContent'
 import { SecurityTabContent } from '@/components/settings/tabs/SecurityTabContent'
 import { Card, CardContent } from '@/components/ui/card'
 import { Organization } from '@/types/organization'
 import { User, UserPreferences } from '@/types/user'
 
-
-
 interface Permissions {
   canEditOrganization: boolean
   canManageBilling: boolean
   canViewAdvancedSettings: boolean
+  canManageProviders?: boolean
 }
 
 interface SettingsTabRendererProps {
@@ -162,6 +165,14 @@ export function SettingsTabRenderer(props: SettingsTabRendererProps): JSX.Elemen
     }
     case 'organization': {
       return renderOrganizationTab(props)
+    }
+    case 'providers': {
+      return (
+        <ProvidersTabContent
+          canManageProviders={permissions.canManageProviders ?? true}
+          userRole={userRole}
+        />
+      )
     }
     case 'billing': {
       return renderBillingTab(props)

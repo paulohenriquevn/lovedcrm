@@ -5,10 +5,7 @@
 
 import { useCallback } from 'react'
 
-import type {
-  PipelineWebSocketMessage,
-  PipelineStageDisplay,
-} from './pipeline-types'
+import type { PipelineWebSocketMessage, PipelineStageDisplay } from './pipeline-types'
 
 export function useWebSocketCallbacks(
   reloadLeadsData: () => Promise<void>,

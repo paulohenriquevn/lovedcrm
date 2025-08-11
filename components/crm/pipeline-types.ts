@@ -68,7 +68,7 @@ export interface PipelineWebSocketMessage {
   stageId?: string
   action?: string
   data?: Record<string, unknown>
-  active_users?: any[]
+  active_users?: Array<{ user_id?: string; full_name?: string }>
 }
 
 export interface UsePipelineWebSocketOptions {

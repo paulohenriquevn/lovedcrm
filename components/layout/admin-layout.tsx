@@ -148,7 +148,9 @@ export function AdminLayout({ children }: AdminLayoutProps): JSX.Element {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            {organization !== null && isB2B === true && <OrganizationInfo organization={organization} />}
+            {organization !== null && isB2B === true && (
+              <OrganizationInfo organization={organization} />
+            )}
             <LanguageSelector
               variant="dropdown"
               size="sm"

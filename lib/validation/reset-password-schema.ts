@@ -2,7 +2,14 @@ import * as z from 'zod'
 
 export const createResetPasswordSchema = (
   tValidation: (key: string) => string
-): z.ZodSchema<ResetPasswordData> =>
+): z.ZodEffects<
+  z.ZodObject<{
+    password: z.ZodString
+    confirmPassword: z.ZodString
+  }>,
+  ResetPasswordData,
+  ResetPasswordData
+> =>
   z
     .object({
       password: z

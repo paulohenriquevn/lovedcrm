@@ -6,7 +6,7 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 import { useState } from 'react'
 
 import {
@@ -24,6 +24,18 @@ import {
   DashboardMockup,
   SocialProof,
 } from './hero-section-components'
+
+// Local fallback variants with proper typing
+const fallbackStaggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+}
 
 interface ImageLoadingState {
   dashboard: boolean
@@ -52,7 +64,7 @@ export function HeroSection(): JSX.Element {
       className="py-20 px-4 text-center bg-gradient-to-b from-background via-violet-50/30 to-background"
       initial="hidden"
       animate="visible"
-      variants={staggerContainer}
+      variants={staggerContainer ?? fallbackStaggerContainer}
     >
       <div className="max-w-7xl mx-auto">
         <HeroBadge heroAnimations={heroAnimations} />

@@ -56,6 +56,7 @@ from api.routers.billing import router as billing_router
 from api.routers.crm_leads import router as crm_leads_router
 from api.routers.invites import router as invites_router
 from api.routers.organizations import router as organizations_router
+from api.routers.providers import router as providers_router
 from api.routers.roles import router as roles_router
 from api.routers.user_preferences import router as user_preferences_router
 from api.routers.users import router as users_router
@@ -451,6 +452,7 @@ app.include_router(billing_router)  # Billing and subscription management
 app.include_router(users_router)
 app.include_router(user_preferences_router)  # User preferences management
 app.include_router(organizations_router)
+app.include_router(providers_router)  # Multi-provider management (Story 2.0)
 app.include_router(roles_router)  # Advanced role management
 app.include_router(invites_router)  # Public invite endpoints
 app.include_router(crm_leads_router)  # CRM Leads management

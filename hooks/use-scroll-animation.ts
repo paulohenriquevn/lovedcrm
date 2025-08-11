@@ -5,18 +5,18 @@
 
 'use client'
 
-import { useInView } from 'framer-motion'
+import { useInView, type Variants } from 'framer-motion'
 import { useRef } from 'react'
 
 export function useScrollAnimation(once = true, margin = '-100px') {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once, margin: margin as any })
+  const isInView = useInView(ref, { once, margin })
 
   return { ref, isInView }
 }
 
 // Animation variants for consistent scroll animations
-export const scrollAnimationVariants: any = {
+export const scrollAnimationVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 50,
@@ -32,7 +32,7 @@ export const scrollAnimationVariants: any = {
 }
 
 // Stagger variants for multiple elements
-export const staggerContainer: any = {
+export const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -43,7 +43,7 @@ export const staggerContainer: any = {
   },
 }
 
-export const staggerItem: any = {
+export const staggerItem: Variants = {
   hidden: {
     opacity: 0,
     y: 30,
@@ -59,7 +59,16 @@ export const staggerItem: any = {
 }
 
 // Hero specific animations
-export const heroAnimations: any = {
+export type HeroAnimations = {
+  badge: Variants
+  title: Variants
+  subtitle: Variants
+  buttons: Variants
+  trustIndicators: Variants
+  mockup: Variants
+}
+
+export const heroAnimations: HeroAnimations = {
   badge: {
     hidden: { opacity: 0, scale: 0.8 },
     visible: {
@@ -111,7 +120,7 @@ export const heroAnimations: any = {
 }
 
 // Card hover animations
-export const cardHoverVariants: any = {
+export const cardHoverVariants: Variants = {
   rest: {
     scale: 1,
     boxShadow: '0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -1px rgba(0, 0, 0, 0.06)',
@@ -127,7 +136,7 @@ export const cardHoverVariants: any = {
 }
 
 // Enhanced button interaction variants
-export const buttonPressVariants: any = {
+export const buttonPressVariants: Variants = {
   rest: {
     scale: 1,
     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
@@ -151,7 +160,7 @@ export const buttonPressVariants: any = {
 }
 
 // Enhanced card hover variants with subtle animations
-export const enhancedCardHoverVariants: any = {
+export const enhancedCardHoverVariants: Variants = {
   rest: {
     scale: 1,
     y: 0,
@@ -173,7 +182,7 @@ export const enhancedCardHoverVariants: any = {
 }
 
 // Badge hover animation
-export const badgeHoverVariants: any = {
+export const badgeHoverVariants: Variants = {
   rest: { scale: 1 },
   hover: {
     scale: 1.1,
@@ -186,7 +195,7 @@ export const badgeHoverVariants: any = {
 }
 
 // Icon bounce animation
-export const iconBounceVariants: any = {
+export const iconBounceVariants: Variants = {
   rest: { y: 0 },
   hover: {
     y: [0, -2, 0],
@@ -199,7 +208,7 @@ export const iconBounceVariants: any = {
 }
 
 // Magnetic hover effect for interactive elements
-export const magneticHoverVariants: any = {
+export const magneticHoverVariants: Variants = {
   rest: { x: 0, y: 0 },
   hover: {
     x: [0, 1, -1, 0],

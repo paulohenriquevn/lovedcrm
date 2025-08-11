@@ -5,7 +5,7 @@
 
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, type Variants } from 'framer-motion'
 import { ArrowRight, Play, Users, Zap, Shield } from 'lucide-react'
 import Image from 'next/image'
 
@@ -16,6 +16,11 @@ import { heroImages, companyLogos, getImageProps } from '@/lib/images'
 
 import { TimelineSection, FeatureHighlights } from './hero-dashboard-utils'
 import { handleCreateOrganizationClick, handleDemoRequestClick } from './hero-helpers'
+
+import type { HeroAnimations } from '@/hooks/use-scroll-animation'
+
+// Animation variants type
+type AnimationVariants = HeroAnimations
 
 interface ImageLoadingState {
   dashboard: boolean
@@ -53,9 +58,9 @@ const mockupVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 1 } },
 }
 
-export function HeroBadge({ heroAnimations }: { heroAnimations?: any }): JSX.Element {
+export function HeroBadge({ heroAnimations }: { heroAnimations?: AnimationVariants }): JSX.Element {
   return (
-    <motion.div variants={heroAnimations?.badge || badgeVariants}>
+    <motion.div variants={heroAnimations?.badge ?? badgeVariants}>
       <Badge className="mb-6 bg-violet-50 text-violet-700 border-violet-200 px-4 py-2 text-sm font-medium">
         Especializado para Agências de 5-20 Colaboradores
       </Badge>
@@ -63,12 +68,16 @@ export function HeroBadge({ heroAnimations }: { heroAnimations?: any }): JSX.Ele
   )
 }
 
-export function HeroHeadline({ heroAnimations }: { heroAnimations?: any }): JSX.Element {
+export function HeroHeadline({
+  heroAnimations,
+}: {
+  heroAnimations?: AnimationVariants
+}): JSX.Element {
   return (
     <>
       <motion.h1
         className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight"
-        variants={heroAnimations?.title || titleVariants}
+        variants={heroAnimations?.title ?? titleVariants}
       >
         O Único CRM que{' '}
         <span className="text-primary bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
@@ -79,7 +88,7 @@ export function HeroHeadline({ heroAnimations }: { heroAnimations?: any }): JSX.
 
       <motion.p
         className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed"
-        variants={heroAnimations?.subtitle || subtitleVariants}
+        variants={heroAnimations?.subtitle ?? subtitleVariants}
       >
         Transforme a gestão da sua agência com{' '}
         <strong className="text-primary">pipeline visual</strong>,{' '}
@@ -91,11 +100,19 @@ export function HeroHeadline({ heroAnimations }: { heroAnimations?: any }): JSX.
   )
 }
 
-export function HeroCTAButtons({ heroAnimations, buttonPressVariants, iconBounceVariants }: { heroAnimations?: any; buttonPressVariants?: any; iconBounceVariants?: any }): JSX.Element {
+export function HeroCTAButtons({
+  heroAnimations,
+  buttonPressVariants,
+  iconBounceVariants,
+}: {
+  heroAnimations?: AnimationVariants
+  buttonPressVariants?: Variants
+  iconBounceVariants?: Variants
+}): JSX.Element {
   return (
     <motion.div
       className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
-      variants={heroAnimations?.buttons || buttonsVariants}
+      variants={heroAnimations?.buttons ?? buttonsVariants}
     >
       <motion.div variants={buttonPressVariants} initial="rest" whileHover="hover" whileTap="press">
         <Button
@@ -127,11 +144,15 @@ export function HeroCTAButtons({ heroAnimations, buttonPressVariants, iconBounce
   )
 }
 
-export function HeroTrustIndicators({ heroAnimations }: { heroAnimations?: any }): JSX.Element {
+export function HeroTrustIndicators({
+  heroAnimations,
+}: {
+  heroAnimations?: AnimationVariants
+}): JSX.Element {
   return (
     <motion.div
       className="flex items-center justify-center gap-8 mb-12 text-sm text-foreground"
-      variants={heroAnimations?.trustIndicators || trustIndicatorsVariants}
+      variants={heroAnimations?.trustIndicators ?? trustIndicatorsVariants}
     >
       <div className="flex items-center gap-2">
         <Users className="h-4 w-4" />
@@ -152,7 +173,7 @@ export function HeroTrustIndicators({ heroAnimations }: { heroAnimations?: any }
 interface DashboardMockupProps {
   imageLoading: ImageLoadingState
   handleImageLoad: (type: 'dashboard' | 'logo', index?: number) => void
-  heroAnimations?: any
+  heroAnimations?: AnimationVariants
 }
 
 export function DashboardMockup({
@@ -163,7 +184,7 @@ export function DashboardMockup({
   const pipelineStages = ['Lead', 'Contato', 'Proposta', 'Negociação', 'Fechado']
 
   return (
-    <motion.div className="mt-12 relative" variants={heroAnimations?.mockup || mockupVariants}>
+    <motion.div className="mt-12 relative" variants={heroAnimations?.mockup ?? mockupVariants}>
       <div className="relative max-w-5xl mx-auto">
         <div className="relative bg-white rounded-2xl shadow-2xl border border-border w-full aspect-[16/10] overflow-hidden">
           <div className="absolute inset-0 opacity-5">

@@ -6,7 +6,7 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, type Variants } from 'framer-motion'
 import { useState } from 'react'
 
 import { staggerContainer } from '@/hooks/use-scroll-animation'
@@ -19,6 +19,18 @@ import {
   HeroDashboardSection,
   HeroSocialProofSection,
 } from './hero-section-old-components'
+
+// Local fallback variant with proper typing
+const fallbackStaggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+}
 
 declare global {
   function gtag(...args: unknown[]): void
@@ -46,7 +58,7 @@ export function HeroSection(): JSX.Element {
       className="py-20 px-4 text-center bg-gradient-to-b from-background via-violet-50/30 to-background"
       initial="hidden"
       animate="visible"
-      variants={staggerContainer}
+      variants={staggerContainer ?? fallbackStaggerContainer}
     >
       <div className="max-w-7xl mx-auto">
         <HeroBadgeSection />

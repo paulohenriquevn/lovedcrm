@@ -5,7 +5,7 @@
 
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, type Variants } from 'framer-motion'
 import { ArrowRight, Play, Users, Zap, Shield } from 'lucide-react'
 import Image from 'next/image'
 
@@ -28,9 +28,54 @@ interface HeroSectionProps {
   handleImageLoad: (type: 'dashboard' | 'logo', index?: number) => void
 }
 
+// Local fallback variants with proper typing
+const fallbackBadgeVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+  },
+}
+
+const fallbackTitleVariants: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay: 0.2 },
+  },
+}
+
+const fallbackSubtitleVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 0.4 },
+  },
+}
+
+const fallbackButtonsVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.6 },
+  },
+}
+
+const fallbackTrustVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.5, delay: 0.8 },
+  },
+}
+
 export function HeroBadgeSection(): JSX.Element {
   return (
-    <motion.div variants={heroAnimations.badge}>
+    <motion.div variants={heroAnimations.badge ?? fallbackBadgeVariants}>
       <Badge className="mb-6 bg-violet-50 text-violet-700 border-violet-200 px-4 py-2 text-sm font-medium">
         Especializado para Agências de 5-20 Colaboradores
       </Badge>
@@ -43,7 +88,7 @@ export function HeroHeadingSection(): JSX.Element {
     <>
       <motion.h1
         className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight"
-        variants={heroAnimations.title}
+        variants={heroAnimations.title ?? fallbackTitleVariants}
       >
         O Único CRM que{' '}
         <span className="text-primary bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">
@@ -54,7 +99,7 @@ export function HeroHeadingSection(): JSX.Element {
 
       <motion.p
         className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed"
-        variants={heroAnimations.subtitle}
+        variants={heroAnimations.subtitle ?? fallbackSubtitleVariants}
       >
         Transforme a gestão da sua agência com{' '}
         <strong className="text-primary">pipeline visual</strong>,{' '}
@@ -70,29 +115,39 @@ export function HeroCTASection(): JSX.Element {
   return (
     <motion.div
       className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
-      variants={heroAnimations.buttons}
+      variants={heroAnimations.buttons ?? fallbackButtonsVariants}
     >
-      <motion.div variants={buttonPressVariants} initial="rest" whileHover="hover" whileTap="press">
+      <motion.div
+        variants={buttonPressVariants ?? { rest: {}, hover: {}, press: {} }}
+        initial="rest"
+        whileHover="hover"
+        whileTap="press"
+      >
         <Button
           size="lg"
           className="h-14 px-8 text-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-300"
           onClick={handleCreateOrganizationClick}
         >
           Criar Organização Grátis
-          <motion.div variants={iconBounceVariants} className="ml-2">
+          <motion.div variants={iconBounceVariants ?? { rest: {}, hover: {} }} className="ml-2">
             <ArrowRight className="h-5 w-5" />
           </motion.div>
         </Button>
       </motion.div>
 
-      <motion.div variants={buttonPressVariants} initial="rest" whileHover="hover" whileTap="press">
+      <motion.div
+        variants={buttonPressVariants ?? { rest: {}, hover: {}, press: {} }}
+        initial="rest"
+        whileHover="hover"
+        whileTap="press"
+      >
         <Button
           variant="outline"
           size="lg"
           className="h-14 px-8 text-lg border-primary text-primary hover:bg-primary/10 transition-colors duration-300"
           onClick={handleDemoRequestClick}
         >
-          <motion.div variants={iconBounceVariants} className="mr-2">
+          <motion.div variants={iconBounceVariants ?? { rest: {}, hover: {} }} className="mr-2">
             <Play className="h-5 w-5" />
           </motion.div>
           Ver Demonstração
@@ -106,7 +161,7 @@ export function HeroTrustSection(): JSX.Element {
   return (
     <motion.div
       className="flex items-center justify-center gap-8 mb-12 text-sm text-foreground"
-      variants={heroAnimations.trustIndicators}
+      variants={heroAnimations.trustIndicators ?? fallbackTrustVariants}
     >
       <div className="flex items-center gap-2">
         <Users className="h-4 w-4" />

@@ -31,7 +31,11 @@ interface ForgotPasswordFormProps {
   isSuccess?: boolean
 }
 
-const createForgotPasswordSchema = (t: (key: string) => string): z.ZodSchema<{ email: string }> =>
+const createForgotPasswordSchema = (
+  t: (key: string) => string
+): z.ZodObject<{
+  email: z.ZodString
+}> =>
   z.object({
     email: z.string().email(t('emailInvalid')),
   })
@@ -249,7 +253,7 @@ function ForgotPasswordFormMain({
   const forgotPasswordSchema = createForgotPasswordSchema(tValidation)
 
   const form = useForm<ForgotPasswordData>({
-    resolver: zodResolver(forgotPasswordSchema as any),
+    resolver: zodResolver(forgotPasswordSchema),
     defaultValues: { email: '' },
   })
 
