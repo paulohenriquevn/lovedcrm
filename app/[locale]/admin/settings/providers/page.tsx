@@ -78,7 +78,7 @@ export default function ProvidersPage(): JSX.Element {
       {/* Migration Wizard Modal */}
       {Boolean(showMigrationWizard && selectedProviderType) && (
         <ProviderMigrationWizard
-          providerType={selectedProviderType}
+          providerType={selectedProviderType ?? ''}
           providers={providers}
           onClose={handleCloseMigrationWizard}
           onComplete={() => {

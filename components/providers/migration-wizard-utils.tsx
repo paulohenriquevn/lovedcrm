@@ -85,7 +85,7 @@ export function WizardActions({
           <Button onClick={onNext}>Validate Switch</Button>
         )}
 
-        {currentStep === 1 && validation?.safeToSwitch === true && (
+        {currentStep === 1 && validation?.safe_to_switch === true && (
           <Button onClick={onNext}>Execute Migration</Button>
         )}
 
@@ -124,7 +124,7 @@ export function getProviderData(
 // Validation error handler
 export function createValidationError(error: unknown): ValidationResult {
   return {
-    safeToSwitch: false,
+    safe_to_switch: false,
     warnings: [],
     blockers: [`Validation failed: ${String(error)}`],
     recommendations: [],
@@ -150,10 +150,10 @@ export function canAdvanceFromStep(
       return selectedProvider !== null
     }
     case 1: {
-      return validation?.safeToSwitch === true
+      return validation?.safe_to_switch === true
     }
     case 2: {
-      return validation?.safeToSwitch === true
+      return validation?.safe_to_switch === true
     }
     default: {
       return false

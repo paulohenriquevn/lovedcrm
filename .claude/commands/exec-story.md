@@ -6,7 +6,7 @@
 
 **📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER PLANEJAMENTO:**
 
-- ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações do projeto
+- ✅ **DEVE**: Analisar histórico completo de implementações do projeto via roadmap e documentação
 
 **Entrada:**
 
@@ -178,7 +178,6 @@ Antes de iniciar qualquer tarefa, o agente DEVE exibir:
 
 - ❌ **ROADMAP NÃO ATUALIZADO**: Plano gerado mas status da história não marcado como concluído
 - ❌ **DATA MISSING**: Status atualizado sem data de conclusão
-- ❌ **INCONSISTÊNCIA**: CHANGELOG atualizado mas roadmap não
 - ❌ **WORKFLOW BROKEN**: Qualquer falha na sequência obrigatória de atualizações
 
 ### **⚡ AÇÃO IMEDIATA QUANDO RED FLAG DETECTADO**
@@ -493,11 +492,8 @@ PARAR PROCESSO IMEDIATAMENTE:
 #### **💾 FASE 5: AUTO-SAVE E ATUALIZAÇÕES OBRIGATÓRIAS**
 
 - ✅ **DEVE**: Salvar plano automaticamente em `docs/plans/[ID]-[title].md`
-- ✅ **DEVE**: Gerar/atualizar CHANGELOG.md na raiz do projeto
-- ✅ **DEVE**: Atualizar status da história no roadmap para "✅ CONCLUÍDO"
 - ✅ **DEVE**: Confirmar salvamento com paths completos
 - ❌ **NUNCA**: Gerar plano sem salvar arquivo
-- ❌ **NUNCA**: Omitir atualização do roadmap (FALHA GRAVE)
 
 ---
 
@@ -1502,12 +1498,6 @@ Execution Plan Salvo:
   Status: ✅ Arquivo criado com sucesso
   Tamanho: [X] KB
 
-CHANGELOG Atualizado:
-  Path: CHANGELOG.md (raiz do projeto)
-  Status: ✅ Entrada adicionada no topo
-  Action: [Criado novo | Atualizado existente]
-  Entry: ## [Story [ID]] - [YYYY-MM-DD]
-
 Roadmap Atualizado - OBRIGATÓRIO:
   Path: docs/project/11-roadmap.md
   Story: [ID] - [Título]
@@ -1523,7 +1513,6 @@ Timestamp: [YYYY-MM-DD HH:MM:SS]
 2. **Referência**: Arquivo disponível para consultas futuras
 3. **Reutilização**: Template para histórias similares
 4. **Atualização Roadmap**: Marcar história como concluída no roadmap após implementação
-5. **CHANGELOG Versionado**: Entrada automática criada para rastreamento histórico
 
 ### **🔗 INTEGRAÇÃO COM WORKFLOW**
 
@@ -1531,48 +1520,6 @@ Timestamp: [YYYY-MM-DD HH:MM:SS]
 - **Após conclusão**: Atualizar status no `docs/project/11-roadmap.md`
 - **Para histórias futuras**: Reutilizar patterns identificados
 - **Para debugging**: Validar se implementação seguiu o plano exato
-- **Para versionamento**: CHANGELOG.md mantém histórico completo das implementações
-- **Para stakeholders**: CHANGELOG fornece visibilidade de progresso e features entregues
-
-### **🚨 ATUALIZAÇÃO ROADMAP OBRIGATÓRIA - FALHA GRAVE SE NÃO CUMPRIR**
-
-**⚠️ CRÍTICO: A ATUALIZAÇÃO DO ROADMAP É OBRIGATÓRIA E SUA OMISSÃO CONSTITUI FALHA GRAVE NO PROCESSO**
-
-**SEMPRE QUE UM PLANO FOR GERADO:**
-
-- ✅ **DEVE**: Marcar história como "✅ CONCLUÍDO ([DD/MM/YYYY])" no roadmap (`docs/project/11-roadmap.md`) AUTOMATICAMENTE
-- ✅ **DEVE**: Atualizar status da história de "⏳ Em andamento" para "✅ CONCLUÍDO" AUTOMATICAMENTE
-- ✅ **DEVE**: Adicionar data de conclusão no formato ([DD/MM/YYYY]) AUTOMATICAMENTE
-- ✅ **DEVE**: Salvar arquivo docs/project/11-roadmap.md com alterações AUTOMATICAMENTE
-- ✅ **DEVE**: Confirmar atualização bem-sucedida no output final AUTOMATICAMENTE
-- ❌ **NUNCA**: Gerar plano sem atualizar roadmap - CONSTITUI FALHA GRAVE
-- ❌ **NUNCA**: Deixar história com status desatualizado - CONSTITUI FALHA GRAVE
-- ❌ **NUNCA**: Omitir data de conclusão - CONSTITUI FALHA GRAVE
-
-**🚨 FORMATO OBRIGATÓRIO DE ATUALIZAÇÃO:**
-
-```markdown
-## Slice 1.1: Pipeline Foundation ✅ CONCLUÍDO (08/01/2025)
-
-- Status: ✅ Implementado em 08/01/2025
-- Plano: docs/plans/1.1-pipeline-foundation.md
-```
-
-**⚡ PROCESSO AUTOMÁTICO OBRIGATÓRIO:**
-
-```yaml
-Step 5 (OBRIGATÓRIO): Atualizar Status no Roadmap
-  1. Localizar história [ID] em docs/project/11-roadmap.md
-  2. Alterar status para "✅ CONCLUÍDO ([DD/MM/YYYY])"
-  3. Adicionar referência ao plano gerado
-  4. Salvar arquivo com alterações
-  5. Validar atualização bem-sucedida
-
-  🚨 SE FALHAR: PARAR PROCESSO E REPORTAR FALHA GRAVE
-```
-
-````
-
 ---
 
 ## 🎯 **VALIDAÇÕES FINAIS OBRIGATÓRIAS**
@@ -1664,7 +1611,7 @@ Step 5 (OBRIGATÓRIO): Atualizar Status no Roadmap
 
 ### **🚨 SALVAMENTO AUTOMÁTICO MANDATÓRIO**
 
-**O agente DEVE SEMPRE salvar automaticamente o plano gerado em arquivo markdown E atualizar o CHANGELOG.md na raiz para preservar conhecimento e permitir reutilização futura.**
+**O agente DEVE SEMPRE salvar automaticamente o plano gerado em arquivo markdown para preservar conhecimento e permitir reutilização futura.**
 
 #### **📋 REGRAS DE SALVAMENTO**
 - ✅ **DEVE**: Salvar automaticamente TODOS os planos gerados
@@ -1672,14 +1619,9 @@ Step 5 (OBRIGATÓRIO): Atualizar Status no Roadmap
 - ✅ **DEVE**: Formato filename: `[NUMERO]-[HISTORIA]-[DESCRICAO].md`
 - ✅ **DEVE**: Extrair título da história do roadmap para filename
 - ✅ **DEVE**: Converter título para kebab-case (lowercase + hífens)
-- ✅ **DEVE**: Gerar/atualizar CHANGELOG.md na raiz do projeto OBRIGATORIAMENTE
-- ✅ **DEVE**: Adicionar entrada no topo do CHANGELOG com formato padrão
-- ✅ **DEVE**: Atualizar status da história no roadmap para "✅ CONCLUÍDO" OBRIGATORIAMENTE
 - ✅ **DEVE**: Adicionar data de conclusão no roadmap OBRIGATORIAMENTE
 - ✅ **DEVE**: Confirmar salvamento com paths completos no final
 - ❌ **NUNCA**: Gerar plano sem salvar em arquivo
-- ❌ **NUNCA**: Gerar plano sem atualizar CHANGELOG.md
-- ❌ **NUNCA**: Gerar plano sem atualizar status no roadmap - FALHA GRAVE
 - ❌ **NUNCA**: Sobrescrever arquivo existente sem warning
 
 #### **📏 PADRÃO DE NOMENCLATURA**
@@ -1716,20 +1658,14 @@ Step 3: Salvar Arquivo
   - Content: Plano completo gerado
   - Check: Arquivo não existe (ou warning se existe)
 
-Step 4: Gerar CHANGELOG Obrigatório
-  - Path: CHANGELOG.md (raiz do projeto)
-  - Content: Entrada formatada da história implementada
-  - Action: Adicionar ao topo do CHANGELOG existente
-
-Step 5: Atualizar Status no Roadmap - OBRIGATÓRIO
+Step 4: Atualizar Status no Roadmap - OBRIGATÓRIO
   - Path: docs/project/11-roadmap.md
   - Find: História [ID] no roadmap
   - Update: Status para "✅ CONCLUÍDO ([DD/MM/YYYY])"
   - Validation: Status atualizado com sucesso
 
-Step 6: Confirmar Salvamento
+Step 5: Confirmar Salvamento
   - Output: "✅ PLANO SALVO: docs/plans/[filename]"
-  - Output: "✅ CHANGELOG ATUALIZADO: CHANGELOG.md"
   - Output: "✅ ROADMAP ATUALIZADO: docs/project/11-roadmap.md - Story [ID] marcada como CONCLUÍDO"
   - Validation: TODOS os arquivos criados/atualizados com sucesso
 ```
@@ -1754,83 +1690,8 @@ docs/plans/
 ├── 2.3-user-preferences-system.md
 ├── 3.1-admin-settings-management.md   # Planos Epic 3
 └── [future-stories].md
-
-CHANGELOG.md                            # OBRIGATÓRIO na raiz do projeto
 ```
 
-#### **📝 FORMATO PADRÃO DO CHANGELOG**
-
-```markdown
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
-## [Story 1.1] - 2025-01-08
-
-### ✨ Added
-
-- [Título da História]: [Descrição resumida]
-- [Feature principal implementada]
-- [Funcionalidade secundária implementada]
-
-### 🔧 Technical
-
-- [Biblioteca/Provedor escolhido]: [Versão] ([Justificativa])
-- Organization isolation implemented for [feature]
-- [Padrão/Pattern implementado]
-
-### 📋 Acceptance Criteria Fulfilled
-
-- ✅ [Critério 1 do roadmap]
-- ✅ [Critério 2 do roadmap]
-- ✅ [Critério N do roadmap]
-
-### 🔗 References
-
-- Execution Plan: `docs/plans/[story-id]-[title-kebab].md`
-- Roadmap Story: `docs/project/11-roadmap.md` - Story [ID]
-- Refinement: `docs/refined/[story-id]-[title].md` (if applicable)
-
----
-
-## [Story 1.2] - 2025-01-09
-
-[Previous entries...]
-```
-
-#### **🔄 FORMATO DE ENTRADA INCREMENTAL**
-
-```markdown
-## [Story ID] - [YYYY-MM-DD]
-
-### ✨ Added
-
-- **[Story Title]**: [1-line description]
-- [Primary feature implemented]
-- [Secondary features if applicable]
-
-### 🔧 Technical
-
-- **[Selected Library/Provider]**: v[X.X.X] ([Reason for choice])
-- **Organization Isolation**: Implemented for [specific context]
-- **Architecture**: [Pattern/approach used]
-
-### 📋 Acceptance Criteria Fulfilled
-
-[EXACT copy of roadmap acceptance criteria with checkmarks]
-
-- ✅ [Criterio 1 EXATO do roadmap]
-- ✅ [Criterio 2 EXATO do roadmap]
-- ✅ [Todos os criterios preservados]
-
-### 🔗 References
-
-- **Execution Plan**: `docs/plans/story-id-title-kebab.md`
-- **Roadmap Source**: `docs/project/11-roadmap.md` - Story [ID]
-- **Technical Refinement**: `docs/refined/story-id-title.md`
-
----
-```
 
 ### **⚠️ WARNING SYSTEM**
 

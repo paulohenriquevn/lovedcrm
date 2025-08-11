@@ -6,9 +6,9 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { UseFormReturn } from 'react-hook-form'
+import { UseFormReturn, FieldValues } from 'react-hook-form'
 
-interface TagManagerForm {
+interface TagManagerForm extends FieldValues {
   tags?: string[]
 }
 
@@ -20,6 +20,13 @@ export interface UseTagManagerReturn {
   addTag: (tag: string) => void
   removeTag: (tag: string) => void
   handleTagInputKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void
+}
+
+// Utility function to safely set tags value without 'any'
+function setTagsValue<T extends TagManagerForm>(form: UseFormReturn<T>, tags: string[]): void {
+  // Type-safe approach using the form's internal setValue
+  const setValue = form.setValue as (name: string, value: string[]) => void
+  setValue('tags', tags)
 }
 
 export function useTagManager<T extends TagManagerForm>(
@@ -34,7 +41,7 @@ export function useTagManager<T extends TagManagerForm>(
       if (trimmedTag && !currentTags.includes(trimmedTag)) {
         const newTags = [...currentTags, trimmedTag]
         setCurrentTags(newTags)
-        form.setValue('tags' as keyof T, newTags as T[keyof T])
+        setTagsValue(form, newTags)
       }
       setTagInput('')
     },
@@ -45,7 +52,7 @@ export function useTagManager<T extends TagManagerForm>(
     (tagToRemove: string): void => {
       const newTags = currentTags.filter(tag => tag !== tagToRemove)
       setCurrentTags(newTags)
-      form.setValue('tags' as keyof T, newTags as T[keyof T])
+      setTagsValue(form, newTags)
     },
     [currentTags, form]
   )

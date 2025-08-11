@@ -146,13 +146,17 @@ interface HeroDashboardMockupProps {
 }
 
 export function HeroDashboardMockupComponent({
-  heroAnimations,
   imageLoading,
   handleImageLoad,
-}: HeroDashboardMockupProps): JSX.Element {
+}: Omit<HeroDashboardMockupProps, 'heroAnimations'>): JSX.Element {
   return (
     <HeroDashboardMockup
-      heroAnimations={heroAnimations}
+      heroAnimations={{
+        mockup: {
+          hidden: { opacity: 0, y: 60 },
+          visible: { opacity: 1, y: 0, transition: { duration: 0.8, delay: 1 } },
+        },
+      }}
       imageLoading={imageLoading}
       handleImageLoad={handleImageLoad}
     />

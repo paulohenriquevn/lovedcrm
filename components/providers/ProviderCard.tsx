@@ -82,9 +82,10 @@ export function ProviderCard({ provider, onAction }: ProviderCardProps): React.R
 
         <ProviderCardLimits limits={limits} />
 
-        {Boolean(provider.last_sync_at) && (
+        {provider.last_sync_at !== undefined && provider.last_sync_at !== null && (
           <div className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-            Last sync: {new Date(provider.last_sync_at).toLocaleString()}
+            Last sync:{' '}
+            {provider.last_sync_at ? new Date(provider.last_sync_at).toLocaleString() : 'Never'}
           </div>
         )}
 

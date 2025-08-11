@@ -35,7 +35,7 @@ export function useMigrationWizard(
       // eslint-disable-next-line no-console
       console.error('Validation failed:', error)
       return {
-        safeToSwitch: false,
+        safe_to_switch: false,
         warnings: [],
         blockers: [`Validation failed: ${String(error)}`],
         recommendations: [],
@@ -108,7 +108,7 @@ export function createNavigationHandlers(options: NavigationHandlerOptions): {
       const validationResult = await performValidation(selectedProvider)
       setValidation(validationResult)
       setIsValidating(false)
-    } else if (currentStep === 1 && validation?.safeToSwitch === true) {
+    } else if (currentStep === 1 && validation?.safe_to_switch === true) {
       setCurrentStep(2)
       const migrationResult = await performMigration(selectedProvider)
       setMigrationResult(migrationResult)

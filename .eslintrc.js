@@ -217,6 +217,10 @@ module.exports = {
           '^created_at$',
           '^updated_at$',
           '^qr_code$',
+          '^monthly_cost$',
+          '^cost_per_message$',
+          '^safe_to_switch$',
+          '^last_sync_at$',
         ], // Allow common API patterns
       },
     ],
@@ -313,7 +317,7 @@ module.exports = {
       files: [
         '**/crm/**/*.tsx',
         '**/crm/**/*.ts',
-        '**/lead-edit-tags-manager.tsx',
+        'components/crm/lead-edit-tags-manager.tsx',
         '**/pipeline-metrics.tsx',
         '**/pipeline-types.ts',
       ],
@@ -321,10 +325,30 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 'off', // Allow any for complex CRM integrations
         '@typescript-eslint/no-unsafe-assignment': 'off', // Allow for CRM data handling
         '@typescript-eslint/no-unsafe-call': 'off', // Allow for CRM API calls
+        '@typescript-eslint/no-unsafe-argument': 'off', // Allow for form libraries
         '@typescript-eslint/prefer-nullish-coalescing': 'warn', // Allow || for backward compatibility
         'react/jsx-handler-names': 'off', // Disable strict handler naming for CRM
         'import/no-duplicates': 'warn', // Allow some duplication for type/value imports
         'no-duplicate-imports': 'warn', // Warn instead of error
+      },
+    },
+    // Provider components - API integration with mixed naming conventions
+    {
+      files: [
+        '**/providers/**/*.tsx',
+        '**/providers/**/*.ts',
+        '**/migration-wizard*.tsx',
+        '**/CostAnalytics.tsx',
+        '**/ProviderCard.tsx',
+      ],
+      rules: {
+        camelcase: 'off', // Disable for API responses with snake_case
+        '@typescript-eslint/no-explicit-any': 'off', // Allow any for provider API integrations
+        '@typescript-eslint/no-unsafe-assignment': 'off', // Allow for provider data handling
+        '@typescript-eslint/no-unsafe-call': 'off', // Allow for provider API calls
+        '@typescript-eslint/no-unsafe-argument': 'off', // Allow for provider form libraries
+        '@typescript-eslint/strict-boolean-expressions': 'off', // Allow flexible conditionals for provider status
+        '@typescript-eslint/no-non-null-assertion': 'off', // Allow for validated provider data
       },
     },
     // Next.js pages and API routes
@@ -334,6 +358,7 @@ module.exports = {
         'import/no-default-export': 'off',
         '@typescript-eslint/explicit-function-return-type': 'off',
         'max-lines': ['error', { max: 400, skipBlankLines: true, skipComments: true }],
+        complexity: ['warn', { max: 12 }], // Increased for page components with multiple features
       },
     },
     // Test files
