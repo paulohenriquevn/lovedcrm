@@ -35,8 +35,8 @@ class TestPipelineFiltersIntegration:
         
         # Use existing authenticated user fixture
         headers = {
-            'Authorization': f'Bearer {authenticated_user["access_token"]}',
-            'X-Org-Id': authenticated_user['user']['organization_id'],
+            'Authorization': f'Bearer {authenticated_user["tokens"]["access_token"]}',
+            'X-Org-Id': authenticated_user['organization']['id'],
             'Content-Type': 'application/json'
         }
         
@@ -66,8 +66,8 @@ class TestPipelineFiltersIntegration:
         
         # Use existing authenticated user fixture
         headers = {
-            'Authorization': f'Bearer {authenticated_user["access_token"]}',
-            'X-Org-Id': authenticated_user['user']['organization_id'],
+            'Authorization': f'Bearer {authenticated_user["tokens"]["access_token"]}',
+            'X-Org-Id': authenticated_user['organization']['id'],
             'Content-Type': 'application/json'
         }
         
@@ -93,7 +93,7 @@ class TestPipelineFiltersIntegration:
         }
         
         response = requests.get(
-            f"{TEST_BASE_URL}/crm/leads/pipeline/advanced-metrics",
+            f"{TEST_BASE_URL}/crm/leads/metrics/advanced",
             params=filter_params,
             headers=headers
         )
@@ -102,7 +102,7 @@ class TestPipelineFiltersIntegration:
         advanced_metrics = response.json()
         
         # Verify advanced metrics include filter-aware data
-        assert 'filtered_stage_counts' in advanced_metrics or 'stage_counts' in advanced_metrics
+        assert 'stage_distribution' in advanced_metrics
         assert 'conversion_funnel' in advanced_metrics or 'conversion_rate' in advanced_metrics
         
         print(f"✅ Metrics integration working: basic={len(basic_metrics)}, advanced={len(advanced_metrics)} fields")
@@ -131,7 +131,7 @@ class TestPipelineFiltersIntegration:
         start_time = time.time()
         
         response = requests.get(
-            f"{TEST_BASE_URL}/crm/leads/pipeline/advanced-metrics",
+            f"{TEST_BASE_URL}/crm/leads/metrics/advanced",
             params=complex_filters,
             headers=headers
         )
@@ -208,7 +208,7 @@ class TestPipelineFiltersIntegration:
         
         # Test empty filters
         response = requests.get(
-            f"{TEST_BASE_URL}/crm/leads/pipeline/advanced-metrics",
+            f"{TEST_BASE_URL}/crm/leads/metrics/advanced",
             params={},
             headers=headers
         )
@@ -222,7 +222,7 @@ class TestPipelineFiltersIntegration:
         }
         
         response = requests.get(
-            f"{TEST_BASE_URL}/crm/leads/pipeline/advanced-metrics",
+            f"{TEST_BASE_URL}/crm/leads/metrics/advanced",
             params=invalid_filters,
             headers=headers
         )
@@ -237,7 +237,7 @@ class TestPipelineFiltersIntegration:
         }
         
         response = requests.get(
-            f"{TEST_BASE_URL}/crm/leads/pipeline/advanced-metrics",
+            f"{TEST_BASE_URL}/crm/leads/metrics/advanced",
             params=invalid_value_filters,
             headers=headers
         )

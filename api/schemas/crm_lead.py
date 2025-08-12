@@ -74,6 +74,11 @@ class LeadResponse(LeadBase):
     updated_at: datetime
     is_favorite: bool = Field(default=False, description="Whether lead is favorited")
 
+    # Lead scoring fields (Story 3.1)
+    lead_score: Optional[int] = Field(None, description="ML-based lead score (0-100)")
+    score_factors: Optional[Dict] = Field(None, description="Score breakdown by factors")
+    duplicate_check_hash: Optional[str] = Field(None, description="Hash for duplicate detection")
+
     # Computed fields
     is_closed: bool = Field(..., description="Whether lead is in closed stage")
     days_in_current_stage: Optional[int] = Field(None, description="Days since last stage change")

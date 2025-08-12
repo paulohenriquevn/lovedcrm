@@ -25,6 +25,8 @@ export interface Lead {
   is_closed: boolean
   days_in_current_stage?: number
   is_favorite: boolean
+  lead_score?: number
+  score_factors?: Record<string, number>
 }
 
 export enum PipelineStage {

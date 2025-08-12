@@ -37,6 +37,7 @@ import {
   LeadContactInfo,
   LeadTagsDisplay,
 } from './lead-card-utils'
+import { LeadScoreDisplay } from './lead-score-display'
 import { useUXEnhancements, useEnhancedButton } from './pipeline-ux-enhancements'
 
 function LeadCardHeader({
@@ -77,7 +78,18 @@ function LeadCardHeader({
           </p>
         ) : null}
       </div>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
+        {/* Lead Score Display */}
+        {lead.lead_score !== null && lead.lead_score !== undefined && (
+          <LeadScoreDisplay 
+            score={lead.lead_score} 
+            factors={lead.score_factors ?? {}}
+            variant="badge"
+            size="sm"
+            showBreakdown
+          />
+        )}
+        
         <div className={getPriorityColor(priority)}>{getPriorityIcon(priority)}</div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

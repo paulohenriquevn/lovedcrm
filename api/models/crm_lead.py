@@ -87,6 +87,11 @@ class Lead(Base):
     notes: Optional[str] = Column(Text, nullable=True)
     lead_metadata: dict = Column("lead_metadata", JSONB, nullable=False, default=dict)
 
+    # Lead scoring system (Story 3.1)
+    lead_score: Optional[Decimal] = Column(DECIMAL(5, 2), nullable=True, default=Decimal("0.00"))
+    score_factors: dict = Column("score_factors", JSONB, nullable=False, default=dict)
+    duplicate_check_hash: Optional[str] = Column(String(64), nullable=True, index=True)
+
     # Favorite functionality
     is_favorite: bool = Column("is_favorite", nullable=False, default=False, index=True)
 
@@ -111,6 +116,10 @@ class Lead(Base):
                 ]
             ),
             name="leads_stage_check",
+        ),
+        CheckConstraint(
+            "lead_score IS NULL OR (lead_score >= 0 AND lead_score <= 100)",
+            name="leads_score_range_check",
         ),
         # Composite indexes for performance
         {"extend_existing": True},

@@ -7,11 +7,11 @@ from datetime import datetime
 from typing import List, Optional
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from api.core.deps import get_current_active_user, get_current_organization, get_db
-from api.models.crm_lead import PipelineStage
+from api.models.crm_lead import Lead, PipelineStage
 from api.models.organization import Organization
 from api.models.user import User
 from api.schemas.crm_lead import (
@@ -29,6 +29,9 @@ from api.schemas.crm_lead import (
     PipelineStatsResponse,
 )
 from api.services.crm_lead_service import CRMLeadService
+from api.services.crm_lead_scoring_service import LeadScoringService
+from api.services.crm_lead_deduplication_service import LeadDeduplicationService
+from api.services.crm_lead_assignment_service import LeadAssignmentService, AssignmentStrategy
 
 router = APIRouter(prefix="/crm/leads", tags=["CRM - Leads"])
 
@@ -102,6 +105,48 @@ async def search_leads(
         page=search_request.page,
         page_size=search_request.page_size,
     )
+
+
+@router.get("/assignment-analytics", status_code=status.HTTP_200_OK)
+async def get_assignment_analytics(
+    days_back: int = Query(30, ge=1, le=365, description="Days of data to analyze"),
+    organization: Organization = Depends(get_current_organization),
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """Get assignment analytics and team performance metrics.
+
+    Provides:
+    - Team member workload distribution
+    - Recent assignment statistics
+    - Conversion rates by team member
+    - Performance scores and recommendations
+
+    **Required**: X-Org-Id header with valid organization ID.
+    """
+    service = LeadAssignmentService(db)
+    return await service.get_assignment_analytics(organization, days_back)
+
+
+@router.get("/duplicates", status_code=status.HTTP_200_OK)
+async def find_potential_duplicates(
+    limit: int = Query(50, ge=1, le=200, description="Maximum duplicates to return"),
+    organization: Organization = Depends(get_current_organization),
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """Find potential duplicate leads using fuzzy matching algorithms.
+
+    Detection methods:
+    - Exact email matching (100% confidence)
+    - Normalized phone matching (95% confidence)
+    - Fuzzy name matching (85%+ similarity)
+    - Email domain matching (same company)
+
+    **Required**: X-Org-Id header with valid organization ID.
+    """
+    service = LeadDeduplicationService(db)
+    return service.find_potential_duplicates(organization, limit=limit)
 
 
 @router.get("/{lead_id}", response_model=LeadResponse)
@@ -280,3 +325,128 @@ async def get_advanced_pipeline_metrics(
     )
 
     return await service.get_advanced_metrics(UUID(str(organization.id)), filters)
+
+
+# =============================================================================
+# STORY 3.1 - LEAD MANAGEMENT MVP ENDPOINTS
+# =============================================================================
+
+
+@router.post("/{lead_id}/calculate-score", status_code=status.HTTP_200_OK)
+async def calculate_lead_score(
+    lead_id: UUID,
+    organization: Organization = Depends(get_current_organization),
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """Calculate ML-based lead score with 6-factor algorithm.
+
+    Scoring factors:
+    - Email authority (10 points)
+    - Phone completeness (5 points)
+    - Estimated value tier (20 points)
+    - Source quality (15 points)
+    - Company size (25 points)
+    - Recent engagement (15 points)
+
+    **Required**: X-Org-Id header with valid organization ID.
+    """
+    service = LeadScoringService(db)
+    return await service.calculate_and_update_score(organization, lead_id)
+
+
+@router.post("/bulk-score", status_code=status.HTTP_200_OK)
+async def bulk_score_leads(
+    lead_ids: Optional[List[UUID]] = None,
+    organization: Organization = Depends(get_current_organization),
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """Bulk score multiple leads (or all leads if no IDs specified).
+
+    **Required**: X-Org-Id header with valid organization ID.
+    """
+    service = LeadScoringService(db)
+    return await service.bulk_score_leads(organization, lead_ids)
+
+
+@router.get("/{lead_id}/duplicates", status_code=status.HTTP_200_OK)
+async def find_lead_duplicates(
+    lead_id: UUID,
+    limit: int = Query(10, ge=1, le=50, description="Maximum duplicates to return"),
+    organization: Organization = Depends(get_current_organization),
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """Find potential duplicates for a specific lead.
+
+    **Required**: X-Org-Id header with valid organization ID.
+    """
+    service = LeadDeduplicationService(db)
+
+    # Get the target lead first
+    lead = (
+        db.query(Lead).filter(Lead.id == lead_id, Lead.organization_id == organization.id).first()
+    )
+
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+
+    return service.find_potential_duplicates(organization, target_lead=lead, limit=limit)
+
+
+@router.post("/merge/{primary_id}/{duplicate_id}", status_code=status.HTTP_200_OK)
+async def merge_duplicate_leads(
+    primary_id: UUID,
+    duplicate_id: UUID,
+    merge_strategy: str = Query(
+        "keep_best_data", description="Merge strategy: keep_original, keep_recent, keep_best_data"
+    ),
+    notes: Optional[str] = Query(None, description="Optional merge notes"),
+    organization: Organization = Depends(get_current_organization),
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """Merge duplicate leads with specified strategy.
+
+    Strategies:
+    - keep_original: Keep primary lead data, merge supplementary info
+    - keep_recent: Use most recently updated lead data
+    - keep_best_data: Intelligently merge best quality data from both
+
+    **Required**: X-Org-Id header with valid organization ID.
+    """
+    if merge_strategy not in ["keep_original", "keep_recent", "keep_best_data"]:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid merge strategy. Must be: keep_original, keep_recent, keep_best_data",
+        )
+
+    service = LeadDeduplicationService(db)
+    return await service.merge_leads(organization, primary_id, duplicate_id, merge_strategy, notes)
+
+
+@router.post("/assign-batch", status_code=status.HTTP_200_OK)
+async def assign_leads_batch(
+    lead_ids: List[UUID],
+    strategy: AssignmentStrategy = Query(
+        AssignmentStrategy.WORKLOAD_BALANCED, description="Assignment strategy to use"
+    ),
+    user_ids: Optional[List[UUID]] = Query(
+        None, description="Optional specific users to assign to"
+    ),
+    organization: Organization = Depends(get_current_organization),
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db),
+):
+    """Intelligently assign multiple leads to team members.
+
+    Strategies:
+    - round_robin: Equal distribution rotation
+    - workload_balanced: Based on current active lead counts
+    - score_based: High-score leads to top performers
+
+    **Required**: X-Org-Id header with valid organization ID.
+    """
+    service = LeadAssignmentService(db)
+    return await service.assign_leads_batch(organization, lead_ids, strategy, user_ids)

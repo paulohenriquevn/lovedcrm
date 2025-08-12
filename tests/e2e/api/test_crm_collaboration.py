@@ -213,7 +213,8 @@ class TestCRMCollaborationAPI:
                 assert 'lead' in event_data
                 assert event_data['lead']['id'] == created_lead['id']
                 assert event_data['lead']['stage'] == 'contato'
-                assert event_data['lead']['notes'] == stage_update['notes']
+                # Notes may be prefixed with [Stage Update], so check if original notes are contained
+                assert stage_update['notes'] in event_data['lead']['notes']
                 
         except asyncio.TimeoutError:
             pytest.fail("Did not receive lead_stage_changed WebSocket event")
