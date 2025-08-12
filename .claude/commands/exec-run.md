@@ -823,6 +823,7 @@ Technical Criteria (do Plano - INTEGRAÇÃO VERTICAL):
   ✅ Performance Requirements: [X]ms response time em fluxo completo
   ✅ Security Compliance: Validações de segurança em toda vertical slice
   ✅ Multi-Tenant Safe: Isolation testado entre organizações
+  ✅ Code Quality Gates: TODOS os linters passando sem erros (npm run lint:frontend ✓ npm run lint:backend ✓ npm run security ✓ npm run typecheck ✓)
 
 User Value Criteria (CRÍTICO - VERTICAL SLICE):
   ✅ Functional Feature: Usuário pode usar funcionalidade IMEDIATAMENTE

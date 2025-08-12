@@ -248,9 +248,34 @@ Gerar documento estruturado em @docs/project/03-tech.md:
 
 ## 5. Database Schema Macro
 
-- Tabelas principais identificadas
-- Relacionamentos com organization_id
-- Índices e constraints necessários
+- Mockup visual das tabelas (diagramas ASCII)
+- Relacionamentos entre tabelas (linhas conectoras)
+- Campos principais e tipos (sem sintaxe SQL)
+- Organização multi-tenant com organization_id
+
+**Formato Obrigatório: Diagramas ASCII, NÃO código SQL**
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│  organizations  │    │     users       │    │     leads       │
+├─────────────────┤    ├─────────────────┤    ├─────────────────┤
+│ • id (UUID)     │    │ • id (UUID)     │    │ • id (UUID)     │
+│ • name          │    │ • email         │    │ • full_name     │
+│ • slug          │    │ • password_hash │    │ • organization_id│
+│ • plan_tier     │    │ • full_name     │    │ • stage_id      │
+│ • settings      │    │ • is_active     │    │ • assigned_to   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         └───────────┬───────────┘                       │
+                     │                                   │
+         ┌─────────────────────┐                         │
+         │ organization_members│◄────────────────────────┘
+         ├─────────────────────┤
+         │ • organization_id   │
+         │ • user_id          │
+         │ • role             │
+         └─────────────────────┘
+```
 
 ## 6. Estimativas e Complexidade
 
@@ -273,5 +298,6 @@ Gerar documento estruturado em @docs/project/03-tech.md:
 - **Stack Compliance**: Next.js 14 + FastAPI + PostgreSQL + Railway
 - **Pesquisa Intensiva**: Providers + Open Source + Implementation por feature
 - **Jornadas Completas**: Como usuário configura, usa e integra?
+- **🚨 Database Schema**: SEMPRE usar diagramas ASCII visuais, NUNCA código SQL
 
 **EXECUTAR PROCESSO E GERAR @docs/project/03-tech.md**

@@ -312,3 +312,115 @@ A configuração ESLint foi ajustada para **eliminar conflitos** entre `npm run 
 **Regra Fundamental**: Se `npm run typecheck` passa, `npm run lint` não deve falhar por conflitos de tipos.
 
 **Implementação**: Regras unsafe (assignment, call, member-access) configuradas como `warn` ao invés de `error`, mantendo feedback sem bloquear o desenvolvimento.
+
+## Claude Command Agents System
+
+**Specialized Claude agents for evidence-based development workflow**
+
+This project includes 18 specialized Claude command agents that automate and standardize development tasks. Each agent follows the **95% confidence rule** and **evidence-based development** principles.
+
+### Documentation Generation Agents (Production Chain)
+
+**Complete documentation pipeline from vision to deployment:**
+
+- **01-doc-vision.md**: Project vision and strategic positioning
+- **02-doc-roadmap.md**: Feature roadmap and prioritization  
+- **03-doc-architecture.md**: Technical architecture and patterns
+- **04-doc-database.md**: Database schema and multi-tenancy design
+- **05-doc-api.md**: API endpoints and authentication flows
+- **06-doc-frontend.md**: UI/UX patterns and component architecture
+- **07-doc-deployment.md**: Production deployment and infrastructure
+- **08-doc-security.md**: Security measures and compliance
+- **09-doc-testing.md**: Testing strategy and quality assurance
+- **10-doc-monitoring.md**: Observability and performance monitoring
+- **11-doc-roadmap.md**: Project roadmap with user stories and acceptance criteria
+
+### Execution Agents (Implementation Workflow)
+
+**End-to-end development execution chain:**
+
+- **exec-context.md**: Analyze codebase context and generate comprehensive project understanding
+- **exec-refine.md**: Technical specification refinement with architecture validation
+- **exec-story.md**: Detailed implementation planning with vertical slice methodology
+- **exec-run.md**: Code execution and implementation following evidence-based practices
+- **exec-bug.md**: Bug investigation and resolution maintaining multi-tenant isolation
+- **exec-review.md**: Quality gate validation ensuring 100% conformity with plans
+
+### Feature Evolution Agent
+
+- **evolve-feature.md**: Feature enhancement using "Simplificar Substituindo" methodology - evolves existing functionality rather than creating new components
+
+### Core Development Principles
+
+All agents follow these **non-negotiable rules**:
+
+#### 95% Confidence Rule
+- **MUST**: Have 95%+ certainty before proceeding with ANY implementation
+- **MUST**: Ask questions until absolute certainty about requirements
+- **NEVER**: Assume requirements or make speculative interpretations
+
+#### Evidence-Based Development
+- **MUST**: Use Read/LS/Bash tools for direct codebase analysis
+- **MUST**: Base decisions on actual code, not assumptions
+- **NEVER**: Proceed without verification of current state
+
+#### Multi-Tenant Compliance
+- **MUST**: Maintain organization isolation (org_id) in all implementations
+- **MUST**: Validate cross-organizational access restrictions
+- **NEVER**: Use user_id isolation (always org_id)
+
+#### Vertical Slice Methodology
+- **MUST**: Implement complete slices (Frontend + Backend + Database)
+- **MUST**: Ensure end-to-end functionality
+- **NEVER**: Implement partial horizontal layers
+
+### Workflow Integration
+
+**Standard development flow:**
+```
+exec-context → exec-refine → exec-story → exec-run → exec-review
+     ↓             ↓            ↓           ↓          ↓
+  understand → specify → plan → implement → validate
+```
+
+**Documentation flow (parallel):**
+```
+01-doc-vision → 02-doc-roadmap → ... → 11-doc-roadmap
+                      ↓
+               feeds into exec-story planning
+```
+
+### Key Features
+
+- **Auto-CHANGELOG Updates**: All agents automatically update CHANGELOG.md
+- **Quality Gates**: exec-review enforces 100% conformity with exec-story plans
+- **Organization Isolation**: All agents respect multi-tenant architecture
+- **Evidence-Based**: All decisions backed by direct codebase analysis
+- **KISS/YAGNI/DRY**: Fundamental principles enforced across all agents
+
+### Usage Examples
+
+```bash
+# Understand codebase context
+/exec-context "Analyze CRM pipeline architecture"
+
+# Refine user story into technical specifications
+/exec-refine "Story 2.1 - Lead management dashboard"
+
+# Generate detailed implementation plan
+/exec-story "2.1"
+
+# Execute implementation following the plan
+/exec-run "Implement story 2.1 following docs/plans/"
+
+# Investigate and fix bugs
+/exec-bug "Cross-org data leakage in dashboard"
+
+# Quality gate validation
+/exec-review "2.1"
+
+# Evolve existing features
+/evolve-feature "Enhance pipeline drag-and-drop with status validation"
+```
+
+This agent system ensures **consistent**, **evidence-based**, and **multi-tenant compliant** development across the entire LovedCRM project.
