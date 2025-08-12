@@ -131,6 +131,8 @@ interface KanbanBoardProps {
   }
   onDrop: (stageId: string) => void
   draggedLead?: Lead | null
+  selectedLeadIds?: string[]
+  onToggleSelection?: (leadId: string) => void
 }
 
 export function KanbanBoard({
@@ -138,6 +140,8 @@ export function KanbanBoard({
   pipelineHandlers,
   onDrop,
   draggedLead = null,
+  selectedLeadIds = [],
+  onToggleSelection,
 }: KanbanBoardProps): JSX.Element {
   return (
     <>
@@ -156,6 +160,8 @@ export function KanbanBoard({
             onCall={pipelineHandlers.handleCall}
             onWhatsApp={pipelineHandlers.handleWhatsApp}
             draggedLead={draggedLead}
+            selectedLeadIds={selectedLeadIds}
+            onToggleSelection={onToggleSelection}
           />
         ))}
       </div>

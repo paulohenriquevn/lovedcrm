@@ -47,6 +47,9 @@ interface PipelineLayoutWithFiltersProps {
   ) => void
   onClearAllFilters: () => void
   isLoadingFilters: boolean
+  // Bulk selection props for Story 3.3
+  selectedLeadIds?: string[]
+  onToggleSelection?: (leadId: string) => void
 }
 
 export function PipelineLayoutWithFilters({
@@ -67,6 +70,8 @@ export function PipelineLayoutWithFilters({
   updateFilter,
   onClearAllFilters,
   isLoadingFilters,
+  selectedLeadIds = [],
+  onToggleSelection,
 }: PipelineLayoutWithFiltersProps): JSX.Element {
   return (
     <div className="h-full">
@@ -99,6 +104,8 @@ export function PipelineLayoutWithFilters({
             pipelineHandlers={pipelineHandlers}
             onDrop={onDrop}
             draggedLead={pipelineHandlers.draggedLead ?? null}
+            selectedLeadIds={selectedLeadIds}
+            onToggleSelection={onToggleSelection}
           />
         )}
         {activeTab === 'metrics' && (

@@ -93,7 +93,9 @@ class LeadAssignmentService:
         # Apply assignments to database
         assignment_results = []
         for assignment in assignments:
-            lead = next(lead_item for lead_item in leads if str(lead_item.id) == assignment["lead_id"])
+            lead = next(
+                lead_item for lead_item in leads if str(lead_item.id) == assignment["lead_id"]
+            )
             lead.assigned_user_id = UUID(assignment["user_id"])
 
             # Add assignment metadata
@@ -137,7 +139,6 @@ class LeadAssignmentService:
         self, organization: Organization, user_ids: Optional[List[UUID]] = None
     ) -> List[User]:
         """Get available team members for assignment with proper organization filtering."""
-
         # Query active users who are members of the organization
         query = (
             self.db.query(User)
@@ -161,7 +162,6 @@ class LeadAssignmentService:
 
     async def _assign_round_robin(self, leads: List[Lead], team_members: List[User]) -> List[Dict]:
         """Round-robin assignment for equal distribution."""
-
         assignments = []
 
         # Sort leads by creation date for consistent assignment order
@@ -188,7 +188,6 @@ class LeadAssignmentService:
         self, leads: List[Lead], team_members: List[User], organization: Organization
     ) -> List[Dict]:
         """Workload-balanced assignment based on active leads."""
-
         # Get current workload for each team member
         workloads = {}
         for member in team_members:
@@ -220,7 +219,9 @@ class LeadAssignmentService:
         assignments = []
 
         # Sort leads by score (high score first for better distribution)
-        sorted_leads = sorted(leads, key=lambda lead_item: float(lead_item.lead_score or 0), reverse=True)
+        sorted_leads = sorted(
+            leads, key=lambda lead_item: float(lead_item.lead_score or 0), reverse=True
+        )
 
         for lead in sorted_leads:
             # Find member with lowest workload (considering performance)
@@ -254,7 +255,6 @@ class LeadAssignmentService:
         self, leads: List[Lead], team_members: List[User], organization: Organization
     ) -> List[Dict]:
         """Score-based assignment - high-value leads to top performers."""
-
         # Get performance data for team members
         performance_data = {}
         for member in team_members:
@@ -267,7 +267,9 @@ class LeadAssignmentService:
         )
 
         # Sort leads by score (high first)
-        sorted_leads = sorted(leads, key=lambda lead_item: float(lead_item.lead_score or 0), reverse=True)
+        sorted_leads = sorted(
+            leads, key=lambda lead_item: float(lead_item.lead_score or 0), reverse=True
+        )
 
         assignments = []
 
@@ -292,7 +294,6 @@ class LeadAssignmentService:
 
     async def _get_performance_score(self, user: User, organization: Organization) -> float:
         """Calculate user performance based on recent conversions."""
-
         # Look at last 90 days of performance
         ninety_days_ago = datetime.now() - timedelta(days=90)
 

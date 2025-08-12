@@ -4,41 +4,31 @@
  * Enhanced with micro-interactions and UX improvements
  */
 
-import {
-  Building2,
-  Calendar,
-  Clock,
-  MessageCircle,
-  MoreHorizontal,
-  Phone,
-  Star,
-} from 'lucide-react'
+import { Calendar, Clock, MessageCircle, Phone } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { CardContent } from '@/components/ui/card'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
 import { Lead } from '@/services/crm-leads'
 
 import { useLeadCardHandlers, LeadCardWrapper } from './lead-card-handlers'
 import {
+  ActionsDropdown,
+  LeadNameSection,
+  ScorePrioritySection,
+  SelectionCheckbox,
+} from './lead-card-header-components'
+import {
   STAGE_DISPLAY_CONFIG,
   getPriorityFromValue,
-  getPriorityColor,
-  getPriorityIcon,
   LeadValueDisplay,
   LeadNotesDisplay,
   LeadContactInfo,
   LeadTagsDisplay,
 } from './lead-card-utils'
-import { LeadScoreDisplay } from './lead-score-display'
 import { useUXEnhancements, useEnhancedButton } from './pipeline-ux-enhancements'
+// UrgencyAlert removed - not needed in this component
 
 function LeadCardHeader({
   lead,
@@ -47,6 +37,8 @@ function LeadCardHeader({
   onEditLead,
   onSendEmail,
   onRemoveLead,
+  isSelected = false,
+  onToggleSelection,
 }: {
   lead: Lead
   priority: string
@@ -54,59 +46,31 @@ function LeadCardHeader({
   onEditLead: (lead: Lead) => void
   onSendEmail: (lead: Lead) => void
   onRemoveLead: (lead: Lead) => void
+  isSelected?: boolean
+  onToggleSelection?: (leadId: string) => void
 }): React.ReactElement {
   return (
     <div className="flex items-start justify-between mb-3">
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-1">
-          <h4
-            className="font-semibold text-sm text-foreground truncate max-w-[200px]"
-            title={lead.name}
-          >
-            {lead.name}
-          </h4>
-          {Boolean(lead.is_favorite) && (
-            <Star className="h-3 w-3 text-yellow-500 fill-current flex-shrink-0" />
-          )}
-        </div>
-        {lead.source !== null && lead.source !== undefined && lead.source.length > 0 ? (
-          <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1 min-w-0">
-            <Building2 className="h-3 w-3 flex-shrink-0" />
-            <span className="truncate max-w-[180px]" title={lead.source}>
-              {lead.source}
-            </span>
-          </p>
-        ) : null}
-      </div>
-      <div className="flex items-center gap-2">
-        {/* Lead Score Display */}
-        {lead.lead_score !== null && lead.lead_score !== undefined && (
-          <LeadScoreDisplay 
-            score={lead.lead_score} 
-            factors={lead.score_factors ?? {}}
-            variant="badge"
-            size="sm"
-            showBreakdown
+      <div className="flex items-start gap-2 flex-1 min-w-0">
+        {/* Selection Checkbox */}
+        {onToggleSelection !== null && onToggleSelection !== undefined && (
+          <SelectionCheckbox
+            lead={lead}
+            isSelected={isSelected}
+            onToggleSelection={onToggleSelection}
           />
         )}
-        
-        <div className={getPriorityColor(priority)}>{getPriorityIcon(priority)}</div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button type="button" variant="ghost" size="sm" className="h-6 w-6 p-0">
-              <MoreHorizontal className="h-3 w-3" />
-              <span className="sr-only">Ações do lead</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onViewDetails(lead)}>Ver detalhes</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onEditLead(lead)}>Editar lead</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onSendEmail(lead)}>Enviar email</DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600" onClick={() => onRemoveLead(lead)}>
-              Remover lead
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <LeadNameSection lead={lead} />
+      </div>
+      <div className="flex items-center gap-2">
+        <ScorePrioritySection lead={lead} priority={priority} />
+        <ActionsDropdown
+          lead={lead}
+          onViewDetails={onViewDetails}
+          onEditLead={onEditLead}
+          onSendEmail={onSendEmail}
+          onRemoveLead={onRemoveLead}
+        />
       </div>
     </div>
   )
@@ -239,6 +203,8 @@ export function LeadCard({
   onCall,
   onWhatsApp,
   isDragging = false,
+  isSelected = false,
+  onToggleSelection,
 }: {
   lead: Lead
   onDragStart: (lead: Lead) => void
@@ -249,6 +215,8 @@ export function LeadCard({
   onCall: (lead: Lead) => void
   onWhatsApp: (lead: Lead) => void
   isDragging?: boolean
+  isSelected?: boolean
+  onToggleSelection?: (leadId: string) => void
 }): React.ReactElement {
   const priority = getPriorityFromValue(lead.estimated_value)
   const { hoverClasses, detectReducedMotion } = useUXEnhancements()
@@ -271,7 +239,10 @@ export function LeadCard({
           onEditLead={onEditLead}
           onSendEmail={onSendEmail}
           onRemoveLead={onRemoveLead}
+          isSelected={isSelected}
+          onToggleSelection={onToggleSelection}
         />
+        {/* Urgency alerts handled by enhanced score display */}
         <LeadCardContent lead={lead} />
         <div
           onClick={e => e.stopPropagation()}

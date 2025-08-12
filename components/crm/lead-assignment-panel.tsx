@@ -1,19 +1,27 @@
 /**
  * Lead Assignment Management Panel
- * 
+ *
  * Interface for intelligent lead assignment with multiple strategies,
  * workload balancing, and performance-based distribution.
  */
 
-"use client"
+'use client'
 
+import { Users, Zap, TrendingUp, UserCheck, Award, Clock } from 'lucide-react'
 import React, { useState } from 'react'
-import { Users, Zap, TrendingUp, UserCheck, Award, Clock } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 
 import { AssignmentDialog, type TeamMember } from './assignment-dialog'
 
@@ -65,7 +73,7 @@ function TeamPerformanceTable({ teamData }: { teamData: TeamMember[] }): React.R
         </TableRow>
       </TableHeader>
       <TableBody>
-        {teamData.map((member) => (
+        {teamData.map(member => (
           <TableRow key={member.user_id}>
             <TableCell>
               <div className="flex items-center gap-2">
@@ -92,22 +100,18 @@ function TeamPerformanceTable({ teamData }: { teamData: TeamMember[] }): React.R
                 <div className="flex items-center justify-between text-sm">
                   <span>{(member.conversion_rate * 100).toFixed(1)}%</span>
                 </div>
-                <Progress 
-                  value={member.conversion_rate * 100} 
-                  className="h-1.5"
-                />
+                <Progress value={member.conversion_rate * 100} className="h-1.5" />
               </div>
             </TableCell>
             <TableCell>
               <div className="space-y-1">
                 <div className="flex items-center justify-between text-sm">
                   <span>{(member.performance_score * 100).toFixed(1)}%</span>
-                  {member.performance_score >= 0.7 && <TrendingUp className="h-3 w-3 text-green-500" />}
+                  {member.performance_score >= 0.7 && (
+                    <TrendingUp className="h-3 w-3 text-green-500" />
+                  )}
                 </div>
-                <Progress 
-                  value={member.performance_score * 100} 
-                  className="h-1.5"
-                />
+                <Progress value={member.performance_score * 100} className="h-1.5" />
               </div>
             </TableCell>
           </TableRow>
@@ -130,12 +134,12 @@ function LoadingState(): React.ReactElement {
   )
 }
 
-function OverviewCards({ 
-  unassignedCount, 
-  analytics 
-}: { 
-  unassignedCount: number; 
-  analytics: AssignmentAnalytics | null 
+function OverviewCards({
+  unassignedCount,
+  analytics,
+}: {
+  unassignedCount: number
+  analytics: AssignmentAnalytics | null
 }): React.ReactElement {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -150,7 +154,7 @@ function OverviewCards({
           </div>
         </CardContent>
       </Card>
-      
+
       {analytics !== null && (
         <>
           <Card>
@@ -164,7 +168,7 @@ function OverviewCards({
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
@@ -176,13 +180,15 @@ function OverviewCards({
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Conversion Rate</p>
-                  <p className="text-2xl font-bold">{(analytics.summary.average_conversion_rate * 100).toFixed(1)}%</p>
+                  <p className="text-2xl font-bold">
+                    {(analytics.summary.average_conversion_rate * 100).toFixed(1)}%
+                  </p>
                 </div>
                 <TrendingUp className="h-8 w-8 text-muted-foreground" />
               </div>
@@ -194,31 +200,41 @@ function OverviewCards({
   )
 }
 
-function WorkloadDistributionSummary({ analytics }: { analytics: AssignmentAnalytics }): React.ReactElement {
+function WorkloadDistributionSummary({
+  analytics,
+}: {
+  analytics: AssignmentAnalytics
+}): React.ReactElement {
   return (
     <div className="grid grid-cols-3 gap-4 p-4 bg-muted/50 rounded-lg">
       <div className="text-center">
-        <div className="text-lg font-bold">{analytics.summary.workload_distribution.min_active_leads}</div>
+        <div className="text-lg font-bold">
+          {analytics.summary.workload_distribution.min_active_leads}
+        </div>
         <div className="text-xs text-muted-foreground">Min Active</div>
       </div>
       <div className="text-center">
-        <div className="text-lg font-bold">{analytics.summary.workload_distribution.avg_active_leads}</div>
+        <div className="text-lg font-bold">
+          {analytics.summary.workload_distribution.avg_active_leads}
+        </div>
         <div className="text-xs text-muted-foreground">Avg Active</div>
       </div>
       <div className="text-center">
-        <div className="text-lg font-bold">{analytics.summary.workload_distribution.max_active_leads}</div>
+        <div className="text-lg font-bold">
+          {analytics.summary.workload_distribution.max_active_leads}
+        </div>
         <div className="text-xs text-muted-foreground">Max Active</div>
       </div>
     </div>
   )
 }
 
-export function LeadAssignmentPanel({ 
-  availableLeads, 
-  analytics, 
-  onAssignLeads, 
+export function LeadAssignmentPanel({
+  availableLeads,
+  analytics,
+  onAssignLeads,
   onRefreshAnalytics,
-  isLoading = false 
+  isLoading = false,
 }: LeadAssignmentPanelProps): React.ReactElement {
   const [showAssignDialog, setShowAssignDialog] = useState(false)
 
@@ -245,10 +261,7 @@ export function LeadAssignmentPanel({
               <Button variant="outline" onClick={() => void onRefreshAnalytics()}>
                 Refresh Data
               </Button>
-              <Button 
-                onClick={() => setShowAssignDialog(true)}
-                disabled={unassignedCount === 0}
-              >
+              <Button onClick={() => setShowAssignDialog(true)} disabled={unassignedCount === 0}>
                 Assign Leads ({unassignedCount})
               </Button>
             </div>
@@ -272,7 +285,7 @@ export function LeadAssignmentPanel({
             <div className="space-y-6">
               {/* Workload Distribution Summary */}
               <WorkloadDistributionSummary analytics={analytics} />
-              
+
               {/* Team Performance Table */}
               <TeamPerformanceTable teamData={analytics.team_performance} />
             </div>

@@ -3,6 +3,8 @@
  */
 import { Lead } from '@/services/crm-leads'
 
+export { PipelineStage } from '@/services/crm-leads'
+
 export interface PipelineStageDisplay {
   id: string
   name: string

@@ -138,78 +138,117 @@ class LeadDeduplicationService:
         unique_duplicates = self._remove_reverse_duplicates(duplicates)
         return sorted(unique_duplicates, key=lambda x: x["similarity_score"], reverse=True)[:limit]
 
-    def _calculate_similarity(self, lead1: Lead, lead2: Lead) -> Tuple[int, List[str]]:
-        """Calculate similarity percentage between two leads."""
-        score = 0
-        factors = []
-
-        # 1. Exact email match (100% duplicate indicator)
+    def _check_exact_email_match(self, lead1: Lead, lead2: Lead) -> Tuple[bool, int, List[str]]:
+        """Check for exact email match."""
         if (
             lead1.email
             and lead2.email
             and lead1.email.lower().strip() == lead2.email.lower().strip()
         ):
-            return 100, ["email_exact_match"]
+            return True, 100, ["email_exact_match"]
+        return False, 0, []
 
-        # 2. Phone number matching (very high confidence)
+    def _calculate_phone_similarity(self, lead1: Lead, lead2: Lead) -> Tuple[int, List[str]]:
+        """Calculate phone number similarity score."""
         phone1 = self.normalize_phone(lead1.phone)
         phone2 = self.normalize_phone(lead2.phone)
         if phone1 and phone2 and len(phone1) >= 8 and phone1 == phone2:
-            score += 40
-            factors.append("phone_exact_match")
+            return 40, ["phone_exact_match"]
+        return 0, []
 
-        # 3. Name similarity using fuzzy matching
-        if lead1.name and lead2.name:
-            name_similarity = fuzz.ratio(
-                self.normalize_name(lead1.name), self.normalize_name(lead2.name)
-            )
-            if name_similarity >= 90:
-                score += 35
-                factors.append("name_very_high_similarity")
-            elif name_similarity >= 80:
-                score += 25
-                factors.append("name_high_similarity")
-            elif name_similarity >= 70:
-                score += 15
-                factors.append("name_medium_similarity")
+    def _calculate_name_similarity(self, lead1: Lead, lead2: Lead) -> Tuple[int, List[str]]:
+        """Calculate name similarity score using fuzzy matching."""
+        if not (lead1.name and lead2.name):
+            return 0, []
 
-        # 4. Email domain similarity (same company)
-        if lead1.email and lead2.email:
-            domain1 = lead1.email.split("@")[1] if "@" in lead1.email else ""
-            domain2 = lead2.email.split("@")[1] if "@" in lead2.email else ""
-            if domain1 and domain2 and domain1.lower() == domain2.lower():
-                score += 15
-                factors.append("email_domain_match")
+        name_similarity = fuzz.ratio(
+            self.normalize_name(lead1.name), self.normalize_name(lead2.name)
+        )
 
-        # 5. Similar estimated values (business context)
-        if lead1.estimated_value and lead2.estimated_value:
-            value1 = float(lead1.estimated_value)
-            value2 = float(lead2.estimated_value)
-            max_value = max(value1, value2)
-            if max_value > 0:
-                diff_ratio = abs(value1 - value2) / max_value
-                if diff_ratio < 0.1:  # Within 10%
-                    score += 10
-                    factors.append("similar_value_exact")
-                elif diff_ratio < 0.3:  # Within 30%
-                    score += 5
-                    factors.append("similar_value_close")
+        if name_similarity >= 90:
+            return 35, ["name_very_high_similarity"]
+        elif name_similarity >= 80:
+            return 25, ["name_high_similarity"]
+        elif name_similarity >= 70:
+            return 15, ["name_medium_similarity"]
 
-        # 6. Common tags/categories
+        return 0, []
+
+    def _calculate_domain_similarity(self, lead1: Lead, lead2: Lead) -> Tuple[int, List[str]]:
+        """Calculate email domain similarity score."""
+        if not (lead1.email and lead2.email):
+            return 0, []
+
+        domain1 = lead1.email.split("@")[1] if "@" in lead1.email else ""
+        domain2 = lead2.email.split("@")[1] if "@" in lead2.email else ""
+
+        if domain1 and domain2 and domain1.lower() == domain2.lower():
+            return 15, ["email_domain_match"]
+
+        return 0, []
+
+    def _calculate_value_similarity(self, lead1: Lead, lead2: Lead) -> Tuple[int, List[str]]:
+        """Calculate estimated value similarity score."""
+        if not (lead1.estimated_value and lead2.estimated_value):
+            return 0, []
+
+        value1 = float(lead1.estimated_value)
+        value2 = float(lead2.estimated_value)
+        max_value = max(value1, value2)
+
+        if max_value > 0:
+            diff_ratio = abs(value1 - value2) / max_value
+            if diff_ratio < 0.1:  # Within 10%
+                return 10, ["similar_value_exact"]
+            elif diff_ratio < 0.3:  # Within 30%
+                return 5, ["similar_value_close"]
+
+        return 0, []
+
+    def _calculate_tag_similarity(self, lead1: Lead, lead2: Lead) -> Tuple[int, List[str]]:
+        """Calculate common tags similarity score."""
         tags1 = set((lead1.tags or []))
         tags2 = set((lead2.tags or []))
         common_tags = tags1.intersection(tags2)
+
         if common_tags:
             tag_score = min(len(common_tags) * 3, 10)
-            score += tag_score
-            factors.append("common_tags")
+            return tag_score, ["common_tags"]
 
-        # 7. Same source (weak indicator)
+        return 0, []
+
+    def _calculate_source_similarity(self, lead1: Lead, lead2: Lead) -> Tuple[int, List[str]]:
+        """Calculate source similarity score."""
         if lead1.source and lead2.source and lead1.source.lower() == lead2.source.lower():
-            score += 5
-            factors.append("same_source")
+            return 5, ["same_source"]
+        return 0, []
 
-        return min(score, 100), factors
+    def _calculate_similarity(self, lead1: Lead, lead2: Lead) -> Tuple[int, List[str]]:
+        """Calculate similarity percentage between two leads."""
+        # Check for exact email match first (definitive duplicate)
+        is_exact_match, exact_score, exact_factors = self._check_exact_email_match(lead1, lead2)
+        if is_exact_match:
+            return exact_score, exact_factors
+
+        # Calculate individual similarity components
+        total_score = 0
+        all_factors = []
+
+        similarity_checks = [
+            self._calculate_phone_similarity,
+            self._calculate_name_similarity,
+            self._calculate_domain_similarity,
+            self._calculate_value_similarity,
+            self._calculate_tag_similarity,
+            self._calculate_source_similarity,
+        ]
+
+        for check_func in similarity_checks:
+            score, factors = check_func(lead1, lead2)
+            total_score += score
+            all_factors.extend(factors)
+
+        return min(total_score, 100), all_factors
 
     def _get_confidence_level(self, similarity_score: int) -> str:
         """Get confidence level based on similarity score."""
@@ -367,10 +406,8 @@ class LeadDeduplicationService:
             "updated_at": lead.updated_at.isoformat(),
         }
 
-    def _merge_field_data(self, primary: Lead, duplicate: Lead, prefer_source: bool = True):
-        """Merge field data between leads based on quality."""
-
-        # Email: prefer non-empty, corporate domain over consumer
+    def _merge_email_field(self, primary: Lead, duplicate: Lead, prefer_source: bool) -> None:
+        """Merge email field with quality preference."""
         if not primary.email and duplicate.email:
             primary.email = duplicate.email
         elif duplicate.email and prefer_source:
@@ -379,12 +416,13 @@ class LeadDeduplicationService:
             )
             dup_domain = duplicate.email.split("@")[1] if "@" in duplicate.email else ""
 
-            # Prefer corporate domain
+            # Prefer corporate domain over consumer domains
             consumer_domains = {"gmail.com", "yahoo.com", "hotmail.com", "outlook.com"}
             if primary_domain in consumer_domains and dup_domain not in consumer_domains:
                 primary.email = duplicate.email
 
-        # Phone: prefer longer/complete phone numbers
+    def _merge_phone_field(self, primary: Lead, duplicate: Lead, prefer_source: bool) -> None:
+        """Merge phone field with length preference."""
         if not primary.phone and duplicate.phone:
             primary.phone = duplicate.phone
         elif duplicate.phone and prefer_source:
@@ -393,23 +431,32 @@ class LeadDeduplicationService:
             if dup_digits > primary_digits:
                 primary.phone = duplicate.phone
 
-        # Estimated value: prefer higher value if reasonable
-        if not primary.estimated_value and duplicate.estimated_value:
+    def _merge_value_field(self, primary: Lead, duplicate: Lead, prefer_source: bool) -> None:
+        """Merge estimated value field with higher value preference."""
+        if (not primary.estimated_value and duplicate.estimated_value) or (
+            duplicate.estimated_value
+            and prefer_source
+            and duplicate.estimated_value > (primary.estimated_value or 0)
+        ):
             primary.estimated_value = duplicate.estimated_value
-        elif duplicate.estimated_value and prefer_source:
-            if duplicate.estimated_value > (primary.estimated_value or 0):
-                primary.estimated_value = duplicate.estimated_value
 
-        # Lead score: keep higher score
+    def _merge_score_field(self, primary: Lead, duplicate: Lead) -> None:
+        """Merge lead score field with higher score preference."""
         if duplicate.lead_score and (
             not primary.lead_score or duplicate.lead_score > primary.lead_score
         ):
             primary.lead_score = duplicate.lead_score
             primary.score_factors = duplicate.score_factors
 
+    def _merge_field_data(self, primary: Lead, duplicate: Lead, prefer_source: bool = True):
+        """Merge field data between leads based on quality."""
+        self._merge_email_field(primary, duplicate, prefer_source)
+        self._merge_phone_field(primary, duplicate, prefer_source)
+        self._merge_value_field(primary, duplicate, prefer_source)
+        self._merge_score_field(primary, duplicate)
+
     def _merge_supplementary_data(self, primary: Lead, duplicate: Lead):
         """Merge notes, tags, and other supplementary data."""
-
         # Merge tags (unique only)
         primary_tags = set(primary.tags or [])
         duplicate_tags = set(duplicate.tags or [])

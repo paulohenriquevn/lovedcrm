@@ -28,10 +28,10 @@ from api.schemas.crm_lead import (
     LeadUpdate,
     PipelineStatsResponse,
 )
-from api.services.crm_lead_service import CRMLeadService
-from api.services.crm_lead_scoring_service import LeadScoringService
+from api.services.crm_lead_assignment_service import AssignmentStrategy, LeadAssignmentService
 from api.services.crm_lead_deduplication_service import LeadDeduplicationService
-from api.services.crm_lead_assignment_service import LeadAssignmentService, AssignmentStrategy
+from api.services.crm_lead_scoring_service import LeadScoringService
+from api.services.crm_lead_service import CRMLeadService
 
 router = APIRouter(prefix="/crm/leads", tags=["CRM - Leads"])
 

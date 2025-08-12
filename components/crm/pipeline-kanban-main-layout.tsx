@@ -66,6 +66,9 @@ interface PipelineKanbanLayoutProps {
   ) => void
   onClearAllFilters: () => void
   isLoadingFilters: boolean
+  // Bulk selection props for Story 3.3
+  selectedLeadIds?: string[]
+  onToggleSelection?: (leadId: string) => void
 }
 
 export function PipelineKanbanLayout({
@@ -87,6 +90,8 @@ export function PipelineKanbanLayout({
   updateFilter,
   onClearAllFilters,
   isLoadingFilters,
+  selectedLeadIds = [],
+  onToggleSelection,
 }: PipelineKanbanLayoutProps): JSX.Element {
   return (
     <div className={cn('h-full', className)}>
@@ -110,6 +115,8 @@ export function PipelineKanbanLayout({
         updateFilter={updateFilter}
         onClearAllFilters={onClearAllFilters}
         isLoadingFilters={isLoadingFilters}
+        selectedLeadIds={selectedLeadIds}
+        onToggleSelection={onToggleSelection}
       />
 
       <PipelineModals

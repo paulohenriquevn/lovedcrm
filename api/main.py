@@ -53,6 +53,9 @@ except ImportError:
 # Import essential routers only
 from api.routers.auth import router as auth_router
 from api.routers.billing import router as billing_router
+from api.routers.crm_analytics import router as crm_analytics_router
+from api.routers.crm_bulk_operations import router as crm_bulk_operations_router
+from api.routers.crm_lead_trends import router as crm_lead_trends_router
 from api.routers.crm_leads import router as crm_leads_router
 from api.routers.invites import router as invites_router
 from api.routers.organizations import router as organizations_router
@@ -456,6 +459,9 @@ app.include_router(providers_router)  # Multi-provider management (Story 2.0)
 app.include_router(roles_router)  # Advanced role management
 app.include_router(invites_router)  # Public invite endpoints
 app.include_router(crm_leads_router)  # CRM Leads management
+app.include_router(crm_analytics_router)  # CRM Analytics & Advanced Insights (Story 3.2)
+app.include_router(crm_bulk_operations_router)  # CRM Bulk Operations (Story 3.3)
+app.include_router(crm_lead_trends_router)  # CRM Lead Trends (Story 3.3)
 app.include_router(websocket_router)  # Real-time collaboration
 
 # Note: Removed app mounting to avoid route conflicts

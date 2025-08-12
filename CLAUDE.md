@@ -324,7 +324,7 @@ This project includes 18 specialized Claude command agents that automate and sta
 **Complete documentation pipeline from vision to deployment:**
 
 - **01-doc-vision.md**: Project vision and strategic positioning
-- **02-doc-roadmap.md**: Feature roadmap and prioritization  
+- **02-doc-roadmap.md**: Feature roadmap and prioritization
 - **03-doc-architecture.md**: Technical architecture and patterns
 - **04-doc-database.md**: Database schema and multi-tenancy design
 - **05-doc-api.md**: API endpoints and authentication flows
@@ -355,21 +355,25 @@ This project includes 18 specialized Claude command agents that automate and sta
 All agents follow these **non-negotiable rules**:
 
 #### 95% Confidence Rule
+
 - **MUST**: Have 95%+ certainty before proceeding with ANY implementation
 - **MUST**: Ask questions until absolute certainty about requirements
 - **NEVER**: Assume requirements or make speculative interpretations
 
 #### Evidence-Based Development
+
 - **MUST**: Use Read/LS/Bash tools for direct codebase analysis
 - **MUST**: Base decisions on actual code, not assumptions
 - **NEVER**: Proceed without verification of current state
 
 #### Multi-Tenant Compliance
+
 - **MUST**: Maintain organization isolation (org_id) in all implementations
 - **MUST**: Validate cross-organizational access restrictions
 - **NEVER**: Use user_id isolation (always org_id)
 
 #### Vertical Slice Methodology
+
 - **MUST**: Implement complete slices (Frontend + Backend + Database)
 - **MUST**: Ensure end-to-end functionality
 - **NEVER**: Implement partial horizontal layers
@@ -377,6 +381,7 @@ All agents follow these **non-negotiable rules**:
 ### Workflow Integration
 
 **Standard development flow:**
+
 ```
 exec-context → exec-refine → exec-story → exec-run → exec-review
      ↓             ↓            ↓           ↓          ↓
@@ -384,6 +389,7 @@ exec-context → exec-refine → exec-story → exec-run → exec-review
 ```
 
 **Documentation flow (parallel):**
+
 ```
 01-doc-vision → 02-doc-roadmap → ... → 11-doc-roadmap
                       ↓

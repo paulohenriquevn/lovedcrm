@@ -3,17 +3,37 @@
  * Separated dialog component for assigning leads to team members
  */
 
-import React, { useState } from 'react'
-import { BarChart, Zap, RotateCcw, TrendingUp } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { cn } from "@/lib/utils"
+import { BarChart, Zap, RotateCcw, TrendingUp } from 'lucide-react'
+import React from 'react'
+
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { cn } from '@/lib/utils'
+
+import {
+  useAssignmentDialogLogic,
+  type AssignmentStrategy,
+  type LeadAssignmentProps,
+} from './assignment-dialog-hooks'
 
 interface TeamMember {
   user_id: string
@@ -25,43 +45,30 @@ interface TeamMember {
   performance_score: number
 }
 
-interface LeadAssignmentProps {
-  availableLeads: Array<{
-    id: string
-    name: string
-    email?: string
-    lead_score?: number
-    estimated_value?: number
-    stage: string
-  }>
-}
-
-type AssignmentStrategy = 'roundRobin' | 'workloadBalanced' | 'scoreBased'
-
 const STRATEGY_CONFIG = {
   roundRobin: {
     label: 'Round Robin',
     description: 'Equal distribution rotation - fair opportunity for all',
     icon: <RotateCcw className="h-4 w-4" />,
-    color: 'text-blue-600'
+    color: 'text-blue-600',
   },
   workloadBalanced: {
     label: 'Workload Balanced',
     description: 'Based on current active lead counts - balance the load',
     icon: <BarChart className="h-4 w-4" />,
-    color: 'text-green-600'
+    color: 'text-green-600',
   },
   scoreBased: {
     label: 'Score Based',
     description: 'High-value leads to top performers - maximize conversion',
     icon: <TrendingUp className="h-4 w-4" />,
-    color: 'text-purple-600'
-  }
+    color: 'text-purple-600',
+  },
 } as const
 
 function StrategySelectionGrid({
   selectedStrategy,
-  onStrategyChange
+  onStrategyChange,
 }: {
   selectedStrategy: AssignmentStrategy
   onStrategyChange: (strategy: AssignmentStrategy) => void
@@ -71,26 +78,22 @@ function StrategySelectionGrid({
       <h3 className="font-medium text-sm">Assignment Strategy</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {Object.entries(STRATEGY_CONFIG).map(([key, config]) => (
-          <Card 
+          <Card
             key={key}
             className={cn(
-              "cursor-pointer transition-all hover:shadow-md border-2",
-              selectedStrategy === key 
-                ? "border-primary bg-primary/5" 
-                : "border-muted hover:border-primary/50"
+              'cursor-pointer transition-all hover:shadow-md border-2',
+              selectedStrategy === key
+                ? 'border-primary bg-primary/5'
+                : 'border-muted hover:border-primary/50'
             )}
             onClick={() => onStrategyChange(key as AssignmentStrategy)}
           >
             <CardContent className="pt-4 pb-3">
               <div className="flex items-center gap-3">
-                <div className={config.color}>
-                  {config.icon}
-                </div>
+                <div className={config.color}>{config.icon}</div>
                 <div>
                   <div className="font-medium text-sm">{config.label}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {config.description}
-                  </div>
+                  <div className="text-xs text-muted-foreground">{config.description}</div>
                 </div>
               </div>
             </CardContent>
@@ -104,7 +107,7 @@ function StrategySelectionGrid({
 function TeamMemberSelection({
   teamData,
   selectedUsers,
-  onUserToggle
+  onUserToggle,
 }: {
   teamData: TeamMember[]
   selectedUsers: string[]
@@ -114,7 +117,7 @@ function TeamMemberSelection({
     <div className="space-y-3">
       <h3 className="font-medium text-sm">Assign to Specific Members (Optional)</h3>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        {teamData.map((member) => (
+        {teamData.map(member => (
           <div key={member.user_id} className="flex items-center space-x-2">
             <Checkbox
               id={`user-${member.user_id}`}
@@ -138,7 +141,7 @@ function LeadSelectionTable({
   unassignedLeads,
   selectedLeads,
   onLeadToggle,
-  onSelectAll
+  onSelectAll,
 }: {
   unassignedLeads: LeadAssignmentProps['availableLeads']
   selectedLeads: string[]
@@ -155,7 +158,7 @@ function LeadSelectionTable({
           {selectedLeads.length === unassignedLeads.length ? 'Deselect All' : 'Select All'}
         </Button>
       </div>
-      
+
       <div className="border rounded-md max-h-64 overflow-y-auto">
         <Table>
           <TableHeader>
@@ -168,7 +171,7 @@ function LeadSelectionTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {unassignedLeads.map((lead) => (
+            {unassignedLeads.map(lead => (
               <TableRow key={lead.id}>
                 <TableCell>
                   <Checkbox
@@ -177,9 +180,7 @@ function LeadSelectionTable({
                   />
                 </TableCell>
                 <TableCell className="font-medium">{lead.name}</TableCell>
-                <TableCell className="text-muted-foreground text-sm">
-                  {lead.email ?? '-'}
-                </TableCell>
+                <TableCell className="text-muted-foreground text-sm">{lead.email ?? '-'}</TableCell>
                 <TableCell>
                   {lead.lead_score !== null && lead.lead_score !== undefined ? (
                     <Badge variant="outline">{lead.lead_score}</Badge>
@@ -205,12 +206,78 @@ function LeadSelectionTable({
   )
 }
 
+function AssignmentDialogContent({
+  selectedStrategy,
+  selectedUsers,
+  selectedLeads,
+  isAssigning,
+  teamData,
+  unassignedLeads,
+  setSelectedStrategy,
+  handleUserToggle,
+  handleLeadToggle,
+  handleSelectAll,
+  handleAssign,
+  onOpenChange,
+}: {
+  selectedStrategy: AssignmentStrategy
+  selectedUsers: string[]
+  selectedLeads: string[]
+  isAssigning: boolean
+  teamData: TeamMember[]
+  unassignedLeads: LeadAssignmentProps['availableLeads']
+  setSelectedStrategy: (strategy: AssignmentStrategy) => void
+  handleUserToggle: (userId: string) => void
+  handleLeadToggle: (leadId: string) => void
+  handleSelectAll: () => void
+  handleAssign: () => Promise<void>
+  onOpenChange: (open: boolean) => void
+}): React.ReactElement {
+  return (
+    <div className="space-y-6">
+      <StrategySelectionGrid
+        selectedStrategy={selectedStrategy}
+        onStrategyChange={setSelectedStrategy}
+      />
+
+      <Separator />
+
+      <TeamMemberSelection
+        teamData={teamData}
+        selectedUsers={selectedUsers}
+        onUserToggle={handleUserToggle}
+      />
+
+      <Separator />
+
+      <LeadSelectionTable
+        unassignedLeads={unassignedLeads}
+        selectedLeads={selectedLeads}
+        onLeadToggle={handleLeadToggle}
+        onSelectAll={handleSelectAll}
+      />
+
+      <div className="flex justify-end gap-3 pt-4">
+        <Button variant="outline" onClick={() => onOpenChange(false)}>
+          Cancel
+        </Button>
+        <Button
+          onClick={() => void handleAssign()}
+          disabled={selectedLeads.length === 0 || isAssigning}
+        >
+          {isAssigning ? 'Assigning...' : `Assign ${selectedLeads.length} Leads`}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
 export function AssignmentDialog({
   isOpen,
   onOpenChange,
   availableLeads,
   teamData,
-  onAssign
+  onAssign,
 }: {
   isOpen: boolean
   onOpenChange: (open: boolean) => void
@@ -218,58 +285,7 @@ export function AssignmentDialog({
   teamData: TeamMember[]
   onAssign: (leadIds: string[], strategy: string, userIds?: string[]) => Promise<void>
 }): React.ReactElement {
-  const [selectedLeads, setSelectedLeads] = useState<string[]>([])
-  const [selectedStrategy, setSelectedStrategy] = useState<AssignmentStrategy>('workloadBalanced')
-  const [selectedUsers, setSelectedUsers] = useState<string[]>([])
-  const [isAssigning, setIsAssigning] = useState(false)
-
-  const handleLeadToggle = (leadId: string): void => {
-    setSelectedLeads(prev => 
-      prev.includes(leadId) 
-        ? prev.filter(id => id !== leadId)
-        : [...prev, leadId]
-    )
-  }
-
-  const handleUserToggle = (userId: string): void => {
-    setSelectedUsers(prev => 
-      prev.includes(userId) 
-        ? prev.filter(id => id !== userId)
-        : [...prev, userId]
-    )
-  }
-
-  const handleSelectAll = (): void => {
-    const unassignedLeads = availableLeads.filter(lead => lead.stage !== 'assigned')
-    if (selectedLeads.length === unassignedLeads.length) {
-      setSelectedLeads([])
-    } else {
-      setSelectedLeads(unassignedLeads.map(lead => lead.id))
-    }
-  }
-
-  const handleAssign = async (): Promise<void> => {
-    if (selectedLeads.length === 0) {
-      return
-    }
-    
-    setIsAssigning(true)
-    try {
-      await onAssign(
-        selectedLeads, 
-        selectedStrategy, 
-        selectedUsers.length > 0 ? selectedUsers : undefined
-      )
-      onOpenChange(false)
-      setSelectedLeads([])
-      setSelectedUsers([])
-    } catch (error) {
-      throw new Error(`Assignment failed: ${error instanceof Error ? error.message : String(error)}`)
-    } finally {
-      setIsAssigning(false)
-    }
-  }
-
+  const logic = useAssignmentDialogLogic(availableLeads, onAssign, onOpenChange)
   const unassignedLeads = availableLeads.filter(lead => lead.stage !== 'assigned')
 
   return (
@@ -285,44 +301,23 @@ export function AssignmentDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
-          <StrategySelectionGrid
-            selectedStrategy={selectedStrategy}
-            onStrategyChange={setSelectedStrategy}
-          />
-
-          <Separator />
-
-          <TeamMemberSelection
-            teamData={teamData}
-            selectedUsers={selectedUsers}
-            onUserToggle={handleUserToggle}
-          />
-
-          <Separator />
-
-          <LeadSelectionTable
-            unassignedLeads={unassignedLeads}
-            selectedLeads={selectedLeads}
-            onLeadToggle={handleLeadToggle}
-            onSelectAll={handleSelectAll}
-          />
-
-          <div className="flex justify-end gap-3 pt-4">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={() => void handleAssign()} 
-              disabled={selectedLeads.length === 0 || isAssigning}
-            >
-              {isAssigning ? 'Assigning...' : `Assign ${selectedLeads.length} Leads`}
-            </Button>
-          </div>
-        </div>
+        <AssignmentDialogContent
+          selectedStrategy={logic.selectedStrategy}
+          selectedUsers={logic.selectedUsers}
+          selectedLeads={logic.selectedLeads}
+          isAssigning={logic.isAssigning}
+          teamData={teamData}
+          unassignedLeads={unassignedLeads}
+          setSelectedStrategy={logic.setSelectedStrategy}
+          handleUserToggle={logic.handleUserToggle}
+          handleLeadToggle={logic.handleLeadToggle}
+          handleSelectAll={logic.handleSelectAll}
+          handleAssign={logic.handleAssign}
+          onOpenChange={onOpenChange}
+        />
       </DialogContent>
     </Dialog>
   )
 }
 
-export type { TeamMember, AssignmentStrategy }
+export type { TeamMember }

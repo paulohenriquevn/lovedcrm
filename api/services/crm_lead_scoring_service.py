@@ -349,11 +349,10 @@ class LeadScoringService:
             }
 
         # Score all leads
-        scored_count = 0
         total_score = 0
         score_ranges = {"0-25": 0, "26-50": 0, "51-75": 0, "76-100": 0}
 
-        for lead in leads:
+        for _, lead in enumerate(leads, 1):
             score, factors = self.calculate_basic_score(lead)
 
             # Update lead
@@ -364,7 +363,6 @@ class LeadScoringService:
                 lead.duplicate_check_hash = self._generate_duplicate_hash(lead)
 
             # Update statistics
-            scored_count += 1
             total_score += score
 
             # Score distribution
@@ -379,6 +377,7 @@ class LeadScoringService:
 
         self.db.commit()
 
+        scored_count = len(leads)
         return {
             "total_leads": len(leads),
             "scored_leads": scored_count,

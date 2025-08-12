@@ -5,7 +5,8 @@ Pydantic schemas for Lead API validation and serialization.
 
 from datetime import datetime
 from decimal import Decimal
-from typing import Dict, List, Optional
+from enum import Enum
+from typing import Any, Dict, List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, Field
@@ -276,3 +277,37 @@ class AdvancedMetricsResponse(BaseModel):
     bottleneck_analysis: BottleneckAnalysis = Field(..., description="Bottleneck detection results")
     trending_data: List[TrendingData] = Field(..., description="Trending metrics over time")
     executive_summary: ExecutiveSummary = Field(..., description="Executive summary metrics")
+
+
+# Story 3.3: Lead Trends and UX Enhancement Schemas
+
+
+class TrendDirection(str, Enum):
+    """Trend direction enumeration."""
+
+    UP = "up"
+    DOWN = "down"
+    STABLE = "stable"
+
+
+class FactorImpact(BaseModel):
+    """Individual factor impact analysis."""
+
+    factor_name: str = Field(..., description="Name of the scoring factor")
+    current_value: float = Field(..., description="Current factor value")
+    change_value: float = Field(..., description="Change in factor value over period")
+    impact_level: str = Field(..., description="Impact level: low/medium/high")
+    description: str = Field(..., description="Human-readable impact description")
+
+
+class LeadScoreTrend(BaseModel):
+    """Lead score trend data for visualization."""
+
+    lead_id: UUID = Field(..., description="Lead UUID")
+    current_score: int = Field(..., description="Current lead score (0-100)")
+    trend_direction: TrendDirection = Field(..., description="Overall trend direction")
+    trend_value: float = Field(..., description="Numerical trend change (+/-)")
+    historical_data: List[Dict[str, Any]] = Field(..., description="Historical score data points")
+    factor_impacts: List[FactorImpact] = Field(..., description="Factor impact analysis")
+    analysis_period_days: int = Field(..., description="Number of days analyzed")
+    last_updated: datetime = Field(..., description="When analysis was generated")
