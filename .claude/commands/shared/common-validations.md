@@ -1,12 +1,28 @@
 # common-validations.md
 
-**🚨 COMPONENTE COMPARTILHADO: Validações Comuns para Todos os Agentes Executivos**
+**🚨 COMPONENTE COMPARTILHADO: Validações Comuns para Todos os Agentes Executivos B2B**
 
-**Este arquivo contém validações reutilizáveis para eliminar 1200+ linhas duplicadas nos agentes executivos. Todos os agentes devem referenciar este arquivo em vez de duplicar validações.**
+**Este arquivo contém validações reutilizáveis para eliminar 1200+ linhas duplicadas nos agentes executivos B2B. Todos os agentes devem referenciar este arquivo em vez de duplicar validações. PRODUTO EXCLUSIVAMENTE B2B - todas validações focam em isolamento organizacional e colaboração empresarial.**
 
 ---
 
 ## 📋 **LEITURA OBRIGATÓRIA ANTES DE QUALQUER EXECUÇÃO**
+
+### **🛡️ VALIDAÇÕES ANTI-ALUCINAÇÃO OBRIGATÓRIAS**
+
+**PRINCÍPIO FUNDAMENTAL**: Todo agente DEVE usar ferramentas Read/LS/Bash para verificar EVIDÊNCIAS REAIS antes de qualquer afirmação sobre o codebase.
+
+**FRASES OBRIGATÓRIAS DE HONESTIDADE:**
+- "Baseado na análise do arquivo X, linha Y..."
+- "Após executar comando Z, verifico que..."
+- "Não encontrei evidências de... preciso investigar mais"
+- "Confirmo pela saída do comando que..."
+
+**PADRÕES DE FACTUALIDADE OBRIGATÓRIOS:**
+- **Sempre fornecer contexto verificável**: Incluir snippet do arquivo/comando para cada afirmação
+- **Reduzir diversidade de resposta**: Usar apenas informações verificadas, evitar "possibilidades"
+- **Admitir ignorância imediatamente**: "Não sei" é preferível a especulação
+- **Citar fonte específica**: Arquivo + linha ou comando + output para cada claim técnico
 
 ### **🚨 COMPLIANCE E DOCUMENTAÇÃO FUNDAMENTAL (OBRIGATÓRIO)**
 
@@ -152,6 +168,12 @@ File System Issues: ❌ requirements.txt ou package.json corrompidos/ausentes
 Git Repository Issues: ❌ git status showing merge conflicts em arquivos críticos
   ❌ Unstaged changes em arquivos core (models, services, migrations)
   ❌ Branch state inconsistente ou detached HEAD
+
+🛡️ ANTI-ALUCINAÇÃO RED FLAGS:
+  ❌ **FALHA CRÍTICA**: Agente afirmar existência sem comando LS executado
+  ❌ **FALHA CRÍTICA**: Agente descrever conteúdo sem comando Read executado
+  ❌ **FALHA CRÍTICA**: Agente especular sobre estado sem verificação bash/grep
+  ❌ **FALHA CRÍTICA**: Agente fazer diagnóstico sem output do comando verificador
 ```
 
 #### **🔴 RED FLAGS DE ENVIRONMENT BREAKDOWN**
@@ -242,29 +264,38 @@ Multi-Tenancy Validation (CRITICAL): □ Organization isolation patterns identif
 
 ## 🎯 **SUCCESS CRITERIA TEMPLATES**
 
-### **📊 VALIDATION EVIDENCE REQUIREMENTS**
+### **📊 VALIDATION EVIDENCE REQUIREMENTS (ANTI-ALUCINAÇÃO)**
 
 ```yaml
 Evidence-Based Validation (TODOS OS AGENTES):
 
+  🛡️ OBRIGATÓRIO - TODAS as afirmações DEVEM incluir evidências:
+
   File Reading Evidence:
-    ✅ CHANGELOG.md: [COLAR 3-5 linhas das implementações recentes]
-    ✅ requirements.txt: [COLAR principais dependencies com versões]
-    ✅ package.json: [COLAR principais dependencies frontend]
-    ✅ ./migrate status: [COLAR output do comando]
+    ✅ CHANGELOG.md: [COLAR 3-5 linhas das implementações recentes REAIS]
+    ✅ requirements.txt: [COLAR principais dependencies com versões EXATAS]
+    ✅ package.json: [COLAR principais dependencies frontend VERIFICADAS]
+    ✅ ./migrate status: [COLAR output REAL do comando executado]
 
   Architecture Mapping Evidence:
-    ✅ api/models/: [LISTAR arquivos .py encontrados]
-    ✅ api/services/: [LISTAR services implementados]
-    ✅ components/ui/: [LISTAR componentes shadcn/ui disponíveis]
-    ✅ app/[locale]/admin/: [LISTAR estrutura de rotas admin]
+    ✅ api/models/: [LISTAR arquivos .py REALMENTE encontrados via LS]
+    ✅ api/services/: [LISTAR services REALMENTE implementados via LS]
+    ✅ components/ui/: [LISTAR componentes REALMENTE disponíveis via LS]
+    ✅ app/[locale]/admin/: [LISTAR estrutura REAL via LS]
 
   Health Check Evidence:
-    ✅ git status: [COLAR status output]
-    ✅ npm run typecheck: [CONFIRMAR zero errors ou COLAR errors]
-    ✅ Relevant tests: [COLAR test results baseados no tipo de mudança]
+    ✅ git status: [COLAR output REAL do comando]
+    ✅ npm run typecheck: [COLAR output REAL - zero errors ou erros específicos]
+    ✅ Relevant tests: [COLAR resultados REAIS de testes executados]
 
 ❌ FALHA CRÍTICA se qualquer validação não tiver EVIDÊNCIA REAL de execução
+❌ FALHA CRÍTICA se agente fizer afirmações sem comandos verificadores
+❌ FALHA CRÍTICA se agente especular sobre estado do sistema
+
+🔍 VALIDAÇÃO ANTI-ALUCINAÇÃO:
+- Toda linha afirmativa DEVE citar fonte verificável
+- Todo comando DEVE ser executado antes da conclusão
+- Toda dúvida DEVE ser explicitamente declarada
 ```
 
 ---

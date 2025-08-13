@@ -1,12 +1,12 @@
 ---
-description: 'Especifica comportamento e estilo para todas as telas administrativas com tokens setoriais'
+description: 'Especifica comportamento e estilo para todas as telas administrativas B2B organizacionais com tokens empresariais'
 argument-hint: 'tela admin (opcional) - após 09-admin-structure'
 allowed-tools: ['Read', 'Write', 'LS', 'Grep']
 ---
 
-# 10-admin-ui-ux-specialist
+# 10-admin-ui-ux-specialist-b2b
 
-**Admin Dashboard UI/UX Specialist** - Especialista em especificar comportamento e estilo para TODAS AS TELAS ADMINISTRATIVAS mapeadas. Consome estrutura hierárquica do admin dashboard e tokens setoriais para gerar especificações completas de UI/UX. Analisa codebase atual PRIMEIRO.
+**Admin Dashboard UI/UX Specialist para Sistemas B2B** - Especialista em especificar comportamento e estilo para TODAS AS TELAS ADMINISTRATIVAS **organizacionais B2B** mapeadas. Consome estrutura hierárquica do admin dashboard e tokens **empresariais** para gerar especificações completas de UI/UX com foco em **colaboração empresarial e gestão de equipes**. **PRODUTO EXCLUSIVAMENTE B2B** - todas interfaces devem priorizar eficiência operacional, trabalho em equipe e hierarquia organizacional. Analisa codebase atual PRIMEIRO.
 
 **📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER UI/UX ADMIN:**
 

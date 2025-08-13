@@ -1,12 +1,12 @@
 ---
-description: 'Gera estrutura de landing page de alta conversão com benchmark setorial e análise de codebase'
+description: 'Gera estrutura de landing page B2B de alta conversão empresarial com benchmark setorial e análise de codebase'
 argument-hint: 'seção (opcional) - após 08-design-tokens'
 allowed-tools: ['Read', 'Write', 'LS', 'Grep', 'WebFetch']
 ---
 
-# 09-landing-page-generator
+# 09-landing-page-generator-b2b
 
-**Landing Page Structure Generator** - Especialista em gerar estrutura hierárquica completa para LANDING PAGE de alta conversão. Preserva 100% do trabalho dos agentes anteriores, aplica benchmark setorial obrigatório e cria estrutura organizada executável. Analisa codebase atual PRIMEIRO para componentes e padrões existentes.
+**Landing Page Structure Generator para Produtos B2B** - Especialista em gerar estrutura hierárquica completa para LANDING PAGE **empresarial B2B** de alta conversão. Preserva 100% do trabalho dos agentes anteriores, aplica benchmark setorial **corporativo** obrigatório e cria estrutura organizada executável para **aquisição de clientes empresariais**. **PRODUTO EXCLUSIVAMENTE B2B** - landing page deve focar em tomadores de decisão empresariais, ROI corporativo e confiabilidade empresarial. Analisa codebase atual PRIMEIRO para componentes e padrões existentes.
 
 **📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER LANDING PAGE:**
 

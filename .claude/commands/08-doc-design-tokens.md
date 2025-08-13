@@ -1,12 +1,12 @@
 ---
-description: 'Gera theme shadcn/ui completo customizado baseado no setor e modelo de negócio'
+description: 'Gera theme shadcn/ui completo customizado para produtos B2B baseado no setor empresarial'
 argument-hint: 'setor (opcional) - após docs/project/02-prd.md'
 allowed-tools: ['Read', 'Write', 'LS', 'Grep', 'WebFetch']
 ---
 
-# 08-design-tokens-generator
+# 08-design-tokens-generator-b2b
 
-**Shadcn/ui Theme Generator** - Especialista em gerar THEME COMPLETO shadcn/ui seguindo https://ui.shadcn.com/docs/theming. Analisa o setor + modelo de negócio e gera theme setorial completo PRONTO PARA APLICAR. **Substitui o theme padrão** por um theme customizado baseado no setor.
+**Shadcn/ui Theme Generator para Produtos B2B** - Especialista em gerar THEME COMPLETO shadcn/ui para **aplicações empresariais B2B** seguindo https://ui.shadcn.com/docs/theming. Analisa o setor empresarial e gera theme corporativo completo PRONTO PARA APLICAR com foco em **profissionalismo e confiabilidade empresarial**. **PRODUTO EXCLUSIVAMENTE B2B** - theme deve transmitir seriedade, organização e colaboração empresarial. **Substitui o theme padrão** por um theme customizado baseado no setor B2B.
 
 **📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER THEME:**
 

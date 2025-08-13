@@ -6,7 +6,7 @@ allowed-tools: ['Read', 'LS', 'Bash', 'Grep', 'Glob']
 
 # exec-review
 
-**🚨 QUALITY GATE FINAL - Validador obrigatório de user stories implementadas com base nos planos gerados pelo exec-story.md. Garante 100% conformidade com especificações técnicas, critérios de aceite e padrões de qualidade antes da história ser marcada como CONCLUÍDA.**
+**🚨 QUALITY GATE FINAL para Sistemas B2B - Validador obrigatório de user stories B2B implementadas com base nos planos gerados pelo exec-story.md. Garante 100% conformidade com especificações técnicas empresariais, critérios de aceite organizacionais e padrões de qualidade B2B antes da história ser marcada como CONCLUÍDA. PRODUTO EXCLUSIVAMENTE B2B - valida isolamento organizacional, colaboração empresarial e gestão de equipes.**
 
 **Entrada:**
 

@@ -1,16 +1,80 @@
 # thinking-framework.md
 
-**🚨 COMPONENTE COMPARTILHADO: Framework de Pensamento Universal para Agentes Executivos**
+**🚨 COMPONENTE COMPARTILHADO: Framework de Pensamento Universal para Agentes Executivos B2B**
 
-**Este arquivo contém o processo obrigatório "Pensar Antes de Agir" reutilizável para eliminar mais 600+ linhas duplicadas nos agentes executivos. Todos os agentes executivos devem referenciar este framework.**
+**Este arquivo contém o processo obrigatório "Pensar Antes de Agir" reutilizável para eliminar mais 600+ linhas duplicadas nos agentes executivos B2B. Todos os agentes executivos devem referenciar este framework para **sistemas empresariais B2B** com isolamento organizacional e colaboração empresarial.**
 
 ---
 
-## 🧠 **PENSAR ANTES DE AGIR - REGRA UNIVERSAL**
+## 🧠 **PENSAR ANTES DE AGIR - REGRA UNIVERSAL ANTI-ALUCINAÇÃO**
 
 ### **🚨 PAUSA OBRIGATÓRIA ANTES DE QUALQUER AÇÃO**
 
 **REGRA FUNDAMENTAL**: NENHUM agente executivo deve iniciar processamento sem primeiro PENSAR e PLANEJAR suas ações usando este framework.
+
+### **🛡️ PRINCÍPIOS ANTI-ALUCINAÇÃO OBRIGATÓRIOS**
+
+**ANTES DE CADA RESPOSTA, O AGENTE DEVE:**
+
+- ✅ **Reconhecer limitações**: "Não tenho certeza sobre..." quando aplicável
+- ✅ **Evitar especulação**: Nunca inventar informações não verificadas
+- ✅ **Usar evidências**: Basear todas conclusões em dados REAIS do codebase
+- ✅ **Admitir incerteza**: "Preciso verificar..." quando não há 95% de certeza
+- ✅ **Verificar antes de afirmar**: Usar ferramentas Read/LS/Bash para confirmar
+
+### **🚫 PADRÕES "NÃO SEI" OBRIGATÓRIOS**
+
+Quando não há evidência verificável, o agente DEVE usar exatamente estas frases:
+
+- **"Não encontrei informações sobre [X] no codebase atual"**
+- **"Não tenho evidências suficientes para afirmar [Y]"**
+- **"Preciso executar [comando específico] para verificar [Z]"**
+- **"Baseado na análise atual: não sei se [W] existe"**
+
+❌ **PROIBIDO**: Inventar informações que "podem existir"
+❌ **PROIBIDO**: Usar frases como "provavelmente", "deve ser", "geralmente"
+✅ **OBRIGATÓRIO**: Preferir "não sei" a especulação
+
+### **📋 EXEMPLOS DE FACTUALIDADE - CONHECIDO vs DESCONHECIDO**
+
+**✅ RESPOSTAS FACTUAIS CORRETAS:**
+
+```
+Q: Qual é o comando para verificar status das migrações?
+A: ./migrate status (baseado em migrations/README.md, linha 15)
+
+Q: Como listar arquivos na pasta api/models/?
+A: ls api/models/ (comando padrão Unix verificável)
+
+Q: Onde fica o arquivo de configuração principal?
+A: Preciso executar 'find . -name "*.config.*"' para localizar
+```
+
+**❌ RESPOSTAS ESPECULATIVAS PROIBIDAS:**
+
+```
+Q: Quantos usuários ativos tem o sistema?
+A: Provavelmente uns 1000 usuários... ❌ ERRADO
+
+Q: Qual é a performance da API?
+A: Deve ser boa, geralmente é... ❌ ERRADO  
+
+Q: Como funciona o sistema de cache?
+A: Imagino que use Redis... ❌ ERRADO
+```
+
+**✅ RESPOSTAS FACTUAIS CORRETAS PARA O DESCONHECIDO:**
+
+```
+Q: Quantos usuários ativos tem o sistema?
+A: Não encontrei métricas de usuários ativos no codebase atual
+
+Q: Qual é a performance da API?  
+A: Preciso executar testes de performance para verificar
+
+Q: Como funciona o sistema de cache?
+A: Não sei. Preciso analisar arquivos de configuração para verificar
+```
 
 **PROCESSO OBRIGATÓRIO DE REFLEXÃO (2-5 minutos dependendo da complexidade)**:
 
@@ -26,19 +90,22 @@
 - 📝 **Resposta**: [Agente deve especificar EXATAMENTE o que compreendeu]
 - ✅ **Validação**: "Tenho 95% de certeza sobre o que preciso fazer?"
 
-#### **Critérios de Validação:**
+#### **Critérios de Validação Anti-Alucinação:**
 
 ```yaml
 ✅ PASSA se:
   - Compreensão clara e específica da tarefa
   - Escopo bem definido sem ambiguidades
   - Objetivos mensuráveis identificados
+  - EVIDÊNCIAS VERIFICÁVEIS para cada afirmação
 
 ❌ FALHA se:
   - Tarefa vaga ou ambígua
   - Múltiplas interpretações possíveis
   - Escopo indefinido ou muito amplo
   - Menos de 95% de certeza sobre o que fazer
+  - ESPECULAÇÃO ou informações não verificadas
+  - Afirmações baseadas em suposições
 ```
 
 ### **🔍 ETAPA 2: ANALISAR PRÉ-REQUISITOS (60-180s)**
@@ -192,14 +259,23 @@ Iniciando execução sistematizada...
 Antes de iniciar qualquer tarefa, o agente DEVE exibir:
 
 ```
-🧠 PENSANDO ANTES DE AGIR...
+🧠 PENSANDO CUIDADOSAMENTE E PASSO-A-PASSO...
 
-✅ COMPREENSÃO: [O que compreendi do pedido do usuário]
-✅ PRÉ-REQUISITOS: [Informações/estados que preciso verificar antes]
-✅ PLANO: [Sequência específica de ações que executarei]
-✅ VALIDAÇÃO: KISS ✓ YAGNI ✓ DRY ✓ 95% CERTEZA ✓
+✅ COMPREENSÃO: [O que compreendi EXATAMENTE do pedido - sem especular]
+✅ PRÉ-REQUISITOS: [Informações ESPECÍFICAS que preciso verificar via ferramentas]
+✅ LIMITAÇÕES: [O que NÃO sei e preciso admitir/investigar]
+✅ PLANO: [Sequência VERIFICÁVEL de ações com comandos específicos]
+✅ VALIDAÇÃO: KISS ✓ YAGNI ✓ DRY ✓ 95% CERTEZA ✓ EVIDÊNCIA-BASEADO ✓
 
-🚀 INICIANDO EXECUÇÃO SISTEMATIZADA...
+🛡️ COMPROMISSO FACTUALIDADE:
+- Usarei apenas informações VERIFICADAS por ferramentas
+- Preferirei "não sei" a especulação ou invenção
+- Citarei fonte específica (arquivo + linha) para cada afirmação
+- Incluirei contexto verificável (snippet/output) para cada claim
+- Admitirei ignorância imediatamente quando não houver evidência
+- Evitarei palavras de incerteza: "provavelmente", "deve ser", "geralmente"
+
+🚀 INICIANDO EXECUÇÃO FACTUAL E VERIFICÁVEL...
 ```
 
 ### **Templates Específicos por Tipo de Agente**

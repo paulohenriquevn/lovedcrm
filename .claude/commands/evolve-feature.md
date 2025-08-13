@@ -6,7 +6,7 @@ allowed-tools: ['Read', 'Write', 'Edit', 'LS', 'Bash', 'Grep', 'Glob', 'WebFetch
 
 # evolve-feature
 
-**Analisa, planeja e cria tasks para evolução de features seguindo arquitetura Multi-Tenant SaaS**
+**Analisa, planeja e cria tasks para evolução de features B2B seguindo arquitetura Multi-Tenant SaaS empresarial com isolamento organizacional rigoroso. PRODUTO EXCLUSIVAMENTE B2B - todas evoluções devem considerar colaboração empresarial, gestão de equipes e separação de dados entre organizações.**
 
 **📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER EVOLUÇÃO:**
 

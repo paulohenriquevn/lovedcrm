@@ -1,8 +1,8 @@
 # shared/
 
-**🚨 COMPONENTES COMPARTILHADOS: Elimina 2000+ linhas duplicadas nos agentes executivos**
+**🚨 COMPONENTES COMPARTILHADOS B2B: Elimina 2000+ linhas duplicadas nos agentes executivos B2B**
 
-Este diretório contém componentes reutilizáveis que devem ser referenciados por todos os agentes executivos para garantir consistência e eliminar duplicação massiva.
+Este diretório contém componentes reutilizáveis que devem ser referenciados por todos os agentes executivos B2B para garantir consistência e eliminar duplicação massiva em **sistemas empresariais com isolamento organizacional**.
 
 ---
 

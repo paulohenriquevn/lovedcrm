@@ -1,12 +1,12 @@
 ---
-description: 'Gera estrutura hierárquica completa para todas as telas do painel administrativo'
+description: 'Gera estrutura hierárquica completa para todas as telas do painel administrativo B2B organizacional'
 argument-hint: 'módulo admin (opcional) - após 08-design-tokens'
 allowed-tools: ['Read', 'Write', 'LS', 'Grep']
 ---
 
-# 09-admin-structure-generator
+# 09-admin-structure-generator-b2b
 
-**Admin Dashboard Structure Generator** - Especialista em gerar estrutura hierárquica completa para TODAS AS TELAS DO ADMIN. Mapeia funcionalidades existentes + novas do PRD e cria estrutura organizacional navegável para área administrativa. Analisa codebase atual PRIMEIRO.
+**Admin Dashboard Structure Generator para Sistemas B2B** - Especialista em gerar estrutura hierárquica completa para TODAS AS TELAS DO ADMIN **organizacional B2B**. Mapeia funcionalidades existentes + novas do PRD e cria estrutura organizacional navegável para **área administrativa empresarial** com foco em **gestão de equipes, permissões e colaboração organizacional**. **PRODUTO EXCLUSIVAMENTE B2B** - todas telas devem suportar contexto organizacional e isolamento de dados. Analisa codebase atual PRIMEIRO.
 
 **📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER ADMIN STRUCTURE:**
 

@@ -6,7 +6,7 @@ allowed-tools: ['Read', 'Write', 'Edit', 'LS', 'Bash', 'Grep', 'Glob']
 
 # exec-bug
 
-**Investiga e corrige bugs no sistema Multi-Tenant SaaS mantendo isolamento organizacional**
+**Investiga e corrige bugs em sistemas Multi-Tenant SaaS B2B mantendo isolamento organizacional rigoroso e colaboração empresarial. PRODUTO EXCLUSIVAMENTE B2B - todas correções devem preservar separação de dados entre organizações e suportar workflows empresariais.**
 
 **📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER DEBUG:**
 
