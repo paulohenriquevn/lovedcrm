@@ -82,7 +82,7 @@ class RoleManagementService:
         if not membership:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="User is not a member of this organization",
+                detail="User is not a member",
             )
 
         return membership

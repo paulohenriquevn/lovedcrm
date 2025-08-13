@@ -56,8 +56,8 @@ def _get_member_to_remove(db: Session, organization_id: UUID, user_id: UUID):
 
     if not member_to_remove:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Member not found in organization",
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User is not a member",
         )
 
     return member_to_remove
@@ -68,7 +68,7 @@ def _prepare_removed_user_data(db: Session, user_id: UUID, member_to_remove) -> 
     removed_user_data = {
         "user_id": str(user_id),
         "role": member_to_remove.role,
-        "joined_at": member_to_remove.joined_at.isoformat() if member_to_remove.joined_at else None,
+        "joined_at": member_to_remove.created_at.isoformat() if member_to_remove.created_at else None,
     }
 
     # Get user details if available
@@ -199,8 +199,8 @@ async def change_member_role(
 
     if not current_membership:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Member not found in organization",
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User is not a member",
         )
 
     old_role = current_membership.role
