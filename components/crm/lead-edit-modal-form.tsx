@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 
 import { LeadEditFormFields } from './lead-edit-form-fields'
-import { LeadEditForm } from './lead-edit-modal-helpers'
+import { LeadEditForm } from './lead-edit-modal-utils'
 
 interface LeadEditModalFormProps {
   form: UseFormReturn<LeadEditForm>

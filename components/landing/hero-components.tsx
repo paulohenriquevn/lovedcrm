@@ -24,7 +24,7 @@ import {
   handleDemoRequestClick,
   type ImageLoadingState,
   type ImageType,
-} from './hero-helpers'
+} from './hero-utils'
 
 interface HeroHeaderProps {
   heroAnimations: typeof heroAnimations

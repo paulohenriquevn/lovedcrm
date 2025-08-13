@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
 import { socialLinks, certifications } from './footer-data'
-import { scrollToTop, handleNewsletterSignup, type FooterSection } from './footer-helpers'
+import { scrollToTop, handleNewsletterSignup, type FooterSection } from './footer-utils'
 
 interface FooterBrandSectionProps {
   socialLinks: typeof socialLinks

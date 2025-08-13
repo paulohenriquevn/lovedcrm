@@ -1,29 +1,27 @@
 /**
  * Lead Edit Modal - Modal para edição de leads
- * Modal completo para editar leads existentes com validação
+ * Simplified modal with extracted components for better maintainability
  */
 
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 
-import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Form } from '@/components/ui/form'
 import { PipelineStage, type Lead } from '@/services/crm-leads'
 
-import { LeadEditFormFields } from './lead-edit-form-fields'
-import {
-  type LeadEditForm,
-  initializeFormWithLead,
-  resetForm,
-  getDefaultFormValues,
-} from './lead-edit-form-helpers'
 import { useLeadEditLogic } from './lead-edit-logic'
-import { useTagManager } from './lead-edit-tags-manager'
+import { LeadEditModalForm } from './lead-edit-modal-form'
+import {
+  LeadEditForm,
+  createDefaultFormValues,
+  populateFormWithLeadData,
+  resetFormState,
+  handleTagOperations,
+} from './lead-edit-modal-utils'
 
 interface LeadEditModalProps {
   isOpen: boolean
@@ -44,36 +42,71 @@ const leadEditSchema = z.object({
   isFavorite: z.boolean().optional(),
 })
 
+function useLeadEditModalState(): {
+  currentTags: string[]
+  setCurrentTags: (tags: string[]) => void
+  tagInput: string
+  setTagInput: (input: string) => void
+} {
+  const [currentTags, setCurrentTags] = useState<string[]>([])
+  const [tagInput, setTagInput] = useState('')
+
+  return {
+    currentTags,
+    setCurrentTags,
+    tagInput,
+    setTagInput,
+  }
+}
+
 export function LeadEditModal({
   isOpen,
   onClose,
   onSuccess,
   lead,
 }: LeadEditModalProps): React.ReactElement | null {
+  const { currentTags, setCurrentTags, tagInput, setTagInput } = useLeadEditModalState()
+
   const form = useForm<LeadEditForm>({
     resolver: zodResolver(leadEditSchema),
-    defaultValues: getDefaultFormValues(),
+    defaultValues: createDefaultFormValues(),
   })
 
-  const tagManager = useTagManager(form)
+  const handleClose = useCallback((): void => {
+    resetFormState(form, setCurrentTags, setTagInput)
+    onClose()
+  }, [form, setCurrentTags, setTagInput, onClose])
 
-  const { isLoading, onSubmit } = useLeadEditLogic({
+  const { onSubmit, isLoading } = useLeadEditLogic({
     lead,
-    currentTags: tagManager.currentTags,
-    onClose,
+    currentTags,
+    onClose: handleClose,
     onSuccess,
   })
 
+  const { addTag, removeTag, handleTagKeyPress } = handleTagOperations({
+    currentTags,
+    tagInput,
+    setCurrentTags,
+    setTagInput,
+    form,
+  })
+
+  // Populate form when lead changes
   useEffect(() => {
     if (lead && isOpen) {
-      initializeFormWithLead(form, lead, tagManager.setCurrentTags)
+      populateFormWithLeadData(form, lead, setCurrentTags)
     }
-  }, [lead, isOpen, form, tagManager.setCurrentTags])
+  }, [lead, isOpen, form, setCurrentTags])
 
-  const handleClose = (): void => {
-    resetForm(form, tagManager.setCurrentTags, tagManager.setTagInput)
-    onClose()
-  }
+  const handleFormSubmit = useCallback(
+    (e: React.FormEvent): void => {
+      e.preventDefault()
+      const formData = form.getValues()
+      void onSubmit(formData)
+    },
+    [form, onSubmit]
+  )
 
   if (!lead) {
     return null
@@ -86,35 +119,18 @@ export function LeadEditModal({
           <DialogTitle>Editar Lead</DialogTitle>
         </DialogHeader>
 
-        <Form {...form}>
-          <form
-            onSubmit={e => {
-              e.preventDefault()
-              void form.handleSubmit(onSubmit)(e)
-            }}
-            className="space-y-4"
-          >
-            <LeadEditFormFields
-              form={form}
-              isLoading={isLoading}
-              currentTags={tagManager.currentTags}
-              tagInput={tagManager.tagInput}
-              onTagInputChange={tagManager.setTagInput}
-              onAddTag={tagManager.addTag}
-              onRemoveTag={tagManager.removeTag}
-              onTagKeyPress={tagManager.handleTagInputKeyDown}
-            />
-
-            <div className="flex justify-end gap-2 pt-4">
-              <Button type="button" variant="outline" onClick={handleClose} disabled={isLoading}>
-                Cancelar
-              </Button>
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? 'Salvando...' : 'Salvar Alterações'}
-              </Button>
-            </div>
-          </form>
-        </Form>
+        <LeadEditModalForm
+          form={form}
+          isLoading={isLoading}
+          currentTags={currentTags}
+          tagInput={tagInput}
+          onTagInputChange={setTagInput}
+          onAddTag={addTag}
+          onRemoveTag={removeTag}
+          onTagKeyPress={handleTagKeyPress}
+          onSubmit={handleFormSubmit}
+          onCancel={handleClose}
+        />
       </DialogContent>
     </Dialog>
   )

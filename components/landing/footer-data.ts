@@ -5,7 +5,7 @@
 
 import { Instagram, Linkedin, Youtube, Facebook, Twitter, Shield, Award } from 'lucide-react'
 
-import type { FooterSection, SocialLink, Certification } from './footer-helpers'
+import type { FooterSection, SocialLink, Certification } from './footer-utils'
 
 export const footerSections: FooterSection[] = [
   {

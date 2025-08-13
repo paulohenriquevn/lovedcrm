@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button'
 import { heroImages, companyLogos, getImageProps } from '@/lib/images'
 
 import { TimelineSection, FeatureHighlights } from './hero-dashboard-utils'
-import { handleCreateOrganizationClick, handleDemoRequestClick } from './hero-helpers'
+import { handleCreateOrganizationClick, handleDemoRequestClick } from './hero-utils'
 
 import type { HeroAnimations } from '@/hooks/use-scroll-animation'
 

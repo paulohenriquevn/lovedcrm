@@ -173,6 +173,31 @@ class YourModel(Base):
 
 ## Development Patterns
 
+### Component Naming Conventions
+
+**File Suffixes (Standardized):**
+- `-utils.tsx/.ts` → Pure utility functions, data transformations, validators
+- `-components.tsx` → Sub-components extracted from main component
+- `-handlers.tsx` → Event handlers and interaction logic  
+- `-types.ts` → Type definitions and interfaces
+- `-hooks.tsx` → Custom React hooks
+
+**Examples:**
+```
+✅ lead-edit-modal-utils.ts     # Form helpers, validation functions
+✅ pipeline-kanban-helpers.tsx  # React components (StageColumn, etc)
+✅ pipeline-drag-handlers.tsx   # Drag & drop event handlers
+✅ pipeline-types.ts            # TypeScript interfaces
+✅ use-pipeline-hooks.tsx       # Custom React hooks
+```
+
+**Rules:**
+- Use `-utils` for pure functions (no React dependencies)
+- Use `-helpers` only for React components
+- Use `-handlers` for event handling logic
+- Keep `-components` for extracted sub-components
+- Use `-types` for TypeScript definitions only
+
 ### Frontend
 
 - **Container-Component**: Separate data logic from presentation

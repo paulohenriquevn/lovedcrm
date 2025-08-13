@@ -12,7 +12,7 @@ import { ImageLoading } from '@/components/loading/section-loading'
 import { Badge } from '@/components/ui/badge'
 import { heroImages, getImageProps } from '@/lib/images'
 
-import type { ImageLoadingState, ImageType } from './hero-helpers'
+import type { ImageLoadingState, ImageType } from './hero-utils'
 
 interface HeroAnimations {
   mockup: {

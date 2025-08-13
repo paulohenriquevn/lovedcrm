@@ -18,7 +18,7 @@ import {
 } from '@/hooks/use-scroll-animation'
 import { companyLogos, getImageProps } from '@/lib/images'
 
-import { handleCreateOrganizationClick, handleDemoRequestClick } from './hero-helpers'
+import { handleCreateOrganizationClick, handleDemoRequestClick } from './hero-utils'
 
 interface HeroSectionProps {
   imageLoading: {
