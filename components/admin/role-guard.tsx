@@ -1,11 +1,6 @@
 "use client"
 
-/**
- * 🛡️ Role Guard Components - Permission-Based UI Rendering
- * 
- * Components that conditionally render content based on user roles and permissions.
- * Implements role hierarchy: Owner > Admin > Member > Viewer
- */
+// Role Guard Components - Permission-Based UI Rendering
 
 import { AlertTriangle, Lock } from 'lucide-react'
 import React from 'react'
@@ -14,81 +9,18 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-// Role hierarchy definition
-export enum Role {
-  OWNER = 'owner',
-  ADMIN = 'admin', 
-  MEMBER = 'member',
-  VIEWER = 'viewer',
-}
+export enum Role { OWNER = 'owner', ADMIN = 'admin', MEMBER = 'member', VIEWER = 'viewer' }
 
-// Role hierarchy levels (higher number = more permissions)
-const ROLE_LEVELS = {
-  [Role.VIEWER]: 1,
-  [Role.MEMBER]: 2,
-  [Role.ADMIN]: 3,
-  [Role.OWNER]: 4,
-} as const
+const ROLE_LEVELS = { [Role.VIEWER]: 1, [Role.MEMBER]: 2, [Role.ADMIN]: 3, [Role.OWNER]: 4 } as const
 
-// All possible permissions
-export type Permission = 
-  | 'manage_organization'
-  | 'manage_members'
-  | 'manage_roles'
-  | 'manage_billing'
-  | 'manage_settings'
-  | 'view_audit_logs'
-  | 'export_data'
-  | 'delete_organization'
-  | 'view_members'
-  | 'manage_leads'
-  | 'view_leads'
-  | 'manage_communications'
-  | 'view_communications'
+export type Permission = 'manage_organization' | 'manage_members' | 'manage_roles' | 'manage_billing' | 'manage_settings' | 'view_audit_logs' | 'export_data' | 'delete_organization' | 'view_members' | 'manage_leads' | 'view_leads' | 'manage_communications' | 'view_communications'
 
-// Permission sets by role
 const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
-  [Role.OWNER]: [
-    'manage_organization',
-    'manage_members', 
-    'manage_roles',
-    'manage_billing',
-    'manage_settings',
-    'view_audit_logs',
-    'export_data',
-    'delete_organization',
-    'view_members',
-    'manage_leads',
-    'view_leads',
-    'manage_communications',
-    'view_communications',
-  ],
-  [Role.ADMIN]: [
-    'manage_members',
-    'manage_roles', 
-    'manage_settings',
-    'view_audit_logs',
-    'export_data',
-    'view_members',
-    'manage_leads',
-    'view_leads', 
-    'manage_communications',
-    'view_communications',
-  ],
-  [Role.MEMBER]: [
-    'view_members',
-    'manage_leads',
-    'view_leads',
-    'manage_communications', 
-    'view_communications',
-  ],
-  [Role.VIEWER]: [
-    'view_leads',
-    'view_communications',
-  ],
+  [Role.OWNER]: ['manage_organization', 'manage_members', 'manage_roles', 'manage_billing', 'manage_settings', 'view_audit_logs', 'export_data', 'delete_organization', 'view_members', 'manage_leads', 'view_leads', 'manage_communications', 'view_communications'],
+  [Role.ADMIN]: ['manage_members', 'manage_roles', 'manage_settings', 'view_audit_logs', 'export_data', 'view_members', 'manage_leads', 'view_leads', 'manage_communications', 'view_communications'],
+  [Role.MEMBER]: ['view_members', 'manage_leads', 'view_leads', 'manage_communications', 'view_communications'],
+  [Role.VIEWER]: ['view_leads', 'view_communications'],
 }
-
-// Types
 interface RoleGuardProps {
   children: React.ReactNode
   requiredRole?: Role | Role[]
@@ -99,7 +31,6 @@ interface RoleGuardProps {
   showReason?: boolean
   className?: string
 }
-
 interface PermissionCheckProps {
   permission: Permission | Permission[]
   currentUserRole?: string
@@ -107,54 +38,45 @@ interface PermissionCheckProps {
   fallback?: React.ReactNode
   mode?: 'hide' | 'disable' | 'replace'
 }
-
-// Helper functions
 function normalizeRole(role?: string): Role {
-  if (!role) {return Role.VIEWER}
+  if (typeof role !== 'string' || role.trim() === '') {return Role.VIEWER}
   const lowerRole = role.toLowerCase()
-  return (Object.values(Role).find(r => r === lowerRole) != null) || Role.VIEWER
+  return Object.values(Role).includes(lowerRole as Role) ? (lowerRole as Role) : Role.VIEWER
 }
-
 function getRoleLevel(role: Role): number {
-  return ROLE_LEVELS[role] || ROLE_LEVELS[Role.VIEWER]
+  return ROLE_LEVELS[role] ?? ROLE_LEVELS[Role.VIEWER]
 }
-
 function hasRequiredRole(currentRole: Role, requiredRole: Role | Role[]): boolean {
   if (Array.isArray(requiredRole)) {
     return requiredRole.some(role => getRoleLevel(currentRole) >= getRoleLevel(role))
   }
   return getRoleLevel(currentRole) >= getRoleLevel(requiredRole)
 }
-
 function hasPermission(currentRole: Role, permission: Permission | Permission[]): boolean {
-  const userPermissions = ROLE_PERMISSIONS[currentRole] || []
-  
+  const userPermissions = ROLE_PERMISSIONS[currentRole] ?? []
   if (Array.isArray(permission)) {
     return permission.some(p => userPermissions.includes(p))
   }
-  
   return userPermissions.includes(permission)
 }
-
 function getRequiredRoleLabel(requiredRole: Role | Role[]): string {
   if (Array.isArray(requiredRole)) {
     return requiredRole.map(r => r.charAt(0).toUpperCase() + r.slice(1)).join(' or ')
   }
   return requiredRole.charAt(0).toUpperCase() + requiredRole.slice(1)
 }
-
 // Default fallback components
 function AccessDeniedCard({ 
   reason, 
   currentRole, 
   requiredRole,
-  requiredPermission 
+  requiredPermission: _requiredPermission 
 }: {
   reason?: string
   currentRole: Role
   requiredRole?: Role | Role[]
   requiredPermission?: Permission | Permission[]
-}) {
+}): JSX.Element {
   return (
     <Card className="border-destructive/50">
       <CardHeader>
@@ -163,7 +85,7 @@ function AccessDeniedCard({
           Access Denied
         </CardTitle>
         <CardDescription>
-          {reason || 'You do not have sufficient permissions to access this content.'}
+          {reason ?? 'You do not have sufficient permissions to access this content.'}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -172,17 +94,19 @@ function AccessDeniedCard({
           <Badge variant="outline">{currentRole.charAt(0).toUpperCase() + currentRole.slice(1)}</Badge>
         </div>
         
-        {requiredRole ? <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Required role:</span>
-            <Badge variant="secondary">{getRequiredRoleLabel(requiredRole)}</Badge>
-          </div> : null}
+{requiredRole === undefined ? null : (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">Required role:</span>
+              <Badge variant="secondary">{getRequiredRoleLabel(requiredRole)}</Badge>
+            </div>
+          )}
         
-        {requiredPermission ? <div className="flex items-center gap-2">
+        {Boolean(_requiredPermission) && <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Required permission:</span>
             <Badge variant="outline" className="font-mono text-xs">
-              {Array.isArray(requiredPermission) ? requiredPermission.join(', ') : requiredPermission}
+              {Array.isArray(_requiredPermission) ? _requiredPermission.join(', ') : _requiredPermission}
             </Badge>
-          </div> : null}
+          </div>}
       </CardContent>
     </Card>
   )
@@ -191,20 +115,59 @@ function AccessDeniedCard({
 function AccessDeniedAlert({ 
   currentRole,
   requiredRole,
-  requiredPermission 
+  requiredPermission: _requiredPermission 
 }: {
   currentRole: Role
   requiredRole?: Role | Role[]
   requiredPermission?: Permission | Permission[]
-}) {
+}): JSX.Element {
   return (
     <Alert variant="destructive">
       <AlertTriangle className="h-4 w-4" />
       <AlertDescription>
-        This action requires {requiredRole ? `${getRequiredRoleLabel(requiredRole)} role` : 'additional permissions'}.
+        This action requires {requiredRole === undefined ? 'additional permissions' : `${getRequiredRoleLabel(requiredRole)} role`}.
         Your current role: <Badge variant="outline" className="ml-1">{currentRole}</Badge>
       </AlertDescription>
     </Alert>
+  )
+}
+
+// Helper function to render access denied content
+function renderAccessDeniedContent(props: {
+  currentRole: Role
+  requiredRole?: Role | Role[]
+  requiredPermission?: Permission | Permission[]
+  fallback?: React.ReactNode
+  showReason?: boolean
+  className?: string
+}): JSX.Element {
+  const { currentRole, requiredRole, requiredPermission, fallback, showReason, className } = props
+  if (fallback === undefined) {
+    // Continue to next condition
+  } else {
+    return <div className={className}>{fallback}</div>
+  }
+  
+  if (showReason === true) {
+    return (
+      <div className={className}>
+        <AccessDeniedCard
+          currentRole={currentRole}
+          requiredRole={requiredRole}
+          requiredPermission={requiredPermission}
+        />
+      </div>
+    )
+  }
+  
+  return (
+    <div className={className}>
+      <AccessDeniedAlert
+        currentRole={currentRole}
+        requiredRole={requiredRole}
+        requiredPermission={requiredPermission}
+      />
+    </div>
   )
 }
 
@@ -218,16 +181,16 @@ export function RoleGuard({
   mode = 'hide',
   showReason = false,
   className = '',
-}: RoleGuardProps) {
+}: RoleGuardProps): JSX.Element | null {
   const currentRole = normalizeRole(currentUserRole)
   
   // Check role requirements
-  const hasRoleAccess = requiredRole ? hasRequiredRole(currentRole, requiredRole) : true
+  const hasRoleAccess = requiredRole === undefined ? true : hasRequiredRole(currentRole, requiredRole)
   
   // Check permission requirements
-  const hasPermissionAccess = requiredPermission 
-    ? hasPermission(currentRole, requiredPermission) 
-    : true
+  const hasPermissionAccess = requiredPermission === undefined
+    ? true
+    : hasPermission(currentRole, requiredPermission)
   
   // Determine if access should be granted
   const hasAccess = hasRoleAccess && hasPermissionAccess
@@ -252,31 +215,14 @@ export function RoleGuard({
     }
       
     case 'replace': {
-      if (fallback) {
-        return <div className={className}>{fallback}</div>
-      }
-      
-      if (showReason) {
-        return (
-          <div className={className}>
-            <AccessDeniedCard
-              currentRole={currentRole}
-              requiredRole={requiredRole}
-              requiredPermission={requiredPermission}
-            />
-          </div>
-        )
-      }
-      
-      return (
-        <div className={className}>
-          <AccessDeniedAlert
-            currentRole={currentRole}
-            requiredRole={requiredRole}
-            requiredPermission={requiredPermission}
-          />
-        </div>
-      )
+      return renderAccessDeniedContent({
+        currentRole,
+        requiredRole,
+        requiredPermission,
+        fallback,
+        showReason,
+        className
+      })
     }
       
     default: {
@@ -292,7 +238,7 @@ export function PermissionGuard({
   children,
   fallback,
   mode = 'hide',
-}: PermissionCheckProps) {
+}: PermissionCheckProps): JSX.Element | null {
   return (
     <RoleGuard
       requiredPermission={permission}
@@ -305,60 +251,10 @@ export function PermissionGuard({
   )
 }
 
-// Specialized role guards for common use cases
-export function AdminOnlyGuard({
-  children,
-  currentUserRole,
-  fallback,
-  mode = 'hide',
-}: Omit<RoleGuardProps, 'requiredRole'>) {
-  return (
-    <RoleGuard
-      requiredRole={Role.ADMIN}
-      currentUserRole={currentUserRole}
-      fallback={fallback}
-      mode={mode}
-    >
-      {children}
-    </RoleGuard>
-  )
-}
-
-export function OwnerOnlyGuard({
-  children,
-  currentUserRole,
-  fallback,
-  mode = 'hide',
-}: Omit<RoleGuardProps, 'requiredRole'>) {
-  return (
-    <RoleGuard
-      requiredRole={Role.OWNER}
-      currentUserRole={currentUserRole}
-      fallback={fallback}
-      mode={mode}
-    >
-      {children}
-    </RoleGuard>
-  )
-}
-
-export function MemberOrAboveGuard({
-  children,
-  currentUserRole,
-  fallback,
-  mode = 'hide',
-}: Omit<RoleGuardProps, 'requiredRole'>) {
-  return (
-    <RoleGuard
-      requiredRole={Role.MEMBER}
-      currentUserRole={currentUserRole}
-      fallback={fallback}
-      mode={mode}
-    >
-      {children}
-    </RoleGuard>
-  )
-}
+// Specialized guards - use RoleGuard directly for custom needs
+export function AdminOnlyGuard(props: Omit<RoleGuardProps, 'requiredRole'>): JSX.Element | null { return <RoleGuard requiredRole={Role.ADMIN} {...props} /> }
+export function OwnerOnlyGuard(props: Omit<RoleGuardProps, 'requiredRole'>): JSX.Element | null { return <RoleGuard requiredRole={Role.OWNER} {...props} /> }
+export function MemberOrAboveGuard(props: Omit<RoleGuardProps, 'requiredRole'>): JSX.Element | null { return <RoleGuard requiredRole={Role.MEMBER} {...props} /> }
 
 // Role-based button wrapper
 export function RoleBasedButton({
@@ -373,19 +269,20 @@ export function RoleBasedButton({
 }: RoleGuardProps & {
   onClick?: () => void
   disabled?: boolean
-  [key: string]: any
-}) {
+  [key: string]: unknown
+}): JSX.Element {
   const currentRole = normalizeRole(currentUserRole)
-  const hasRoleAccess = requiredRole ? hasRequiredRole(currentRole, requiredRole) : true
-  const hasPermissionAccess = requiredPermission 
-    ? hasPermission(currentRole, requiredPermission) 
-    : true
+  const hasRoleAccess = requiredRole === undefined ? true : hasRequiredRole(currentRole, requiredRole)
+  const hasPermissionAccess = requiredPermission === undefined
+    ? true
+    : hasPermission(currentRole, requiredPermission)
   const hasAccess = hasRoleAccess && hasPermissionAccess
   
   return (
     <button
+      type="button"
       onClick={hasAccess ? onClick : undefined}
-      disabled={disabled || !hasAccess}
+      disabled={disabled === true || !hasAccess}
       className={className}
       title={hasAccess ? undefined : 'Insufficient permissions'}
       {...props}
@@ -395,32 +292,15 @@ export function RoleBasedButton({
   )
 }
 
-// Utility hook for checking permissions in components
-export function usePermissions(currentUserRole?: string) {
+// Utility hook - basic permissions checking
+export function usePermissions(currentUserRole?: string): { role: Role; hasRole: (r: Role | Role[]) => boolean; hasPermission: (p: Permission | Permission[]) => boolean } {
   const currentRole = normalizeRole(currentUserRole)
-  
   return {
     role: currentRole,
-    level: getRoleLevel(currentRole),
-    permissions: ROLE_PERMISSIONS[currentRole] || [],
-    
     hasRole: (requiredRole: Role | Role[]) => hasRequiredRole(currentRole, requiredRole),
     hasPermission: (permission: Permission | Permission[]) => hasPermission(currentRole, permission),
-    
-    isOwner: currentRole === Role.OWNER,
-    isAdmin: getRoleLevel(currentRole) >= getRoleLevel(Role.ADMIN),
-    isMember: getRoleLevel(currentRole) >= getRoleLevel(Role.MEMBER),
-    isViewer: currentRole === Role.VIEWER,
-    
-    canManageMembers: hasPermission(currentRole, 'manage_members'),
-    canManageRoles: hasPermission(currentRole, 'manage_roles'),
-    canViewAuditLogs: hasPermission(currentRole, 'view_audit_logs'),
-    canManageOrganization: hasPermission(currentRole, 'manage_organization'),
   }
 }
 
 // Export role-related utilities
 export { ROLE_LEVELS, ROLE_PERMISSIONS, normalizeRole, getRoleLevel, hasRequiredRole, hasPermission }
-
-// Default export
-export default RoleGuard

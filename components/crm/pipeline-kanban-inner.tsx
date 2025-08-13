@@ -98,7 +98,7 @@ export function PipelineKanbanInner({ className }: PipelineKanbanInnerProps): Re
       currentFilters={filters}
       onFiltersChange={setFilters}
       filteredStages={filteredStages}
-      pipelineHandlers={pipelineHandlers as unknown as Record<string, unknown>}
+      pipelineHandlers={pipelineHandlers}
       onDragDrop={(stageId: string) => {
         void handleDragDrop(stageId)
       }}

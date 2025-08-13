@@ -78,16 +78,150 @@ const ROLE_CONFIG = {
 type RoleKey = keyof typeof ROLE_CONFIG
 
 // Helper function to get role configuration
-function getRoleConfig(role?: string) {
-  const roleKey = (role?.toLowerCase() || 'viewer') as RoleKey
-  return ROLE_CONFIG[roleKey] || ROLE_CONFIG.viewer
+function getRoleConfig(role?: string): typeof ROLE_CONFIG[RoleKey] {
+  const roleKey = (role?.toLowerCase() ?? 'viewer') as RoleKey
+  return ROLE_CONFIG[roleKey] ?? ROLE_CONFIG.viewer
 }
 
 // Helper function to format member count
 function formatMemberCount(count?: number): string {
-  if (!count) {return '0 members'}
+  if (typeof count !== 'number' || count === 0) {return '0 members'}
   if (count === 1) {return '1 member'}
   return `${count} members`
+}
+
+// Helper components for OrganizationHeader to reduce function complexity
+function LoadingState({ className }: { className: string }): JSX.Element {
+  return (
+    <div className={`flex items-center justify-between p-4 bg-background border-b ${className}`}>
+      <div className="flex items-center space-x-3">
+        <Skeleton className="h-8 w-8 rounded" />
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-3 w-24" />
+        </div>
+      </div>
+      <div className="flex items-center space-x-2">
+        <Skeleton className="h-6 w-16" />
+        <Skeleton className="h-8 w-8 rounded" />
+      </div>
+    </div>
+  )
+}
+
+function NoOrganizationState({ className }: { className: string }): JSX.Element {
+  return (
+    <div className={`flex items-center justify-between p-4 bg-background border-b border-destructive ${className}`}>
+      <div className="flex items-center space-x-3">
+        <div className="w-8 h-8 rounded bg-destructive/10 flex items-center justify-center">
+          <Building2 className="h-4 w-4 text-destructive" />
+        </div>
+        <div>
+          <p className="font-medium text-destructive">No Organization</p>
+          <p className="text-sm text-muted-foreground">Organization context not available</p>
+        </div>
+      </div>
+      <Badge variant="destructive">Error</Badge>
+    </div>
+  )
+}
+
+function OrganizationInfo({ organization }: { organization: Organization }): JSX.Element {
+  return (
+    <div className="flex items-center space-x-3">
+      <CurrentOrganizationBadge 
+        orgName={organization.name}
+        tier={(organization.plan as 'free' | 'pro' | 'enterprise') ?? 'free'}
+        className="h-8 w-8"
+      />
+      <div className="min-w-0">
+        <div className="flex items-center space-x-2">
+          <h2 className="font-semibold text-lg truncate">
+            {organization.name}
+          </h2>
+          {Boolean(organization.plan) && <Badge variant="outline" className="text-xs">
+              {organization.plan}
+            </Badge>}
+        </div>
+        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+          <Users className="h-3 w-3" />
+          <span>{formatMemberCount(organization.member_count)}</span>
+          {Boolean(organization.slug) && <>
+              <span>•</span>
+              <span className="font-mono text-xs">/{organization.slug}</span>
+            </>}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function UserRoleActions({ 
+  user, 
+  organization, 
+  onSwitchOrganization 
+}: { 
+  user: User | null
+  organization: Organization
+  onSwitchOrganization?: () => void 
+}): JSX.Element {
+  const roleConfig = getRoleConfig(user?.role)
+  const RoleIcon = roleConfig.icon
+
+  return (
+    <div className="flex items-center space-x-3">
+      {Boolean(user?.role) && <Badge variant={roleConfig.variant} className="flex items-center space-x-1">
+          <RoleIcon className="h-3 w-3" />
+          <span>{roleConfig.label}</span>
+        </Badge>}
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="sm" className="h-8 px-2">
+            <ChevronDown className="h-4 w-4" />
+            <span className="sr-only">Organization actions</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuLabel>Organization Context</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          
+          <div className="px-2 py-1.5">
+            <div className="text-sm font-medium">{organization.name}</div>
+            <div className="text-xs text-muted-foreground">
+              ID: {organization.id.slice(0, 8)}...
+            </div>
+          </div>
+
+          <DropdownMenuSeparator />
+          
+          {Boolean(user?.role) && <div className="px-2 py-1.5">
+              <div className="flex items-center space-x-2 text-sm">
+                <RoleIcon className="h-3 w-3" />
+                <span className="font-medium">{roleConfig.label}</span>
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {roleConfig.description}
+              </div>
+            </div>}
+
+          <DropdownMenuSeparator />
+
+          {Boolean(onSwitchOrganization) && <DropdownMenuItem onClick={onSwitchOrganization}>
+              <Building2 className="mr-2 h-4 w-4" />
+              Switch Organization
+            </DropdownMenuItem>}
+          
+          <DropdownMenuItem asChild>
+            <a href="/admin/settings">
+              <Shield className="mr-2 h-4 w-4" />
+              Organization Settings
+            </a>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  )
 }
 
 export function OrganizationHeader({
@@ -96,134 +230,23 @@ export function OrganizationHeader({
   isLoading = false,
   onSwitchOrganization,
   className = '',
-}: OrganizationHeaderProps) {
-  // Loading state
+}: OrganizationHeaderProps): JSX.Element {
   if (isLoading) {
-    return (
-      <div className={`flex items-center justify-between p-4 bg-background border-b ${className}`}>
-        <div className="flex items-center space-x-3">
-          <Skeleton className="h-8 w-8 rounded" />
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-32" />
-            <Skeleton className="h-3 w-24" />
-          </div>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Skeleton className="h-6 w-16" />
-          <Skeleton className="h-8 w-8 rounded" />
-        </div>
-      </div>
-    )
+    return <LoadingState className={className} />
   }
 
-  // No organization state
   if (!organization) {
-    return (
-      <div className={`flex items-center justify-between p-4 bg-background border-b border-destructive ${className}`}>
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 rounded bg-destructive/10 flex items-center justify-center">
-            <Building2 className="h-4 w-4 text-destructive" />
-          </div>
-          <div>
-            <p className="font-medium text-destructive">No Organization</p>
-            <p className="text-sm text-muted-foreground">Organization context not available</p>
-          </div>
-        </div>
-        <Badge variant="destructive">Error</Badge>
-      </div>
-    )
+    return <NoOrganizationState className={className} />
   }
-
-  const roleConfig = getRoleConfig(user?.role)
-  const RoleIcon = roleConfig.icon
 
   return (
     <div className={`flex items-center justify-between p-4 bg-background border-b ${className}`}>
-      {/* Organization Info */}
-      <div className="flex items-center space-x-3">
-        <CurrentOrganizationBadge 
-          orgName={organization.name}
-          tier={organization.plan as 'free' | 'pro' | 'enterprise' || 'free'}
-          className="h-8 w-8"
-        />
-        <div className="min-w-0">
-          <div className="flex items-center space-x-2">
-            <h2 className="font-semibold text-lg truncate">
-              {organization.name}
-            </h2>
-            {organization.plan ? <Badge variant="outline" className="text-xs">
-                {organization.plan}
-              </Badge> : null}
-          </div>
-          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-            <Users className="h-3 w-3" />
-            <span>{formatMemberCount(organization.member_count)}</span>
-            {organization.slug ? <>
-                <span>•</span>
-                <span className="font-mono text-xs">/{organization.slug}</span>
-              </> : null}
-          </div>
-        </div>
-      </div>
-
-      {/* User Role & Actions */}
-      <div className="flex items-center space-x-3">
-        {/* User Role Badge */}
-        {user?.role ? <Badge variant={roleConfig.variant} className="flex items-center space-x-1">
-            <RoleIcon className="h-3 w-3" />
-            <span>{roleConfig.label}</span>
-          </Badge> : null}
-
-        {/* Organization Actions Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 px-2">
-              <ChevronDown className="h-4 w-4" />
-              <span className="sr-only">Organization actions</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>Organization Context</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            
-            {/* Organization Details */}
-            <div className="px-2 py-1.5">
-              <div className="text-sm font-medium">{organization.name}</div>
-              <div className="text-xs text-muted-foreground">
-                ID: {organization.id.slice(0, 8)}...
-              </div>
-            </div>
-
-            <DropdownMenuSeparator />
-            
-            {/* User Role Info */}
-            {user?.role ? <div className="px-2 py-1.5">
-                <div className="flex items-center space-x-2 text-sm">
-                  <RoleIcon className="h-3 w-3" />
-                  <span className="font-medium">{roleConfig.label}</span>
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  {roleConfig.description}
-                </div>
-              </div> : null}
-
-            <DropdownMenuSeparator />
-
-            {/* Actions */}
-            {onSwitchOrganization ? <DropdownMenuItem onClick={onSwitchOrganization}>
-                <Building2 className="mr-2 h-4 w-4" />
-                Switch Organization
-              </DropdownMenuItem> : null}
-            
-            <DropdownMenuItem asChild>
-              <a href="/admin/settings">
-                <Shield className="mr-2 h-4 w-4" />
-                Organization Settings
-              </a>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      <OrganizationInfo organization={organization} />
+      <UserRoleActions 
+        user={user} 
+        organization={organization} 
+        onSwitchOrganization={onSwitchOrganization} 
+      />
     </div>
   )
 }
@@ -237,7 +260,7 @@ export function CompactOrganizationHeader({
   organization,
   user,
   className = '',
-}: Pick<OrganizationHeaderProps, 'organization' | 'user' | 'className'>) {
+}: Pick<OrganizationHeaderProps, 'organization' | 'user' | 'className'>): JSX.Element {
   if (!organization) {
     return (
       <div className={`flex items-center space-x-2 ${className}`}>
@@ -260,9 +283,9 @@ export function CompactOrganizationHeader({
       <span className="text-sm font-medium truncate max-w-32">
         {organization.name}
       </span>
-      {user?.role ? <Badge variant={roleConfig.variant} className="text-xs">
+      {Boolean(user?.role) && <Badge variant={roleConfig.variant} className="text-xs">
           {roleConfig.label}
-        </Badge> : null}
+        </Badge>}
     </div>
   )
 }
@@ -277,36 +300,35 @@ export function OrganizationHeaderWithActions({
   className = '',
 }: OrganizationHeaderProps & {
   actions?: React.ReactNode
-}) {
+}): JSX.Element {
   return (
     <div className={`flex items-center justify-between p-4 bg-background border-b ${className}`}>
       {/* Left: Organization Info */}
       <div className="flex items-center space-x-3">
         <CurrentOrganizationBadge 
-          orgName={organization?.name || 'Unknown'}
-          tier={organization?.plan as 'free' | 'pro' | 'enterprise' || 'free'}
+          orgName={organization?.name ?? 'Unknown'}
+          tier={(organization?.plan as 'free' | 'pro' | 'enterprise') ?? 'free'}
           className="h-8 w-8"
         />
         <div className="min-w-0">
           <h2 className="font-semibold text-lg truncate">
-            {organization?.name || 'No Organization'}
+            {organization?.name ?? 'No Organization'}
           </h2>
-          {user?.role ? <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+          {Boolean(user?.role) && <div className="flex items-center space-x-1 text-sm text-muted-foreground">
               <span>as</span>
-              <Badge variant={getRoleConfig(user.role).variant} className="text-xs">
-                {getRoleConfig(user.role).label}
+              <Badge variant={getRoleConfig(user?.role).variant} className="text-xs">
+                {getRoleConfig(user?.role).label}
               </Badge>
-            </div> : null}
+            </div>}
         </div>
       </div>
 
       {/* Right: Custom Actions */}
-      {actions ? <div className="flex items-center space-x-2">
+      {Boolean(actions) && <div className="flex items-center space-x-2">
           {actions}
-        </div> : null}
+        </div>}
     </div>
   )
 }
 
-// Default export
-export default OrganizationHeader
+// Named export only - no default export

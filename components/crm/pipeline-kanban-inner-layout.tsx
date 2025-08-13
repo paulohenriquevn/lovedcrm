@@ -4,11 +4,41 @@
  */
 'use client'
 
+import React from 'react'
+
 import { BulkOperationsPanel } from './bulk-operations-panel'
 import { PipelineKanbanLayout } from './pipeline-kanban-main-layout'
 
 import type { PipelineFiltersState } from './pipeline-filters-types'
-import type { PipelineStageDisplay } from './pipeline-types'
+import type { PipelineStageDisplay, DragParams } from './pipeline-types'
+import type { Lead, PipelineStage } from '@/services/crm-leads'
+
+interface PipelineHandlers {
+  draggedLead: Lead | null
+  handleDragStart: (lead: Lead) => void
+  handleDrop: (params: DragParams) => Promise<void>
+  handleAddLead: (stageId?: string) => void
+  handleViewDetails: (lead: Lead) => void
+  handleEditLead: (lead: Lead) => void
+  handleSendEmail: (lead: Lead) => void
+  handleRemoveLead: (lead: Lead) => void
+  handleCall: (lead: Lead) => void
+  handleWhatsApp: (lead: Lead) => void
+  isCreateModalOpen: boolean
+  handleCreateModalClose: () => void
+  handleCreateSuccess: () => void
+  createModalStage: PipelineStage | null
+  isDetailsModalOpen: boolean
+  handleModalClose: () => void
+  selectedLead: Lead | null
+  handleEditFromDetails: (lead: Lead) => void
+  handleDeleteFromDetails: (lead: Lead) => void
+  handleFavoriteToggle: () => void
+  isEditModalOpen: boolean
+  handleEditSuccess: () => void
+  isDeleteDialogOpen: boolean
+  handleDeleteSuccess: () => void
+}
 
 interface PipelineKanbanInnerLayoutProps {
   className?: string
@@ -17,7 +47,7 @@ interface PipelineKanbanInnerLayoutProps {
   currentFilters: PipelineFiltersState
   onFiltersChange: (filters: PipelineFiltersState) => void
   filteredStages: PipelineStageDisplay[]
-  pipelineHandlers: any
+  pipelineHandlers: PipelineHandlers
   onDragDrop: (stageId: string) => void
   isConnected: boolean
   isPolling: boolean

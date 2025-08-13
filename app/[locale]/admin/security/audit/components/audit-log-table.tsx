@@ -52,7 +52,7 @@ export function AuditLogTable({ logs, isLoading }: AuditLogTableProps) {
               
               <p className="text-sm font-medium mb-1">{log.summary}</p>
               
-              {log.ipAddress && (
+              {Boolean(log.ipAddress) && (
                 <p className="text-xs text-muted-foreground">
                   IP: {log.ipAddress}
                 </p>

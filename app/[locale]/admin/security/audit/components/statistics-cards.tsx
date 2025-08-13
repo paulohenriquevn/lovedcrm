@@ -21,11 +21,11 @@ export function StatisticsCards({ statistics, isLoading }: StatisticsCardsProps)
     )
   }
 
-  const topAction = Object.entries(statistics.actionsDistribution)
-    .sort(([, a], [, b]) => b - a)[0]
+  const [topAction] = Object.entries(statistics.actionsDistribution)
+    .sort(([, a], [, b]) => b - a)
   
-  const topTable = Object.entries(statistics.tablesDistribution)
-    .sort(([, a], [, b]) => b - a)[0]
+  const [topTable] = Object.entries(statistics.tablesDistribution)
+    .sort(([, a], [, b]) => b - a)
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">

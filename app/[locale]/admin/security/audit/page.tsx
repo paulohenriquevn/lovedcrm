@@ -7,20 +7,19 @@
  * Features real-time audit log display with advanced filtering and analytics.
  */
 
+import { Shield } from 'lucide-react'
 import React, { useState } from 'react'
 
 import { OrganizationHeader } from '@/components/admin/organization-header'
-import { OwnerOnlyGuard, RoleGuard } from '@/components/admin/role-guard'
-import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useOrgContext } from '@/hooks/use-org-context'
 import { usePermissions } from '@/hooks/use-permissions'
 
 import { AuditFilters } from './components/audit-filters'
 import { AuditPageHeader } from './components/audit-page-header'
-import { AuditTabs } from './components/audit-tabs'
 import { StatisticsCards } from './components/statistics-cards'
-import { mockAuditLogs, mockSecurityEvents, mockStatistics } from './mock-data'
+import { mockStatistics } from './mock-data'
+
 import type { AuditFilters as AuditFiltersType } from './types'
 
 // Handler functions moved to outer scope
@@ -67,9 +66,9 @@ export default function SecurityAuditPage() {
     timeframe: '7d'
   })
   
-  const auditLogs = mockAuditLogs
-  const securityEvents = mockSecurityEvents
   const statistics = mockStatistics
+  
+  // Note: auditLogs and securityEvents would be used when implementing actual audit table
 
   // Permission check - only users with audit log access can see this page
   if (!canViewAuditLogs) {
@@ -106,11 +105,10 @@ export default function SecurityAuditPage() {
         onFiltersChange={setFilters}
       />
 
-      <AuditTabs 
-        auditLogs={auditLogs}
-        securityEvents={securityEvents}
-        isLoading={isLoading}
-      />
+      {/* TODO: Implement AuditTabs component */}
+      <div className="text-center py-8 text-muted-foreground">
+        Audit tabs component will be implemented here
+      </div>
     </div>
   )
 }
