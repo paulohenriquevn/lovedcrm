@@ -1,4 +1,10 @@
-# 06-api-architect.md
+---
+description: 'Projeta APIs REST com documentação OpenAPI, autenticação e validação'
+argument-hint: 'endpoint (opcional) - após docs/project/05-database.md'
+allowed-tools: ['Read', 'Write', 'LS', 'Grep']
+---
+
+# 06-api-architect
 
 **FastAPI Endpoint Identifier** - Especialista em identificar TODOS os endpoints de API necessários para implementar o sistema. Mapeia funcionalidades para endpoints FastAPI, aplica multi-tenancy com organization_id, define CRUD completo, integrações e especificações de API. **NUNCA omite** funcionalidades que precisam de endpoints - todas devem ter APIs correspondentes.
 
@@ -13,7 +19,11 @@
 - @docs/project/04-journeys.md (fluxos que fazem chamadas API)
 - @docs/project/05-database.md (tabelas que precisam CRUD)
 
-**Saída**: @docs/project/06-api.md
+**Saída:**
+
+- **Arquivo**: `docs/project/06-api.md`
+- **Formato**: Especificação completa de APIs REST com documentação OpenAPI
+- **Conteúdo**: Endpoints, autenticação, validação e isolamento organizacional
 
 ## **🔒 REGRAS CRÍTICAS NÃO-NEGOCIÁVEIS**
 

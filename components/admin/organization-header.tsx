@@ -7,8 +7,8 @@
  * Always visible in admin interface to ensure users are aware of organizational context.
  */
 
-import React from 'react'
 import { Building2, ChevronDown, Shield, Users } from 'lucide-react'
+import React from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -85,8 +85,8 @@ function getRoleConfig(role?: string) {
 
 // Helper function to format member count
 function formatMemberCount(count?: number): string {
-  if (!count) return '0 members'
-  if (count === 1) return '1 member'
+  if (!count) {return '0 members'}
+  if (count === 1) {return '1 member'}
   return `${count} members`
 }
 
@@ -151,21 +151,17 @@ export function OrganizationHeader({
             <h2 className="font-semibold text-lg truncate">
               {organization.name}
             </h2>
-            {organization.plan && (
-              <Badge variant="outline" className="text-xs">
+            {organization.plan ? <Badge variant="outline" className="text-xs">
                 {organization.plan}
-              </Badge>
-            )}
+              </Badge> : null}
           </div>
           <div className="flex items-center space-x-2 text-sm text-muted-foreground">
             <Users className="h-3 w-3" />
             <span>{formatMemberCount(organization.member_count)}</span>
-            {organization.slug && (
-              <>
+            {organization.slug ? <>
                 <span>•</span>
                 <span className="font-mono text-xs">/{organization.slug}</span>
-              </>
-            )}
+              </> : null}
           </div>
         </div>
       </div>
@@ -173,12 +169,10 @@ export function OrganizationHeader({
       {/* User Role & Actions */}
       <div className="flex items-center space-x-3">
         {/* User Role Badge */}
-        {user?.role && (
-          <Badge variant={roleConfig.variant} className="flex items-center space-x-1">
+        {user?.role ? <Badge variant={roleConfig.variant} className="flex items-center space-x-1">
             <RoleIcon className="h-3 w-3" />
             <span>{roleConfig.label}</span>
-          </Badge>
-        )}
+          </Badge> : null}
 
         {/* Organization Actions Dropdown */}
         <DropdownMenu>
@@ -203,8 +197,7 @@ export function OrganizationHeader({
             <DropdownMenuSeparator />
             
             {/* User Role Info */}
-            {user?.role && (
-              <div className="px-2 py-1.5">
+            {user?.role ? <div className="px-2 py-1.5">
                 <div className="flex items-center space-x-2 text-sm">
                   <RoleIcon className="h-3 w-3" />
                   <span className="font-medium">{roleConfig.label}</span>
@@ -212,21 +205,18 @@ export function OrganizationHeader({
                 <div className="text-xs text-muted-foreground">
                   {roleConfig.description}
                 </div>
-              </div>
-            )}
+              </div> : null}
 
             <DropdownMenuSeparator />
 
             {/* Actions */}
-            {onSwitchOrganization && (
-              <DropdownMenuItem onClick={onSwitchOrganization}>
+            {onSwitchOrganization ? <DropdownMenuItem onClick={onSwitchOrganization}>
                 <Building2 className="mr-2 h-4 w-4" />
                 Switch Organization
-              </DropdownMenuItem>
-            )}
+              </DropdownMenuItem> : null}
             
             <DropdownMenuItem asChild>
-              <a href={`/admin/settings`}>
+              <a href="/admin/settings">
                 <Shield className="mr-2 h-4 w-4" />
                 Organization Settings
               </a>
@@ -270,11 +260,9 @@ export function CompactOrganizationHeader({
       <span className="text-sm font-medium truncate max-w-32">
         {organization.name}
       </span>
-      {user?.role && (
-        <Badge variant={roleConfig.variant} className="text-xs">
+      {user?.role ? <Badge variant={roleConfig.variant} className="text-xs">
           {roleConfig.label}
-        </Badge>
-      )}
+        </Badge> : null}
     </div>
   )
 }
@@ -303,23 +291,19 @@ export function OrganizationHeaderWithActions({
           <h2 className="font-semibold text-lg truncate">
             {organization?.name || 'No Organization'}
           </h2>
-          {user?.role && (
-            <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+          {user?.role ? <div className="flex items-center space-x-1 text-sm text-muted-foreground">
               <span>as</span>
               <Badge variant={getRoleConfig(user.role).variant} className="text-xs">
                 {getRoleConfig(user.role).label}
               </Badge>
-            </div>
-          )}
+            </div> : null}
         </div>
       </div>
 
       {/* Right: Custom Actions */}
-      {actions && (
-        <div className="flex items-center space-x-2">
+      {actions ? <div className="flex items-center space-x-2">
           {actions}
-        </div>
-      )}
+        </div> : null}
     </div>
   )
 }

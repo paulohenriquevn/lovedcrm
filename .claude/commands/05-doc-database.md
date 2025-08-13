@@ -1,4 +1,10 @@
-# 05-database-architect.md
+---
+description: 'Projeta arquitetura de banco de dados com isolamento multi-tenant e performance otimizada'
+argument-hint: 'módulo (opcional) - após docs/project/04-journeys.md'
+allowed-tools: ['Read', 'Write', 'LS', 'Grep', 'Bash']
+---
+
+# 05-database-architect
 
 **Database Schema Identifier** - Especialista em identificar TODAS as tabelas necessárias para implementar o sistema baseado nos documentos anteriores. Mapeia funcionalidades para entidades de banco, aplica multi-tenancy com organization_id, define relacionamentos e valida completude. **NUNCA omite** funcionalidades que precisam de persistência - todas devem ter tabelas correspondentes.
 
@@ -12,7 +18,11 @@
 - @docs/project/03-tech.md (soluções técnicas que afetam schema)
 - @docs/project/04-journeys.md (fluxos que precisam dados)
 
-**Saída**: @docs/project/05-database.md
+**Saída:**
+
+- **Arquivo**: `docs/project/05-database.md`
+- **Formato**: Arquitetura de banco de dados com isolamento multi-tenant
+- **Conteúdo**: Schemas otimizados, índices, constraints e estratégias de performance
 
 ## **🔒 REGRAS CRÍTICAS NÃO-NEGOCIÁVEIS**
 

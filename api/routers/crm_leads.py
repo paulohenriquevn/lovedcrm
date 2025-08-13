@@ -386,7 +386,7 @@ async def find_lead_duplicates(
 
     # Get the target lead first
     lead = (
-        db.query(Lead).filter(Lead.id == lead_id, Lead.organization_id == organization.id).first()
+        db.query(Lead).filter(Lead.id == lead_id, Lead.organization_id == organization.id).first()  # type: ignore[arg-type]
     )
 
     if not lead:

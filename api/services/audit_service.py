@@ -49,7 +49,7 @@ class AuditService:
                 "old_role": old_role,
                 "new_role": new_role,
                 "manager_user_id": str(manager_user_id),
-            }
+            },
         )
 
         audit_log = AuditLog.create_update_log(
@@ -83,7 +83,7 @@ class AuditService:
                 "organization_id": str(org_id),
                 "removed_user_id": str(removed_user_id),
                 "manager_user_id": str(manager_user_id),
-            }
+            },
         )
 
         audit_log = AuditLog.create_delete_log(
@@ -120,7 +120,7 @@ class AuditService:
                 "organization_id": str(org_id),
                 "user_id": str(user_id),
                 "action": action,
-            }
+            },
         )
 
         audit_log = AuditLog.create_insert_log(
@@ -160,7 +160,7 @@ class AuditService:
                 "filters": filters,
                 "limit": limit,
                 "offset": offset,
-            }
+            },
         )
 
         query = self.db.query(AuditLog).filter(AuditLog.organization_id == org_id)
@@ -203,7 +203,7 @@ class AuditService:
                 "organization_id": str(org_id),
                 "timeframe_hours": timeframe_hours,
                 "severity_level": severity_level,
-            }
+            },
         )
 
         start_time = datetime.utcnow() - timedelta(hours=timeframe_hours)
@@ -251,31 +251,37 @@ class AuditService:
             # Identify specific security events
             if log.table_name == "organization_members":
                 if log.action == AuditAction.UPDATE:
-                    security_events["role_changes"].append({
-                        "user_id": str(log.user_id),
-                        "target_user_id": str(log.record_id),
-                        "old_values": log.old_values,
-                        "new_values": log.new_values,
-                        "timestamp": log.created_at.isoformat(),
-                    })
+                    security_events["role_changes"].append(
+                        {
+                            "user_id": str(log.user_id),
+                            "target_user_id": str(log.record_id),
+                            "old_values": log.old_values,
+                            "new_values": log.new_values,
+                            "timestamp": log.created_at.isoformat(),
+                        }
+                    )
                 elif log.action == AuditAction.DELETE:
-                    security_events["member_removals"].append({
-                        "user_id": str(log.user_id),
-                        "removed_user_id": str(log.record_id),
-                        "old_values": log.old_values,
-                        "timestamp": log.created_at.isoformat(),
-                    })
+                    security_events["member_removals"].append(
+                        {
+                            "user_id": str(log.user_id),
+                            "removed_user_id": str(log.record_id),
+                            "old_values": log.old_values,
+                            "timestamp": log.created_at.isoformat(),
+                        }
+                    )
 
             # Flag suspicious activities (example criteria)
             if self._is_suspicious_activity(log):
-                security_events["suspicious_activities"].append({
-                    "log_id": str(log.id),
-                    "action": log.action.value,
-                    "table": log.table_name,
-                    "user_id": str(log.user_id) if log.user_id else None,
-                    "timestamp": log.created_at.isoformat(),
-                    "reason": "Multiple rapid changes detected",
-                })
+                security_events["suspicious_activities"].append(
+                    {
+                        "log_id": str(log.id),
+                        "action": log.action.value,
+                        "table": log.table_name,
+                        "user_id": str(log.user_id) if log.user_id else None,
+                        "timestamp": log.created_at.isoformat(),
+                        "reason": "Multiple rapid changes detected",
+                    }
+                )
 
         return security_events
 
@@ -292,7 +298,7 @@ class AuditService:
                 "organization_id": str(org_id),
                 "user_id": str(user_id),
                 "days": days,
-            }
+            },
         )
 
         start_date = datetime.utcnow() - timedelta(days=days)
@@ -346,12 +352,14 @@ class AuditService:
 
             # Add to recent activities (limit to 10 most recent)
             if len(activity_summary["recent_activities"]) < 10:
-                activity_summary["recent_activities"].append({
-                    "action": log.action.value,
-                    "table": log.table_name,
-                    "timestamp": log.created_at.isoformat(),
-                    "summary": log.get_summary(),
-                })
+                activity_summary["recent_activities"].append(
+                    {
+                        "action": log.action.value,
+                        "table": log.table_name,
+                        "timestamp": log.created_at.isoformat(),
+                        "summary": log.get_summary(),
+                    }
+                )
 
         # Find most active days
         activity_summary["most_active_days"] = dict(
@@ -433,10 +441,9 @@ class AuditService:
             "end_date": datetime.utcnow().isoformat(),
             "total_audit_logs": total_logs,
             "actions_distribution": {str(action): count for action, count in action_stats},
-            "tables_distribution": {table: count for table, count in table_stats},
+            "tables_distribution": dict(table_stats),
             "most_active_users": [
-                {"user_id": str(user_id), "action_count": count}
-                for user_id, count in user_stats
+                {"user_id": str(user_id), "action_count": count} for user_id, count in user_stats
             ],
         }
 
@@ -483,7 +490,7 @@ class AuditService:
             self.db.commit()
             logger.info(
                 f"Deleted {count} old audit logs for organization {org_id}",
-                extra={"organization_id": str(org_id), "deleted_count": count}
+                extra={"organization_id": str(org_id), "deleted_count": count},
             )
 
         return {
@@ -531,7 +538,9 @@ class AuditService:
         for (user_id,) in logs_with_users:
             user_exists = self.db.query(User).filter(User.id == user_id).first()
             if not user_exists:
-                integrity_issues.append(f"User {user_id} referenced in audit logs but doesn't exist")
+                integrity_issues.append(
+                    f"User {user_id} referenced in audit logs but doesn't exist"
+                )
 
         return {
             "organization_id": str(org_id),

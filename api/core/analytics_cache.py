@@ -14,7 +14,7 @@ import hashlib
 import json
 import logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 from uuid import UUID
 
 import redis
@@ -79,18 +79,22 @@ class AnalyticsCache:
             if cached_data:
                 logger.debug(
                     "Cache hit for analytics operation",
-                    operation=operation,
-                    organization_id=str(organization_id),
-                    cache_key=cache_key,
+                    extra={
+                        "operation": operation,
+                        "organization_id": str(organization_id),
+                        "cache_key": cache_key,
+                    },
                 )
 
                 return json.loads(cached_data)
 
             logger.debug(
                 "Cache miss for analytics operation",
-                operation=operation,
-                organization_id=str(organization_id),
-                cache_key=cache_key,
+                extra={
+                    "operation": operation,
+                    "organization_id": str(organization_id),
+                    "cache_key": cache_key,
+                },
             )
 
             return None
@@ -98,9 +102,11 @@ class AnalyticsCache:
         except Exception as e:
             logger.warning(
                 "Cache get operation failed",
-                operation=operation,
-                organization_id=str(organization_id),
-                error=str(e),
+                extra={
+                    "operation": operation,
+                    "organization_id": str(organization_id),
+                    "error": str(e),
+                },
             )
             return None
 
@@ -135,10 +141,12 @@ class AnalyticsCache:
 
             logger.debug(
                 "Data cached successfully",
-                operation=operation,
-                organization_id=str(organization_id),
-                cache_key=cache_key,
-                ttl=ttl,
+                extra={
+                    "operation": operation,
+                    "organization_id": str(organization_id),
+                    "cache_key": cache_key,
+                    "ttl": ttl,
+                },
             )
 
             return True
@@ -146,9 +154,11 @@ class AnalyticsCache:
         except Exception as e:
             logger.warning(
                 "Cache set operation failed",
-                operation=operation,
-                organization_id=str(organization_id),
-                error=str(e),
+                extra={
+                    "operation": operation,
+                    "organization_id": str(organization_id),
+                    "error": str(e),
+                },
             )
             return False
 
@@ -163,10 +173,12 @@ class AnalyticsCache:
 
             logger.info(
                 "Cache invalidation completed",
-                operation=operation,
-                organization_id=str(organization_id),
-                cache_key=cache_key,
-                keys_deleted=result,
+                extra={
+                    "operation": operation,
+                    "organization_id": str(organization_id),
+                    "cache_key": cache_key,
+                    "keys_deleted": result,
+                },
             )
 
             return result > 0
@@ -174,9 +186,11 @@ class AnalyticsCache:
         except Exception as e:
             logger.warning(
                 "Cache invalidation failed",
-                operation=operation,
-                organization_id=str(organization_id),
-                error=str(e),
+                extra={
+                    "operation": operation,
+                    "organization_id": str(organization_id),
+                    "error": str(e),
+                },
             )
             return False
 
@@ -195,9 +209,11 @@ class AnalyticsCache:
 
                 logger.info(
                     "Organization cache invalidated",
-                    organization_id=str(organization_id),
-                    keys_deleted=deleted_count,
-                    pattern=pattern,
+                    extra={
+                        "organization_id": str(organization_id),
+                        "keys_deleted": deleted_count,
+                        "pattern": pattern,
+                    },
                 )
 
                 return deleted_count
@@ -207,8 +223,10 @@ class AnalyticsCache:
         except Exception as e:
             logger.warning(
                 "Organization cache invalidation failed",
-                organization_id=str(organization_id),
-                error=str(e),
+                extra={
+                    "organization_id": str(organization_id),
+                    "error": str(e),
+                },
             )
             return 0
 
@@ -216,7 +234,7 @@ class AnalyticsCache:
         self,
         organization_id: UUID,
         operations: List[str],
-        background_task_func: Optional[callable] = None,
+        background_task_func: Optional[Callable] = None,
     ) -> Dict[str, bool]:
         """Pre-warm cache for common operations."""
         if not self.redis_client:
@@ -237,8 +255,10 @@ class AnalyticsCache:
                     # This would trigger background computation
                     logger.info(
                         "Scheduling cache warming",
-                        operation=operation,
-                        organization_id=str(organization_id),
+                        extra={
+                            "operation": operation,
+                            "organization_id": str(organization_id),
+                        },
                     )
                     warming_results[operation] = True
                 else:
@@ -247,9 +267,11 @@ class AnalyticsCache:
             except Exception as e:
                 logger.warning(
                     "Cache warming failed for operation",
-                    operation=operation,
-                    organization_id=str(organization_id),
-                    error=str(e),
+                    extra={
+                        "operation": operation,
+                        "organization_id": str(organization_id),
+                        "error": str(e),
+                    },
                 )
                 warming_results[operation] = False
 
@@ -291,7 +313,7 @@ class AnalyticsCache:
                 stats["organization_id"] = str(organization_id)
 
                 # Get cache key distribution
-                operation_counts = {}
+                operation_counts: Dict[str, int] = {}
                 for key in org_keys:
                     parts = key.split(":")
                     if len(parts) >= 2:
@@ -369,7 +391,8 @@ class CachedAnalyticsService:
 
                 if not organization_id:
                     logger.warning(
-                        "Cannot cache operation without organization_id", operation=operation_name
+                        "Cannot cache operation without organization_id",
+                        extra={"operation": operation_name},
                     )
                     return await func(*args, **kwargs)
 
@@ -428,18 +451,22 @@ async def invalidate_analytics_cache_on_lead_change(
 
         logger.info(
             "Analytics cache invalidated due to lead change",
-            organization_id=str(organization_id),
-            lead_id=str(lead_id),
-            change_type=change_type,
-            operations_invalidated=len(operations_to_invalidate),
+            extra={
+                "organization_id": str(organization_id),
+                "lead_id": str(lead_id),
+                "change_type": change_type,
+                "operations_invalidated": len(operations_to_invalidate),
+            },
         )
 
     except Exception as e:
         logger.warning(
             "Failed to invalidate analytics cache",
-            organization_id=str(organization_id),
-            lead_id=str(lead_id),
-            error=str(e),
+            extra={
+                "organization_id": str(organization_id),
+                "lead_id": str(lead_id),
+                "error": str(e),
+            },
         )
 
 
@@ -452,10 +479,14 @@ async def schedule_cache_warming(organization_id: UUID) -> None:
 
         logger.info(
             "Cache warming scheduled",
-            organization_id=str(organization_id),
-            operations=common_operations,
-            results=warming_results,
+            extra={
+                "organization_id": str(organization_id),
+                "operations": common_operations,
+                "results": warming_results,
+            },
         )
 
     except Exception as e:
-        logger.warning("Cache warming failed", organization_id=str(organization_id), error=str(e))
+        logger.warning(
+            "Cache warming failed", extra={"organization_id": str(organization_id), "error": str(e)}
+        )

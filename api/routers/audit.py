@@ -5,12 +5,12 @@ All endpoints require authentication and organization context (X-Org-Id header).
 """
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from api.core.database import get_db
@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 class AuditLogResponse(BaseModel):
     """Response model for audit log entries."""
-    
+
     id: UUID
     organization_id: UUID
     table_name: str
@@ -46,6 +46,8 @@ class AuditLogResponse(BaseModel):
     summary: str
 
     class Config:
+        """Pydantic configuration for ORM mode."""
+
         from_attributes = True
 
     @classmethod
@@ -69,7 +71,7 @@ class AuditLogResponse(BaseModel):
 
 class SecurityEventsResponse(BaseModel):
     """Response model for security events summary."""
-    
+
     timeframe_hours: int
     start_time: str
     end_time: str
@@ -83,7 +85,7 @@ class SecurityEventsResponse(BaseModel):
 
 class UserActivityResponse(BaseModel):
     """Response model for user activity summary."""
-    
+
     user_id: UUID
     organization_id: UUID
     period_days: int
@@ -98,7 +100,7 @@ class UserActivityResponse(BaseModel):
 
 class AuditStatisticsResponse(BaseModel):
     """Response model for audit statistics."""
-    
+
     organization_id: UUID
     period_days: int
     start_date: str
@@ -111,7 +113,7 @@ class AuditStatisticsResponse(BaseModel):
 
 class AuditFilters(BaseModel):
     """Query filters for audit trail."""
-    
+
     table_name: Optional[str] = None
     action: Optional[AuditAction] = None
     user_id: Optional[UUID] = None
@@ -138,7 +140,7 @@ async def get_audit_trail(
     db: Session = Depends(get_db),
 ) -> List[AuditLogResponse]:
     """Get organization audit trail with optional filters.
-    
+
     Returns audit logs for the current organization with optional filtering.
     All results are automatically scoped to the organization context.
     """
@@ -156,13 +158,13 @@ async def get_audit_trail(
             },
             "limit": limit,
             "offset": offset,
-        }
+        },
     )
 
     audit_service = AuditService(db)
 
     # Build filters dictionary
-    filters = {}
+    filters: Dict[str, Any] = {}
     if table_name:
         filters["table_name"] = table_name
     if action:
@@ -176,7 +178,7 @@ async def get_audit_trail(
 
     try:
         audit_logs = await audit_service.get_audit_trail(
-            org_id=organization.id,
+            org_id=organization.id,  # type: ignore[arg-type]
             filters=filters if filters else None,
             limit=limit,
             offset=offset,
@@ -209,7 +211,7 @@ async def get_security_events(
     db: Session = Depends(get_db),
 ) -> SecurityEventsResponse:
     """Get security events summary for organization.
-    
+
     Returns analysis of recent security-related audit events including:
     - Role changes
     - Member additions/removals
@@ -223,14 +225,14 @@ async def get_security_events(
             "user_id": str(current_user.id),
             "timeframe_hours": timeframe_hours,
             "severity_level": severity_level,
-        }
+        },
     )
 
     audit_service = AuditService(db)
 
     try:
         security_events = await audit_service.get_security_events(
-            org_id=organization.id,
+            org_id=organization.id,  # type: ignore[arg-type]
             timeframe_hours=timeframe_hours,
             severity_level=severity_level,
         )
@@ -262,13 +264,13 @@ async def get_user_activity(
     db: Session = Depends(get_db),
 ) -> UserActivityResponse:
     """Get activity summary for specific user in organization.
-    
+
     Returns detailed activity analysis for a user including:
     - Action counts by type and table
     - Recent activities timeline
     - Most active days
     - Activity patterns
-    
+
     Requires 'view_members' permission to access other users' activity.
     """
     logger.info(
@@ -278,7 +280,7 @@ async def get_user_activity(
             "current_user_id": str(current_user.id),
             "target_user_id": str(target_user_id),
             "days": days,
-        }
+        },
     )
 
     # Check if user is requesting their own activity or has permission
@@ -290,14 +292,14 @@ async def get_user_activity(
             extra={
                 "current_user_id": str(current_user.id),
                 "target_user_id": str(target_user_id),
-            }
+            },
         )
 
     audit_service = AuditService(db)
 
     try:
         activity_summary = await audit_service.get_user_activity_summary(
-            org_id=organization.id,
+            org_id=organization.id,  # type: ignore[arg-type]
             user_id=target_user_id,
             days=days,
         )
@@ -329,7 +331,7 @@ async def get_audit_statistics(
     db: Session = Depends(get_db),
 ) -> AuditStatisticsResponse:
     """Get comprehensive audit statistics for organization.
-    
+
     Returns statistical analysis of audit activity including:
     - Total log counts
     - Distribution by action type
@@ -342,14 +344,14 @@ async def get_audit_statistics(
             "organization_id": str(organization.id),
             "user_id": str(current_user.id),
             "days": days,
-        }
+        },
     )
 
     audit_service = AuditService(db)
 
     try:
         statistics = await audit_service.get_audit_statistics(
-            org_id=organization.id,
+            org_id=organization.id,  # type: ignore[arg-type]
             days=days,
         )
 
@@ -383,12 +385,12 @@ async def verify_audit_integrity(
     db: Session = Depends(get_db),
 ) -> Dict[str, Any]:
     """Verify audit log integrity for organization.
-    
+
     Performs integrity checks including:
     - Orphaned log detection
     - Reference validation
     - Consistency checks
-    
+
     Requires administrator permissions.
     """
     logger.info(
@@ -396,7 +398,7 @@ async def verify_audit_integrity(
         extra={
             "organization_id": str(organization.id),
             "user_id": str(current_user.id),
-        }
+        },
     )
 
     # TODO: Add admin permission check
@@ -406,7 +408,7 @@ async def verify_audit_integrity(
 
     try:
         integrity_report = await audit_service.verify_audit_integrity(
-            org_id=organization.id
+            org_id=organization.id  # type: ignore[arg-type]
         )
 
         return integrity_report
@@ -429,17 +431,21 @@ async def verify_audit_integrity(
 
 @router.post("/cleanup")
 async def cleanup_old_audit_logs(
-    retention_days: int = Query(365, ge=30, le=2555, description="Retention period in days (30 days to 7 years)"),
-    dry_run: bool = Query(True, description="Dry run mode - show what would be deleted without actually deleting"),
+    retention_days: int = Query(
+        365, ge=30, le=2555, description="Retention period in days (30 days to 7 years)"
+    ),
+    dry_run: bool = Query(
+        True, description="Dry run mode - show what would be deleted without actually deleting"
+    ),
     organization: Organization = Depends(get_current_organization),
     current_user: User = Depends(get_current_active_user),
     db: Session = Depends(get_db),
 ) -> Dict[str, Any]:
     """Clean up old audit logs beyond retention period.
-    
+
     Removes audit logs older than the specified retention period.
     Use dry_run=true to preview what would be deleted.
-    
+
     Requires administrator permissions.
     """
     logger.info(
@@ -449,7 +455,7 @@ async def cleanup_old_audit_logs(
             "user_id": str(current_user.id),
             "retention_days": retention_days,
             "dry_run": dry_run,
-        }
+        },
     )
 
     # TODO: Add admin permission check
@@ -459,7 +465,7 @@ async def cleanup_old_audit_logs(
 
     try:
         cleanup_result = await audit_service.cleanup_old_audit_logs(
-            org_id=organization.id,
+            org_id=organization.id,  # type: ignore[arg-type]
             retention_days=retention_days,
             dry_run=dry_run,
         )

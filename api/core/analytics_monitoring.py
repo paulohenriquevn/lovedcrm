@@ -175,7 +175,7 @@ class AnalyticsHealthChecker:
 
     async def check_analytics_health(self) -> Dict[str, Any]:
         """Comprehensive health check for analytics system."""
-        health_status = {
+        health_status: Dict[str, Any] = {
             "status": "healthy",
             "timestamp": datetime.now().isoformat(),
             "components": {},

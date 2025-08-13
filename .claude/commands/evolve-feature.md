@@ -1,3 +1,9 @@
+---
+description: 'Analisa, planeja e cria tasks para evolução de features seguindo arquitetura Multi-Tenant SaaS'
+argument-hint: 'feature existente (obrigatório) - analisa codebase atual'
+allowed-tools: ['Read', 'Write', 'Edit', 'LS', 'Bash', 'Grep', 'Glob', 'WebFetch']
+---
+
 # evolve-feature
 
 **Analisa, planeja e cria tasks para evolução de features seguindo arquitetura Multi-Tenant SaaS**
@@ -10,6 +16,12 @@
 
 - `feature`: Nome da feature a ser evoluída
 - `objective`: Objetivo da evolução (opcional)
+
+**Saída:**
+
+- **Análise**: Estado atual da feature e pontos de evolução identificados
+- **Plano**: Tasks específicas para evolução mantendo compatibilidade
+- **Roadmap**: Priorização e dependências das melhorias
 
 **Uso:**
 
@@ -114,18 +126,18 @@ Antes de iniciar qualquer tarefa, o agente DEVE exibir:
 
 ```yaml
 ❌ Evoluções Problemáticas:
-  - "Vamos manter as duas versões por segurança"
-  - "Precisamos de um sistema de migração elaborado"
-  - "E se fizéssemos algo genérico para o futuro?"
-  - "Vamos criar um período de transição de 3 meses"
-  - "Precisamos de 15 configurações diferentes"
+  - 'Vamos manter as duas versões por segurança'
+  - 'Precisamos de um sistema de migração elaborado'
+  - 'E se fizéssemos algo genérico para o futuro?'
+  - 'Vamos criar um período de transição de 3 meses'
+  - 'Precisamos de 15 configurações diferentes'
 
 ✅ Evoluções Corretas:
-  - "Dia D trocamos tudo"
-  - "Script simples de migração"
-  - "Resolvemos o problema específico"
-  - "1 semana de migração máximo"
-  - "1 configuração que funciona"
+  - 'Dia D trocamos tudo'
+  - 'Script simples de migração'
+  - 'Resolvemos o problema específico'
+  - '1 semana de migração máximo'
+  - '1 configuração que funciona'
 ```
 
 ---
@@ -197,20 +209,20 @@ Cortar YAGNI:
 
 ```yaml
 Migração de Dados:
-  COMPLEXO: "Sistema de migração gradual com rollback automático"
-  SIMPLES: "Railway migration apply, validação org isolation"
+  COMPLEXO: 'Sistema de migração gradual com rollback automático'
+  SIMPLES: 'Railway migration apply, validação org isolation'
 
 API Changes:
-  COMPLEXO: "Versionamento com 3 versões simultâneas"
-  SIMPLES: "Breaking change, update client + server"
+  COMPLEXO: 'Versionamento com 3 versões simultâneas'
+  SIMPLES: 'Breaking change, update client + server'
 
 Multi-Tenant Deployment:
-  COMPLEXO: "Deploy per-organization com feature flags"
-  SIMPLES: "Deploy global, validar org isolation"
+  COMPLEXO: 'Deploy per-organization com feature flags'
+  SIMPLES: 'Deploy global, validar org isolation'
 
 Org Context:
-  COMPLEXO: "Context switching dinâmico"
-  SIMPLES: "useOrgContext hook + BaseService"
+  COMPLEXO: 'Context switching dinâmico'
+  SIMPLES: 'useOrgContext hook + BaseService'
 ```
 
 ### **FASE 3: CRIAÇÃO DE TASKS (1 hora)**

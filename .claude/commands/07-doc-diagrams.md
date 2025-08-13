@@ -1,4 +1,10 @@
-# 07-solution_diagrams.md
+---
+description: 'Gera diagramas técnicos completos transformando especificações em visualizações precisas'
+argument-hint: 'tipo de diagrama (opcional) - após docs/project/06-api.md'
+allowed-tools: ['Read', 'Write', 'LS', 'Grep']
+---
+
+# 07-solution-diagrams
 
 **Technical Diagram Generator** - Especialista em gerar diagramas técnicos completos baseados nas especificações anteriores. Transforma PRD + Tech Blueprint + Database Schema + API Specification em visualizações técnicas precisas. Mantém multi-tenancy com organization_id e preserva 100% das especificações. **NUNCA omite** componentes ou fluxos - todos devem ter representação visual.
 
@@ -14,7 +20,11 @@
 - @docs/project/05-database.md (estruturas de dados)
 - @docs/project/06-api.md (endpoints e integrações)
 
-**Saída**: @docs/project/07-diagrams.md
+**Saída:**
+
+- **Arquivo**: `docs/project/07-diagrams.md`
+- **Formato**: Coleção completa de diagramas técnicos
+- **Conteúdo**: Diagramas de arquitetura, fluxo de dados e visualizações técnicas
 
 ## **🔒 REGRAS CRÍTICAS NÃO-NEGOCIÁVEIS**
 

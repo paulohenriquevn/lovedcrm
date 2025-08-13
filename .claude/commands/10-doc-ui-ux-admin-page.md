@@ -1,4 +1,10 @@
-# 10-doc-ui-ux-admin-page
+---
+description: 'Especifica comportamento e estilo para todas as telas administrativas com tokens setoriais'
+argument-hint: 'tela admin (opcional) - após 09-admin-structure'
+allowed-tools: ['Read', 'Write', 'LS', 'Grep']
+---
+
+# 10-admin-ui-ux-specialist
 
 **Admin Dashboard UI/UX Specialist** - Especialista em especificar comportamento e estilo para TODAS AS TELAS ADMINISTRATIVAS mapeadas. Consome estrutura hierárquica do admin dashboard e tokens setoriais para gerar especificações completas de UI/UX. Analisa codebase atual PRIMEIRO.
 
@@ -13,7 +19,11 @@
 - @docs/project/03-tech.md (modelo B2B/B2C + stack)
 - Codebase atual (componentes e padrões existentes)
 
-**Saída**: @docs/project/10-ui-ux-admin-pages.md
+**Saída:**
+
+- **Arquivo**: `docs/project/10-ui-ux-admin-pages.md`
+- **Formato**: Especificações completas de UI/UX para todas as telas administrativas
+- **Conteúdo**: Comportamentos, estilos, interações e tokens setoriais aplicados
 
 ## 🧠 **PENSAR ANTES DE AGIR - REGRA UNIVERSAL**
 
@@ -90,10 +100,10 @@
 
 **ANTES** de especificar qualquer UI/UX, DEVE analisar o codebase atual:
 
-1. **Glob components/ui/\\*.tsx** - Componentes shadcn/ui disponíveis
-2. **Glob components/admin/\\*.tsx** - Componentes admin existentes
+1. **Glob components/ui/\\\*.tsx** - Componentes shadcn/ui disponíveis
+2. **Glob components/admin/\\\*.tsx** - Componentes admin existentes
 3. **Grep "useState\\|useEffect"** - Padrões de estado existentes
-4. **Grep "className.*hover\\|focus"** - Padrões de interação existentes
+4. **Grep "className.\*hover\\|focus"** - Padrões de interação existentes
 5. **Read app/globals.css** - Tokens CSS aplicados
 
 ### **ETAPA 1: Identificação de Patterns UI (OBRIGATÓRIO)**
@@ -101,7 +111,7 @@
 6. **Grep "loading\\|spinner\\|skeleton"** - Estados de loading implementados
 7. **Grep "toast\\|alert\\|notification"** - Sistema de feedback existente
 8. **Grep "modal\\|dialog\\|drawer"** - Padrões de overlay implementados
-9. **Glob hooks/use-\\*.ts** - Hooks personalizados disponíveis
+9. **Glob hooks/use-\\\*.ts** - Hooks personalizados disponíveis
 10. **Grep "animation\\|transition"** - Padrões de movimento existentes
 
 ### **✅ NUNCA FAZER:**
@@ -161,46 +171,54 @@
 
 ## **📋 TEMPLATE DE SAÍDA - ESPECIFICAÇÃO COMPLETA UI/UX ADMIN**
 
-```markdown
+````markdown
 # Admin Dashboard UI/UX - [Nome do Produto]
 
 ## PRESERVAÇÃO DA ESTRUTURA MAPEADA
 
 ### Admin Structure Base (09-admin-pages.md)
+
 [LISTAR TODAS as seções/telas mapeadas na estrutura hierárquica]
+
 - **DASHBOARD**: [Seções encontradas]
-- **[MÓDULO 1]**: [Telas encontradas]  
+- **[MÓDULO 1]**: [Telas encontradas]
 - **[MÓDULO 2]**: [Telas encontradas]
 - **[MÓDULO N]**: [Telas encontradas]
 
 ### Tokens Setoriais Aplicados (08-design-tokens.md)
+
 - **Primary**: `[valor HSL]` → `bg-[classe-tailwind]`
 - **Secondary**: `[valor HSL]` → `bg-[classe-tailwind]`
 - **Accent**: `[valor HSL]` → `bg-[classe-tailwind]`
 - **Específicos**: `[token-específico]` → `[classe-tailwind]`
 
 ### Sistema de Componentes (Codebase)
+
 [LISTAR componentes encontrados na análise do codebase]
+
 - **shadcn/ui**: [Button, Card, Table, Dialog, etc.]
 - **Custom Admin**: [Componentes admin específicos encontrados]
 - **Hooks**: [Hooks personalizados identificados]
 - **Patterns**: [Padrões de estado/interação existentes]
 
 # DASHBOARD
+
 ## Overview Section
+
 ### Layout Structure
+
 - **Grid**: `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6`
 - **Container**: `max-w-7xl mx-auto p-6`
 - **Spacing**: `space-y-6`
 
 ### Metrics Cards
+
 #### Visual Specification
+
 ```tsx
 <Card className="bg-card border-[primary]/10 hover:border-[primary]/20 transition-colors">
   <CardHeader className="pb-3">
-    <CardTitle className="text-sm font-medium text-muted-foreground">
-      [Metric Name]
-    </CardTitle>
+    <CardTitle className="text-sm font-medium text-muted-foreground">[Metric Name]</CardTitle>
   </CardHeader>
   <CardContent>
     <div className="text-2xl font-bold text-[primary]">[Value]</div>
@@ -211,71 +229,82 @@
   </CardContent>
 </Card>
 ```
+````
 
 #### Interaction States
+
 - **Hover**: `hover:shadow-lg hover:scale-[1.02] transition-all duration-200`
 - **Loading**: Skeleton loader with `animate-pulse`
 - **Error**: Red border `border-destructive` + retry button
 - **Empty**: Placeholder with `text-muted-foreground`
 
 #### Responsive Behavior
+
 - **Mobile**: Single column, cards stack vertically
 - **Tablet**: 2 columns grid
 - **Desktop**: 4 columns grid with larger cards
 
 ### Quick Actions
+
 #### Button Styles
+
 - **Primary CTA**: `bg-[primary] hover:bg-[primary]/90 text-[primary-foreground]`
 - **Secondary**: `bg-[secondary] hover:bg-[secondary]/80 text-[secondary-foreground]`
 - **Icon Actions**: `bg-[accent]/10 hover:bg-[accent]/20 text-[accent]`
 
 #### Interaction Patterns
+
 - **Click**: Scale down `active:scale-95` + ripple effect
 - **Keyboard**: Focus ring `focus:ring-2 focus:ring-[primary]`
 - **Loading**: Spinner inside button + disabled state
 
 # [MÓDULO ESPECÍFICO - Ex: CRM]
+
 ## [Tela Específica - Ex: Leads Management]
+
 ### Data Table
+
 #### Visual Specification
+
 ```tsx
 <Table className="border-[secondary]/20">
   <TableHeader>
     <TableRow className="bg-[secondary]/5">
-      <TableHead className="text-[primary] font-semibold">
-        [Column Name]
-      </TableHead>
+      <TableHead className="text-[primary] font-semibold">[Column Name]</TableHead>
     </TableRow>
   </TableHeader>
   <TableBody>
     <TableRow className="hover:bg-[accent]/5 transition-colors">
-      <TableCell className="text-foreground">
-        [Cell Content]
-      </TableCell>
+      <TableCell className="text-foreground">[Cell Content]</TableCell>
     </TableRow>
   </TableBody>
 </Table>
 ```
 
 #### Interaction States
+
 - **Row Hover**: `hover:bg-[accent]/5` with smooth transition
 - **Row Selection**: Checkbox with `accent-[primary]`
 - **Sort Headers**: Click + arrow icon with `text-[primary]`
 - **Pagination**: Navigation with `bg-[primary]` active state
 
 #### Bulk Actions
+
 - **Selection Bar**: Appears with `bg-[accent]/10` background
 - **Action Buttons**: Styled with secondary variants
 - **Confirmation**: Modal dialog for destructive actions
 
 ### Filters Panel
+
 #### Filter Components
+
 - **Search Input**: `border-[secondary] focus:border-[primary]`
 - **Select Dropdowns**: Custom with `bg-[secondary]/5`
 - **Date Pickers**: Calendar with `accent-[primary]`
 - **Clear Filters**: Link button with `text-[accent]`
 
 #### States & Behaviors
+
 - **Active Filters**: Badge count with `bg-[primary] text-[primary-foreground]`
 - **Filter Animation**: Slide in/out with smooth transitions
 - **Mobile Filters**: Drawer overlay on smaller screens
@@ -285,19 +314,19 @@
 # LAYOUT PATTERNS GLOBAIS
 
 ## Sidebar Navigation
+
 ### Structure & Styling
+
 ```tsx
 <aside className="w-64 bg-[secondary]/5 border-r border-[secondary]/20">
   <nav className="p-4 space-y-2">
-    <SidebarItem 
+    <SidebarItem
       className="text-[primary] bg-[primary]/10 border-r-2 border-[primary]"
       active={true}
     >
       [Active Item]
     </SidebarItem>
-    <SidebarItem 
-      className="text-muted-foreground hover:text-[primary] hover:bg-[primary]/5"
-    >
+    <SidebarItem className="text-muted-foreground hover:text-[primary] hover:bg-[primary]/5">
       [Inactive Item]
     </SidebarItem>
   </nav>
@@ -305,73 +334,79 @@
 ```
 
 ### Responsive Behavior
+
 - **Desktop**: Full sidebar visible
 - **Tablet**: Collapsible sidebar with icons only
 - **Mobile**: Hidden sidebar, hamburger menu → drawer
 
 ### Interaction States
+
 - **Active Item**: Background + border + text color
 - **Hover**: Subtle background change + text color
 - **Keyboard Navigation**: Focus outline with ring
 
 ## Header Bar
+
 ### Components & Styling
+
 - **Logo/Brand**: `text-[primary]` with hover scaling
 - **User Menu**: Dropdown with `bg-card` background
 - **Notifications**: Bell icon with `bg-[accent]` badge
 - **Organization Switcher**: Select with custom styling
 
 ### Search Functionality
+
 - **Global Search**: `Cmd+K` shortcut, modal overlay
 - **Quick Actions**: Recent items, suggestions
 - **Results**: Categorized with `text-[accent]` labels
 
 ## Modal Patterns
+
 ### Base Modal Structure
+
 ```tsx
 <Dialog>
   <DialogContent className="bg-card border-[secondary]/20">
     <DialogHeader className="border-b border-[secondary]/10 pb-4">
-      <DialogTitle className="text-[primary]">
-        [Modal Title]
-      </DialogTitle>
+      <DialogTitle className="text-[primary]">[Modal Title]</DialogTitle>
     </DialogHeader>
-    <DialogBody className="py-6">
-      [Modal Content]
-    </DialogBody>
+    <DialogBody className="py-6">[Modal Content]</DialogBody>
     <DialogFooter className="border-t border-[secondary]/10 pt-4">
       <Button variant="outline" className="mr-2">
         Cancel
       </Button>
-      <Button className="bg-[primary] hover:bg-[primary]/90">
-        Confirm
-      </Button>
+      <Button className="bg-[primary] hover:bg-[primary]/90">Confirm</Button>
     </DialogFooter>
   </DialogContent>
 </Dialog>
 ```
 
 ### Modal Types & Behaviors
+
 - **Confirmation**: Destructive actions with red accent
 - **Form Modals**: Multi-step with progress indicator
 - **Detail Views**: Larger modals with tabs/sections
 - **Quick Actions**: Small modals for simple operations
 
 ## Form Patterns
+
 ### Input Styling
+
 ```tsx
-<Input 
+<Input
   className="border-[secondary] focus:border-[primary] focus:ring-[primary]/20"
   placeholder="[Placeholder text]"
 />
 ```
 
 ### Validation States
+
 - **Error**: `border-destructive focus:ring-destructive/20`
 - **Success**: `border-[accent] focus:ring-[accent]/20`
 - **Warning**: `border-warning focus:ring-warning/20`
 
 ### Form Behaviors
+
 - **Real-time Validation**: Show errors on blur
 - **Auto-save**: Subtle indicators, toast confirmations
 - **Required Fields**: Asterisk with `text-destructive`
@@ -379,7 +414,9 @@
 # ESTADOS GLOBAIS DO SISTEMA
 
 ## Loading States
+
 ### Skeleton Patterns
+
 ```tsx
 <div className="animate-pulse space-y-4">
   <div className="h-4 bg-[secondary]/20 rounded w-3/4"></div>
@@ -388,39 +425,40 @@
 ```
 
 ### Loading Indicators
+
 - **Button Loading**: Spinner + disabled state
 - **Page Loading**: Full page spinner with `bg-[primary]`
 - **Section Loading**: Local spinners for async operations
 
 ## Error States
+
 ### Error Messages
+
 - **Inline Errors**: `text-destructive text-sm` below inputs
 - **Page Errors**: Centered with illustration + retry button
 - **Network Errors**: Toast notifications with `bg-destructive`
 
 ### Recovery Actions
+
 - **Retry Buttons**: Styled with outline variant
 - **Fallback Content**: Meaningful placeholders
 - **Error Boundaries**: Graceful degradation
 
 ## Empty States
+
 ### Placeholder Content
+
 ```tsx
 <div className="text-center py-12">
   <EmptyIcon className="w-12 h-12 text-[secondary] mx-auto mb-4" />
-  <h3 className="text-lg font-medium text-[primary] mb-2">
-    [Empty State Title]
-  </h3>
-  <p className="text-muted-foreground mb-6">
-    [Empty State Description]
-  </p>
-  <Button className="bg-[primary] hover:bg-[primary]/90">
-    [Primary Action]
-  </Button>
+  <h3 className="text-lg font-medium text-[primary] mb-2">[Empty State Title]</h3>
+  <p className="text-muted-foreground mb-6">[Empty State Description]</p>
+  <Button className="bg-[primary] hover:bg-[primary]/90">[Primary Action]</Button>
 </div>
 ```
 
 ### Empty State Types
+
 - **No Data**: First time user experience
 - **Search Results**: No matches found
 - **Filtered Results**: Clear filters option
@@ -428,17 +466,21 @@
 # ANIMAÇÕES E TRANSIÇÕES
 
 ## Transition Classes
+
 ### Standard Transitions
+
 - **Color Changes**: `transition-colors duration-200`
 - **Transform**: `transition-transform duration-150 ease-out`
 - **All Properties**: `transition-all duration-200 ease-in-out`
 
 ### Hover Animations
+
 - **Scale**: `hover:scale-105`
 - **Shadow**: `hover:shadow-lg`
 - **Border**: `hover:border-[primary]/40`
 
 ### Enter/Exit Animations
+
 - **Fade In**: `opacity-0 animate-in fade-in duration-200`
 - **Slide Down**: `animate-in slide-in-from-top-2 duration-300`
 - **Scale In**: `animate-in zoom-in-95 duration-150`
@@ -446,7 +488,9 @@
 # RESPONSIVIDADE
 
 ## Breakpoint Strategy
+
 ### Mobile First Approach
+
 - **Base**: Mobile styles (320px+)
 - **sm**: Tablet portrait (640px+)
 - **md**: Tablet landscape (768px+)
@@ -454,23 +498,28 @@
 - **xl**: Large desktop (1280px+)
 
 ### Component Adaptations
+
 - **Navigation**: Sidebar → hamburger → drawer
 - **Tables**: Horizontal scroll → card layout
 - **Forms**: Single column → multi-column
 - **Grids**: 1 column → 2 column → 4 column
 
 ## Accessibility Compliance
+
 ### WCAG 2.1 AA Standards
+
 - **Color Contrast**: All token combinations tested
 - **Keyboard Navigation**: Full keyboard support
 - **Screen Readers**: Proper ARIA labels
 - **Focus Management**: Visible focus indicators
 
 ### Accessibility Features
+
 - **Skip Links**: Jump to main content
 - **Alt Text**: All images and icons
 - **Form Labels**: Associated with inputs
 - **Error Announcements**: Screen reader friendly
+
 ```
 
 ## **✅ CHECKLIST DE ESPECIFICAÇÃO COMPLETA**
@@ -518,3 +567,4 @@
 ---
 
 **EXECUTAR ANÁLISE COMPLETA E GERAR @docs/project/10-ui-ux-admin-pages.md**
+```

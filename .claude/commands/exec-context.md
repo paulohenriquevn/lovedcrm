@@ -1,3 +1,9 @@
+---
+description: 'Contextualização completa do sistema multitenant para novos desenvolvedores'
+argument-hint: 'módulo/área (opcional) - comando independente'
+allowed-tools: ['Read', 'LS', 'Bash', 'Grep', 'Glob']
+---
+
 # exec-context
 
 **🚨 AVISO CRÍTICO: Este agente DEVE usar ferramentas Read/LS/Bash/Grep para analisar o codebase REAL antes de qualquer contextualização. Contextos baseados em suposições são FALHA CRÍTICA.**
@@ -12,7 +18,11 @@
 
 - Nenhuma (analisa projeto completo automaticamente)
 
-**Saída**: Contextualização completa salva automaticamente em `docs/context/PROJECT-CONTEXT-[TIMESTAMP].md`
+**Saída:**
+
+- **Arquivo**: `docs/context/PROJECT-CONTEXT-[TIMESTAMP].md`
+- **Formato**: Contextualização completa do sistema multi-tenant
+- **Conteúdo**: Arquitetura, estado atual, padrões, configurações e guia de desenvolvimento
 
 **Uso:**
 
@@ -83,58 +93,27 @@ graph LR
 
 ---
 
-## 🧠 **PENSAR ANTES DE AGIR - REGRA UNIVERSAL**
+## 🧠 **PROCESSO DE REFLEXÃO OBRIGATÓRIO**
 
-### **🚨 PAUSA OBRIGATÓRIA ANTES DE QUALQUER AÇÃO**
+**🔗 REFERÊNCIA**: `@shared/thinking-framework.md#framework-4-etapas`
 
-**REGRA FUNDAMENTAL**: Este agente NUNCA deve iniciar qualquer processamento sem primeiro PENSAR e PLANEJAR suas ações.
-
-**PROCESSO OBRIGATÓRIO DE REFLEXÃO (3-5 minutos)**:
-
-#### **🎯 ETAPA 1: COMPREENDER O PEDIDO (30s)**
-
-- ❓ **Pergunta**: "O que exatamente preciso contextualizar?"
-- 📝 **Resposta**: [Mapeamento completo de arquitetura + estado + padrões + configurações]
-- ✅ **Validação**: "Tenho 95% de certeza sobre o escopo da contextualização?"
-
-#### **🔍 ETAPA 2: ANALISAR PRÉ-REQUISITOS (90s)**
-
-- 📋 **Pergunta**: "Que arquivos e estruturas preciso analisar?"
-- 🔎 **Resposta**: [Configurações, código, schema, dependências, histórico, documentação]
-- ⚠️ **Validação**: "Posso mapear completamente com as ferramentas disponíveis?"
-
-#### **⚙️ ETAPA 3: PLANEJAR ABORDAGEM (90s)**
-
-- 🛣️ **Pergunta**: "Qual é a sequência ótima de análise?"
-- 📈 **Resposta**: [Config → Dependencies → Architecture → Patterns → History → Documentation]
-- 🎯 **Validação**: "Esta sequência gera contexto completo e preciso?"
-
-#### **🚨 ETAPA 4: VALIDAR PRINCÍPIOS (30s)**
-
-- 🔴 **KISS**: Esta abordagem é a mais simples e eficaz?
-- 🔴 **COMPLETUDE**: Cobrirá todos os aspectos críticos do projeto?
-- 🔴 **PRECISÃO**: Baseada em evidências reais, não suposições?
-- 🔴 **99% CERTEZA**: Tenho confiança absoluta na metodologia?
-
-**❌ SE QUALQUER VALIDAÇÃO FALHAR**: PARAR e refinar abordagem
-**✅ SE TODAS VALIDAÇÕES PASSAREM**: Prosseguir com análise sistemática
-
-### **📝 TEMPLATE DE REFLEXÃO OBRIGATÓRIA**
-
-Antes de iniciar qualquer contextualização, o agente DEVE exibir:
+**TEMPLATE ESPECÍFICO PARA ANÁLISE CONTEXTUAL**:
 
 ```
-🧠 PENSANDO ANTES DE CONTEXTUALIZAR...
+🧠 ANALISANDO ANTES DE AGIR...
 
-✅ COMPREENSÃO: [Mapeamento completo de arquitetura + estado + padrões]
-✅ PRÉ-REQUISITOS: [Análise de configs + código + schema + dependências + histórico]
-✅ PLANO: [Sequência sistemática de análise com ferramentas específicas]
-✅ VALIDAÇÃO: KISS ✓ COMPLETUDE ✓ PRECISÃO ✓ 99% CERTEZA ✓
+✅ COMPREENSÃO: [Análise específica solicitada + escopo de contextualização]
+✅ PRÉ-REQUISITOS: [Arquivos para ler + estado para verificar + estruturas para mapear]
+✅ PLANO: [Read → Analyze → Synthesize → Validate → Document]
+✅ VALIDAÇÃO: KISS ✓ COMPLETUDE ✓ EVIDÊNCIAS ✓ 95% CERTEZA ✓
 
-🚀 INICIANDO CONTEXTUALIZAÇÃO SISTEMÁTICA...
+🚀 INICIANDO ANÁLISE SISTEMÁTICA...
 ```
 
-**TEMPO INVESTIDO**: 3-5 minutos de planejamento garantem contextualização completa e precisa.
+**🔗 REFERÊNCIA**: `@shared/thinking-framework.md#decision-gates`
+
+❌ **SE VALIDAÇÃO FALHAR**: Parar e solicitar esclarecimento
+✅ **SE VALIDAÇÃO PASSAR**: Prosseguir com contextualização sistematizada
 
 ---
 
@@ -1096,8 +1075,7 @@ Current Development Focus (baseado em CHANGELOG + Git history):
 ### **🚨 REGRAS FUNDAMENTAIS (CRÍTICAS)**
 
 ```yaml
-Multi-Tenancy Rules (NON-NEGOTIABLE):
-  1. EVERY protected endpoint MUST validate X-Org-Id header
+Multi-Tenancy Rules (NON-NEGOTIABLE): 1. EVERY protected endpoint MUST validate X-Org-Id header
   2. ALL models MUST include organization_id FK
   3. ALL queries MUST filter by organization_id
   4. NEVER trust client-provided org_id without validation

@@ -1,3 +1,9 @@
+---
+description: 'Investiga e corrige bugs no sistema Multi-Tenant SaaS mantendo isolamento organizacional'
+argument-hint: 'descrição detalhada do bug (obrigatório) - independente'
+allowed-tools: ['Read', 'Write', 'Edit', 'LS', 'Bash', 'Grep', 'Glob']
+---
+
 # exec-bug
 
 **Investiga e corrige bugs no sistema Multi-Tenant SaaS mantendo isolamento organizacional**
@@ -9,6 +15,12 @@
 **Argumentos:**
 
 - `bug`: Descrição do bug, erro específico, ou comportamento inesperado
+
+**Saída:**
+
+- **Correção**: Bug corrigido diretamente no codebase
+- **Relatório**: Análise detalhada, causa raiz e solução aplicada
+- **Documentação**: Atualização automática do CHANGELOG.md
 
 **Uso:**
 
@@ -533,7 +545,7 @@ Princípio: Melhoria sustentável
 
 ```yaml
 ❌ Sinais:
-  - "Já que estou aqui, vou arrumar..."
+  - 'Já que estou aqui, vou arrumar...'
   - Mudança de múltiplas features
   - Refatoração não relacionada
   - Correção de bugs não reportados

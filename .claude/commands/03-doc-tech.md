@@ -1,4 +1,10 @@
-# 03-tech-architect.md
+---
+description: 'Transforma funcionalidades do PRD em histórias técnicas através de pesquisa intensiva de soluções'
+argument-hint: 'funcionalidade (opcional) - requer docs/project/02-prd.md'
+allowed-tools: ['Read', 'Write', 'LS', 'Grep', 'WebFetch']
+---
+
+# 03-tech-architect
 
 **Technical Solution Researcher** - Pesquisador técnico especializado em transformar funcionalidades do PRD em histórias técnicas macro implementáveis. Identifica soluções viáveis através de pesquisa intensiva em provedores, open source e ferramentas. Mapeia jornadas técnicas críticas e gera blueprint completo de implementação. **NUNCA remove funcionalidades** do PRD - todas devem ter solução técnica identificada.
 
@@ -7,7 +13,11 @@
 - ✅ **DEVE**: Read CHANGELOG.md - ANALISAR histórico completo de implementações do projeto
 
 **Entrada**: @docs/project/02-prd.md  
-**Saída**: @docs/project/03-tech.md
+**Saída:**
+
+- **Arquivo**: `docs/project/03-tech.md`
+- **Formato**: Blueprint técnico detalhado com soluções implementáveis
+- **Conteúdo**: Histórias técnicas macro, provedores validados e jornadas críticas
 
 ## **🔒 REGRAS CRÍTICAS NÃO-NEGOCIÁVEIS**
 
@@ -254,27 +264,28 @@ Gerar documento estruturado em @docs/project/03-tech.md:
 - Organização multi-tenant com organization_id
 
 **Formato Obrigatório: Diagramas ASCII, NÃO código SQL**
-
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│  organizations  │    │     users       │    │     leads       │
-├─────────────────┤    ├─────────────────┤    ├─────────────────┤
-│ • id (UUID)     │    │ • id (UUID)     │    │ • id (UUID)     │
-│ • name          │    │ • email         │    │ • full_name     │
-│ • slug          │    │ • password_hash │    │ • organization_id│
-│ • plan_tier     │    │ • full_name     │    │ • stage_id      │
-│ • settings      │    │ • is_active     │    │ • assigned_to   │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         └───────────┬───────────┘                       │
-                     │                                   │
-         ┌─────────────────────┐                         │
-         │ organization_members│◄────────────────────────┘
-         ├─────────────────────┤
-         │ • organization_id   │
-         │ • user_id          │
-         │ • role             │
-         └─────────────────────┘
+
+┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
+│ organizations │ │ users │ │ leads │
+├─────────────────┤ ├─────────────────┤ ├─────────────────┤
+│ • id (UUID) │ │ • id (UUID) │ │ • id (UUID) │
+│ • name │ │ • email │ │ • full_name │
+│ • slug │ │ • password_hash │ │ • organization_id│
+│ • plan_tier │ │ • full_name │ │ • stage_id │
+│ • settings │ │ • is_active │ │ • assigned_to │
+└─────────────────┘ └─────────────────┘ └─────────────────┘
+│ │ │
+└───────────┬───────────┘ │
+│ │
+┌─────────────────────┐ │
+│ organization_members│◄────────────────────────┘
+├─────────────────────┤
+│ • organization_id │
+│ • user_id │
+│ • role │
+└─────────────────────┘
+
 ```
 
 ## 6. Estimativas e Complexidade

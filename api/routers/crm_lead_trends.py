@@ -43,7 +43,7 @@ def get_lead_score_trend(
     # Get lead with organization validation
     lead = (
         db.query(Lead)
-        .filter(and_(Lead.id == lead_uuid, Lead.organization_id == organization.id))
+        .filter(and_(Lead.id == lead_uuid, Lead.organization_id == organization.id))  # type: ignore[arg-type]
         .first()
     )
 
@@ -76,7 +76,7 @@ def get_lead_score_trend(
     # Create response
     trend_data = LeadScoreTrend(
         lead_id=lead.id,
-        current_score=lead.lead_score or 0,
+        current_score=int(lead.lead_score or 0),
         trend_direction=trend_direction,
         trend_value=round(trend_value, 1),
         historical_data=historical_scores,
@@ -118,7 +118,7 @@ def _generate_score_history(
         random_variation = hash(f"{lead.id}_{date.date()}") % 21 - 10  # -10 to +10
 
         # Apply realistic constraints
-        day_score = current_score + base_variation + (random_variation * 0.3)
+        day_score = float(current_score) + base_variation + (random_variation * 0.3)
         day_score = max(0, min(100, round(day_score, 1)))
 
         historical_data.append(
@@ -190,7 +190,7 @@ def _analyze_factor_impacts(
             )
 
     # Sort by impact level and change magnitude
-    factor_impacts.sort(key=lambda x: (x.impact_level.value, abs(x.change_value)), reverse=True)
+    factor_impacts.sort(key=lambda x: (x.impact_level, abs(x.change_value)), reverse=True)
 
     return factor_impacts
 
@@ -256,7 +256,7 @@ def get_lead_trend_summary(
     # Get lead with organization validation
     lead = (
         db.query(Lead)
-        .filter(and_(Lead.id == lead_uuid, Lead.organization_id == organization.id))
+        .filter(and_(Lead.id == lead_uuid, Lead.organization_id == organization.id))  # type: ignore[arg-type]
         .first()
     )
 

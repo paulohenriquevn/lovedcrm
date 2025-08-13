@@ -12,7 +12,7 @@ Integration Points:
 """
 
 from datetime import datetime, timedelta
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, status
@@ -79,7 +79,7 @@ async def get_executive_dashboard(
         analytics_service = LeadAnalyticsService(db)
 
         # Build filters from query parameters
-        filters = {}
+        filters: Dict[str, Any] = {}
         if source:
             filters["source"] = source
         if score_min is not None:
@@ -101,7 +101,7 @@ async def get_executive_dashboard(
 
         # Get dashboard data from analytics service
         dashboard_data = await analytics_service.calculate_executive_dashboard(
-            organization.id, start_date, end_date, filters
+            organization.id, start_date, end_date, filters  # type: ignore[arg-type]
         )
 
         return ExecutiveDashboard(**dashboard_data)
@@ -157,7 +157,7 @@ async def get_summary_metrics(
             start_date, end_date = _calculate_timeframe_dates(timeframe)
 
         dashboard_data = await analytics_service.calculate_executive_dashboard(
-            organization.id, start_date, end_date
+            organization.id, start_date, end_date  # type: ignore[arg-type]
         )
 
         return SummaryMetrics(**dashboard_data["summary_metrics"])
@@ -206,13 +206,13 @@ async def get_conversion_funnel(
         from ..models.crm_lead import Lead
 
         base_query = db.query(Lead).filter(
-            Lead.organization_id == organization.id,
-            Lead.created_at >= start_date,
-            Lead.created_at <= end_date,
+            Lead.organization_id == organization.id,  # type: ignore[arg-type]
+            Lead.created_at >= start_date,  # type: ignore[arg-type]
+            Lead.created_at <= end_date,  # type: ignore[arg-type]
         )
 
         funnel_data = await analytics_service._calculate_conversion_funnel(
-            organization.id, base_query, start_date, end_date
+            organization.id, base_query, start_date, end_date  # type: ignore[arg-type]
         )
 
         return ConversionFunnel(**funnel_data)
@@ -261,9 +261,9 @@ async def get_source_performance(
         from ..models.crm_lead import Lead
 
         base_query = db.query(Lead).filter(
-            Lead.organization_id == organization.id,
-            Lead.created_at >= start_date,
-            Lead.created_at <= end_date,
+            Lead.organization_id == organization.id,  # type: ignore[arg-type]
+            Lead.created_at >= start_date,  # type: ignore[arg-type]
+            Lead.created_at <= end_date,  # type: ignore[arg-type]
         )
 
         source_data = await analytics_service._calculate_source_performance(base_query)
@@ -314,7 +314,7 @@ async def get_behavior_analysis(
             start_date, end_date = _calculate_timeframe_dates(timeframe)
 
         behavior_data = await analytics_service._calculate_behavior_insights(
-            organization.id, start_date, end_date
+            organization.id, start_date, end_date  # type: ignore[arg-type]
         )
 
         return BehaviorInsights(**behavior_data)
@@ -356,7 +356,7 @@ async def get_performance_alerts(
     try:
         analytics_service = LeadAnalyticsService(db)
 
-        alerts = await analytics_service._generate_performance_alerts(organization.id)
+        alerts = await analytics_service._generate_performance_alerts(organization.id)  # type: ignore[arg-type]
 
         # Filter alerts based on parameters
         filtered_alerts = alerts
@@ -423,7 +423,7 @@ async def update_alert_status(
         )
 
         return JSONResponse(
-            status_code=status.HTTP_200_OK,
+            status_code=200,
             content={
                 "message": f"Alert {alert_id} status updated to {status}",
                 "alert_id": alert_id,
@@ -435,7 +435,7 @@ async def update_alert_status(
 
     except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=500,
             detail=f"Failed to update alert status: {str(e)}",
         )
 
@@ -479,8 +479,8 @@ async def generate_analytics_report(
             _generate_report_background,
             report_id,
             report_request,
-            organization.id,
-            current_user.id,
+            organization.id,  # type: ignore[arg-type]
+            current_user.id,  # type: ignore[arg-type]
             db,
         )
 

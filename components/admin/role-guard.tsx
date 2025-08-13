@@ -7,8 +7,8 @@
  * Implements role hierarchy: Owner > Admin > Member > Viewer
  */
 
-import React from 'react'
 import { AlertTriangle, Lock } from 'lucide-react'
+import React from 'react'
 
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
@@ -110,9 +110,9 @@ interface PermissionCheckProps {
 
 // Helper functions
 function normalizeRole(role?: string): Role {
-  if (!role) return Role.VIEWER
+  if (!role) {return Role.VIEWER}
   const lowerRole = role.toLowerCase()
-  return Object.values(Role).find(r => r === lowerRole) || Role.VIEWER
+  return (Object.values(Role).find(r => r === lowerRole) != null) || Role.VIEWER
 }
 
 function getRoleLevel(role: Role): number {
@@ -172,21 +172,17 @@ function AccessDeniedCard({
           <Badge variant="outline">{currentRole.charAt(0).toUpperCase() + currentRole.slice(1)}</Badge>
         </div>
         
-        {requiredRole && (
-          <div className="flex items-center gap-2">
+        {requiredRole ? <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Required role:</span>
             <Badge variant="secondary">{getRequiredRoleLabel(requiredRole)}</Badge>
-          </div>
-        )}
+          </div> : null}
         
-        {requiredPermission && (
-          <div className="flex items-center gap-2">
+        {requiredPermission ? <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Required permission:</span>
             <Badge variant="outline" className="font-mono text-xs">
               {Array.isArray(requiredPermission) ? requiredPermission.join(', ') : requiredPermission}
             </Badge>
-          </div>
-        )}
+          </div> : null}
       </CardContent>
     </Card>
   )
@@ -243,17 +239,19 @@ export function RoleGuard({
   
   // Handle access denied cases
   switch (mode) {
-    case 'hide':
+    case 'hide': {
       return null
+    }
       
-    case 'disable':
+    case 'disable': {
       return (
         <div className={`opacity-50 pointer-events-none ${className}`}>
           {children}
         </div>
       )
+    }
       
-    case 'replace':
+    case 'replace': {
       if (fallback) {
         return <div className={className}>{fallback}</div>
       }
@@ -279,9 +277,11 @@ export function RoleGuard({
           />
         </div>
       )
+    }
       
-    default:
+    default: {
       return null
+    }
   }
 }
 

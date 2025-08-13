@@ -1,4 +1,10 @@
-# 09-doc-landing-page
+---
+description: 'Gera estrutura de landing page de alta conversão com benchmark setorial e análise de codebase'
+argument-hint: 'seção (opcional) - após 08-design-tokens'
+allowed-tools: ['Read', 'Write', 'LS', 'Grep', 'WebFetch']
+---
+
+# 09-landing-page-generator
 
 **Landing Page Structure Generator** - Especialista em gerar estrutura hierárquica completa para LANDING PAGE de alta conversão. Preserva 100% do trabalho dos agentes anteriores, aplica benchmark setorial obrigatório e cria estrutura organizada executável. Analisa codebase atual PRIMEIRO para componentes e padrões existentes.
 
@@ -14,7 +20,11 @@
 - @docs/project/08-design-tokens.md (tokens setoriais)
 - Codebase atual (componentes existentes)
 
-**Saída**: @docs/project/09-landing-page.md
+**Saída:**
+
+- **Arquivo**: `docs/project/09-landing-page.md`
+- **Formato**: Estrutura de landing page de alta conversão com benchmark setorial
+- **Conteúdo**: Seções otimizadas, componentes e estratégia de conversão
 
 ## 🧠 **PENSAR ANTES DE AGIR - REGRA UNIVERSAL**
 
@@ -91,18 +101,18 @@
 
 **ANTES** de gerar qualquer landing page, DEVE analisar o codebase atual:
 
-1. **Glob components/ui/\\*.tsx** - Todos componentes shadcn/ui disponíveis
-2. **Glob components/**/\\*landing\\*.tsx** - Landing components existentes  
-3. **Glob components/**/\\*hero\\*.tsx** - Hero sections implementadas
+1. **Glob components/ui/\\\*.tsx** - Todos componentes shadcn/ui disponíveis
+2. **Glob components/**/\\_landing\\_.tsx\*\* - Landing components existentes
+3. **Glob components/**/\\_hero\\_.tsx\*\* - Hero sections implementadas
 4. **Grep "Button\\|Card\\|Badge\\|Avatar"** - Componentes base para landing
 5. **Grep "framer-motion\\|motion\\."** - Padrões de animação existentes
 
 ### **ETAPA 1: Identificação de Patterns (OBRIGATÓRIO)**
 
-6. **Grep "className.*animate"** - Classes de animação Tailwind
-7. **Glob hooks/use-\\*animation\\*.ts** - Hooks de animação personalizados
+6. **Grep "className.\*animate"** - Classes de animação Tailwind
+7. **Glob hooks/use-\\_animation\\_.ts** - Hooks de animação personalizados
 8. **Grep "Lucide\\|Icon"** - Sistema de ícones utilizado
-9. **Glob app/\\**/page.tsx** - Páginas existentes para referência
+9. **Glob app/\\**/page.tsx\*\* - Páginas existentes para referência
 10. **Grep "metadata\\|title\\|description"** - Padrões SEO
 
 ### **✅ SISTEMA IDENTIFICADO - ESPECIFICAR NO TEMPLATE:**
@@ -173,24 +183,29 @@
 ## PRESERVAÇÃO DOS AGENTES ANTERIORES
 
 ### Vision Core (01-vision.md) - PRESERVAÇÃO ABSOLUTA
+
 - **Headline**: [COPIAR EXATO - palavra por palavra do vision.md]
-- **Sub-headline**: [COPIAR EXATO - palavra por palavra do vision.md]  
+- **Sub-headline**: [COPIAR EXATO - palavra por palavra do vision.md]
 - **Público-alvo**: [COPIAR EXATO do vision.md]
 - **Proposta de valor**: [COPIAR EXATO - sem alterações]
 
 ### Funcionalidades (02-prd.md) - COBERTURA TOTAL
+
 [LISTAR TODAS as funcionalidades - zero omissões permitidas]
+
 1. [Nome Funcionalidade 1] → [Benefício específico]
 2. [Nome Funcionalidade 2] → [Benefício específico]
 3. [Nome Funcionalidade N] → [Benefício específico]
 
 ### Modelo Detectado (03-tech.md)
+
 - **Tipo**: [B2B ou B2C]
 - **Stack**: [Next.js 14 + FastAPI + PostgreSQL + Railway confirmado]
 - **Multi-tenancy**: [organization_id isolation confirmado]
 - **CTAs Modelo**: [B2B: "Solicitar Demo/Orçamento" | B2C: "Começar Grátis/Testar"]
 
 ### Tokens Setoriais (08-design-tokens.md)
+
 - **Primary**: [valor HSL exato do arquivo]
 - **Accent**: [valor HSL exato do arquivo]
 - **CTA Color**: [valor HSL exato do arquivo]
@@ -199,12 +214,15 @@
 ## CODEBASE ATUAL MAPEADO
 
 ### Componentes Disponíveis
+
 [LISTAR componentes encontrados no Glob/Grep do codebase]
+
 - **shadcn/ui**: [Button, Card, Badge, Avatar, Input, etc - encontrados]
 - **Custom**: [Landing components existentes encontrados]
 - **Layout**: [Header, Footer, Section components encontrados]
 
 ### Padrões Identificados
+
 - **Animações**: [Framer Motion patterns ou Tailwind animate]
 - **Icons**: [Lucide React ou sistema encontrado]
 - **Typography**: [Classes Tailwind utilizadas]
@@ -213,7 +231,8 @@
 ## BENCHMARK SETORIAL OBRIGATÓRIO
 
 ### Concorrentes Analisados - SETOR: [Setor específico do PRD]
-1. **[Nome Real Concorrente 1]** 
+
+1. **[Nome Real Concorrente 1]**
    - URL: [URL real da landing page]
    - Headline: "[Headline exata copiada]"
    - CTA Principal: "[CTA exato]"
@@ -228,179 +247,226 @@
    - Gap: [O que não fazem]
 
 3. **[Nome Real Concorrente 3]**
-   - URL: [URL real da landing page]  
+   - URL: [URL real da landing page]
    - Headline: "[Headline exata copiada]"
    - CTA Principal: "[CTA exato]"
    - Força: [O que fazem muito bem]
    - Gap: [O que não fazem]
 
 ### Nossa Diferenciação Estratégica
+
 - **Gap Identificado**: [O que TODOS os concorrentes não fazem bem]
 - **Nossa Vantagem**: [Funcionalidade única do PRD que explora esse gap]
 - **Posicionamento**: [Como nos posicionamos diferente no mercado]
 
 # HERO
+
 ## Headline
+
 [Headline EXATA do 01-vision.md - palavra por palavra, zero alterações]
 
-## Sub-headline  
+## Sub-headline
+
 [Sub-headline EXATA do 01-vision.md - palavra por palavra, zero alterações]
 
 ## Badge/Tag
+
 **Setor**: [Setor específico] • [Benefício específico do setor baseado no benchmark]
 
 ## CTA Principal
+
 - **Primary**: [Adaptado ao modelo B2B/B2C + insights do benchmark]
-  - B2B: "Solicitar Demo" | "Falar com Especialista" | "Ver Demonstração"  
+  - B2B: "Solicitar Demo" | "Falar com Especialista" | "Ver Demonstração"
   - B2C: "Começar Gratuitamente" | "Testar 14 dias Grátis" | "Criar Conta"
 - **Secondary**: [Baseado no benchmark: "Ver Preços" | "Saber Mais" | "Assistir Demo"]
 
 ## Social Proof Inicial
+
 [Métrica baseada no benchmark setorial]
+
 - "Usado por [X]+ [tipo de usuário específico do setor]"
 - "Confiado por [X] [empresas/profissionais do setor]"
 
 ## Visual/Hero Image
+
 - **Tipo**: [Product mockup | Dashboard preview | Video demo]
 - **Componentes**: [shadcn/ui components para implementar]
 - **Animação**: [Pattern encontrado no codebase]
 
 # FEATURES
+
 ## Feature 1: [Nome EXATO da Funcionalidade 1 do PRD]
+
 ### Título Convertido
+
 [Transformar nome técnico em benefício claro para o setor]
 
 ### Descrição Benefício
+
 [Descrição da funcionalidade do PRD adaptada como benefício específico]
 
 ### Benefits Lista
-- **Benefício 1**: [Específico do setor, baseado no benchmark]
-- **Benefício 2**: [Dor específica que resolve, identificada no benchmark] 
-- **Benefício 3**: [Vantagem competitiva vs concorrentes]
 
-### Visual/Component
-- **Tipo**: [Screenshot | Diagram | Interactive demo]
-- **shadcn/ui**: [Components necessários para implementar]
-
-## Feature 2: [Nome EXATO da Funcionalidade 2 do PRD]
-### Título Convertido
-[Transformar nome técnico em benefício claro para o setor]
-
-### Descrição Benefício  
-[Descrição da funcionalidade do PRD adaptada como benefício específico]
-
-### Benefits Lista
 - **Benefício 1**: [Específico do setor, baseado no benchmark]
 - **Benefício 2**: [Dor específica que resolve, identificada no benchmark]
 - **Benefício 3**: [Vantagem competitiva vs concorrentes]
 
 ### Visual/Component
+
+- **Tipo**: [Screenshot | Diagram | Interactive demo]
+- **shadcn/ui**: [Components necessários para implementar]
+
+## Feature 2: [Nome EXATO da Funcionalidade 2 do PRD]
+
+### Título Convertido
+
+[Transformar nome técnico em benefício claro para o setor]
+
+### Descrição Benefício
+
+[Descrição da funcionalidade do PRD adaptada como benefício específico]
+
+### Benefits Lista
+
+- **Benefício 1**: [Específico do setor, baseado no benchmark]
+- **Benefício 2**: [Dor específica que resolve, identificada no benchmark]
+- **Benefício 3**: [Vantagem competitiva vs concorrentes]
+
+### Visual/Component
+
 - **Tipo**: [Screenshot | Diagram | Interactive demo]
 - **shadcn/ui**: [Components necessários para implementar]
 
 [REPETIR para TODAS as funcionalidades do PRD - zero omissões]
 
 ## Feature N: [Nome EXATO da Funcionalidade N do PRD]
+
 ### Título Convertido
+
 [Transformar nome técnico em benefício claro para o setor]
 
 ### Descrição Benefício
+
 [Descrição da funcionalidade do PRD adaptada como benefício específico]
 
-### Benefits Lista  
+### Benefits Lista
+
 - **Benefício 1**: [Específico do setor, baseado no benchmark]
 - **Benefício 2**: [Dor específica que resolve, identificada no benchmark]
 - **Benefício 3**: [Vantagem competitiva vs concorrentes]
 
 # SOCIAL PROOF
+
 ## Title Setorial
+
 [Título específico do setor baseado no benchmark]
+
 - "Confiado por [tipo de profissional específico]"
 - "Escolhido por [X]+ [empresas do setor]"
 
 ## Testimonials Setoriais
+
 ### Testimonial 1
+
 - **Name**: [Nome típico do setor - baseado no benchmark]
 - **Role**: [Cargo específico comum no setor]
 - **Company**: [Tipo de empresa do setor]
 - **Quote**: "[Depoimento focado na dor #1 do setor identificada no benchmark]"
 - **Result**: [Métrica específica do setor]
 
-### Testimonial 2  
+### Testimonial 2
+
 - **Name**: [Nome típico do setor - baseado no benchmark]
-- **Role**: [Cargo específico comum no setor]  
+- **Role**: [Cargo específico comum no setor]
 - **Company**: [Tipo de empresa do setor]
 - **Quote**: "[Depoimento focado no benefício principal identificado]"
 - **Result**: [Métrica específica do setor]
 
 ### Testimonial 3
+
 - **Name**: [Nome típico do setor - baseado no benchmark]
 - **Role**: [Cargo específico comum no setor]
-- **Company**: [Tipo de empresa do setor] 
+- **Company**: [Tipo de empresa do setor]
 - **Quote**: "[Depoimento focado na diferenciação vs concorrentes]"
 - **Result**: [Métrica específica do setor]
 
 ## Metrics Setoriais
+
 ### Metric 1: Conversão
+
 - **Number**: [Métrica de conversão típica do setor]
 - **Label**: "[% de aumento em [métrica do setor]]"
 - **Benchmark**: [Comparação com média do setor]
 
-### Metric 2: Eficiência  
+### Metric 2: Eficiência
+
 - **Number**: [Métrica de eficiência típica do setor]
 - **Label**: "[Redução em tempo/custo específico do setor]"
 - **Benchmark**: [Comparação com métodos tradicionais]
 
 ### Metric 3: Satisfação
+
 - **Number**: [Score de satisfação/NPS]
 - **Label**: "[Satisfação de [tipo de usuário do setor]]"
 - **Benchmark**: [Comparação com ferramentas concorrentes]
 
 ## Logos/Brands
+
 [Logos de empresas típicas do setor - baseado no benchmark]
+
 - [Empresa tipo 1 do setor]
-- [Empresa tipo 2 do setor]  
+- [Empresa tipo 2 do setor]
 - [Empresa tipo 3 do setor]
 
 # FOOTER
+
 ## Brand
+
 - **Name**: [Nome do Produto]
 - **Tagline**: [Proposta de valor resumida em 1 linha - baseada no vision.md]
 
 ## Links Setoriais
+
 ### Product Links
+
 [Links baseados nas funcionalidades do PRD]
+
 - [Funcionalidade 1]
-- [Funcionalidade 2] 
+- [Funcionalidade 2]
 - [Funcionalidade N]
 - Preços
 - Demo
 
 ### Company Links
+
 - Sobre nós
 - [Setor específico] (página setorial)
 - Blog
 - Contato
 - Suporte
 
-### Resources Links  
+### Resources Links
+
 - Documentação
 - API
 - Integrações
 - [Recurso específico do setor]
 
 ### Legal Links
+
 - Política de Privacidade
 - Termos de Uso
 - LGPD/Compliance
 - Cookies
 
 ## CTA Final Otimizado
+
 **Modelo B2B**: "Solicitar Demonstração Personalizada"
 **Modelo B2C**: "Começar Gratuitamente Hoje"
 [CTA adaptado baseado nos insights do benchmark]
 
 ## Contact Info
+
 - **Email**: [Email específico do setor]
 - **Phone**: [Se aplicável ao modelo B2B]
 - **Social**: [Redes sociais relevantes ao setor]
@@ -409,30 +475,37 @@
 ## **📐 ESPECIFICAÇÃO TÉCNICA DE IMPLEMENTAÇÃO**
 
 ### **Layout Components**
+
 - **Container**: `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`
 - **Section Spacing**: `py-16 sm:py-24`
 - **Grid System**: `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
 
 ### **shadcn/ui Components Utilizados**
+
 [Especificar baseado no que foi encontrado no codebase]
+
 - **Button**: [Variants: default, outline, ghost]
-- **Card**: [Para features, testimonials, metrics]  
+- **Card**: [Para features, testimonials, metrics]
 - **Badge**: [Para tags setoriais, status]
 - **Avatar**: [Para testimonials, team]
 - **Input**: [Para newsletter, contact forms]
 
 ### **Animation Patterns**
+
 [Baseado no que foi encontrado no codebase]
+
 - **Entrance**: `fade-in-up`, `slide-in-left`
 - **Hover**: `hover:scale-105`, `hover:shadow-lg`
 - **Loading**: [Skeleton patterns existentes]
 
 ### **Responsive Behavior**
+
 - **Mobile**: Single column, stacked CTAs
-- **Tablet**: 2-column grid, sidebar CTAs  
+- **Tablet**: 2-column grid, sidebar CTAs
 - **Desktop**: 3-column grid, inline CTAs
 
 ### **SEO Implementation**
+
 ```typescript
 export const metadata = {
   title: '[Headline do vision.md]',
@@ -441,20 +514,22 @@ export const metadata = {
   openGraph: {
     title: '[Headline]',
     description: '[Sub-headline]',
-    type: 'website'
-  }
-}
+    type: 'website',
+  },
+};
 ```
 
 ## **✅ CHECKLIST RIGOROSO DE VALIDAÇÃO**
 
 ### **Preservação Absoluta**
+
 - [ ] **Headline EXATA** palavra por palavra do vision.md preservada
 - [ ] **Sub-headline EXATA** palavra por palavra do vision.md preservada
 - [ ] **Proposta de valor** core mantida sem alterações
 - [ ] **TODAS funcionalidades** do PRD incluídas (zero omissões)
 
-### **Benchmark Competitivo**  
+### **Benchmark Competitivo**
+
 - [ ] **3+ concorrentes** líderes do setor analisados
 - [ ] **URLs reais** documentadas para cada concorrente
 - [ ] **Headlines exatas** copiadas de cada concorrente
@@ -462,18 +537,21 @@ export const metadata = {
 - [ ] **Gap competitivo** identificado e explorado
 
 ### **Adaptação Modelo**
+
 - [ ] **CTAs adaptados** ao modelo B2B/B2C detectado
 - [ ] **Social proof** específica do setor implementada
 - [ ] **Testimonials** com cargos típicos do setor
 - [ ] **Metrics** relevantes ao setor especificadas
 
 ### **Especificação Técnica**
+
 - [ ] **Componentes shadcn/ui** reais do codebase especificados
 - [ ] **Padrões animação** existentes identificados e aplicados
 - [ ] **Layout responsive** detalhado para todos breakpoints
 - [ ] **SEO metadata** completo especificado
 
 ### **Tokens Design**
+
 - [ ] **Cores HSL exatas** do design-tokens.md aplicadas
 - [ ] **Theme light/dark** considerado na especificação
 - [ ] **Typography** consistente com sistema atual
@@ -492,16 +570,19 @@ export const metadata = {
 ## **🎯 CRITÉRIOS DE EXCELÊNCIA**
 
 ### **Conversão Otimizada**
+
 - Headlines preservadas + CTAs otimizados por modelo
 - Social proof setorial específica e credível
 - Benefits claros conectados às dores do setor
 
 ### **Implementação Viável**
+
 - Todos componentes existem no codebase atual
 - Padrões de animação consistentes com sistema
 - Layout responsive especificado em detalhes
 
-### **Diferenciação Estratégica**  
+### **Diferenciação Estratégica**
+
 - Gap competitivo identificado e explorado
 - Posicionamento claro vs concorrentes
 - Funcionalidades únicas destacadas como vantagens

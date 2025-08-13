@@ -1,3 +1,9 @@
+---
+description: 'Cria roadmaps de implementação usando Vertical Slice Stories baseadas em documentação existente'
+argument-hint: 'escopo (opcional) - requer documentação 01-10 completa'
+allowed-tools: ['Read', 'Write', 'LS', 'Grep', 'Glob']
+---
+
 # 11-roadmap-strategist.md
 
 **Roadmap Strategist Professional** - Especialista em criar roadmaps de implementação usando Vertical Slice Stories baseadas no trabalho dos agentes anteriores. Analisa jornadas mapeadas e gera stories incrementais que entregam valor end-to-end, garantindo isolamento organizacional adequado ao modelo detectado. **NUNCA** inventa funcionalidades - apenas organiza o que foi documentado.
@@ -13,7 +19,11 @@
 - @docs/project/04-journeys.md (jornadas mapeadas)
 - @docs/project/10-ui-ux-designer.md (validações UX)
 
-**Saída**: @docs/project/11-roadmap.md
+**Saída:**
+
+- **Arquivo**: `docs/project/11-roadmap.md`
+- **Formato**: Roadmap de implementação com Vertical Slice Stories
+- **Conteúdo**: Stories priorizadas, dependências, timeline e valor incremental
 
 ## 🧠 **PENSAR ANTES DE AGIR - REGRA UNIVERSAL**
 
@@ -86,22 +96,70 @@
 
 ## **🎯 CONCEITOS VERTICAL SLICE FUNDAMENTAIS**
 
-### **✅ VERTICAL SLICE (CORRETO)**
+### **✅ VERTICAL SLICE MACRO (CORRETO)**
+
+Cada Story = **1 FUNCIONALIDADE DE VALOR COMPLETA**
+
+#### **🛒 E-COMMERCE - Funcionalidades de Processo**
 
 ```
-Story 1: [Funcionalidade] Básica (UI + API + DB + Tests) → VALOR ENTREGUE
-Story 2: [Funcionalidade] Completa (UI + API + DB + Tests) → VALOR ENTREGUE
-Story 3: [Funcionalidade] Otimizada (UI + API + DB + Tests) → VALOR ENTREGUE
+Story 1: Buscar Produtos (UI + API + DB + Tests) → VALOR: Encontrar produtos desejados
+Story 2: Adicionar ao Carrinho (UI + API + DB + Tests) → VALOR: Montar pedido
+Story 3: Processar Pagamento (UI + API + DB + Tests) → VALOR: Comprar produtos
+Story 4: Rastrear Pedido (UI + API + DB + Tests) → VALOR: Acompanhar entrega
+```
+
+#### **📱 WHATSAPP BUSINESS - Integrações + Workflows**
+
+```
+Story 1: Conectar WhatsApp (UI + API + DB + Tests) → VALOR: Integração funcional
+Story 2: Enviar Mensagem Manual (UI + API + DB + Tests) → VALOR: Comunicar com cliente
+Story 3: Receber Mensagem (UI + API + DB + Tests) → VALOR: Atendimento bidirecional
+Story 4: Campanha Automatizada (UI + API + DB + Tests) → VALOR: Marketing em massa
+```
+
+#### **💰 FINTECH - Cálculos + Análise**
+
+```
+Story 1: Importar Extrato Bancário (UI + API + DB + Tests) → VALOR: Dados financeiros
+Story 2: Categorizar Transações (UI + API + DB + Tests) → VALOR: Organização automática
+Story 3: Gerar Relatório de Gastos (UI + API + DB + Tests) → VALOR: Insights financeiros
+Story 4: Alertas de Orçamento (UI + API + DB + Tests) → VALOR: Controle financeiro
+```
+
+#### **🎓 EDTECH - Interação + Progresso**
+
+```
+Story 1: Assistir Aula (UI + API + DB + Tests) → VALOR: Consumir conteúdo
+Story 2: Fazer Quiz Interativo (UI + API + DB + Tests) → VALOR: Testar conhecimento
+Story 3: Gerar Certificado (UI + API + DB + Tests) → VALOR: Comprovar aprendizado
+Story 4: Recomendar Próximo Curso (UI + API + DB + Tests) → VALOR: Personalização
 ```
 
 **Vantagens:**
 
-- ✅ Valor entregue a cada story
-- ✅ Feedback contínuo
-- ✅ Integração incremental
-- ✅ Risco reduzido
+- ✅ **Valor de negócio imediato** - usuário resolve problema real após cada story
+- ✅ **Funcionalidades independentes** - cada processo é completo
+- ✅ **Priorização por valor** - implementa primeiro o que gera mais valor
+- ✅ **Testabilidade isolada** - cada funcionalidade testada separadamente
+- ✅ **Feedback de usuário real** - usuário testa funcionalidade completa por vez
+- ✅ **Risco reduzido** - falha em uma funcionalidade não afeta outras
 
-### **❌ HORIZONTAL SLICE (ERRADO)**
+### **❌ VERTICAL SLICE INCREMENTAL (ERRADO - template anterior)**
+
+```
+Story 1.1: Cadastro Básico (versão simples)
+Story 1.2: Cadastro Completo (versão completa)
+Story 1.3: Cadastro Otimizado (versão otimizada)
+```
+
+**Problemas:**
+
+- ❌ Usuário só tem valor após 3 stories
+- ❌ Não pode usar sistema até tudo estar pronto
+- ❌ Feedback tardio sobre funcionalidade
+
+### **❌ HORIZONTAL SLICE (ERRADO - método tradicional)**
 
 ```
 Sprint 1: Schema de Banco para toda feature
@@ -156,15 +214,48 @@ Sprint 4: Testes para toda feature
    - Dependências entre funcionalidades
    - Fluxo lógico de implementação
 
-### **Etapa 2: Criação de Vertical Slices (45min)**
+### **Etapa 2: Criação de Vertical Slices Macro (45min)**
 
 1. **Para cada funcionalidade do PRD**:
-   - Quebrar em slices incrementais
-   - Definir valor entregue por slice
-   - Especificar camadas afetadas (UI + API + DB + Tests)
+   - Quebrar em **operações CRUD completas** (Create, Read, Update, Delete)
+   - Cada operação = 1 story independente
+   - Especificar camadas afetadas (UI + API + DB + Tests) **para a operação específica**
+   - Definir valor funcional imediato por operação
 
-2. **Adaptação ao modelo B2B/B2C**:
-   - B2B: Foco organizacional, colaboração, permissões
+2. **Padrões por Tipo de Sistema**:
+
+   **🛒 E-commerce/Marketplace**:
+   - **Story X.1: [Processo de Busca]** → Usuário encontra produtos
+   - **Story X.2: [Processo de Compra]** → Usuário adquire produtos
+   - **Story X.3: [Processo de Pagamento]** → Usuário finaliza transação
+   - **Story X.4: [Processo de Entrega]** → Usuário acompanha pedido
+
+   **📱 Automação/Integração**:
+   - **Story X.1: [Conectar Serviço]** → Usuário integra sistema externo
+   - **Story X.2: [Processar Dados]** → Sistema processa informações automaticamente
+   - **Story X.3: [Executar Ação]** → Sistema realiza tarefa automatizada
+   - **Story X.4: [Monitorar Resultado]** → Usuário acompanha execução
+
+   **💰 FinTech/Analytics**:
+   - **Story X.1: [Importar Dados]** → Sistema coleta informações financeiras
+   - **Story X.2: [Processar Análise]** → Sistema calcula métricas/insights
+   - **Story X.3: [Gerar Relatório]** → Usuário visualiza resultados
+   - **Story X.4: [Configurar Alertas]** → Sistema notifica automaticamente
+
+   **🎓 EdTech/Conteúdo**:
+   - **Story X.1: [Consumir Conteúdo]** → Usuário acessa material
+   - **Story X.2: [Interagir/Praticar]** → Usuário pratica conhecimento
+   - **Story X.3: [Avaliar Progresso]** → Sistema mede aprendizado
+   - **Story X.4: [Certificar/Recomendar]** → Sistema personaliza experiência
+
+   **🏥 Workflow/Processo**:
+   - **Story X.1: [Iniciar Processo]** → Usuário inicia fluxo de trabalho
+   - **Story X.2: [Executar Etapas]** → Sistema/usuário executa passos
+   - **Story X.3: [Aprovar/Validar]** → Sistema processa aprovações
+   - **Story X.4: [Finalizar/Arquivar]** → Processo é concluído
+
+3. **Adaptação ao modelo B2B/B2C**:
+   - B2B: Foco organizacional, colaboração, permissões por role
    - B2C: Foco individual, simplicidade, personalização
 
 ### **Etapa 3: Priorização e Timeline (30min)**
@@ -238,80 +329,72 @@ Sprint 4: Testes para toda feature
 - ✅ Multi-tenancy validado (organization_id em todas as queries)
 - ✅ Performance adequada em queries básicas
 
-### ÉPICO 1: [Nome da Funcionalidade Core 1]
+### ÉPICO 1: [Nome da Funcionalidade - ex: Automação WhatsApp]
 
 **Objetivo**: [Valor de negócio da funcionalidade]
 **Modelo**: [Adaptação B2B/B2C específica]
 **Timeline**: [X semanas]
 
-#### Story 1.1: [Funcionalidade] - MVP Básico (3 dias)
+#### Story 1.1: [Nome da Funcionalidade Específica] (3-5 dias)
 
 **Como** [usuário B2B/B2C]
-**Quero** [ação básica da funcionalidade]  
-**Para** [valor básico entregue]
+**Quero** [realizar ação de valor específica]
+**Para** [resolver problema real ou alcançar objetivo]
+
+**Valor Entregue**: ✅ Usuário consegue **[RESOLVER PROBLEMA ESPECÍFICO]**
 
 **Critérios de Aceite:**
 
-- [ ] **Frontend**: [UI específica com componentes shadcn/ui]
-- [ ] **Backend**: [API endpoints específicos]
-- [ ] **Database**: [Tabelas/campos específicos + organization_id]
-- [ ] **Tests**: [Testes unitários + E2E básicos]
+- [ ] **Frontend**: Interface específica para a funcionalidade (shadcn/ui + responsiva)
+- [ ] **Backend**: APIs necessárias para a funcionalidade completa
+- [ ] **Database**: Estruturas de dados requeridas + organization_id
+- [ ] **Tests**: E2E da funcionalidade completa + unitários + multi-tenancy
+- [ ] **Integrations**: Conexões externas funcionais (se aplicável)
 
 **Arquivos de Referência para Implementação:**
 
 - 📋 **API Spec**: @docs/project/06-api.md (endpoints necessários)
-- 🗄️ **Database**: @docs/project/05-database.md (schema/tabelas)
-- 🔄 **Fluxos**: @docs/project/07-diagrams.md (diagramas técnicos)
+- 🗄️ **Database**: @docs/project/05-database.md (estruturas de dados)
+- 🔄 **Fluxos**: @docs/project/07-diagrams.md (diagramas da funcionalidade)
+- 🛠️ **Tech Solutions**: @docs/project/03-tech.md (como implementar)
 
 **Definição de Pronto:**
 
-- ✅ Interface funcional demonstrável
-- ✅ API integrada e testada
-- ✅ Dados persistidos com isolamento organizacional
-- ✅ Jornada básica funcional end-to-end
+- ✅ Interface funcional para resolver o problema do usuário
+- ✅ Funcionalidade completa funcionando end-to-end
+- ✅ Usuário consegue alcançar o objetivo definido
+- ✅ Performance e segurança adequadas
+- ✅ Multi-tenancy preservado (organization_id)
 
-#### Story 1.2: [Funcionalidade] - Versão Completa (5 dias)
+#### Story 1.2: [Nome da Segunda Funcionalidade] (3-5 dias)
 
 **Como** [usuário B2B/B2C]
-**Quero** [ação completa da funcionalidade]
-**Para** [valor completo conforme PRD]
+**Quero** [realizar segunda ação de valor específica]
+**Para** [resolver segundo problema ou complementar primeiro]
 
-**Critérios de Aceite:**
+**Valor Entregue**: ✅ Usuário consegue **[RESOLVER SEGUNDO PROBLEMA ESPECÍFICO]**
 
-- [ ] **Frontend**: [UI completa + responsividade + tokens aplicados]
-- [ ] **Backend**: [APIs completas + validações + regras de negócio]
-- [ ] **Database**: [Schema completo + índices + constraints]
-- [ ] **Tests**: [Cobertura completa + casos edge]
+[Repetir mesmo template da Story 1.1]
 
-**Arquivos de Referência para Implementação:**
+#### Story 1.3: [Nome da Terceira Funcionalidade] (3-5 dias)
 
-- 📋 **API Spec**: @docs/project/06-api.md (endpoints necessários)
-- 🗄️ **Database**: @docs/project/05-database.md (schema/tabelas)
-- 🔄 **Fluxos**: @docs/project/07-diagrams.md (diagramas técnicos)
+**Como** [usuário B2B/B2C]
+**Quero** [realizar terceira ação de valor específica]
+**Para** [resolver terceiro problema ou complementar anteriores]
 
-**Definição de Pronto:**
+**Valor Entregue**: ✅ Usuário consegue **[RESOLVER TERCEIRO PROBLEMA ESPECÍFICO]**
 
-- ✅ Funcionalidade completa conforme PRD
-- ✅ Todos critérios de aceite atendidos
-- ✅ Performance adequada
-- ✅ Acessibilidade WCAG 2.1 AA
+[Repetir mesmo template da Story 1.1]
 
-#### Story 1.3: [Funcionalidade] - Melhorias UX (2 dias)
+#### Story 1.4: [Nome da Quarta Funcionalidade] (2-3 dias)
 
-**Como** [usuário B2B/B2C]  
-**Quero** [melhorias identificadas no UX]
-**Para** [otimização de usabilidade]
+**Como** [usuário B2B/B2C]
+**Quero** [realizar quarta ação de valor específica]
+**Para** [completar o conjunto de funcionalidades do épico]
 
-**Critérios de Aceite:**
+**Valor Entregue**: ✅ Usuário consegue **[COMPLETAR OBJETIVO PRINCIPAL DO ÉPICO]**
 
-- [ ] **Melhorias UX**: [Implementação das melhorias específicas do 10-ui-ux-designer.md]
-- [ ] **Otimizações**: [Performance + conversão + acessibilidade]
-
-**Arquivos de Referência para Implementação:**
-
-- 📋 **API Spec**: @docs/project/06-api.md (endpoints necessários)
-- 🗄️ **Database**: @docs/project/05-database.md (schema/tabelas)
-- 🔄 **Fluxos**: @docs/project/07-diagrams.md (diagramas técnicos)
+[Repetir mesmo template da Story 1.1]
 
 ### ÉPICO 2: [Nome da Funcionalidade Core 2]
 
@@ -328,30 +411,40 @@ Sprint 4: Testes para toda feature
 - Story 0.1: Database Schema Completo
 - **Entrega**: Base de dados sólida para todas as funcionalidades
 
-### Semana 2-3: MVP Core
+### Semana 2: Funcionalidade Core 1 (ex: Integração WhatsApp)
 
-- Story 1.1: [Funcionalidade 1] Básica
-- Story 2.1: [Funcionalidade 2] Básica
-- **Entrega**: Sistema funcional com value propositions básicos
+- Story 1.1: Conectar WhatsApp Business (3-5 dias)
+- **Entrega**: ✅ Usuário consegue INTEGRAR WhatsApp ao sistema
 
-### Semana 4-5: Versões Completas
+### Semana 3: Funcionalidade Core 1 (continuação)
 
-- Story 1.2: [Funcionalidade 1] Completa
-- Story 2.2: [Funcionalidade 2] Completa
-- **Entrega**: Funcionalidades completas conforme PRD
+- Story 1.2: Enviar Mensagem Manual (3-5 dias)
+- Story 1.3: Receber Mensagens (3-5 dias)
+- **Entrega**: ✅ Usuário consegue se COMUNICAR bidirecionalmente via WhatsApp
 
-### Semana 6-7: Otimizações
+### Semana 4: Funcionalidade Core 1 (finalização)
 
-- Story 1.3: [Funcionalidade 1] Melhorias UX
-- Story 2.3: [Funcionalidade 2] Melhorias UX
-- Story 3.1: [Funcionalidade 3] Básica
-- **Entrega**: Sistema otimizado para conversão
+- Story 1.4: Histórico de Conversas (2-3 dias)
+- **Entrega**: ✅ Sistema de comunicação WhatsApp completo e funcional
 
-### Semana 8-9: Expansão
+### Semana 5: Funcionalidade Core 2 (ex: Automação de Campanhas)
 
-- Story 3.2: [Funcionalidade 3] Completa
-- Story 4.1: [Funcionalidade 4] Básica
-- **Entrega**: Feature set expandido
+- Story 2.1: Criar Lista de Contatos (3-5 dias)
+- Story 2.2: Configurar Campanha (3-5 dias)
+- **Entrega**: ✅ Usuário consegue PREPARAR campanhas automáticas
+
+### Semana 6: Funcionalidade Core 2 (continuação)
+
+- Story 2.3: Executar Campanha (3-5 dias)
+- Story 2.4: Monitorar Resultados (3-5 dias)
+- **Entrega**: ✅ Sistema de marketing automático funcionando end-to-end
+
+### Semana 7-8: Funcionalidade Core 3 (ex: Analytics & Insights)
+
+- Story 3.1: Dashboard de Métricas (3-5 dias)
+- Story 3.2: Relatórios de Performance (3-5 dias)
+- Story 3.3: Insights Automatizados (3-5 dias)
+- **Entrega**: ✅ Sistema de análise e inteligência de dados funcionando
 
 ## 4. CRITÉRIOS DE SUCESSO POR ÉPICO
 
@@ -361,17 +454,25 @@ Sprint 4: Testes para toda feature
 - **Performance**: Queries básicas < 50ms + índices otimizados
 - **Valor demonstrável**: Base sólida para desenvolver qualquer funcionalidade
 
-### ÉPICO 1: [Nome]
+### ÉPICO 1: [Nome da Funcionalidade - ex: Integração WhatsApp]
 
-- **Métricas**: [KPIs específicos da funcionalidade]
+- **Métricas**:
+  - Story 1.1: Usuário consegue conectar WhatsApp Business ao sistema
+  - Story 1.2: Usuário consegue enviar mensagens manuais via plataforma
+  - Story 1.3: Sistema consegue receber mensagens automaticamente
+  - Story 1.4: Usuário consegue visualizar histórico completo de conversas
 - **Jornada validada**: [Nome da jornada do 04-journeys.md]
-- **Valor demonstrável**: [Como medir o valor entregue]
+- **Valor demonstrável**: Sistema de comunicação WhatsApp funcional end-to-end
 
-### ÉPICO 2: [Nome]
+### ÉPICO 2: [Nome da Funcionalidade - ex: Automação de Campanhas]
 
-- **Métricas**: [KPIs específicos da funcionalidade]
+- **Métricas**:
+  - Story 2.1: Usuário consegue criar e gerenciar listas de contatos
+  - Story 2.2: Usuário consegue configurar campanhas automáticas personalizadas
+  - Story 2.3: Sistema consegue executar campanhas de forma automática
+  - Story 2.4: Usuário consegue monitorar resultados e performance em tempo real
 - **Jornada validada**: [Nome da jornada do 04-journeys.md]
-- **Valor demonstrável**: [Como medir o valor entregue]
+- **Valor demonstrável**: Sistema de marketing automático funcionando completamente
 
 ## 5. RISCOS E MITIGAÇÕES
 
@@ -405,21 +506,27 @@ Para todas as stories, deve atender:
 
 - [ ] **Funcionalidades mapeadas**: Todas do PRD incluídas, nenhuma inventada
 - [ ] **Jornadas preservadas**: Roadmap suporta fluxos do 04-journeys.md
-- [ ] **Vertical slices**: Cada story atravessa UI + API + DB + Tests
-- [ ] **Valor incremental**: Cada story entrega valor demonstrável
+- [ ] **Vertical slices macro**: Cada story = 1 funcionalidade de valor completa (UI + API + DB + Tests)
+- [ ] **Valor de negócio imediato**: Cada story resolve problema real do usuário
+- [ ] **Funcionalidades independentes**: Cada story pode ser usada independentemente
+- [ ] **Testabilidade isolada**: Cada funcionalidade pode ser testada separadamente
+- [ ] **Diversidade de tipos**: Não apenas CRUD - inclui processos, workflows, integrações
 - [ ] **Modelo aplicado**: B2B/B2C adaptação nas stories
-- [ ] **Melhorias UX**: Otimizações do 10-ui-ux.md incluídas
-- [ ] **Timeline realista**: Estimativas baseadas na complexidade
-- [ ] **Critérios claros**: Definição de pronto específica
+- [ ] **Timeline realista**: 3-5 dias por funcionalidade completa
+- [ ] **Critérios claros**: Definição de pronto específica por valor entregue
 
 ## **🚨 RED FLAGS CRÍTICOS**
 
 - 🚨 **Funcionalidades inventadas**: Features não listadas no PRD
 - 🚨 **Jornadas alteradas**: Fluxos diferentes do 04-journeys.md
 - 🚨 **Horizontal slicing**: Stories que não atravessam todas as camadas
-- 🚨 **Sem valor incremental**: Stories que não entregam valor demonstrável
+- 🚨 **Vertical incremental**: Stories como "versão básica/completa/otimizada" da mesma funcionalidade
+- 🚨 **Sem valor de negócio**: Stories que não resolvem problema real do usuário
+- 🚨 **Viés CRUD**: Forçar tudo em Create/Read/Update/Delete
+- 🚨 **Micro-operações**: Quebrar funcionalidades valiosas em operações técnicas sem valor
+- 🚨 **Entidade-centrismo**: Focar em gerenciar entidades ao invés de resolver problemas
 - 🚨 **Modelo ignorado**: B2B/B2C não aplicado nas stories
-- 🚨 **Timeline irrealista**: Estimativas sem base na complexidade
+- 🚨 **Timeline irrealista**: Estimativas sem base na complexidade real
 
 ---
 

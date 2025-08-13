@@ -1,3 +1,9 @@
+---
+description: 'Refinamento técnico completo de user stories com pesquisa ativa e análise do codebase'
+argument-hint: "story_id do roadmap (ex: '1.1', '2.3') - PRIMEIRO passo após roadmap"
+allowed-tools: ['Read', 'Write', 'LS', 'Bash', 'Grep', 'Glob', 'WebFetch']
+---
+
 # exec-refine
 
 **🚨 AVISO CRÍTICO: Este agente DEVE usar ferramentas Read/LS/Bash para analisar o codebase REAL antes de qualquer ação. Refinements baseados em suposições são FALHA CRÍTICA.**
@@ -12,7 +18,11 @@
 
 - `story_id`: ID da história do roadmap (ex: "2.1", "1.3")
 
-**Saída**: Refinamento técnico completo salvo automaticamente em `docs/refined/`
+**Saída:**
+
+- **Arquivo**: `docs/refined/[ID]-[título].md`
+- **Formato**: Refinamento técnico completo com pesquisa e análise
+- **Conteúdo**: Especificações detalhadas, riscos, timeline e soluções validadas
 
 **Uso:**
 
@@ -66,6 +76,47 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 
 ---
 
+## 🧠 **PROCESSO DE REFLEXÃO OBRIGATÓRIO**
+
+**🔗 REFERÊNCIA**: `@shared/thinking-framework.md#framework-4-etapas`
+
+**TEMPLATE ESPECÍFICO PARA REFINAMENTO**:
+
+```
+🧠 REFINANDO APÓS ANÁLISE PROFUNDA...
+
+✅ COMPREENSÃO: [História específica + codebase atual + estado real]
+✅ PRÉ-REQUISITOS: [Roadmap + análise técnica + pesquisa + validações]
+✅ PLANO: [Research → Analyze → Compare → Refine → Validate]
+✅ VALIDAÇÃO: KISS ✓ YAGNI ✓ DRY ✓ 99% CERTEZA ✓
+
+🚀 INICIANDO REFINAMENTO TÉCNICO COMPLETO...
+```
+
+**🔗 REFERÊNCIA**: `@shared/thinking-framework.md#decision-gates`
+
+❌ **SE VALIDAÇÃO FALHAR**: Parar e reportar problemas
+✅ **SE VALIDAÇÃO PASSAR**: Prosseguir com refinamento sistematizado
+
+---
+
+## 📋 **VALIDAÇÕES PRÉ-REFINAMENTO**
+
+**🔗 REFERÊNCIA**: `@shared/common-validations.md#leitura-obrigatória`
+
+### **🚨 COMPLIANCE E ANÁLISE OBRIGATÓRIA**
+
+- ✅ **Compliance**: CHANGELOG.md + RULES.md + migrations/README.md
+- ✅ **Codebase**: Dependencies + Schema + Architecture + Tests
+- ✅ **Environment**: Git + TypeScript + Services + Database
+- ✅ **Red Flags**: Parar se qualquer bloqueador identificado
+
+**🔗 REFERÊNCIA**: `@shared/common-validations.md#red-flags-críticos`
+
+🛑 **PARAR IMEDIATAMENTE SE**: Environment inseguro ou dados incompletos
+
+---
+
 ## 🚨 **MISSÃO: REFINAMENTO TÉCNICO COM 99% CERTEZA (RESEARCH PHASE)**
 
 ### **PROCESSO AUTOMÁTICO EM 6 FASES COM PESQUISA EXTENSIVA**
@@ -83,26 +134,19 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 
 **🚨 REGRA ABSOLUTA: DEVE LER FISICAMENTE ARQUIVOS ANTES DE QUALQUER AÇÃO**
 
+**🔗 REFERÊNCIA**: `@shared/common-validations.md#análise-obrigatória-do-codebase`
+
 ### **📁 LEITURA OBRIGATÓRIA DE ARQUIVOS CRÍTICOS**
 
-- ✅ **DEVE**: `Read requirements.txt` - LISTAR todas bibliotecas Python + versões exatas
-- ✅ **DEVE**: `Read package.json` - LISTAR todas bibliotecas Frontend + versões exatas
-- ✅ **DEVE**: `Bash cd migrations && ./migrate status` - VERIFICAR versão atual do schema
-- ✅ **DEVE**: `LS api/models/` - MAPEAR todos models existentes
-- ✅ **DEVE**: `LS api/services/` - MAPEAR todos services existentes
-- ✅ **DEVE**: `LS api/routers/` - MAPEAR todos routers existentes
-- ✅ **DEVE**: `LS components/ui/` - CATALOGAR componentes shadcn/ui disponíveis
-- ✅ **DEVE**: `LS app/[locale]/admin/` - MAPEAR estrutura de rotas existentes
-- ✅ **DEVE**: `Read .env.example` - IDENTIFICAR configurações disponíveis
-- ✅ **DEVE**: `Read docker-compose.yml` - ANALISAR services configurados
-
-### **🎨 LEITURA OBRIGATÓRIA DE ARQUIVOS DE DESIGN E JOURNEYS**
-
-- ✅ **DEVE**: `Read docs/project/04-journeys.md` - MAPEAR jornadas de usuário e fluxos completos
-- ✅ **DEVE**: `Read docs/project/07-diagrams.md` - ANALISAR diagramas técnicos e arquitetura
-- ✅ **DEVE**: `Read docs/project/10-ui-ux-designer.md` - ENTENDER padrões UI/UX e validações
+- ✅ **Backend**: requirements.txt + api/models/ + api/services/ + api/routers/
+- ✅ **Frontend**: package.json + components/ui/ + app/[locale]/admin/
+- ✅ **Database**: migrations status + schema atual
+- ✅ **Config**: .env.example + docker-compose.yml
+- ✅ **Design**: docs/project/04-journeys.md + 07-diagrams.md + 10-ui-ux-designer.md
 
 ### **🚨 VALIDAÇÃO OBRIGATÓRIA**
+
+**🔗 REFERÊNCIA**: `@shared/common-validations.md#red-flags-críticos`
 
 - ❌ **FALHA CRÍTICA**: Não usar ferramentas Read/LS/Bash para análise real
 - ❌ **FALHA CRÍTICA**: Assumir estado do projeto sem verificação direta
@@ -131,16 +175,42 @@ Imagine um arquiteto que antes de fazer a planta da casa:
 - ❌ **NUNCA**: Aceitar objetivos genéricos ou vagos
 - ❌ **NUNCA**: Proceder sem compreender o PORQUÊ da história
 
-#### **🔍 FASE 2: PESQUISA ATIVA INTENSIVA CONTEXTUALIZADA**
+#### **🔍 FASE 2: ANÁLISE CODEBASE vs BACKLOG ITEM (INTELIGENTE)**
 
-- ✅ **DEVE**: Pesquisar soluções **COMPATÍVEIS** com versões atuais (Fase 0)
-- ✅ **DEVE**: **KISS**: Priorizar soluções mais simples que atendem os requisitos
-- ✅ **DEVE**: **DRY**: Filtrar opções que **ESTENDEM** funcionalidades existentes
-- ✅ **DEVE**: **YAGNI**: Focar APENAS nos requisitos da história atual
-- ✅ **DEVE**: Validar compatibilidade com Next.js + FastAPI + PostgreSQL atuais
+### **🚨 PROCESSO OBRIGATÓRIO: APROVEITAR PRIMEIRO, PESQUISAR DEPOIS**
+
+#### **2.1 ANÁLISE DO QUE JÁ EXISTE (PRIORIDADE 1)**
+
+- ✅ **DEVE**: Comparar requisitos da story com funcionalidades existentes no codebase
+- ✅ **DEVE**: Mapear componentes/services/patterns similares já implementados
+- ✅ **DEVE**: Identificar código reutilizável relacionado aos requisitos
+- ✅ **DEVE**: Verificar se existe base técnica para estender ao invés de criar
+- ✅ **DEVE**: Analisar models/APIs/UX patterns que podem ser aproveitados
+- ✅ **DEVE**: **DRY**: Priorizar EXTENSÃO de funcionalidades existentes
+- ❌ **NUNCA**: Propor solução do zero quando existe similar no codebase
+
+#### **2.2 DECISÃO INTELIGENTE: APROVEITAR vs PESQUISAR**
+
+**✅ SE EXISTE SOLUÇÃO SIMILAR NO CODEBASE:**
+
+- **APROVEITAR**: Documentar como estender/adaptar código existente
+- **REUTILIZAR**: Máximo aproveitamento de patterns estabelecidos
+- **ESTENDER**: Adicionar apenas funcionalidades necessárias
+- **MANTER**: Consistência arquitetural com codebase atual
+
+**❌ SE NÃO EXISTE NO CODEBASE:**
+
+- **PESQUISAR**: Soluções externas compatíveis com versões atuais
+- **KISS**: Priorizar soluções mais simples que atendem requisitos
+- **YAGNI**: Focar APENAS nos requisitos da história atual
+- **VALIDAR**: Compatibilidade com Next.js + FastAPI + PostgreSQL atuais
+
+#### **2.3 PESQUISA EXTERNA (APENAS SE NECESSÁRIA)**
+
 - ✅ **DEVE**: Comparar alternativas considerando **migration path** do estado atual
+- ✅ **DEVE**: Justificar por que solução externa é necessária vs extensão
 - ❌ **NUNCA**: Sugerir soluções complexas quando simples funcionam
-- ❌ **NUNCA**: Especificar funcionalidades não solicitadas na história
+- ❌ **NUNCA**: Pesquisar soluções quando codebase já tem base adequada
 
 #### **📊 FASE 3: ANÁLISE CONTEXTUAL PROFUNDA OBRIGATÓRIA**
 
@@ -299,12 +369,10 @@ Objetivo da História Identificado:
   Contexto Organizacional: [Como se conecta com estratégia/épico maior]
 
 Validação SMART do Objetivo:
-  ✅ Específico:
-    [Objetivo não é genérico - descreve EXATAMENTE o que será entregue]
+  ✅ Específico: [Objetivo não é genérico - descreve EXATAMENTE o que será entregue]
   ✅ Mensurável: [Critérios claros e objetivos para medir sucesso]
   ✅ Alcançável: [Tecnicamente viável com o stack atual]
-  ✅ Relevante:
-    [Alinhado com estratégia organizacional e necessidades do usuário]
+  ✅ Relevante: [Alinhado com estratégia organizacional e necessidades do usuário]
   ✅ Temporal: [Timeline e marco de entrega definidos]
 
 Conexão Estratégica:
@@ -347,29 +415,56 @@ Validação de Dor do Usuário:
 
 ---
 
-## 🔍 **PESQUISA TÉCNICA EXAUSTIVA**
+## 🔍 **ANÁLISE INTELIGENTE: CODEBASE vs EXTERNOS**
 
-### **Soluções Open Source Pesquisadas**
+### **🎯 ANÁLISE PRIMÁRIA: O QUE JÁ TEMOS (PRIORIDADE 1)**
 
 ```yaml
-Top 5 Bibliotecas Analisadas:
-  1. [Biblioteca A] v[X.X.X]:
-     Stars: [X]k | Updated: [X] days ago
-     Pros: [Lista específica]
-     Cons: [Lista específica]
-     Bundle: [X]KB | TypeScript: [Yes/No]
+Funcionalidades Similares no Codebase:
+  ✅ ENCONTRADO:
+    - ? [Funcionalidade Similar 1]
+      Localização: [api/services/exemplo.py]
+      Capacidade Atual: [O que já faz]
+      Potencial Extensão: [Como pode ser estendido]
+      Reutilização: [80% aproveitável]
 
-Decision Matrix:
-  [Biblioteca Winner]: 43/50 ⭐ ESCOLHIDA
-  [Justificativa técnica específica]
+    - ? [Funcionalidade Similar 2]
+      Localização: [components/ui/exemplo.tsx]
+      Capacidade Atual: [O que já faz]
+      Potencial Extensão: [Como pode ser adaptado]
+      Reutilização: [60% aproveitável]
+
+  ❌ NÃO ENCONTRADO:
+    - [Funcionalidade Específica]: Não existe implementação similar
+    - [Integração Específica]: Precisa pesquisa externa
+
+DECISÃO INTELIGENTE:
+  APROVEITAR: [Lista do que será reutilizado/estendido]
+  PESQUISAR: [Lista do que precisa buscar externamente]
+  Justificativa: [Por que esta combinação é a mais eficiente]
 ```
 
-### **Provedores/SaaS Analisados**
+### **🔍 PESQUISA EXTERNA (APENAS PARA GAPS IDENTIFICADOS)**
 
 ```yaml
+Pesquisa Necessária Para:
+  [Funcionalidade X que não existe no codebase]:
+    Top 3 Soluções Analisadas:
+      1. [Biblioteca A] v[X.X.X]:
+         Stars: [X]k | Updated: [X] days ago
+         Pros: [Lista específica]
+         Cons: [Lista específica]
+         Bundle: [X]KB | TypeScript: [Yes/No]
+         Integração com Codebase: [Facilidade 1-10]
+
+    Decision Matrix:
+      [Biblioteca Winner]: 43/50 ⭐ ESCOLHIDA
+      [Justificativa técnica específica]
+      [Por que não foi possível estender codebase existente]
+
 Build vs Buy Analysis:
-  DECISION: [Build/Buy]
-  JUSTIFICATION: [Análise custo-benefício específica]
+  DECISION: [Extend Existing / Build New / Buy Solution]
+  JUSTIFICATION: [Análise custo-benefício vs reutilização]
 ```
 
 ### **Melhores Práticas 2024/2025 Aplicadas**

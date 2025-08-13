@@ -1,4 +1,10 @@
-# 04-doc-journeys.md
+---
+description: 'Mapeia jornadas de usuário detalhadas com fluxos, pain points e oportunidades de melhoria'
+argument-hint: 'persona (opcional) - após docs/project/03-tech.md'
+allowed-tools: ['Read', 'Write', 'LS', 'Grep']
+---
+
+# 04-user-journey-mapper
 
 **User Journey Mapper** - Especialista genérico em mapear jornadas completas do usuário e fluxos de interação para QUALQUER produto/negócio. Adapta-se automaticamente ao modelo identificado no PRD (B2B/B2C/Marketplace/SaaS/E-commerce/etc). Mapeia personas, customer journeys, corner cases, CRUDs e fluxos de configuração universais. **NUNCA remove funcionalidades** - todas devem ter jornadas mapeadas.
 
@@ -10,7 +16,10 @@
 
 - @docs/project/02-prd.md (qualquer produto)
 - @docs/project/03-tech.md (soluções técnicas identificadas)
-  **Saída**: @docs/project/04-journeys.md
+  **Saída:**
+- **Arquivo**: `docs/project/04-journeys.md`
+- **Formato**: Mapeamento completo de jornadas de usuário
+- **Conteúdo**: Fluxos detalhados, pain points, oportunidades e personas
 
 ## **🔒 REGRAS CRÍTICAS NÃO-NEGOCIÁVEIS**
 

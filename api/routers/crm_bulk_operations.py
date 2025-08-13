@@ -106,7 +106,7 @@ def _get_organization_leads(
     """Get leads that belong to the organization."""
     return (
         db.query(Lead)
-        .filter(and_(Lead.id.in_(lead_uuids), Lead.organization_id == organization.id))
+        .filter(and_(Lead.id.in_(lead_uuids), Lead.organization_id == organization.id))  # type: ignore[attr-defined,arg-type]
         .all()
     )
 
@@ -163,7 +163,7 @@ def bulk_update_leads(
         try:
             # Apply updates using the service layer for proper validation
             updated_lead = lead_service.update_lead(
-                lead_id=str(lead.id), lead_data=request.updates, organization=organization
+                lead_id=lead.id, lead_data=request.updates, organization=organization
             )
             successful_updates.append(str(updated_lead.id))
 
@@ -187,7 +187,7 @@ def bulk_update_leads(
     if request.notify_websocket and successful_updates:
         background_tasks.add_task(
             _send_bulk_websocket_notification,
-            organization.id,
+            organization.id,  # type: ignore[arg-type]
             "bulk_update",
             successful_updates,
             {"updates": request.updates.dict(exclude_unset=True)},
@@ -251,8 +251,8 @@ def bulk_stage_update(
             update(Lead)
             .where(
                 and_(
-                    Lead.id.in_([lead.id for lead in leads]),
-                    Lead.organization_id == organization.id,
+                    Lead.id.in_([lead.id for lead in leads]),  # type: ignore[attr-defined,arg-type]
+                    Lead.organization_id == organization.id,  # type: ignore[arg-type]
                 )
             )
             .values(stage=request.stage, updated_at=datetime.utcnow())
@@ -281,7 +281,7 @@ def bulk_stage_update(
     if request.notify_websocket and successful_updates:
         background_tasks.add_task(
             _send_bulk_websocket_notification,
-            organization.id,
+            organization.id,  # type: ignore[arg-type]
             "bulk_stage_update",
             successful_updates,
             {"new_stage": request.stage, "notes": request.notes},
@@ -340,7 +340,7 @@ def bulk_delete_leads(
     try:
         # Bulk delete in database
         stmt = delete(Lead).where(
-            and_(Lead.id.in_([lead.id for lead in leads]), Lead.organization_id == organization.id)
+            and_(Lead.id.in_([lead.id for lead in leads]), Lead.organization_id == organization.id)  # type: ignore[attr-defined,arg-type]
         )
 
         db.execute(stmt)
@@ -365,7 +365,7 @@ def bulk_delete_leads(
     # Send WebSocket notification
     if request.notify_websocket and successful_updates:
         background_tasks.add_task(
-            _send_bulk_websocket_notification, organization.id, "bulk_delete", successful_updates
+            _send_bulk_websocket_notification, organization.id, "bulk_delete", successful_updates  # type: ignore[arg-type]
         )
 
     execution_time = int((datetime.utcnow() - start_time).total_seconds() * 1000)
