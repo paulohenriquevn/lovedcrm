@@ -2,10 +2,11 @@
 
 Endpoints for managing organization roles with hierarchy validation and permissions.
 """
+import logging
 from typing import Annotated, Any, Dict, List, Set
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
@@ -15,9 +16,24 @@ from ..models.organization import Organization
 from ..models.organization_invite import OrganizationRole
 from ..models.user import User
 from ..schemas.organization import OrganizationMemberResponse
+from ..services.audit_service import AuditService
 from ..services.role_management_service import RoleManagementService
 
 router = APIRouter(prefix="/roles", tags=["Role Management"])
+logger = logging.getLogger(__name__)
+
+
+def get_client_ip(request: Request) -> str:
+    """Get client IP address from request."""
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
+def get_user_agent(request: Request) -> str:
+    """Get user agent from request."""
+    return request.headers.get("user-agent", "unknown")
 
 
 # Pydantic schemas for role management
@@ -56,6 +72,7 @@ class ManageableRolesResponse(BaseModel):
 async def change_member_role(
     user_id: UUID,
     role_change: RoleChangeRequest,
+    request: Request,
     organization: Annotated[Organization, Depends(get_current_organization)],
     current_user: Annotated[User, Depends(get_current_active_user)],
     db: Annotated[Session, Depends(get_db)],
@@ -68,14 +85,75 @@ async def change_member_role(
     - Members and viewers cannot manage roles
     """
     role_service = RoleManagementService(db)
+    audit_service = AuditService(db)
+
+    # Get current member data for audit logging
+    from sqlalchemy import and_
+    from ..models.organization import OrganizationMember
+
+    current_membership = (
+        db.query(OrganizationMember)
+        .filter(
+            and_(
+                OrganizationMember.organization_id == organization.id,
+                OrganizationMember.user_id == user_id,
+                OrganizationMember.is_active.is_(True),
+            )
+        )
+        .first()
+    )
+
+    if not current_membership:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Member not found in organization",
+        )
+
+    old_role = current_membership.role
 
     try:
+        # Perform role change
         updated_membership = role_service.change_member_role(
             organization_id=UUID(str(organization.id)),
             target_user_id=user_id,
             new_role=role_change.new_role,
             manager_user=current_user,
         )
+
+        # Audit log the role change
+        try:
+            await audit_service.log_role_change(
+                org_id=organization.id,
+                target_user_id=user_id,
+                old_role=old_role,
+                new_role=role_change.new_role.value,
+                manager_user_id=current_user.id,
+                ip_address=get_client_ip(request),
+                user_agent=get_user_agent(request),
+            )
+
+            logger.info(
+                "Role change audit logged successfully",
+                extra={
+                    "organization_id": str(organization.id),
+                    "target_user_id": str(user_id),
+                    "old_role": old_role,
+                    "new_role": role_change.new_role.value,
+                    "manager_user_id": str(current_user.id),
+                }
+            )
+
+        except Exception as audit_error:
+            # Log audit failure but don't fail the role change operation
+            logger.error(
+                "Failed to log role change audit",
+                extra={
+                    "organization_id": str(organization.id),
+                    "target_user_id": str(user_id),
+                    "error": str(audit_error),
+                },
+                exc_info=True,
+            )
 
         return OrganizationMemberResponse.model_validate(updated_membership)
 
@@ -90,6 +168,7 @@ async def change_member_role(
 @router.delete("/members/{user_id}")
 async def remove_member(
     user_id: UUID,
+    request: Request,
     organization: Annotated[Organization, Depends(get_current_organization)],
     current_user: Annotated[User, Depends(get_current_active_user)],
     db: Annotated[Session, Depends(get_db)],
@@ -100,8 +179,52 @@ async def remove_member(
     Cannot remove the last owner.
     """
     role_service = RoleManagementService(db)
+    audit_service = AuditService(db)
+
+    # Get member data for audit logging before removal
+    from sqlalchemy import and_
+    from ..models.organization import OrganizationMember
+
+    member_to_remove = (
+        db.query(OrganizationMember)
+        .filter(
+            and_(
+                OrganizationMember.organization_id == organization.id,
+                OrganizationMember.user_id == user_id,
+                OrganizationMember.is_active.is_(True),
+            )
+        )
+        .first()
+    )
+
+    if not member_to_remove:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Member not found in organization",
+        )
+
+    # Prepare audit data
+    removed_user_data = {
+        "user_id": str(user_id),
+        "role": member_to_remove.role,
+        "joined_at": member_to_remove.joined_at.isoformat() if member_to_remove.joined_at else None,
+    }
+
+    # Get user details if needed
+    try:
+        from ..models.user import User as UserModel
+        user_details = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if user_details:
+            removed_user_data.update({
+                "email": user_details.email,
+                "full_name": user_details.full_name,
+            })
+    except Exception:
+        # Continue without user details if query fails
+        pass
 
     try:
+        # Perform member removal
         success = role_service.remove_member(
             organization_id=UUID(str(organization.id)),
             target_user_id=user_id,
@@ -109,6 +232,38 @@ async def remove_member(
         )
 
         if success:
+            # Audit log the member removal
+            try:
+                await audit_service.log_member_removal(
+                    org_id=organization.id,
+                    removed_user_id=user_id,
+                    manager_user_id=current_user.id,
+                    removed_user_data=removed_user_data,
+                    ip_address=get_client_ip(request),
+                    user_agent=get_user_agent(request),
+                )
+
+                logger.info(
+                    "Member removal audit logged successfully",
+                    extra={
+                        "organization_id": str(organization.id),
+                        "removed_user_id": str(user_id),
+                        "manager_user_id": str(current_user.id),
+                    }
+                )
+
+            except Exception as audit_error:
+                # Log audit failure but don't fail the removal operation
+                logger.error(
+                    "Failed to log member removal audit",
+                    extra={
+                        "organization_id": str(organization.id),
+                        "removed_user_id": str(user_id),
+                        "error": str(audit_error),
+                    },
+                    exc_info=True,
+                )
+
             return {"message": "Member removed successfully"}
         else:
             raise HTTPException(

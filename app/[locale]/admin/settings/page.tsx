@@ -17,7 +17,7 @@ export default function SettingsPage(): JSX.Element {
   const [activeTab, setActiveTab] = useState('profile')
   const { profile, preferences } = useSettingsStore()
   const { organization } = useAuthStore()
-  const { permissions, userRole } = usePermissions()
+  const { can, userRole } = usePermissions()
   const tSettings = useTranslations('admin.settings')
 
   // Load settings data
@@ -43,10 +43,10 @@ export default function SettingsPage(): JSX.Element {
           activeTab={activeTab}
           onTabChange={setActiveTab}
           permissions={{
-            canEditOrganization: permissions.canEditOrganization,
-            canManageBilling: permissions.canManageBilling,
-            canViewAdvancedSettings: permissions.canViewAdvancedSettings,
-            canManageProviders: permissions.canManageProviders,
+            canEditOrganization: can.canEditOrganization,
+            canManageBilling: can.canManageBilling,
+            canViewAdvancedSettings: can.canViewAdvancedSettings,
+            canManageProviders: can.canManageProviders,
           }}
         />
       </div>
@@ -60,10 +60,10 @@ export default function SettingsPage(): JSX.Element {
             preferences={preferences}
             organization={organization}
             permissions={{
-              canEditOrganization: permissions.canEditOrganization,
-              canManageBilling: permissions.canManageBilling,
-              canViewAdvancedSettings: permissions.canViewAdvancedSettings,
-              canManageProviders: permissions.canManageProviders,
+              canEditOrganization: can.canEditOrganization,
+              canManageBilling: can.canManageBilling,
+              canViewAdvancedSettings: can.canViewAdvancedSettings,
+              canManageProviders: can.canManageProviders,
             }}
             userRole={userRole ?? undefined}
             isUpdatingOrg={handlers.isUpdatingOrg}

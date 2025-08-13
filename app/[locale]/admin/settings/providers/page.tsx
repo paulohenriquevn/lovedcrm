@@ -12,12 +12,12 @@ export default function ProvidersPage(): JSX.Element {
   const [showMigrationWizard, setShowMigrationWizard] = useState(false)
   const [selectedProviderType, setSelectedProviderType] = useState<string | null>(null)
 
-  const { permissions } = usePermissions()
+  const { can } = usePermissions()
   const { providers, isLoading, error } = useProviderData()
   // const tSettings = useTranslations('admin.settings')
 
   // Check permissions for provider management
-  if (!permissions.canManageProviders) {
+  if (!can.canManageProviders) {
     return (
       <div className="p-6">
         <div className="text-center py-12">

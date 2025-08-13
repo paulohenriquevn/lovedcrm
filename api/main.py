@@ -51,6 +51,7 @@ except ImportError:
 
 
 # Import essential routers only
+from api.routers.audit import router as audit_router
 from api.routers.auth import router as auth_router
 from api.routers.billing import router as billing_router
 from api.routers.crm_analytics import router as crm_analytics_router
@@ -450,6 +451,7 @@ app.add_middleware(OrganizationContextMiddleware)
 # Middleware removido para investigação - servidor travado pode não estar recarregando
 
 # Include essential routers - SIMPLIFIED (no versioning)
+app.include_router(audit_router)  # Multi-Tenant Audit Trail (Story 4.1)
 app.include_router(auth_router)
 app.include_router(billing_router)  # Billing and subscription management
 app.include_router(users_router)
