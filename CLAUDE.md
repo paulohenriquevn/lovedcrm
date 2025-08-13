@@ -110,26 +110,21 @@ make test-hot-data          # Reload test data (3s)
 
 ## SAAS Mode Configuration
 
-**CRITICAL**: Two modes via `SAAS_MODE` environment variable:
+**B2B ONLY**: System is exclusively B2B mode:
 
 - **B2B**: Team collaboration, role-based permissions, shared workspaces
-- **B2C**: Individual use, auto-created personal organizations
 
 ```bash
-# B2B Mode (default)
+# B2B Mode (only mode supported)
 SAAS_MODE=B2B
 ENABLE_TEAM_FEATURES=true
-
-# B2C Mode
-SAAS_MODE=B2C
-ENABLE_TEAM_FEATURES=false
 ```
 
 **Rules**:
 
-- ✅ Both modes use org_id isolation (never user_id)
+- ✅ B2B mode uses org_id isolation (never user_id)
 - ✅ Auto-organization creation always enabled
-- ❌ Never mix B2B and B2C in same deployment
+- ✅ Team features always enabled
 
 ## Multi-Tenancy Patterns
 
@@ -204,7 +199,7 @@ class YourModel(Base):
 ```bash
 DATABASE_URL=postgresql://user:pass@localhost:5433/crm_db
 SECRET_KEY=your-secret-key-min-32-chars
-SAAS_MODE=B2B  # or B2C
+SAAS_MODE=B2B  # B2B only
 ENFORCE_ORGANIZATION_CONTEXT=true
 AUTO_CREATE_ORGANIZATION=true
 ```
@@ -258,7 +253,7 @@ AUTO_CREATE_ORGANIZATION=true
 
 ```bash
 make status                  # Project status
-./check-saas-mode.sh        # B2B/B2C config verification
+./check-saas-mode.sh        # B2B config verification
 make test-verify            # Test environment health
 ```
 

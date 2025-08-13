@@ -7,7 +7,6 @@ import { useTranslations } from 'next-intl'
 
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { useSaasMode } from '@/hooks/use-saas-mode'
 import { cn } from '@/lib/utils'
 import { useSidebarStore } from '@/stores/sidebar'
 
@@ -32,7 +31,6 @@ const navigationItems: NavigationItem[] = [
 export function AdminNavigation(): JSX.Element {
   const pathname = usePathname()
   const { isCollapsed } = useSidebarStore()
-  const { isB2C } = useSaasMode()
   const tNav = useTranslations('navigation')
 
   return (
@@ -40,10 +38,6 @@ export function AdminNavigation(): JSX.Element {
       <TooltipProvider>
         <div className={cn('space-y-1', isCollapsed ? 'p-2' : 'p-4')}>
           {navigationItems
-            .filter(item => {
-              // Hide team navigation in B2C mode
-              return !(item.nameKey === 'team' && isB2C)
-            })
             .map(item => {
               const Icon = item.icon
               const isActive =
@@ -88,16 +82,11 @@ export function AdminNavigation(): JSX.Element {
 
 export function MobileNavigation(): JSX.Element {
   const pathname = usePathname()
-  const { isB2C } = useSaasMode()
   const tNav = useTranslations('navigation')
 
   return (
     <div className="grid gap-2 p-4">
       {navigationItems
-        .filter(item => {
-          // Hide team navigation in B2C mode
-          return !(item.nameKey === 'team' && isB2C)
-        })
         .map(item => {
           const Icon = item.icon
           const isActive =

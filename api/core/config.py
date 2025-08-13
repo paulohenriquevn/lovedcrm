@@ -31,27 +31,22 @@ class Settings(BaseSettings):
     DEBUG: bool = True
 
     # =====================================================
-    # 🎯 SAAS MODE CONFIGURATION (B2B/B2C)
+    # 🎯 SAAS MODE CONFIGURATION (B2B ONLY)
     # =====================================================
-    SAAS_MODE: str = Field(default="B2C", description="SaaS mode: B2B or B2C")
+    SAAS_MODE: str = Field(default="B2B", description="SaaS mode: B2B only")
 
     @validator("SAAS_MODE")
     @classmethod
     def validate_saas_mode(cls, v: str) -> str:
-        """Validate SAAS_MODE is either B2B or B2C."""
-        if v.upper() not in ["B2B", "B2C"]:
-            raise ValueError("SAAS_MODE must be 'B2B' or 'B2C'")
+        """Validate SAAS_MODE is B2B only."""
+        if v.upper() != "B2B":
+            raise ValueError("SAAS_MODE must be 'B2B'")
         return v.upper()
 
     @property
-    def is_b2c_mode(self) -> bool:
-        """Check if running in B2C mode."""
-        return self.SAAS_MODE == "B2C"
-
-    @property
     def is_b2b_mode(self) -> bool:
-        """Check if running in B2B mode."""
-        return self.SAAS_MODE == "B2B"
+        """Check if running in B2B mode (always True)."""
+        return True
 
     # =====================================================
     # 🔐 SECURITY (SINGLE SOURCE OF TRUTH)

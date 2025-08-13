@@ -383,32 +383,18 @@ class TestUtilityFunctions:
 
 
 class TestSaasModeConfiguration:
-    """Test SAAS_MODE configuration - FUNCTIONALITY FIRST."""
+    """Test SAAS_MODE configuration - B2B ONLY."""
 
-    def test_saas_mode_default_b2c(self):
-        """Test SAAS_MODE defaults to B2C."""
-        # ✅ SUCCESS SCENARIO: Default SAAS_MODE is B2C
+    def test_saas_mode_default_b2b(self):
+        """Test SAAS_MODE defaults to B2B."""
+        # ✅ SUCCESS SCENARIO: Default SAAS_MODE is B2B
         with patch.dict(os.environ, {
             'SECRET_KEY': 'secure_random_string_32_characters!'
         }, clear=True):
             settings = Settings()
             
-            assert settings.SAAS_MODE == "B2C"
-            assert settings.is_b2c_mode is True
-            assert settings.is_b2b_mode is False
-
-    def test_saas_mode_b2c_explicit(self):
-        """Test SAAS_MODE set to B2C explicitly."""
-        # ✅ SUCCESS SCENARIO: B2C mode works correctly
-        with patch.dict(os.environ, {
-            'SECRET_KEY': 'secure_random_string_32_characters!',
-            'SAAS_MODE': 'B2C'
-        }):
-            settings = Settings()
-            
-            assert settings.SAAS_MODE == "B2C"
-            assert settings.is_b2c_mode is True
-            assert settings.is_b2b_mode is False
+            assert settings.SAAS_MODE == "B2B"
+            assert settings.is_b2b_mode is True
 
     def test_saas_mode_b2b_explicit(self):
         """Test SAAS_MODE set to B2B explicitly."""
@@ -420,16 +406,14 @@ class TestSaasModeConfiguration:
             settings = Settings()
             
             assert settings.SAAS_MODE == "B2B"
-            assert settings.is_b2c_mode is False
             assert settings.is_b2b_mode is True
 
     def test_saas_mode_case_insensitive(self):
-        """Test SAAS_MODE is case insensitive."""
-        # ✅ SUCCESS SCENARIO: Case insensitive validation works
+        """Test SAAS_MODE case handling for B2B."""
+        # ✅ SUCCESS SCENARIO: Case insensitive validation works for B2B
         test_cases = [
-            ('b2c', 'B2C'),
             ('b2b', 'B2B'),
-            ('B2c', 'B2C'),
+            ('B2b', 'B2B'),
             ('b2B', 'B2B'),
         ]
         
@@ -444,7 +428,7 @@ class TestSaasModeConfiguration:
     def test_saas_mode_invalid_value_error(self):
         """Test SAAS_MODE validation rejects invalid values."""
         # ❌ ERROR SCENARIO: Invalid SAAS_MODE should fail validation
-        invalid_modes = ['B2G', 'C2B', 'HYBRID', 'AUTO', 'MIXED', '']
+        invalid_modes = ['B2C', 'B2G', 'C2B', 'HYBRID', 'AUTO', 'MIXED', '']
         
         for invalid_mode in invalid_modes:
             with patch.dict(os.environ, {
@@ -455,4 +439,4 @@ class TestSaasModeConfiguration:
                     Settings()
                 
                 errors = exc_info.value.errors()
-                assert any("must be 'B2B' or 'B2C'" in str(error) for error in errors)
+                assert any("must be 'B2B'" in str(error) for error in errors)

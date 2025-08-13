@@ -47,11 +47,10 @@ class TestSimpleAuthService:
     def test_register_user_success(
         self, mock_settings, mock_hash_password, auth_service, mock_db_session
     ):
-        """Test user registration with auto-organization creation in B2C mode (default)."""
+        """Test user registration with auto-organization creation in B2B mode."""
         # Setup mocks
         mock_settings.EMAIL_VERIFICATION_REQUIRED = False
         mock_settings.EMAIL_ENABLED = False
-        mock_settings.is_b2c_mode = True  # Default B2C mode
         mock_hash_password.return_value = "hashed_password_123"
         
         # Mock database queries
@@ -103,9 +102,9 @@ class TestSimpleAuthService:
                 is_verified=True  # Since EMAIL_VERIFICATION_REQUIRED is False
             )
             
-            # Verify organization creation (B2C mode creates "Personal Workspace")
+            # Verify organization creation (B2B mode creates user's organization)
             mock_org_class.assert_called_once_with(
-                name="Personal Workspace",
+                name="Test User's Organization",
                 slug=f"org_{user_id}",
                 owner_id=user_id,
                 is_active=True
@@ -136,7 +135,6 @@ class TestSimpleAuthService:
         # Setup mocks for B2B mode
         mock_settings.EMAIL_VERIFICATION_REQUIRED = False
         mock_settings.EMAIL_ENABLED = False
-        mock_settings.is_b2c_mode = False  # B2B mode
         mock_hash_password.return_value = "hashed_password_123"
         
         # Mock database queries
@@ -589,66 +587,6 @@ class TestSaasModeRegistration:
         """Create auth service instance with mock session."""
         return SimpleAuthService(mock_db_session)
 
-    @patch('api.services.auth_simple.get_password_hash')
-    @patch('api.core.config.settings')
-    def test_register_user_b2c_mode_organization_naming(
-        self, mock_settings, mock_hash_password, auth_service, mock_db_session
-    ):
-        """Test user registration creates 'Personal Workspace' in B2C mode."""
-        # Setup B2C mode
-        mock_settings.is_b2c_mode = True
-        mock_settings.is_b2b_mode = False
-        mock_settings.EMAIL_VERIFICATION_REQUIRED = False
-        mock_settings.EMAIL_ENABLED = False
-        mock_hash_password.return_value = "hashed_password_123"
-        
-        # Mock database queries
-        mock_query = Mock()
-        mock_filter = Mock()
-        mock_query.filter.return_value = mock_filter
-        mock_filter.first.return_value = None  # No existing user
-        mock_db_session.query.return_value = mock_query
-        
-        # Mock user and org creation
-        user_id = uuid.uuid4()
-        with patch('api.services.auth_simple.User') as mock_user_class, \
-             patch('api.services.auth_simple.Organization') as mock_org_class, \
-             patch('api.services.auth_simple.OrganizationMember') as mock_member_class:
-            
-            # Setup user mock
-            user_instance = Mock()
-            user_instance.id = user_id
-            user_instance.email = "test@example.com"
-            mock_user_class.return_value = user_instance
-            
-            # Setup org mock
-            org_instance = Mock()
-            org_instance.id = uuid.uuid4()
-            org_instance.name = "Personal Workspace"
-            mock_org_class.return_value = org_instance
-            
-            # Setup member mock
-            member_instance = Mock()
-            mock_member_class.return_value = member_instance
-            
-            # ✅ SUCCESS SCENARIO: B2C registration creates "Personal Workspace"
-            user, org = auth_service.register_user(
-                email="test@example.com",
-                password="SecurePassword123",
-                full_name="Test User",
-                terms_accepted=True
-            )
-            
-            # Verify organization creation with B2C naming
-            mock_org_class.assert_called_once_with(
-                name="Personal Workspace",  # B2C mode uses generic name
-                slug=f"org_{user_id}",
-                owner_id=user_id,
-                is_active=True
-            )
-            
-            assert user == user_instance
-            assert org == org_instance
 
     @patch('api.services.auth_simple.get_password_hash')
     @patch('api.core.config.settings')
@@ -657,7 +595,6 @@ class TestSaasModeRegistration:
     ):
         """Test user registration creates personalized organization in B2B mode."""
         # Setup B2B mode
-        mock_settings.is_b2c_mode = False
         mock_settings.is_b2b_mode = True
         mock_settings.EMAIL_VERIFICATION_REQUIRED = False
         mock_settings.EMAIL_ENABLED = False
@@ -711,57 +648,6 @@ class TestSaasModeRegistration:
             assert user == user_instance
             assert org == org_instance
 
-    @patch('api.services.auth_simple.get_password_hash')
-    @patch('api.core.config.settings')
-    def test_register_user_b2c_mode_without_full_name(
-        self, mock_settings, mock_hash_password, auth_service, mock_db_session
-    ):
-        """Test B2C registration without full_name still creates Personal Workspace."""
-        # Setup B2C mode
-        mock_settings.is_b2c_mode = True
-        mock_settings.is_b2b_mode = False
-        mock_settings.EMAIL_VERIFICATION_REQUIRED = False
-        mock_settings.EMAIL_ENABLED = False
-        mock_hash_password.return_value = "hashed_password_123"
-        
-        # Mock database queries
-        mock_query = Mock()
-        mock_filter = Mock()
-        mock_query.filter.return_value = mock_filter
-        mock_filter.first.return_value = None  # No existing user
-        mock_db_session.query.return_value = mock_query
-        
-        # Mock user and org creation
-        user_id = uuid.uuid4()
-        with patch('api.services.auth_simple.User') as mock_user_class, \
-             patch('api.services.auth_simple.Organization') as mock_org_class, \
-             patch('api.services.auth_simple.OrganizationMember') as mock_member_class:
-            
-            # Setup mocks
-            user_instance = Mock()
-            user_instance.id = user_id
-            mock_user_class.return_value = user_instance
-            
-            org_instance = Mock()
-            mock_org_class.return_value = org_instance
-            
-            member_instance = Mock()
-            mock_member_class.return_value = member_instance
-            
-            # ✅ SUCCESS SCENARIO: B2C mode always uses "Personal Workspace"
-            user, org = auth_service.register_user(
-                email="test@example.com",
-                password="SecurePassword123",
-                terms_accepted=True  # No full_name provided
-            )
-            
-            # Verify organization name is still "Personal Workspace"
-            mock_org_class.assert_called_once_with(
-                name="Personal Workspace",  # Always generic in B2C mode
-                slug=f"org_{user_id}",
-                owner_id=user_id,
-                is_active=True
-            )
 
     @patch('api.services.auth_simple.get_password_hash')
     @patch('api.core.config.settings')
@@ -770,7 +656,6 @@ class TestSaasModeRegistration:
     ):
         """Test B2B registration without full_name uses email prefix for organization."""
         # Setup B2B mode
-        mock_settings.is_b2c_mode = False
         mock_settings.is_b2b_mode = True
         mock_settings.EMAIL_VERIFICATION_REQUIRED = False
         mock_settings.EMAIL_ENABLED = False

@@ -60,7 +60,6 @@ BACKEND_VALIDATION=$(docker exec saas-api-dev python -c "
 try:
     from api.core.config import settings
     print(f'is_b2b_mode: {settings.is_b2b_mode}')
-    print(f'is_b2c_mode: {settings.is_b2c_mode}')
 except Exception as e:
     print('ERROR')
 " 2>/dev/null)
@@ -83,11 +82,8 @@ echo "   NEXT_PUBLIC_SAAS_MODE: $FRONTEND_MODE"
 
 # Frontend hook validation
 FRONTEND_VALIDATION=$(docker exec saas-frontend-dev node -e "
-const mode = process.env.NEXT_PUBLIC_SAAS_MODE || 'B2C';
-const validMode = mode === 'B2B' || mode === 'B2C' ? mode : 'B2C';
-console.log('   Hook resolved mode: ' + validMode);
-console.log('   isB2B: ' + (validMode === 'B2B'));
-console.log('   isB2C: ' + (validMode === 'B2C'));
+console.log('   Hook resolved mode: B2B');
+console.log('   isB2B: true');
 " 2>/dev/null)
 
 echo "$FRONTEND_VALIDATION"
@@ -112,17 +108,10 @@ fi
 # UI Behavior check
 echo ""
 echo -e "${BLUE}🎯 Expected UI Behavior:${NC}"
-if [ "$FRONTEND_MODE" = "B2B" ]; then
-    echo "   Teams menu: ✅ VISIBLE"
-    echo "   Dashboard title: 'Team Dashboard'"
-    echo "   Organization info: ✅ VISIBLE"
-    echo "   Registration creates: 'User's Organization'"
-elif [ "$FRONTEND_MODE" = "B2C" ]; then
-    echo "   Teams menu: ❌ HIDDEN"
-    echo "   Dashboard title: 'My Dashboard'"
-    echo "   Organization info: ❌ HIDDEN"
-    echo "   Registration creates: 'Personal Workspace'"
-fi
+echo "   Teams menu: ✅ VISIBLE"
+echo "   Dashboard title: 'Team Dashboard'"
+echo "   Organization info: ✅ VISIBLE"
+echo "   Registration creates: 'User's Organization'"
 
 echo ""
 echo -e "${GREEN}🎉 SAAS Mode configuration is correct\!${NC}"

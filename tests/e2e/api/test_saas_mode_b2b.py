@@ -5,7 +5,7 @@ PRIORITY 1: SUCCESS SCENARIOS (2XX) - Real B2B functionality
 PRIORITY 2: Validation scenarios (4XX) - Security and validation  
 OBJECTIVE: Verify B2B mode TRULY WORKS with personalized organization creation
 
-These tests run only when SAAS_MODE=B2B (skip if B2C mode)
+These tests verify B2B mode functionality
 """
 import pytest
 import requests
@@ -23,7 +23,7 @@ TEST_BASE_URL = "http://localhost:8001"
 def is_api_in_b2b_mode():
     """
     Detect if API is running in B2B mode by testing registration behavior.
-    B2B creates personalized org names, B2C creates 'Personal Workspace'.
+    B2B creates personalized org names.
     """
     try:
         import uuid
@@ -48,7 +48,7 @@ def is_api_in_b2b_mode():
 class TestB2BModeRegistration:
     """PRIORITY 1: Test B2B mode registration creates personalized organizations."""
 
-    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
+    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only")
     def test_b2b_registration_creates_personalized_organization(self, api_client, clean_database):
         """✅ Test B2B registration creates personalized organization name."""
         test_user_data = {
@@ -84,7 +84,7 @@ class TestB2BModeRegistration:
         assert "refresh_token" in data
         assert data["token_type"] == "bearer"
 
-    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
+    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only")
     def test_b2b_registration_without_full_name_uses_email_prefix(
         self, api_client, clean_database
     ):
@@ -105,7 +105,7 @@ class TestB2BModeRegistration:
         org_data = data["organization"]
         assert org_data["name"] == "testcompany's Organization"  # Uses email prefix in B2B mode
 
-    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
+    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only")
     def test_b2b_login_returns_personalized_organization_context(
         self, api_client, clean_database
     ):
@@ -138,7 +138,7 @@ class TestB2BModeRegistration:
         assert org_data["name"] == "B2B Login User's Organization"
         assert_valid_uuid(org_data["id"])
 
-    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
+    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only")
     def test_b2b_complete_user_journey(self, api_client, clean_database):
         """✅ Test complete B2B user journey: register → login → access protected endpoint."""
         # Clear any existing headers
@@ -192,7 +192,7 @@ class TestB2BModeRegistration:
 class TestB2BModeTeamFeatures:
     """Test B2B mode team-specific features and behavior."""
 
-    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
+    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only")
     def test_b2b_organization_owner_has_admin_role(self, api_client, authenticated_user):
         """✅ Test B2B organization owner has admin/owner role."""
         # Get organization members
@@ -212,7 +212,7 @@ class TestB2BModeTeamFeatures:
         assert owner is not None
         assert owner["user_id"] == authenticated_user["id"]
 
-    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
+    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only")
     def test_b2b_organization_info_endpoint(self, api_client, authenticated_user):
         """✅ Test organization info endpoint returns personalized organization."""
         response = api_client.get(f"{TEST_BASE_URL}/organizations/current")
@@ -226,7 +226,7 @@ class TestB2BModeTeamFeatures:
         assert data["owner_id"] == authenticated_user["id"]
         assert_valid_uuid(data["id"])
 
-    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
+    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only")
     def test_b2b_organization_roles_endpoint_accessible(self, api_client, authenticated_user):
         """✅ Test B2B mode exposes organization roles management."""
         response = api_client.get(f"{TEST_BASE_URL}/roles/summary", headers={
@@ -250,7 +250,7 @@ class TestB2BModeTeamFeatures:
 class TestB2BModeValidation:
     """PRIORITY 2: Test B2B mode validation and error scenarios."""
 
-    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
+    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only")
     def test_b2b_duplicate_email_registration_fails(self, api_client, clean_database):
         """Test B2B registration with duplicate email fails."""
         # Register first user
@@ -275,7 +275,7 @@ class TestB2BModeValidation:
         second_response = api_client.post(f"{TEST_BASE_URL}/auth/register", json=second_user_data)
         assert_error_response(second_response, 400, "already exists")
 
-    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
+    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only")
     def test_b2b_invalid_login_fails(self, api_client, clean_database):
         """Test B2B login with invalid credentials fails."""
         # Register user first
@@ -302,7 +302,7 @@ class TestB2BModeValidation:
 class TestB2BModeConsistency:
     """Test B2B mode data consistency and integrity."""
 
-    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
+    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only")
     def test_b2b_organization_isolation(self, api_client, clean_database):
         """✅ Test B2B organizations are properly isolated between companies."""
         # Register two B2B users (representing different companies)
@@ -361,7 +361,7 @@ class TestB2BModeConsistency:
         
         assert_error_response(cross_access_response, 403)  # Should be forbidden
 
-    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
+    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only")
     def test_b2b_organization_naming_uniqueness(self, api_client, clean_database):
         """✅ Test B2B organizations have unique names even with similar user names."""
         # Register users with similar names
@@ -398,7 +398,7 @@ class TestB2BModeConsistency:
 class TestB2BModeScenarios:
     """Test B2B mode realistic business scenarios."""
 
-    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
+    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only")
     def test_b2b_startup_company_registration_scenario(self, api_client, clean_database):
         """✅ Test realistic B2B scenario: startup company founder registration."""
         founder_data = {
@@ -426,7 +426,7 @@ class TestB2BModeScenarios:
         login_data = login_response.json()
         assert login_data["organization"]["name"] == "Sarah Tech Founder's Organization"
 
-    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only - API is in B2C mode")
+    @pytest.mark.skipif(not is_api_in_b2b_mode(), reason="B2B mode only")
     def test_b2b_enterprise_admin_registration_scenario(self, api_client, clean_database):
         """✅ Test realistic B2B scenario: enterprise admin registration."""
         enterprise_admin_data = {

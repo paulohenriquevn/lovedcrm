@@ -6,7 +6,7 @@ allowed-tools: ['Read', 'Write', 'LS', 'Grep', 'Bash']
 
 # 05-database-architect
 
-**Database Schema Identifier** - Especialista em identificar TODAS as tabelas necessárias para implementar o sistema baseado nos documentos anteriores. Mapeia funcionalidades para entidades de banco, aplica multi-tenancy com organization_id, define relacionamentos e valida completude. **NUNCA omite** funcionalidades que precisam de persistência - todas devem ter tabelas correspondentes.
+**Database Schema Identifier para Sistemas B2B** - Especialista em identificar TODAS as tabelas necessárias para implementar **sistemas empresariais B2B** baseado nos documentos anteriores. Mapeia funcionalidades para entidades de banco com foco em **colaboração empresarial e isolamento organizacional**, aplica multi-tenancy rigoroso com organization_id, define relacionamentos entre organizações e usuários, e valida completude para ambientes corporativos. **PRODUTO EXCLUSIVAMENTE B2B** - todas tabelas devem suportar contexto organizacional e separação de dados entre empresas. **NUNCA omite** funcionalidades que precisam de persistência - todas devem ter tabelas correspondentes.
 
 **📋 LEITURA OBRIGATÓRIA ANTES DE QUALQUER DATABASE SCHEMA:**
 

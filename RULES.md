@@ -74,14 +74,13 @@
 - ❌ **NÃO DEVE**: Criar arquiteturas que não aproveitem sistema atual
 - ❌ **NÃO DEVE**: Ignorar padrões de isolation estabelecidos
 
-### **TEMPLATE SAAS_MODE CONFIGURÁVEL - B2B OU B2C**
+### **TEMPLATE SAAS_MODE - B2B ONLY**
 
-- 🔴 **FATO CRÍTICO**: Template suporta SAAS_MODE=B2B ou SAAS_MODE=B2C configurável
+- 🔴 **FATO CRÍTICO**: Sistema é exclusivamente B2B mode
 - 🔴 **FATO CRÍTICO**: Modo B2B: Colaboração em equipe com organizações compartilhadas
-- 🔴 **FATO CRÍTICO**: Modo B2C: Uso individual com organizações pessoais auto-criadas
-- ✅ **DEVE**: Configurar SAAS_MODE via variável de ambiente (B2B/B2C)
-- ✅ **DEVE**: Usar organização auto-criada no registro (suporta ambos modos)
-- ✅ **DEVE**: Adaptar UI baseado no modo (team features B2B, personal features B2C)
+- ✅ **DEVE**: Configurar SAAS_MODE=B2B via variável de ambiente
+- ✅ **DEVE**: Usar organização auto-criada no registro (B2B mode)
+- ✅ **DEVE**: UI sempre com team features habilitadas
 - ✅ **DEVE**: Manter isolation organization-centric sempre (org_id universal)
 - ✅ **DEVE**: Implementar billing apropriado para o modo escolhido
 - ❌ **NÃO DEVE**: Misturar funcionalidades B2B e B2C no mesmo deployment

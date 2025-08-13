@@ -1,18 +1,15 @@
 /**
- * Hook para detectar o modo SaaS (B2B ou B2C) baseado em environment variables.
+ * Hook para detectar o modo SaaS (B2B only) baseado em environment variables.
  *
- * Este hook lê a variável NEXT_PUBLIC_SAAS_MODE e fornece utilities para
- * adaptar a UI baseada no modo configurado.
+ * Este hook sempre retorna B2B mode, pois o sistema agora é exclusivamente B2B.
  */
 
-export type SaasMode = 'B2B' | 'B2C'
+export type SaasMode = 'B2B'
 
 export interface UseSaasModeReturn {
-  /** Modo atual do SaaS (B2B ou B2C) */
+  /** Modo atual do SaaS (sempre B2B) */
   mode: SaasMode
-  /** True se estiver em modo B2C (individual/personal) */
-  isB2C: boolean
-  /** True se estiver em modo B2B (team/collaborative) */
+  /** True se estiver em modo B2B (sempre true) */
   isB2B: boolean
 }
 
@@ -24,26 +21,17 @@ export interface UseSaasModeReturn {
  * @example
  * ```tsx
  * function DashboardHeader() {
- *   const { isB2C, isB2B, mode } = useSaasMode()
+ *   const { isB2B, mode } = useSaasMode()
  *
  *   return (
- *     <h1>
- *       {isB2C ? 'My Dashboard' : 'Team Dashboard'}
- *     </h1>
+ *     <h1>Team Dashboard</h1>
  *   )
  * }
  * ```
  */
 export function useSaasMode(): UseSaasModeReturn {
-  // Lê a variável de ambiente, defaulta para B2C se não definida
-  const mode = (process.env.NEXT_PUBLIC_SAAS_MODE || 'B2C') as SaasMode
-
-  // Valida se o modo é válido, fallback para B2C
-  const validMode = mode === 'B2B' || mode === 'B2C' ? mode : 'B2C'
-
   return {
-    mode: validMode,
-    isB2C: validMode === 'B2C',
-    isB2B: validMode === 'B2B',
+    mode: 'B2B',
+    isB2B: true,
   }
 }

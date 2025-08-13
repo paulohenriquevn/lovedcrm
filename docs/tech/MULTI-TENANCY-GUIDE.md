@@ -34,7 +34,7 @@
 This starter template implements **header-based multi-tenancy** with **organization-centric design** that YOUR features inherit:
 
 - **Every operation is organization-scoped** (org_id required via X-Org-Id header)
-- **User registration automatically creates organization** (personal in B2C, can be shared in B2B)
+- **User registration automatically creates organization** (shared in B2B mode)
 - **Complete data isolation between organizations** (middleware validation)
 - **Secure by default** - all routes protected with organization context unless explicitly public
 

@@ -70,11 +70,8 @@ class SimpleAuthService:
 
         # 🔴 CRITICAL: Always create organization for new user
         try:
-            # Create organization name based on SAAS_MODE
-            if settings.is_b2c_mode:
-                org_name = "Personal Workspace"  # Generic name for B2C mode
-            else:  # B2B mode
-                org_name = f"{full_name or email.split('@')[0]}'s Organization"
+            # Create organization name for B2B mode
+            org_name = f"{full_name or email.split('@')[0]}'s Organization"
 
             org_slug = f"org_{user.id}"
             org = Organization(name=org_name, slug=org_slug, owner_id=user.id, is_active=True)
