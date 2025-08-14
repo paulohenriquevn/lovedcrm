@@ -27,7 +27,7 @@ export function AuditPageHeader({ isLoading, onRefresh, onExport }: AuditPageHea
           <RefreshCcw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
           Refresh
         </Button>
-        
+
         <RoleGuard requiredPermission="export_data">
           <Button variant="outline" size="sm" onClick={onExport}>
             <Download className="h-4 w-4 mr-2" />

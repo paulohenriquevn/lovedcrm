@@ -21,11 +21,9 @@ export function StatisticsCards({ statistics, isLoading }: StatisticsCardsProps)
     )
   }
 
-  const [topAction] = Object.entries(statistics.actionsDistribution)
-    .sort(([, a], [, b]) => b - a)
-  
-  const [topTable] = Object.entries(statistics.tablesDistribution)
-    .sort(([, a], [, b]) => b - a)
+  const [topAction] = Object.entries(statistics.actionsDistribution).sort(([, a], [, b]) => b - a)
+
+  const [topTable] = Object.entries(statistics.tablesDistribution).sort(([, a], [, b]) => b - a)
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -45,12 +43,8 @@ export function StatisticsCards({ statistics, isLoading }: StatisticsCardsProps)
           <TrendingUp className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
-            {topAction?.[0] ?? 'N/A'}
-          </div>
-          <p className="text-xs text-muted-foreground">
-            {topAction?.[1] ?? 0} occurrences
-          </p>
+          <div className="text-2xl font-bold">{topAction?.[0] ?? 'N/A'}</div>
+          <p className="text-xs text-muted-foreground">{topAction?.[1] ?? 0} occurrences</p>
         </CardContent>
       </Card>
 
@@ -60,12 +54,8 @@ export function StatisticsCards({ statistics, isLoading }: StatisticsCardsProps)
           <Users className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
-            {topTable?.[0] ?? 'N/A'}
-          </div>
-          <p className="text-xs text-muted-foreground">
-            {topTable?.[1] ?? 0} modifications
-          </p>
+          <div className="text-2xl font-bold">{topTable?.[0] ?? 'N/A'}</div>
+          <p className="text-xs text-muted-foreground">{topTable?.[1] ?? 0} modifications</p>
         </CardContent>
       </Card>
 

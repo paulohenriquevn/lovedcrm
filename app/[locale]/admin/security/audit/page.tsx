@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
 /**
  * 🔍 Security Audit Trail Page - Multi-Tenant Audit Management
- * 
+ *
  * Comprehensive audit trail interface for organization security monitoring.
  * Features real-time audit log display with advanced filtering and analytics.
  */
@@ -23,9 +23,7 @@ import { StatisticsCards } from './components/statistics-cards'
 import type { AuditFilters as AuditFiltersType } from './types'
 
 // Handler functions moved to outer scope
-const handleRefreshData = (
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
-) => {
+const handleRefreshData = (setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
   setIsLoading(true)
   // Simulate API call
   setTimeout(() => setIsLoading(false), 1000)
@@ -37,7 +35,6 @@ const handleExportData = () => {
   // REMOVE: Connect to real export API when available
 }
 
-
 function AccessDeniedCard() {
   return (
     <Card className="border-destructive/50">
@@ -47,7 +44,8 @@ function AccessDeniedCard() {
           Access Denied
         </CardTitle>
         <CardDescription>
-          You don&apos;t have permission to view audit logs. Contact your organization admin for access.
+          You don&apos;t have permission to view audit logs. Contact your organization admin for
+          access.
         </CardDescription>
       </CardHeader>
     </Card>
@@ -57,29 +55,25 @@ function AccessDeniedCard() {
 export default function SecurityAuditPage() {
   const { organization } = useOrgContext()
   const { canViewAuditLogs, user } = usePermissions()
-  
+
   const [isLoading, setIsLoading] = useState(false)
   const [filters, setFilters] = useState<AuditFiltersType>({
     selectedTable: '',
     selectedAction: '',
     searchTerm: '',
-    timeframe: '7d'
+    timeframe: '7d',
   })
-  
+
   // REMOVE: Use real audit API - implement statistics fetch
-  const statistics = null
-  
+  const statistics = null as any
+
   // Note: auditLogs and securityEvents would be used when implementing actual audit table
 
   // Permission check - only users with audit log access can see this page
   if (!canViewAuditLogs) {
     return (
       <div className="container mx-auto py-6">
-        <OrganizationHeader 
-          organization={organization}
-          user={user}
-          className="mb-6"
-        />
+        <OrganizationHeader organization={organization} user={user} className="mb-6" />
         <AccessDeniedCard />
       </div>
     )
@@ -87,13 +81,9 @@ export default function SecurityAuditPage() {
 
   return (
     <div className="container mx-auto py-6 space-y-6">
-      <OrganizationHeader 
-        organization={organization}
-        user={user}
-        className="mb-6"
-      />
+      <OrganizationHeader organization={organization} user={user} className="mb-6" />
 
-      <AuditPageHeader 
+      <AuditPageHeader
         isLoading={isLoading}
         onRefresh={() => handleRefreshData(setIsLoading)}
         onExport={handleExportData}
@@ -101,10 +91,7 @@ export default function SecurityAuditPage() {
 
       <StatisticsCards statistics={statistics} isLoading={isLoading} />
 
-      <AuditFilters 
-        filters={filters}
-        onFiltersChange={setFilters}
-      />
+      <AuditFilters filters={filters} onFiltersChange={setFilters} />
 
       {/* REMOVE: Connect AuditTabs to real API when component is ready */}
       <div className="text-center py-8 text-muted-foreground">

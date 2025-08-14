@@ -21,17 +21,20 @@
 ## 🎯 **STORY DEFINITION**
 
 ### **User Story**
+
 **Como** founder de agência B2B  
 **Quero** isolamento absoluto entre clientes  
 **Para** garantir segurança de dados
 
 ### **Acceptance Criteria**
+
 - [ ] **Frontend**: Organization context + role-based UI (enhancement)
-- [ ] **Backend**: Organization middleware + RBAC + audit logging (enhancement)  
+- [ ] **Backend**: Organization middleware + RBAC + audit logging (enhancement)
 - [ ] **Database**: All queries org-scoped + audit_logs table (already complete ✅)
 - [ ] **Tests**: Cross-org prevention + role permissions + audit trail
 
 ### **Definition of Done**
+
 - ✅ Middleware validando X-Org-Id em todos endpoints business (already done ✅)
 - ✅ Roles (admin, manager, sales, viewer) funcionando (enhancement needed)
 - ✅ Cross-organization access bloqueado (403 errors) (already done ✅)
@@ -44,6 +47,7 @@
 ### **✅ ALREADY IMPLEMENTED**
 
 **Multi-Tenancy Foundation**:
+
 - ✅ `organization_middleware.py` - Header validation X-Org-Id vs JWT
 - ✅ `organization.py` + `organization_member.py` - Complete models
 - ✅ `crm_audit_log.py` - Comprehensive audit system with factory methods
@@ -52,16 +56,18 @@
 - ✅ Cross-org prevention in middleware layer
 
 **Security Architecture**:
+
 ```python
 # EXISTING: Comprehensive organization isolation
 class OrganizationContextMiddleware(BaseHTTPMiddleware):
     # ✅ Header validation
-    # ✅ JWT verification  
+    # ✅ JWT verification
     # ✅ Cross-org prevention
     # ✅ Audit logging integration
 ```
 
 **RBAC System**:
+
 ```python
 # EXISTING: 4-tier role hierarchy
 ROLE_HIERARCHY = {
@@ -75,21 +81,25 @@ ROLE_HIERARCHY = {
 ### **❌ GAPS TO ADDRESS**
 
 **Gap 1: Enhanced API Endpoints**
+
 - Missing audit trail access endpoints
 - Missing bulk role management APIs
 - Missing organization analytics endpoints
 
 **Gap 2: Frontend Management Interface**
+
 - No role management UI components
 - No audit trail dashboard
 - No team invitation interface
 
-**Gap 3: Advanced Security Features**  
+**Gap 3: Advanced Security Features**
+
 - Enhanced audit logging with request context
 - Security event monitoring
 - Advanced cross-org validation
 
 **Gap 4: Integration & Testing**
+
 - Comprehensive cross-org security tests
 - Performance testing for audit system
 - Frontend integration with existing components
@@ -123,16 +133,19 @@ FRONTEND (NEW)              BACKEND (ENHANCE)           DATA (READY ✅)
 ### **Implementation Strategy**
 
 **Day 1: Backend Service Enhancement**
+
 - Extend `role_management_service.py` with bulk operations
 - Create audit trail service and repository
 - Enhance organization middleware with security events
 
-**Day 2: API Layer Development**  
+**Day 2: API Layer Development**
+
 - Create audit trail endpoints
 - Extend role management APIs
 - Add organization analytics endpoints
 
 **Day 3: Frontend & Integration**
+
 - Build role management UI components
 - Create audit trail dashboard
 - Implement team invitation interface
@@ -152,22 +165,22 @@ FRONTEND (NEW)              BACKEND (ENHANCE)           DATA (READY ✅)
 # NEW METHODS TO ADD:
 
 async def bulk_role_update(
-    self, 
-    organization_id: UUID, 
+    self,
+    organization_id: UUID,
     role_changes: List[RoleChangeRequest],
     manager_user: User
 ) -> List[OrganizationMember]:
     """Bulk update multiple user roles with validation."""
-    
+
 async def get_role_change_history(
-    self, 
-    organization_id: UUID, 
+    self,
+    organization_id: UUID,
     user_id: Optional[UUID] = None
 ) -> List[AuditLog]:
     """Get role change audit history."""
-    
+
 async def validate_organization_security(
-    self, 
+    self,
     organization_id: UUID
 ) -> SecurityValidationReport:
     """Comprehensive security validation for organization."""
@@ -180,23 +193,23 @@ async def validate_organization_security(
 ```python
 class AuditService:
     """Comprehensive audit trail management."""
-    
+
     async def get_organization_audit_logs(
-        self, 
+        self,
         organization_id: UUID,
         filters: AuditLogFilters
     ) -> PaginatedResponse[AuditLog]:
         """Get filtered audit logs for organization."""
-        
+
     async def get_security_events(
-        self, 
+        self,
         organization_id: UUID,
         time_range: TimeRange
     ) -> List[SecurityEvent]:
         """Get security-related events."""
-        
+
     async def generate_audit_report(
-        self, 
+        self,
         organization_id: UUID,
         report_type: AuditReportType
     ) -> AuditReport:
@@ -211,22 +224,22 @@ class AuditService:
 # ENHANCEMENTS TO ADD:
 
 async def _log_security_event(
-    self, 
-    request: Request, 
+    self,
+    request: Request,
     event_type: SecurityEventType,
     details: Dict[str, Any]
 ) -> None:
     """Enhanced security event logging."""
-    
+
 async def _validate_request_context(
-    self, 
+    self,
     request: Request
 ) -> SecurityContext:
     """Advanced request validation with context."""
-    
+
 async def _detect_anomalous_access(
-    self, 
-    request: Request, 
+    self,
+    request: Request,
     user_context: UserContext
 ) -> Optional[SecurityAlert]:
     """Anomaly detection for access patterns."""
@@ -327,11 +340,14 @@ async def get_usage_analytics(
 
 ```typescript
 interface RoleManagementProps {
-  organization: Organization;
-  currentUser: User;
+  organization: Organization
+  currentUser: User
 }
 
-export function RoleManagement({ organization, currentUser }: RoleManagementProps) {
+export function RoleManagement({
+  organization,
+  currentUser,
+}: RoleManagementProps) {
   // Component for managing team roles
   // - Member list with current roles
   // - Role change interface
@@ -341,7 +357,7 @@ export function RoleManagement({ organization, currentUser }: RoleManagementProp
 
 // Supporting components:
 // - role-change-dialog.tsx
-// - bulk-role-update.tsx  
+// - bulk-role-update.tsx
 // - permission-matrix.tsx
 ```
 
@@ -351,7 +367,7 @@ export function RoleManagement({ organization, currentUser }: RoleManagementProp
 
 ```typescript
 interface AuditDashboardProps {
-  organization: Organization;
+  organization: Organization
 }
 
 export function AuditDashboard({ organization }: AuditDashboardProps) {
@@ -374,8 +390,8 @@ export function AuditDashboard({ organization }: AuditDashboardProps) {
 
 ```typescript
 interface TeamInvitesProps {
-  organization: Organization;
-  currentUser: User;
+  organization: Organization
+  currentUser: User
 }
 
 export function TeamInvites({ organization, currentUser }: TeamInvitesProps) {
@@ -402,10 +418,10 @@ export function TeamInvites({ organization, currentUser }: TeamInvitesProps) {
 # Test cross-organization access prevention
 def test_cross_org_audit_access_denied():
     """Verify audit logs are org-scoped."""
-    
+
 def test_role_management_security():
     """Verify role changes are properly validated."""
-    
+
 def test_enhanced_middleware_security():
     """Verify enhanced security features."""
 ```
@@ -416,10 +432,10 @@ def test_enhanced_middleware_security():
 # Test complete workflow
 def test_complete_role_management_workflow():
     """Test end-to-end role management."""
-    
+
 def test_audit_trail_integration():
     """Test audit trail captures all events."""
-    
+
 def test_frontend_backend_integration():
     """Test UI components with API."""
 ```
@@ -430,7 +446,7 @@ def test_frontend_backend_integration():
 # Test audit system performance
 def test_audit_log_performance():
     """Verify audit logging doesn't impact performance."""
-    
+
 def test_bulk_operations_performance():
     """Test bulk role updates performance."""
 ```
@@ -440,18 +456,21 @@ def test_bulk_operations_performance():
 ## 📊 **SUCCESS METRICS**
 
 ### **Technical Metrics**
+
 - [ ] **API Response Time**: < 500ms for all new endpoints
 - [ ] **Audit Log Performance**: < 50ms for log insertion
 - [ ] **Cross-Org Prevention**: 100% security test coverage
 - [ ] **UI Response**: < 200ms for frontend interactions
 
 ### **Security Metrics**
+
 - [ ] **Zero Cross-Org Leaks**: All tests passing
 - [ ] **Audit Coverage**: 100% critical actions logged
 - [ ] **Role Validation**: All role changes properly validated
 - [ ] **Security Events**: All anomalies detected and logged
 
 ### **User Experience Metrics**
+
 - [ ] **Role Management**: Complete workflow in < 30 seconds
 - [ ] **Audit Access**: Find relevant logs in < 10 seconds
 - [ ] **Team Invites**: Send invite in < 15 seconds
@@ -462,18 +481,22 @@ def test_bulk_operations_performance():
 ## 🚨 **RISK MITIGATION**
 
 ### **Risk 1: API Breaking Changes**
+
 - **Mitigation**: Extend existing patterns, avoid modifications
 - **Validation**: Comprehensive regression testing
 
 ### **Risk 2: Performance Impact**
+
 - **Mitigation**: Async audit logging + indexed queries
 - **Validation**: Performance benchmarking
 
 ### **Risk 3: Security Gaps**
+
 - **Mitigation**: Enhanced testing + security review
 - **Validation**: Penetration testing simulation
 
 ### **Risk 4: Frontend Complexity**
+
 - **Mitigation**: Reuse existing component patterns
 - **Validation**: UI/UX consistency review
 
@@ -482,6 +505,7 @@ def test_bulk_operations_performance():
 ## 📂 **FILE STRUCTURE**
 
 ### **New Files to Create**
+
 ```
 api/
 ├── services/
@@ -515,6 +539,7 @@ tests/
 ```
 
 ### **Files to Enhance**
+
 ```
 api/
 ├── core/
@@ -530,14 +555,17 @@ api/
 ## 🎯 **IMPLEMENTATION TIMELINE**
 
 ### **Day 1: Backend Foundation (8h)**
+
 - **Morning (4h)**: Enhanced role management service + audit service
 - **Afternoon (4h)**: Enhanced organization middleware + security features
 
 ### **Day 2: API Development (8h)**
-- **Morning (4h)**: Audit trail endpoints + role management endpoints  
+
+- **Morning (4h)**: Audit trail endpoints + role management endpoints
 - **Afternoon (4h)**: Organization analytics + integration testing
 
 ### **Day 3: Frontend & Testing (8h)**
+
 - **Morning (4h)**: Role management + audit dashboard UI
 - **Afternoon (4h)**: Team invites interface + comprehensive testing
 
@@ -566,5 +594,5 @@ This refined specification provides a **complete blueprint** for implementing St
 
 ---
 
-*Document Generated by `/exec-refine 4.1` on 2025-08-12*  
-*Confidence Level: 99% | Ready for Implementation: ✅*
+_Document Generated by `/exec-refine 4.1` on 2025-08-12_  
+_Confidence Level: 99% | Ready for Implementation: ✅_

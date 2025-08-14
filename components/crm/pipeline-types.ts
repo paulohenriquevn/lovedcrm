@@ -17,7 +17,6 @@ export interface DragParams {
   targetStageId: string
   sendMessage: (msg: Record<string, unknown>) => void
   setStages: React.Dispatch<React.SetStateAction<PipelineStageDisplay[]>>
-  setError: React.Dispatch<React.SetStateAction<string | null>>
 }
 
 // WebSocket event types

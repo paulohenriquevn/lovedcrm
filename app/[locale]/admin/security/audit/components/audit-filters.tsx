@@ -2,7 +2,13 @@ import { Filter } from 'lucide-react'
 
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 import type { AuditFilters as AuditFiltersType } from '../types'
 
@@ -15,7 +21,7 @@ export function AuditFilters({ filters, onFiltersChange }: AuditFiltersProps) {
   const updateFilter = (key: keyof AuditFiltersType, value: string) => {
     onFiltersChange({
       ...filters,
-      [key]: value
+      [key]: value,
     })
   }
 
@@ -26,8 +32,8 @@ export function AuditFilters({ filters, onFiltersChange }: AuditFiltersProps) {
           <Filter className="h-4 w-4" />
           <span className="text-sm font-medium">Filters:</span>
         </div>
-        
-        <Select value={filters.timeframe} onValueChange={(value) => updateFilter('timeframe', value)}>
+
+        <Select value={filters.timeframe} onValueChange={value => updateFilter('timeframe', value)}>
           <SelectTrigger className="w-32">
             <SelectValue />
           </SelectTrigger>
@@ -39,7 +45,10 @@ export function AuditFilters({ filters, onFiltersChange }: AuditFiltersProps) {
           </SelectContent>
         </Select>
 
-        <Select value={filters.selectedTable} onValueChange={(value) => updateFilter('selectedTable', value)}>
+        <Select
+          value={filters.selectedTable}
+          onValueChange={value => updateFilter('selectedTable', value)}
+        >
           <SelectTrigger className="w-40">
             <SelectValue placeholder="Table" />
           </SelectTrigger>
@@ -51,7 +60,10 @@ export function AuditFilters({ filters, onFiltersChange }: AuditFiltersProps) {
           </SelectContent>
         </Select>
 
-        <Select value={filters.selectedAction} onValueChange={(value) => updateFilter('selectedAction', value)}>
+        <Select
+          value={filters.selectedAction}
+          onValueChange={value => updateFilter('selectedAction', value)}
+        >
           <SelectTrigger className="w-32">
             <SelectValue placeholder="Action" />
           </SelectTrigger>
@@ -66,7 +78,7 @@ export function AuditFilters({ filters, onFiltersChange }: AuditFiltersProps) {
         <Input
           placeholder="Search audit logs..."
           value={filters.searchTerm}
-          onChange={(e) => updateFilter('searchTerm', e.target.value)}
+          onChange={e => updateFilter('searchTerm', e.target.value)}
           className="w-64"
         />
       </div>

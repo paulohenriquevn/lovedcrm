@@ -67,15 +67,14 @@ function notifyStageChange(
 
 function createErrorHandler(
   reloadLeadsData: () => Promise<void>
-): (error: unknown, setError: React.Dispatch<React.SetStateAction<string | null>>) => void {
-  return (error: unknown, setError: React.Dispatch<React.SetStateAction<string | null>>): void => {
+): (error: unknown) => void {
+  return (error: unknown): void => {
     // eslint-disable-next-line no-console
     console.error('Erro ao mover lead:', error)
-    setError('Erro ao mover lead. A página será recarregada.')
+    // Reload data to revert optimistic updates
     setTimeout(() => {
       void reloadLeadsData()
-      setError(null)
-    }, 2000)
+    }, 1000)
   }
 }
 
@@ -128,7 +127,6 @@ export function usePipelineDragLogic(reloadLeadsData: () => Promise<void>): Drag
     targetStageId,
     sendMessage,
     setStages,
-    setError,
   }: DragParams): Promise<void> => {
     if (draggedLead === null || draggedLead === undefined) {
       setIsDragging(false)
@@ -166,7 +164,7 @@ export function usePipelineDragLogic(reloadLeadsData: () => Promise<void>): Drag
     } catch (error) {
       // Error haptic feedback
       triggerHaptic([200, 100, 200])
-      helpers.handleDropError(error, setError)
+      helpers.handleDropError(error)
 
       // Error toast notification
       toast({

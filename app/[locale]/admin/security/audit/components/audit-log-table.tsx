@@ -31,15 +31,18 @@ export function AuditLogTable({ logs, isLoading }: AuditLogTableProps) {
 
   return (
     <div className="space-y-4">
-      {logs.map((log) => (
+      {logs.map(log => (
         <Card key={log.id} className="p-4">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center space-x-2 mb-2">
-                <Badge 
+                <Badge
                   variant={
-                    log.action === 'DELETE' ? 'destructive' :
-                    log.action === 'CREATE' ? 'default' : 'secondary'
+                    log.action === 'DELETE'
+                      ? 'destructive'
+                      : log.action === 'CREATE'
+                        ? 'default'
+                        : 'secondary'
                   }
                 >
                   {log.action}
@@ -49,16 +52,14 @@ export function AuditLogTable({ logs, isLoading }: AuditLogTableProps) {
                   {new Date(log.createdAt).toLocaleString()}
                 </span>
               </div>
-              
+
               <p className="text-sm font-medium mb-1">{log.summary}</p>
-              
+
               {Boolean(log.ipAddress) && (
-                <p className="text-xs text-muted-foreground">
-                  IP: {log.ipAddress}
-                </p>
+                <p className="text-xs text-muted-foreground">IP: {log.ipAddress}</p>
               )}
             </div>
-            
+
             <Button variant="ghost" size="sm">
               <Eye className="h-4 w-4" />
             </Button>
