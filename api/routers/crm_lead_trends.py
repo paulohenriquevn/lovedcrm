@@ -19,6 +19,7 @@ from api.core.logging_config import get_logger
 from api.models.crm_lead import Lead
 from api.models.organization import Organization
 from api.schemas.crm_lead import FactorImpact, LeadScoreTrend, TrendDirection
+from api.services.crm_lead_score_history_service import LeadScoreHistoryService
 
 router = APIRouter(prefix="/crm/leads", tags=["crm-lead-trends"])
 logger = get_logger(__name__)
@@ -54,24 +55,28 @@ def get_lead_score_trend(
     end_date = datetime.utcnow()
     start_date = end_date - timedelta(days=days)
 
-    # Generate mock historical data for visualization
-    # In production, this would query actual audit logs or score history table
-    historical_scores = _generate_score_history(
-        lead=lead, start_date=start_date, end_date=end_date, days=days
+    # Get real historical data from score history service
+    score_history_service = LeadScoreHistoryService(db)
+    historical_scores = score_history_service.get_formatted_score_trend(
+        organization=organization, lead_id=lead_uuid, days_back=days
+    )
+    
+    # Get trend summary
+    trend_summary = score_history_service.get_score_trend_summary(
+        organization=organization, lead_id=lead_uuid, days_back=days
     )
 
-    # Analyze trend direction
-    trend_direction = _analyze_trend_direction(historical_scores)
+    # Convert trend direction to enum
+    trend_direction_map = {
+        "increasing": TrendDirection.INCREASING,
+        "decreasing": TrendDirection.DECREASING,
+        "stable": TrendDirection.STABLE,
+    }
+    trend_direction = trend_direction_map.get(trend_summary["trend_direction"], TrendDirection.STABLE)
+    trend_value = trend_summary["trend_value"]
 
-    # Calculate trend value (change from start to end)
-    trend_value = 0
-    if len(historical_scores) >= 2:
-        start_score = historical_scores[0]["score"]
-        end_score = historical_scores[-1]["score"]
-        trend_value = end_score - start_score
-
-    # Analyze factor impacts
-    factor_impacts = _analyze_factor_impacts(lead, historical_scores)
+    # Analyze factor impacts from latest score factors
+    factor_impacts = _analyze_factor_impacts_from_lead(lead)
 
     # Create response
     trend_data = LeadScoreTrend(
@@ -99,12 +104,15 @@ def get_lead_score_trend(
     return trend_data
 
 
+# DEPRECATED: Mock functions below are no longer used
+# Real data is now fetched from LeadScoreHistoryService
+
 def _generate_score_history(
     lead: Lead, start_date: datetime, end_date: datetime, days: int
 ) -> List[Dict[str, Any]]:
-    """Generate mock historical score data.
+    """DEPRECATED: Generate mock historical score data.
 
-    In production, this would query actual audit logs or dedicated score history table.
+    Now replaced by LeadScoreHistoryService.get_formatted_score_trend().
     """
     current_score = lead.lead_score or 50
     historical_data = []
@@ -155,6 +163,76 @@ def _analyze_trend_direction(historical_scores: List[Dict[str, Any]]) -> TrendDi
         return TrendDirection.STABLE
 
 
+def _analyze_factor_impacts_from_lead(lead: Lead) -> List[FactorImpact]:
+    """Analyze factor impacts from current lead data.
+    
+    Creates factor impact analysis based on current lead scoring factors.
+    """
+    factor_impacts = []
+    
+    # Get current score factors from lead
+    score_factors = lead.score_factors or {}
+    
+    # Common factors to analyze
+    factor_weights = {
+        "email_quality": 0.2,
+        "phone_provided": 0.15,
+        "source_quality": 0.15,
+        "estimated_value": 0.2,
+        "stage_progress": 0.15,
+        "engagement_level": 0.15,
+    }
+    
+    for factor_name, weight in factor_weights.items():
+        factor_score = score_factors.get(factor_name, 0)
+        
+        # Calculate impact based on factor score and weight
+        impact_value = factor_score * weight
+        
+        # Determine impact level
+        if impact_value >= 15:
+            impact_level = "high"
+        elif impact_value >= 8:
+            impact_level = "medium"
+        else:
+            impact_level = "low"
+            
+        factor_impacts.append(
+            FactorImpact(
+                factor_name=factor_name.replace("_", " ").title(),
+                impact_value=round(impact_value, 1),
+                impact_level=impact_level,
+                description=_get_factor_description(factor_name, factor_score),
+            )
+        )
+    
+    # Sort by impact value descending
+    factor_impacts.sort(key=lambda x: x.impact_value, reverse=True)
+    
+    return factor_impacts
+
+def _get_factor_description(factor_name: str, factor_score: float) -> str:
+    """Get description for a factor based on its score."""
+    descriptions = {
+        "email_quality": "Email address validation and deliverability",
+        "phone_provided": "Phone number provided and validated",
+        "source_quality": "Lead source reliability and conversion rate",
+        "estimated_value": "Potential deal value assessment",
+        "stage_progress": "Movement through sales pipeline",
+        "engagement_level": "Recent interaction and response rate",
+    }
+    
+    base_desc = descriptions.get(factor_name, "Factor impact on lead score")
+    
+    if factor_score >= 80:
+        return f"{base_desc} - Excellent"
+    elif factor_score >= 60:
+        return f"{base_desc} - Good"
+    elif factor_score >= 40:
+        return f"{base_desc} - Average"
+    else:
+        return f"{base_desc} - Needs improvement"
+
 def _analyze_factor_impacts(
     lead: Lead, historical_scores: List[Dict[str, Any]]
 ) -> List[FactorImpact]:
@@ -185,7 +263,7 @@ def _analyze_factor_impacts(
                     current_value=current_value,
                     change_value=round(change, 1),
                     impact_level=impact_level,
-                    description=_get_factor_description(factor_name, change),
+                    description=_get_factor_change_description(factor_name, change),
                 )
             )
 
@@ -196,9 +274,9 @@ def _analyze_factor_impacts(
 
 
 def _generate_factor_snapshot(lead: Lead, date: datetime, total_score: float) -> Dict[str, float]:
-    """Generate mock factor values for a specific date.
+    """DEPRECATED: Generate mock factor values for a specific date.
 
-    In production, this would come from stored historical data.
+    Now replaced by real factor data from LeadScoreHistory records.
     """
     if not lead.score_factors:
         return {}
@@ -223,8 +301,8 @@ def _calculate_impact_level(change_magnitude: float) -> str:
         return "low"
 
 
-def _get_factor_description(factor_name: str, change: float) -> str:
-    """Get human-readable description of factor change."""
+def _get_factor_change_description(factor_name: str, change: float) -> str:
+    """DEPRECATED: Get human-readable description of factor change."""
     direction = "increased" if change > 0 else "decreased"
     factor_labels = {
         "email_authority": "Email Authority",

@@ -154,23 +154,94 @@ class Lead(Base):
     def can_move_to_stage(self, new_stage: PipelineStage) -> bool:
         """Business logic for stage transitions.
 
-        Can be extended with more complex rules.
+        Implements realistic pipeline progression rules:
+        - Sequential progression is always allowed (lead → contato → proposta → negociacao → fechado)
+        - Backward movement is allowed for most stages
+        - Direct jumps are allowed with some restrictions
         """
-        # For now, allow any stage transition
-        # TODO: Add business rules if needed
+        current_stage = self.stage
+        
+        # If stage is not changing, allow it
+        if current_stage == new_stage:
+            return True
+            
+        # Define stage ordering for sequential progression
+        stage_order = {
+            PipelineStage.LEAD: 0,
+            PipelineStage.CONTATO: 1,
+            PipelineStage.PROPOSTA: 2,
+            PipelineStage.NEGOCIACAO: 3,
+            PipelineStage.FECHADO: 4,
+        }
+        
+        current_order = stage_order[current_stage]
+        new_order = stage_order[new_stage]
+        
+        # Always allow forward sequential progression
+        if new_order == current_order + 1:
+            return True
+            
+        # Always allow backward movement (except from FECHADO)
+        if new_order < current_order and current_stage != PipelineStage.FECHADO:
+            return True
+            
+        # Allow jumping forward, but with validation
+        if new_order > current_order:
+            # Cannot jump directly to FECHADO from LEAD
+            if current_stage == PipelineStage.LEAD and new_stage == PipelineStage.FECHADO:
+                return False
+                
+            # Need basic contact info for advanced stages
+            if new_order >= 2:  # PROPOSTA or later
+                if not self.email and not self.phone:
+                    return False
+                    
+            return True
+            
+        # Special rule: Once FECHADO, can only reopen to NEGOCIACAO
+        if current_stage == PipelineStage.FECHADO:
+            return new_stage == PipelineStage.NEGOCIACAO
+            
+        # Default: allow transition
         return True
+
+    def get_transition_requirements(self, new_stage: PipelineStage) -> List[str]:
+        """Get requirements that must be met for stage transition.
+        
+        Returns list of requirements that are not met.
+        """
+        requirements = []
+        
+        if new_stage in [PipelineStage.PROPOSTA, PipelineStage.NEGOCIACAO, PipelineStage.FECHADO]:
+            if not self.email and not self.phone:
+                requirements.append("Contact information (email or phone) is required")
+                
+        if new_stage == PipelineStage.PROPOSTA:
+            if not self.estimated_value:
+                requirements.append("Estimated value should be defined for proposals")
+                
+        if new_stage == PipelineStage.FECHADO:
+            if self.stage == PipelineStage.LEAD:
+                requirements.append("Cannot close lead directly - must progress through pipeline")
+                
+        return requirements
 
     def move_to_stage(self, new_stage: PipelineStage, notes: Optional[str] = None):
         """Move lead to new stage with optional notes."""
-        if self.can_move_to_stage(new_stage):
-            old_stage = self.stage
-            self.stage = new_stage
-            self.updated_at = func.now()
+        if not self.can_move_to_stage(new_stage):
+            requirements = self.get_transition_requirements(new_stage)
+            if requirements:
+                error_msg = f"Cannot move lead from {self.stage} to {new_stage}. Requirements: {'; '.join(requirements)}"
+            else:
+                error_msg = f"Invalid transition from {self.stage} to {new_stage}"
+            raise ValueError(error_msg)
+            
+        old_stage = self.stage
+        self.stage = new_stage
+        self.updated_at = func.now()
 
-            if notes:
-                if self.notes:
-                    self.notes += f"\n[{datetime.now()}] Stage {old_stage} → {new_stage}: {notes}"
-                else:
-                    self.notes = f"[{datetime.now()}] Stage {old_stage} → {new_stage}: {notes}"
-        else:
-            raise ValueError(f"Cannot move lead from {self.stage} to {new_stage}")
+        if notes:
+            if self.notes:
+                self.notes += f"\n[{datetime.now()}] Stage {old_stage} → {new_stage}: {notes}"
+            else:
+                self.notes = f"[{datetime.now()}] Stage {old_stage} → {new_stage}: {notes}"

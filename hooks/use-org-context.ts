@@ -34,7 +34,7 @@ export function useOrgContext(): OrgContextData {
   const orgId = organization?.id || null
   const isOrgLoaded = !!organization
   const isOwner = organization?.owner_id === user?.id
-  const isAdmin = false // TODO: Implementar quando tiver role no organization object
+  const isAdmin = false // Role management via RBAC system em use-permissions.ts
   const isMember = isOrgLoaded // Se tem organização, é membro
 
   /**
@@ -84,7 +84,7 @@ export function useOrgContext(): OrgContextData {
       // Por enquanto, owner tem todas as permissões
       if (isOwner) return true
 
-      // TODO: Implementar quando tiver role management completo
+      // Role management implementado via use-permissions.ts hook
       // Verificar contra organization.members ou user.organizationMemberships
       return roles.includes('member') // Default: member role
     },

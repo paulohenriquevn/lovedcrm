@@ -19,6 +19,7 @@ from api.models.crm_audit_log import AuditAction, AuditLog
 from api.models.organization import Organization
 from api.models.user import User
 from api.services.audit_service import AuditService
+from api.services.role_management_service import RoleManagementService
 
 router = APIRouter(prefix="/audit", tags=["Audit Trail"])
 logger = logging.getLogger(__name__)
@@ -161,6 +162,21 @@ async def get_audit_trail(
         },
     )
 
+    # Check permissions for viewing audit logs
+    role_service = RoleManagementService(db)
+    if not role_service.check_permission(organization.id, current_user.id, "view_audit_logs"):
+        logger.warning(
+            "Permission denied: User lacks view_audit_logs permission",
+            extra={
+                "current_user_id": str(current_user.id),
+                "organization_id": str(organization.id),
+            },
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Insufficient permissions to view audit logs"
+        )
+
     audit_service = AuditService(db)
 
     # Build filters dictionary
@@ -285,13 +301,27 @@ async def get_user_activity(
 
     # Check if user is requesting their own activity or has permission
     if target_user_id != current_user.id:
-        # TODO: Add permission check for 'view_members'
-        # This would integrate with the role management service
+        role_service = RoleManagementService(db)
+        if not role_service.check_permission(organization.id, current_user.id, "view_member_activity"):
+            logger.warning(
+                "Permission denied: User lacks view_member_activity permission",
+                extra={
+                    "current_user_id": str(current_user.id),
+                    "target_user_id": str(target_user_id),
+                    "organization_id": str(organization.id),
+                },
+            )
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Insufficient permissions to view other member's activity"
+            )
+        
         logger.info(
-            "User requesting other user's activity - permission check needed",
+            "Permission granted: User has view_member_activity permission",
             extra={
                 "current_user_id": str(current_user.id),
                 "target_user_id": str(target_user_id),
+                "organization_id": str(organization.id),
             },
         )
 
@@ -401,8 +431,20 @@ async def verify_audit_integrity(
         },
     )
 
-    # TODO: Add admin permission check
-    # This would integrate with the role management service
+    # Check admin permissions for audit integrity verification
+    role_service = RoleManagementService(db)
+    if not role_service.check_permission(organization.id, current_user.id, "view_audit_logs"):
+        logger.warning(
+            "Permission denied: User lacks view_audit_logs permission",
+            extra={
+                "current_user_id": str(current_user.id),
+                "organization_id": str(organization.id),
+            },
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Insufficient permissions to verify audit integrity"
+        )
 
     audit_service = AuditService(db)
 
@@ -458,8 +500,20 @@ async def cleanup_old_audit_logs(
         },
     )
 
-    # TODO: Add admin permission check
-    # This would integrate with the role management service
+    # Check admin permissions for audit cleanup
+    role_service = RoleManagementService(db)
+    if not role_service.check_permission(organization.id, current_user.id, "view_audit_logs"):
+        logger.warning(
+            "Permission denied: User lacks view_audit_logs permission for cleanup",
+            extra={
+                "current_user_id": str(current_user.id),
+                "organization_id": str(organization.id),
+            },
+        )
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Insufficient permissions to perform audit cleanup"
+        )
 
     audit_service = AuditService(db)
 

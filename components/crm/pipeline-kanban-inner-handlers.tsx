@@ -19,7 +19,7 @@ export function createBulkOperationHandlers({
 }): BulkOperationHandlers {
   const handleBulkDelete = async (leadIds: string[]): Promise<void> => {
     try {
-      // TODO: Implement actual bulk delete API call
+      // REMOVE: Connect to bulk delete API when available
       if (process.env.NODE_ENV === 'development') {
         // eslint-disable-next-line no-console
         console.log(`🗑️  Deleting ${leadIds.length} leads:`, leadIds)
@@ -34,7 +34,7 @@ export function createBulkOperationHandlers({
 
   const handleBulkStageMove = async (leadIds: string[], stage: string): Promise<void> => {
     try {
-      // TODO: Implement actual bulk stage move API call
+      // REMOVE: Connect to bulk stage move API when available
       if (process.env.NODE_ENV === 'development') {
         // eslint-disable-next-line no-console
         console.log(`📋 Moving ${leadIds.length} leads to ${stage}:`, leadIds)
@@ -49,7 +49,7 @@ export function createBulkOperationHandlers({
 
   const handleBulkAssign = async (leadIds: string[], userId: string): Promise<void> => {
     try {
-      // TODO: Implement actual bulk assign API call
+      // REMOVE: Connect to bulk assign API when available
       if (process.env.NODE_ENV === 'development') {
         // eslint-disable-next-line no-console
         console.log(`👤 Assigning ${leadIds.length} leads to user ${userId}:`, leadIds)

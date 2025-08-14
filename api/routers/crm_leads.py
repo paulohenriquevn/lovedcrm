@@ -48,14 +48,7 @@ async def create_lead(
     **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
-    lead = await service.create_lead(organization, lead_data, UUID(str(current_user.id)))
-
-    # Convert to response with computed properties
-    response = LeadResponse.model_validate(lead)
-    response.is_closed = lead.is_closed
-    response.days_in_current_stage = lead.days_in_current_stage
-
-    return response
+    return await service.create_lead_response(organization, lead_data, UUID(str(current_user.id)))
 
 
 @router.get("", response_model=LeadListResponse)
@@ -160,14 +153,7 @@ async def get_lead(
     **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
-    lead = service.get_lead_by_id(organization, lead_id)
-
-    # Convert to response with computed properties
-    response = LeadResponse.model_validate(lead)
-    response.is_closed = lead.is_closed
-    response.days_in_current_stage = lead.days_in_current_stage
-
-    return response
+    return service.get_lead_by_id_response(organization, lead_id)
 
 
 @router.put("/{lead_id}", response_model=LeadResponse)
@@ -182,14 +168,7 @@ async def update_lead(
     **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
-    lead = service.update_lead(organization, lead_id, lead_data)
-
-    # Convert to response with computed properties
-    response = LeadResponse.model_validate(lead)
-    response.is_closed = lead.is_closed
-    response.days_in_current_stage = lead.days_in_current_stage
-
-    return response
+    return service.update_lead_response(organization, lead_id, lead_data)
 
 
 @router.put("/{lead_id}/stage", response_model=LeadResponse)
@@ -208,16 +187,9 @@ async def update_lead_stage(
     **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
-    lead = await service.update_lead_stage(
+    return await service.update_lead_stage_response(
         organization, lead_id, stage_data, UUID(str(current_user.id))
     )
-
-    # Convert to response with computed properties
-    response = LeadResponse.model_validate(lead)
-    response.is_closed = lead.is_closed
-    response.days_in_current_stage = lead.days_in_current_stage
-
-    return response
 
 
 @router.put("/{lead_id}/favorite", response_model=LeadResponse)
@@ -232,14 +204,38 @@ async def toggle_lead_favorite(
     **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
-    lead = service.toggle_lead_favorite(organization, lead_id, favorite_data)
+    return service.toggle_lead_favorite_response(organization, lead_id, favorite_data)
 
-    # Convert to response with computed properties
-    response = LeadResponse.model_validate(lead)
-    response.is_closed = lead.is_closed
-    response.days_in_current_stage = lead.days_in_current_stage
 
-    return response
+@router.get("/{lead_id}/transition-validation")
+async def validate_stage_transition(
+    lead_id: UUID,
+    target_stage: PipelineStage = Query(..., description="Target stage to validate"),
+    organization: Organization = Depends(get_current_organization),
+    db: Session = Depends(get_db),
+):
+    """Validate if a stage transition is allowed for a lead.
+    
+    Returns validation result and requirements if transition is not allowed.
+    
+    **Required**: X-Org-Id header with valid organization ID.
+    """
+    service = CRMLeadService(db)
+    lead = service.get_lead_by_id(organization, lead_id)
+    
+    can_transition = lead.can_move_to_stage(target_stage)
+    requirements = lead.get_transition_requirements(target_stage) if not can_transition else []
+    
+    return {
+        "can_transition": can_transition,
+        "current_stage": lead.stage.value,
+        "target_stage": target_stage.value,
+        "requirements": requirements,
+        "valid_transitions": [
+            stage.value for stage in PipelineStage 
+            if lead.can_move_to_stage(stage) and stage != lead.stage
+        ]
+    }
 
 
 @router.delete("/{lead_id}", status_code=status.HTTP_204_NO_CONTENT)

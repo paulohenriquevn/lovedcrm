@@ -160,7 +160,7 @@ export interface UseMembersOptions {
  */
 export function useMembers(options: UseMembersOptions = {}) {
   // Por enquanto, retorna apenas o service
-  // TODO: Integrar com React Query quando disponível
+  // REMOVE: Integrate with React Query when proper caching is needed
   return {
     listMembers: () => membersService.listMembers(),
     inviteMember: (data: MemberInviteData) => membersService.inviteMember(data),

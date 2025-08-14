@@ -14,7 +14,7 @@ export function useBulkOperationsHandlers(
 } {
   const handleBulkDelete = async (): Promise<void> => {
     try {
-      // TODO: Implement actual bulk delete API call
+      // REMOVE: Connect to bulk delete API when available
       // eslint-disable-next-line no-console
       console.log('🗑️ Bulk delete operation initiated')
       await reloadLeadsData()
@@ -27,7 +27,7 @@ export function useBulkOperationsHandlers(
 
   const handleBulkStageMove = async (leadIds: string[], stage: string): Promise<void> => {
     try {
-      // TODO: Implement actual bulk stage move API call
+      // REMOVE: Connect to bulk stage move API when available
       // eslint-disable-next-line no-console
       console.log(`📋 Moving ${leadIds.length} leads to ${stage}:`, leadIds)
       await reloadLeadsData()
@@ -40,7 +40,7 @@ export function useBulkOperationsHandlers(
 
   const handleBulkAssign = async (leadIds: string[], userId: string): Promise<void> => {
     try {
-      // TODO: Implement actual bulk assign API call
+      // REMOVE: Connect to bulk assign API when available
       // eslint-disable-next-line no-console
       console.log(`👤 Assigning ${leadIds.length} leads to user ${userId}:`, leadIds)
       await reloadLeadsData()

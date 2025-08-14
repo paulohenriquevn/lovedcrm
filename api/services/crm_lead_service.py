@@ -44,7 +44,30 @@ class CRMLeadService:
         self.db = db
         self.repository = CRMLeadRepository(db)
 
+    def _convert_to_response(self, lead: Lead) -> LeadResponse:
+        """Convert Lead model to LeadResponse with computed properties.
+        
+        Eliminates code duplication across endpoints.
+        """
+        response = LeadResponse.model_validate(lead)
+        response.is_closed = lead.is_closed
+        response.days_in_current_stage = lead.days_in_current_stage
+        return response
+
     async def create_lead(
+        self, organization: Organization, lead_data: LeadCreate, user_id: Optional[UUID] = None
+    ) -> Lead:
+        """Create new lead for organization and return Lead model."""
+        return await self._create_lead_internal(organization, lead_data, user_id)
+
+    async def create_lead_response(
+        self, organization: Organization, lead_data: LeadCreate, user_id: Optional[UUID] = None
+    ) -> LeadResponse:
+        """Create new lead for organization and return LeadResponse."""
+        lead = await self._create_lead_internal(organization, lead_data, user_id)
+        return self._convert_to_response(lead)
+
+    async def _create_lead_internal(
         self, organization: Organization, lead_data: LeadCreate, user_id: Optional[UUID] = None
     ) -> Lead:
         """Create new lead for organization."""
@@ -153,12 +176,7 @@ class CRMLeadService:
                 total_count = self.repository.count_by_organization(organization.id)
 
             # Convert to response models with computed properties
-            lead_responses = []
-            for lead in leads:
-                lead_response = LeadResponse.model_validate(lead)
-                lead_response.is_closed = lead.is_closed
-                lead_response.days_in_current_stage = lead.days_in_current_stage
-                lead_responses.append(lead_response)
+            lead_responses = [self._convert_to_response(lead) for lead in leads]
 
             return LeadListResponse(
                 leads=lead_responses,
@@ -185,6 +203,15 @@ class CRMLeadService:
             )
 
     def get_lead_by_id(self, organization: Organization, lead_id: UUID) -> Lead:
+        """Get lead by ID and return Lead model."""
+        return self._get_lead_by_id_internal(organization, lead_id)
+
+    def get_lead_by_id_response(self, organization: Organization, lead_id: UUID) -> LeadResponse:
+        """Get lead by ID and return LeadResponse."""
+        lead = self._get_lead_by_id_internal(organization, lead_id)
+        return self._convert_to_response(lead)
+
+    def _get_lead_by_id_internal(self, organization: Organization, lead_id: UUID) -> Lead:
         """Get single lead by ID with organization validation."""
         lead = self.repository.get_by_id_and_org(lead_id, organization.id)
 
@@ -194,9 +221,18 @@ class CRMLeadService:
         return lead
 
     def update_lead(self, organization: Organization, lead_id: UUID, lead_data: LeadUpdate) -> Lead:
+        """Update lead and return Lead model."""
+        return self._update_lead_internal(organization, lead_id, lead_data)
+
+    def update_lead_response(self, organization: Organization, lead_id: UUID, lead_data: LeadUpdate) -> LeadResponse:
+        """Update lead and return LeadResponse."""
+        lead = self._update_lead_internal(organization, lead_id, lead_data)
+        return self._convert_to_response(lead)
+
+    def _update_lead_internal(self, organization: Organization, lead_id: UUID, lead_data: LeadUpdate) -> Lead:
         """Update existing lead."""
         try:
-            lead = self.get_lead_by_id(organization, lead_id)
+            lead = self._get_lead_by_id_internal(organization, lead_id)
 
             # Update fields that were provided
             update_data = lead_data.model_dump(exclude_unset=True)
@@ -265,18 +301,61 @@ class CRMLeadService:
         stage_data: LeadStageUpdate,
         user_id: Optional[UUID] = None,
     ) -> Lead:
+        """Update lead stage and return Lead model."""
+        return await self._update_lead_stage_internal(organization, lead_id, stage_data, user_id)
+
+    async def update_lead_stage_response(
+        self,
+        organization: Organization,
+        lead_id: UUID,
+        stage_data: LeadStageUpdate,
+        user_id: Optional[UUID] = None,
+    ) -> LeadResponse:
+        """Update lead stage and return LeadResponse."""
+        lead = await self._update_lead_stage_internal(organization, lead_id, stage_data, user_id)
+        return self._convert_to_response(lead)
+
+    async def _update_lead_stage_internal(
+        self,
+        organization: Organization,
+        lead_id: UUID,
+        stage_data: LeadStageUpdate,
+        user_id: Optional[UUID] = None,
+    ) -> Lead:
         """Update lead pipeline stage."""
         try:
-            lead = self.repository.update_stage(
-                lead_id=lead_id, org_id=organization.id, new_stage=stage_data.stage
-            )
-
-            if not lead:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Lead not found")
-
-            # Add notes about stage transition if provided
-            if stage_data.notes:
-                self._add_stage_update_notes(lead, stage_data.notes)
+            # First get the lead to validate transition
+            lead = self._get_lead_by_id_internal(organization, lead_id)
+            
+            # Validate stage transition using business rules
+            if not lead.can_move_to_stage(stage_data.stage):
+                requirements = lead.get_transition_requirements(stage_data.stage)
+                if requirements:
+                    error_detail = f"Cannot move lead from {lead.stage.value} to {stage_data.stage.value}. Requirements: {'; '.join(requirements)}"
+                else:
+                    error_detail = f"Invalid transition from {lead.stage.value} to {stage_data.stage.value}"
+                
+                logger.warning(
+                    "Invalid stage transition attempted",
+                    extra={
+                        "lead_id": str(lead_id),
+                        "organization_id": str(organization.id),
+                        "current_stage": lead.stage.value,
+                        "requested_stage": stage_data.stage.value,
+                        "requirements": requirements,
+                    },
+                )
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=error_detail
+                )
+            
+            # Perform the transition using the model's business logic
+            lead.move_to_stage(stage_data.stage, stage_data.notes)
+            
+            # Save changes
+            self.db.commit()
+            self.db.refresh(lead)
 
             logger.info(
                 "Lead stage updated successfully",
@@ -315,7 +394,7 @@ class CRMLeadService:
     def delete_lead(self, organization: Organization, lead_id: UUID) -> bool:
         """Delete lead with organization validation."""
         try:
-            lead = self.get_lead_by_id(organization, lead_id)
+            lead = self._get_lead_by_id_internal(organization, lead_id)
 
             # Store lead info before deletion for broadcasting
             # lead_dict prepared for future websocket broadcast
@@ -436,9 +515,22 @@ class CRMLeadService:
     def toggle_lead_favorite(
         self, organization: Organization, lead_id: UUID, favorite_data: LeadFavoriteToggle
     ) -> Lead:
+        """Toggle lead favorite status and return Lead model."""
+        return self._toggle_lead_favorite_internal(organization, lead_id, favorite_data)
+
+    def toggle_lead_favorite_response(
+        self, organization: Organization, lead_id: UUID, favorite_data: LeadFavoriteToggle
+    ) -> LeadResponse:
+        """Toggle lead favorite status and return LeadResponse."""
+        lead = self._toggle_lead_favorite_internal(organization, lead_id, favorite_data)
+        return self._convert_to_response(lead)
+
+    def _toggle_lead_favorite_internal(
+        self, organization: Organization, lead_id: UUID, favorite_data: LeadFavoriteToggle
+    ) -> Lead:
         """Toggle lead favorite status."""
         try:
-            lead = self.get_lead_by_id(organization, lead_id)
+            lead = self._get_lead_by_id_internal(organization, lead_id)
 
             # Update favorite status
             lead.is_favorite = favorite_data.is_favorite

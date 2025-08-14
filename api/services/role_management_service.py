@@ -46,6 +46,8 @@ class RoleManagementService:
             "manage_members",
             "edit_organization",
             "view_analytics",
+            "view_audit_logs",
+            "view_member_activity",
         },
         OrganizationRole.owner: {
             "view_organization",
@@ -55,6 +57,8 @@ class RoleManagementService:
             "manage_members",
             "edit_organization",
             "view_analytics",
+            "view_audit_logs",
+            "view_member_activity",
             "delete_organization",
             "manage_admins",
             "transfer_ownership",

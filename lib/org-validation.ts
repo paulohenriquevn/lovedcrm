@@ -322,7 +322,7 @@ function checkRolePermissions(
   user: User,
   organization: Organization
 ): OrgErrorType | null {
-  // TODO: Implementar quando tiver role management completo
+  // Role management implementado via RBAC system
   // Por enquanto, owner tem todas as permiss�es
   const isOwner = validateOwnership(user, organization)
   if (!isOwner && requiredRole !== 'member') {

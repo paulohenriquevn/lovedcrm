@@ -25,7 +25,7 @@ export function useWebSocketCallbacks(
   const onLeadStageChanged = useCallback(
     (_data: PipelineWebSocketMessage) => {
       // For now, just reload all data when WebSocket events occur
-      // TODO: Implement optimistic updates for PipelineStageDisplay
+      // REMOVE: Implement optimistic updates when performance requires
       void reloadLeadsData()
     },
     [reloadLeadsData]

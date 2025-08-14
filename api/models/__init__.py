@@ -8,6 +8,7 @@ from .crm_file_attachment import FileAttachment, StorageType
 
 # CRM business models (YOUR EXTENSION)
 from .crm_lead import Lead, PipelineStage
+from .crm_lead_score_history import LeadScoreHistory
 from .crm_organization_integration import (
     IntegrationProvider,
     IntegrationStatus,
@@ -36,6 +37,7 @@ __all__ = [
     # CRM business models
     "Lead",
     "PipelineStage",
+    "LeadScoreHistory",
     "Communication",
     "CommunicationChannel",
     "CommunicationDirection",

@@ -3,6 +3,7 @@
 Follows existing patterns and multi-tenant architecture.
 """
 import logging
+from datetime import datetime
 from typing import List
 from uuid import UUID
 
@@ -24,6 +25,7 @@ from ..schemas.billing import (
     UpgradeRequest,
 )
 from ..services.feature_service import get_feature_service
+from ..services.stripe_service import get_stripe_service
 
 router = APIRouter(prefix="/billing", tags=["billing"])
 logger = logging.getLogger(__name__)
@@ -226,15 +228,27 @@ async def upgrade_plan(
                 checkout_url=f"success?plan={request.plan_slug}", session_id="free_upgrade"
             )
 
-        # For paid plans, create checkout session (mock for now)
+        # For paid plans, create Stripe checkout session
         logger.info(
             f"Paid upgrade requested: org={UUID(str(organization.id))}, plan={request.plan_slug}"
         )
 
-        # TODO: Implement actual Stripe checkout session creation
+        stripe_service = get_stripe_service(db)
+        
+        # Create checkout URLs (in production these would be dynamic)
+        success_url = f"{request.get('frontend_url', 'https://app.lovedcrm.com')}/admin/settings/billing?success=true&plan={request.plan_slug}"
+        cancel_url = f"{request.get('frontend_url', 'https://app.lovedcrm.com')}/admin/settings/billing?cancelled=true"
+        
+        checkout_session = stripe_service.create_checkout_session(
+            organization=organization,
+            plan=target_plan,
+            success_url=success_url,
+            cancel_url=cancel_url
+        )
+        
         return CheckoutSessionResponse(
-            checkout_url=f"https://checkout.stripe.com/pay/{target_plan.id}",
-            session_id=f"cs_mock_{target_plan.slug}",
+            checkout_url=checkout_session["checkout_url"],
+            session_id=checkout_session["session_id"],
         )
 
     except HTTPException:
@@ -339,10 +353,9 @@ async def sync_plans_with_config(
         )
 
 
-# TODO: Implement Stripe webhook endpoint
 @router.post("/stripe-webhook")
 async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
-    """Handle Stripe webhook events (placeholder)."""
+    """Handle Stripe webhook events."""
     try:
         payload = await request.body()
         signature = request.headers.get("stripe-signature")
@@ -354,11 +367,15 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
 
         logger.info(f"Received Stripe webhook (payload size: {len(payload)} bytes)")
 
-        # TODO: Implement actual Stripe webhook processing
+        stripe_service = get_stripe_service(db)
+        result = stripe_service.handle_webhook(payload, signature)
+        
+        logger.info(f"Stripe webhook processed successfully: {result['event_type']}")
+        
         return {
-            "status": "received",
-            "processed": False,
-            "note": "Webhook processing not yet implemented",
+            "status": "success",
+            "event_type": result["event_type"],
+            "timestamp": datetime.now().isoformat(),
         }
 
     except HTTPException:

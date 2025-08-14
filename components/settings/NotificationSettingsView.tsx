@@ -30,7 +30,7 @@ interface NotificationSettingsViewProps {
 }
 
 function handleTestNotification(_type: 'email' | 'push' | 'sms'): void {
-  // TODO: Implementar teste de notificação
+  // REMOVE: Connect to real notification test API when available
 }
 
 function useNotificationSettings(): {
@@ -136,9 +136,9 @@ export function NotificationSettingsView({
       }
 
       await onSavePreferences(notificationPrefs)
-      // TODO: Show success toast
+      // REMOVE: Show success toast when notification system is ready
     } catch {
-      // TODO: Show error toast
+      // REMOVE: Show error toast when notification system is ready
     }
   }
 

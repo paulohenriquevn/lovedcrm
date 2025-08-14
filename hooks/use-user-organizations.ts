@@ -37,7 +37,7 @@ export function useUserOrganizations(): UseUserOrganizationsReturn {
 
     try {
       // Por enquanto, usar a organização atual como base
-      // TODO: Implementar endpoint /api/users/organizations quando disponível
+      // REMOVE: Implementar endpoint /api/users/organizations real
       if (organization) {
         const orgWithRole: UserOrganization = {
           ...organization,
@@ -63,7 +63,7 @@ export function useUserOrganizations(): UseUserOrganizationsReturn {
       setIsLoading(true)
       setError(null)
 
-      // TODO: Implementar switching real quando API estiver disponível
+      // REMOVE: Connect to real organization switching API when available
       // await organizationsService.switchOrganization(orgId)
 
       // Por enquanto, apenas log

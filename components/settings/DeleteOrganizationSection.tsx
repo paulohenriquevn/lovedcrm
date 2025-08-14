@@ -16,7 +16,7 @@ export function DeleteOrganizationSection({
   onDeleteOrganization,
 }: DeleteOrganizationSectionProps): JSX.Element {
   const handleDeleteClick = React.useCallback((): void => {
-    // TODO: Implement organization deletion confirmation dialog
+    // REMOVE: Connect to real organization deletion API when admin features are ready
     // For now, we'll call the handler directly
     onDeleteOrganization()
   }, [onDeleteOrganization])

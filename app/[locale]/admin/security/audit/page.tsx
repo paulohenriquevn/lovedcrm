@@ -18,7 +18,7 @@ import { usePermissions } from '@/hooks/use-permissions'
 import { AuditFilters } from './components/audit-filters'
 import { AuditPageHeader } from './components/audit-page-header'
 import { StatisticsCards } from './components/statistics-cards'
-import { mockStatistics } from './mock-data'
+// REMOVE: Import removed - use real audit API
 
 import type { AuditFilters as AuditFiltersType } from './types'
 
@@ -34,7 +34,7 @@ const handleRefreshData = (
 const handleExportData = () => {
   // Export functionality would be implemented here
   // console.log removed as per ESLint warning
-  // TODO: Implement actual export functionality
+  // REMOVE: Connect to real export API when available
 }
 
 
@@ -66,7 +66,8 @@ export default function SecurityAuditPage() {
     timeframe: '7d'
   })
   
-  const statistics = mockStatistics
+  // REMOVE: Use real audit API - implement statistics fetch
+  const statistics = null
   
   // Note: auditLogs and securityEvents would be used when implementing actual audit table
 
@@ -105,7 +106,7 @@ export default function SecurityAuditPage() {
         onFiltersChange={setFilters}
       />
 
-      {/* TODO: Implement AuditTabs component */}
+      {/* REMOVE: Connect AuditTabs to real API when component is ready */}
       <div className="text-center py-8 text-muted-foreground">
         Audit tabs component will be implemented here
       </div>

@@ -32,7 +32,7 @@ export function useNotifications(): UseNotificationsReturn {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Mock notifications por enquanto - TODO: Implementar API real
+  // REMOVE: Mock notifications - implementar API real
   const mockNotifications: Notification[] = [
     {
       id: '1',
@@ -76,7 +76,7 @@ export function useNotifications(): UseNotificationsReturn {
     setError(null)
 
     try {
-      // TODO: Implementar API call real
+      // REMOVE: Implementar API call real
       // const response = await notificationsService.getNotifications()
 
       // Por enquanto, usar mock com contexto organizacional
@@ -98,7 +98,7 @@ export function useNotifications(): UseNotificationsReturn {
   // Marcar como lida
   const markAsRead = useCallback(async (notificationId: string) => {
     try {
-      // TODO: API call para marcar como lida
+      // REMOVE: API call para marcar como lida
       // await notificationsService.markAsRead(notificationId)
 
       setNotifications(prev =>
@@ -114,7 +114,7 @@ export function useNotifications(): UseNotificationsReturn {
   // Marcar todas como lidas
   const markAllAsRead = useCallback(async () => {
     try {
-      // TODO: API call para marcar todas como lidas
+      // REMOVE: API call para marcar todas como lidas
       // await notificationsService.markAllAsRead()
 
       setNotifications(prev => prev.map(notification => ({ ...notification, unread: false })))

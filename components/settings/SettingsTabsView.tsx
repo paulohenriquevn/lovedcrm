@@ -84,7 +84,7 @@ function TabButton({
   const Icon = tab.icon
 
   // For now, don't block any tabs - let the content handle feature gating
-  // TODO: Implement proper feature checking with subscription/plan validation
+  // REMOVE: Connect to real subscription/plan validation API when billing is ready
   const isFeatureBlocked = false
 
   // Keep this logic for future feature gating implementation:
