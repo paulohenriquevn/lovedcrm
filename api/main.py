@@ -62,6 +62,7 @@ from api.routers.invites import router as invites_router
 from api.routers.organizations import router as organizations_router
 from api.routers.providers import router as providers_router
 from api.routers.roles import router as roles_router
+from api.routers.templates import router as templates_router
 from api.routers.user_preferences import router as user_preferences_router
 from api.routers.users import router as users_router
 from api.routers.websocket import router as websocket_router
@@ -464,6 +465,7 @@ app.include_router(crm_leads_router)  # CRM Leads management
 app.include_router(crm_analytics_router)  # CRM Analytics & Advanced Insights (Story 3.2)
 app.include_router(crm_bulk_operations_router)  # CRM Bulk Operations (Story 3.3)
 app.include_router(crm_lead_trends_router)  # CRM Lead Trends (Story 3.3)
+app.include_router(templates_router)  # Message Templates (Story 6.1)
 app.include_router(websocket_router)  # Real-time collaboration
 
 # Note: Removed app mounting to avoid route conflicts

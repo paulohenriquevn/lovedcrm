@@ -11,8 +11,6 @@ from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, Field
 
-from api.models.crm_lead import PipelineStage
-
 
 class LeadBase(BaseModel):
     """Base Lead schema with common fields."""
@@ -31,7 +29,7 @@ class LeadBase(BaseModel):
 class LeadCreate(LeadBase):
     """Schema for creating new leads."""
 
-    stage: PipelineStage = Field(default=PipelineStage.LEAD, description="Initial pipeline stage")
+    stage: str = Field(default="lead", description="Initial pipeline stage")
     assigned_user_id: Optional[UUID] = Field(None, description="User ID to assign this lead to")
 
 
@@ -52,7 +50,7 @@ class LeadUpdate(BaseModel):
 class LeadStageUpdate(BaseModel):
     """Schema for updating lead pipeline stage."""
 
-    stage: PipelineStage = Field(..., description="New pipeline stage")
+    stage: str = Field(..., description="New pipeline stage")
     notes: Optional[str] = Field(None, description="Notes about stage transition")
 
 
@@ -67,7 +65,7 @@ class LeadResponse(LeadBase):
 
     id: UUID
     organization_id: UUID
-    stage: PipelineStage
+    stage: str
     assigned_user_id: Optional[UUID]
     last_contact_at: Optional[datetime]
     last_contact_channel: Optional[str]
@@ -190,7 +188,7 @@ class FilterOptionsResponse(BaseModel):
 class PipelineFilters(BaseModel):
     """Pipeline filter parameters."""
 
-    stages: Optional[List[PipelineStage]] = Field(None, description="Filter by pipeline stages")
+    stages: Optional[List[str]] = Field(None, description="Filter by pipeline stages")
     sources: Optional[List[str]] = Field(None, description="Filter by lead sources")
     assigned_users: Optional[List[UUID]] = Field(None, description="Filter by assigned users")
     tags: Optional[List[str]] = Field(None, description="Filter by tags")

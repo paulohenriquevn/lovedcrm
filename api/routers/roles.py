@@ -68,7 +68,9 @@ def _prepare_removed_user_data(db: Session, user_id: UUID, member_to_remove) -> 
     removed_user_data = {
         "user_id": str(user_id),
         "role": member_to_remove.role,
-        "joined_at": member_to_remove.created_at.isoformat() if member_to_remove.created_at else None,
+        "joined_at": member_to_remove.created_at.isoformat()
+        if member_to_remove.created_at
+        else None,
     }
 
     # Get user details if available

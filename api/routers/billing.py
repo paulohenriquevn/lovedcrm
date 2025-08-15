@@ -3,6 +3,7 @@
 Follows existing patterns and multi-tenant architecture.
 """
 import logging
+import uuid
 from datetime import datetime
 from typing import List
 from uuid import UUID
@@ -73,8 +74,6 @@ async def get_current_plan(
                 )
 
             # Create a temporary subscription-like response
-            import uuid
-            from datetime import datetime
 
             subscription_data = {
                 "id": uuid.uuid4(),
@@ -234,18 +233,23 @@ async def upgrade_plan(
         )
 
         stripe_service = get_stripe_service(db)
-        
+
         # Create checkout URLs (in production these would be dynamic)
-        success_url = f"{request.get('frontend_url', 'https://app.lovedcrm.com')}/admin/settings/billing?success=true&plan={request.plan_slug}"
-        cancel_url = f"{request.get('frontend_url', 'https://app.lovedcrm.com')}/admin/settings/billing?cancelled=true"
-        
+        success_url = (
+            request.success_url
+            or f"https://app.lovedcrm.com/admin/settings/billing?success=true&plan={request.plan_slug}"
+        )
+        cancel_url = (
+            request.cancel_url or "https://app.lovedcrm.com/admin/settings/billing?cancelled=true"
+        )
+
         checkout_session = stripe_service.create_checkout_session(
             organization=organization,
             plan=target_plan,
             success_url=success_url,
-            cancel_url=cancel_url
+            cancel_url=cancel_url,
         )
-        
+
         return CheckoutSessionResponse(
             checkout_url=checkout_session["checkout_url"],
             session_id=checkout_session["session_id"],
@@ -369,9 +373,9 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
 
         stripe_service = get_stripe_service(db)
         result = stripe_service.handle_webhook(payload, signature)
-        
+
         logger.info(f"Stripe webhook processed successfully: {result['event_type']}")
-        
+
         return {
             "status": "success",
             "event_type": result["event_type"],

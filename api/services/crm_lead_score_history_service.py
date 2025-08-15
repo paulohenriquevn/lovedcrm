@@ -35,14 +35,14 @@ class LeadScoreHistoryService:
         score_factors: Optional[Dict] = None,
     ) -> LeadScoreHistory:
         """Record a score change in history.
-        
+
         Args:
             lead: The lead whose score changed
             new_score: New score value
             change_reason: Reason for the change (e.g., "lead_updated", "stage_changed")
             changed_by_user_id: User who triggered the change
             score_factors: Score factor breakdown
-            
+
         Returns:
             Created score history record
         """
@@ -92,13 +92,13 @@ class LeadScoreHistoryService:
         limit: int = 100,
     ) -> List[LeadScoreHistory]:
         """Get score history for a lead.
-        
+
         Args:
             organization: Organization context
             lead_id: Lead ID
             days_back: Number of days to look back
             limit: Maximum records to return
-            
+
         Returns:
             List of score history records ordered by date descending
         """
@@ -125,12 +125,12 @@ class LeadScoreHistoryService:
         days_back: int = 30,
     ) -> List[Dict]:
         """Get formatted score trend data for visualization.
-        
+
         Args:
             organization: Organization context
             lead_id: Lead ID
             days_back: Number of days to analyze
-            
+
         Returns:
             List of score data points formatted for frontend visualization
         """
@@ -139,13 +139,17 @@ class LeadScoreHistoryService:
         # Convert to frontend format
         trend_data = []
         for record in reversed(history_records):  # Reverse to get chronological order
-            trend_data.append({
-                "date": record.created_at.isoformat(),
-                "score": float(record.score),
-                "previous_score": float(record.previous_score) if record.previous_score else None,
-                "change_reason": record.change_reason,
-                "factors": record.score_factors,
-            })
+            trend_data.append(
+                {
+                    "date": record.created_at.isoformat(),
+                    "score": float(record.score),
+                    "previous_score": float(record.previous_score)
+                    if record.previous_score
+                    else None,
+                    "change_reason": record.change_reason,
+                    "factors": record.score_factors,
+                }
+            )
 
         return trend_data
 
@@ -156,12 +160,12 @@ class LeadScoreHistoryService:
         days_back: int = 30,
     ) -> Dict:
         """Get summary statistics for score trends.
-        
+
         Args:
             organization: Organization context
             lead_id: Lead ID
             days_back: Number of days to analyze
-            
+
         Returns:
             Dictionary with trend summary statistics
         """

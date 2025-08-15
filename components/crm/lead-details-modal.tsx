@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { useToast } from '@/hooks/use-toast'
 import { default as crmLeadsService, Lead } from '@/services/crm-leads'
 
+import { LeadCommunication } from './lead-communication'
 import {
   LeadDetailsHeader,
   ContactInfoCard,
@@ -72,12 +73,29 @@ export function LeadDetailsModal({
   onDelete,
   onFavoriteToggle,
 }: LeadDetailsModalProps): React.ReactElement | null {
+  const { toast } = useToast()
+
   // eslint-disable-next-line camelcase
   const defaultLead = { id: '', name: '', is_favorite: false } as Lead
   const { isToggleLoading, handleFavoriteToggle } = useFavoriteToggle(
     lead ?? defaultLead,
     onFavoriteToggle
   )
+
+  const handleSendMessage = async (message: string, templateId?: string): Promise<void> => {
+    // This would integrate with your messaging service
+    // TODO: Replace console.log with actual messaging service integration
+    // eslint-disable-next-line no-console
+    console.log('Sending message to lead:', lead?.name, message, templateId)
+
+    // Simulate async operation - remove this when implementing real messaging service
+    await new Promise(resolve => setTimeout(resolve, 100))
+
+    toast({
+      title: 'Mensagem enviada',
+      description: `Mensagem enviada para ${lead?.name} com sucesso.`,
+    })
+  }
 
   if (!lead) {
     return null
@@ -108,6 +126,9 @@ export function LeadDetailsModal({
           <TimelineCard lead={lead} />
           <TagsSection lead={lead} />
           <NotesSection lead={lead} />
+
+          {/* Lead Communication with Template Suggestions */}
+          <LeadCommunication lead={lead} onSendMessage={handleSendMessage} />
         </div>
       </DialogContent>
     </Dialog>

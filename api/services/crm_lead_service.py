@@ -46,7 +46,7 @@ class CRMLeadService:
 
     def _convert_to_response(self, lead: Lead) -> LeadResponse:
         """Convert Lead model to LeadResponse with computed properties.
-        
+
         Eliminates code duplication across endpoints.
         """
         response = LeadResponse.model_validate(lead)
@@ -224,12 +224,16 @@ class CRMLeadService:
         """Update lead and return Lead model."""
         return self._update_lead_internal(organization, lead_id, lead_data)
 
-    def update_lead_response(self, organization: Organization, lead_id: UUID, lead_data: LeadUpdate) -> LeadResponse:
+    def update_lead_response(
+        self, organization: Organization, lead_id: UUID, lead_data: LeadUpdate
+    ) -> LeadResponse:
         """Update lead and return LeadResponse."""
         lead = self._update_lead_internal(organization, lead_id, lead_data)
         return self._convert_to_response(lead)
 
-    def _update_lead_internal(self, organization: Organization, lead_id: UUID, lead_data: LeadUpdate) -> Lead:
+    def _update_lead_internal(
+        self, organization: Organization, lead_id: UUID, lead_data: LeadUpdate
+    ) -> Lead:
         """Update existing lead."""
         try:
             lead = self._get_lead_by_id_internal(organization, lead_id)
@@ -326,15 +330,17 @@ class CRMLeadService:
         try:
             # First get the lead to validate transition
             lead = self._get_lead_by_id_internal(organization, lead_id)
-            
+
             # Validate stage transition using business rules
             if not lead.can_move_to_stage(stage_data.stage):
                 requirements = lead.get_transition_requirements(stage_data.stage)
                 if requirements:
                     error_detail = f"Cannot move lead from {lead.stage.value} to {stage_data.stage.value}. Requirements: {'; '.join(requirements)}"
                 else:
-                    error_detail = f"Invalid transition from {lead.stage.value} to {stage_data.stage.value}"
-                
+                    error_detail = (
+                        f"Invalid transition from {lead.stage.value} to {stage_data.stage.value}"
+                    )
+
                 logger.warning(
                     "Invalid stage transition attempted",
                     extra={
@@ -345,14 +351,11 @@ class CRMLeadService:
                         "requirements": requirements,
                     },
                 )
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=error_detail
-                )
-            
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error_detail)
+
             # Perform the transition using the model's business logic
             lead.move_to_stage(stage_data.stage, stage_data.notes)
-            
+
             # Save changes
             self.db.commit()
             self.db.refresh(lead)

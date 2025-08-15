@@ -4,11 +4,10 @@ Tracks historical changes in lead scores for trend analysis.
 """
 
 import uuid
-from datetime import datetime
 from decimal import Decimal
 
-from sqlalchemy import Column, DateTime, ForeignKey, Index, DECIMAL
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy import DECIMAL, Column, DateTime, ForeignKey, Index
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -26,17 +25,17 @@ class LeadScoreHistory(Base):
     # Foreign keys
     lead_id = Column(UUID(as_uuid=True), ForeignKey("leads.id", ondelete="CASCADE"), nullable=False)
     organization_id = Column(
-        UUID(as_uuid=True), 
-        ForeignKey("organizations.id", ondelete="CASCADE"), 
+        UUID(as_uuid=True),
+        ForeignKey("organizations.id", ondelete="CASCADE"),
         nullable=False,
-        index=True
+        index=True,
     )
 
     # Score data
     score = Column(DECIMAL(5, 2), nullable=False, default=Decimal("0.00"))
     previous_score = Column(DECIMAL(5, 2), nullable=True)
     score_factors = Column(JSONB, nullable=False, default=dict)
-    
+
     # Change tracking
     change_reason = Column("change_reason", nullable=True)  # e.g., "lead_updated", "stage_changed"
     changed_by_user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)

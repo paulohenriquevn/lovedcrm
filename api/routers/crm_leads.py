@@ -215,26 +215,27 @@ async def validate_stage_transition(
     db: Session = Depends(get_db),
 ):
     """Validate if a stage transition is allowed for a lead.
-    
+
     Returns validation result and requirements if transition is not allowed.
-    
+
     **Required**: X-Org-Id header with valid organization ID.
     """
     service = CRMLeadService(db)
     lead = service.get_lead_by_id(organization, lead_id)
-    
+
     can_transition = lead.can_move_to_stage(target_stage)
     requirements = lead.get_transition_requirements(target_stage) if not can_transition else []
-    
+
     return {
         "can_transition": can_transition,
         "current_stage": lead.stage.value,
         "target_stage": target_stage.value,
         "requirements": requirements,
         "valid_transitions": [
-            stage.value for stage in PipelineStage 
+            stage.value
+            for stage in PipelineStage
             if lead.can_move_to_stage(stage) and stage != lead.stage
-        ]
+        ],
     }
 
 

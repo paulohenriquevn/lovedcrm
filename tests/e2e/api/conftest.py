@@ -84,6 +84,8 @@ def clean_database(db_session):
         "DELETE FROM organization_invites WHERE token NOT IN ('test_invite_token_123456789', 'test_expired_token_123456789')",
         # Remove only memberships created during tests (not seed memberships)
         "DELETE FROM organization_members WHERE user_id NOT IN (SELECT id FROM users WHERE email IN ('test@example.com', 'admin@example.com', 'member@example.com', 'viewer@example.com'))",
+        # 🔧 TEMPLATES FIX: Remove templates before removing organizations to avoid FK violations
+        "DELETE FROM message_templates WHERE organization_id IN (SELECT id FROM organizations WHERE slug != 'test-org')",
         # Remove only organizations created during tests (not seed organizations)
         "DELETE FROM organizations WHERE slug != 'test-org'",
         # Remove only users created during tests (not seed users)

@@ -51,16 +51,12 @@ def get_lead_score_trend(
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
 
-    # Calculate date range
-    end_date = datetime.utcnow()
-    start_date = end_date - timedelta(days=days)
-
     # Get real historical data from score history service
     score_history_service = LeadScoreHistoryService(db)
     historical_scores = score_history_service.get_formatted_score_trend(
         organization=organization, lead_id=lead_uuid, days_back=days
     )
-    
+
     # Get trend summary
     trend_summary = score_history_service.get_score_trend_summary(
         organization=organization, lead_id=lead_uuid, days_back=days
@@ -68,11 +64,13 @@ def get_lead_score_trend(
 
     # Convert trend direction to enum
     trend_direction_map = {
-        "increasing": TrendDirection.INCREASING,
-        "decreasing": TrendDirection.DECREASING,
+        "increasing": TrendDirection.UP,
+        "decreasing": TrendDirection.DOWN,
         "stable": TrendDirection.STABLE,
     }
-    trend_direction = trend_direction_map.get(trend_summary["trend_direction"], TrendDirection.STABLE)
+    trend_direction = trend_direction_map.get(
+        trend_summary["trend_direction"], TrendDirection.STABLE
+    )
     trend_value = trend_summary["trend_value"]
 
     # Analyze factor impacts from latest score factors
@@ -106,6 +104,7 @@ def get_lead_score_trend(
 
 # DEPRECATED: Mock functions below are no longer used
 # Real data is now fetched from LeadScoreHistoryService
+
 
 def _generate_score_history(
     lead: Lead, start_date: datetime, end_date: datetime, days: int
@@ -165,14 +164,14 @@ def _analyze_trend_direction(historical_scores: List[Dict[str, Any]]) -> TrendDi
 
 def _analyze_factor_impacts_from_lead(lead: Lead) -> List[FactorImpact]:
     """Analyze factor impacts from current lead data.
-    
+
     Creates factor impact analysis based on current lead scoring factors.
     """
     factor_impacts = []
-    
+
     # Get current score factors from lead
     score_factors = lead.score_factors or {}
-    
+
     # Common factors to analyze
     factor_weights = {
         "email_quality": 0.2,
@@ -182,13 +181,13 @@ def _analyze_factor_impacts_from_lead(lead: Lead) -> List[FactorImpact]:
         "stage_progress": 0.15,
         "engagement_level": 0.15,
     }
-    
+
     for factor_name, weight in factor_weights.items():
         factor_score = score_factors.get(factor_name, 0)
-        
+
         # Calculate impact based on factor score and weight
         impact_value = factor_score * weight
-        
+
         # Determine impact level
         if impact_value >= 15:
             impact_level = "high"
@@ -196,20 +195,22 @@ def _analyze_factor_impacts_from_lead(lead: Lead) -> List[FactorImpact]:
             impact_level = "medium"
         else:
             impact_level = "low"
-            
+
         factor_impacts.append(
             FactorImpact(
                 factor_name=factor_name.replace("_", " ").title(),
-                impact_value=round(impact_value, 1),
+                current_value=round(factor_score, 1),
+                change_value=round(impact_value, 1),
                 impact_level=impact_level,
                 description=_get_factor_description(factor_name, factor_score),
             )
         )
-    
+
     # Sort by impact value descending
-    factor_impacts.sort(key=lambda x: x.impact_value, reverse=True)
-    
+    factor_impacts.sort(key=lambda x: x.change_value, reverse=True)
+
     return factor_impacts
+
 
 def _get_factor_description(factor_name: str, factor_score: float) -> str:
     """Get description for a factor based on its score."""
@@ -221,9 +222,9 @@ def _get_factor_description(factor_name: str, factor_score: float) -> str:
         "stage_progress": "Movement through sales pipeline",
         "engagement_level": "Recent interaction and response rate",
     }
-    
+
     base_desc = descriptions.get(factor_name, "Factor impact on lead score")
-    
+
     if factor_score >= 80:
         return f"{base_desc} - Excellent"
     elif factor_score >= 60:
@@ -232,6 +233,7 @@ def _get_factor_description(factor_name: str, factor_score: float) -> str:
         return f"{base_desc} - Average"
     else:
         return f"{base_desc} - Needs improvement"
+
 
 def _analyze_factor_impacts(
     lead: Lead, historical_scores: List[Dict[str, Any]]

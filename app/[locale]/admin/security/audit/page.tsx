@@ -20,7 +20,7 @@ import { AuditPageHeader } from './components/audit-page-header'
 import { StatisticsCards } from './components/statistics-cards'
 // REMOVE: Import removed - use real audit API
 
-import type { AuditFilters as AuditFiltersType } from './types'
+import type { AuditFilters as AuditFiltersType, AuditStatistics } from './types'
 
 // Handler functions moved to outer scope
 const handleRefreshData = (setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
@@ -65,7 +65,7 @@ export default function SecurityAuditPage() {
   })
 
   // REMOVE: Use real audit API - implement statistics fetch
-  const statistics = null as any
+  const statistics: AuditStatistics | null = null
 
   // Note: auditLogs and securityEvents would be used when implementing actual audit table
 

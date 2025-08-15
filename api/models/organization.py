@@ -52,6 +52,9 @@ class Organization(Base):
     audit_logs = relationship(
         "AuditLog", back_populates="organization", cascade="all, delete-orphan"
     )
+    message_templates = relationship(
+        "MessageTemplate", back_populates="organization", cascade="all, delete-orphan"
+    )
 
     # Performance indexes
     __table_args__ = (

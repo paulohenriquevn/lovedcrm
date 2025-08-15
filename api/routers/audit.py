@@ -164,7 +164,9 @@ async def get_audit_trail(
 
     # Check permissions for viewing audit logs
     role_service = RoleManagementService(db)
-    if not role_service.check_permission(organization.id, current_user.id, "view_audit_logs"):
+    if not role_service.check_permission(
+        UUID(str(organization.id)), UUID(str(current_user.id)), "view_audit_logs"
+    ):
         logger.warning(
             "Permission denied: User lacks view_audit_logs permission",
             extra={
@@ -174,7 +176,7 @@ async def get_audit_trail(
         )
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Insufficient permissions to view audit logs"
+            detail="Insufficient permissions to view audit logs",
         )
 
     audit_service = AuditService(db)
@@ -302,7 +304,9 @@ async def get_user_activity(
     # Check if user is requesting their own activity or has permission
     if target_user_id != current_user.id:
         role_service = RoleManagementService(db)
-        if not role_service.check_permission(organization.id, current_user.id, "view_member_activity"):
+        if not role_service.check_permission(
+            UUID(str(organization.id)), UUID(str(current_user.id)), "view_member_activity"
+        ):
             logger.warning(
                 "Permission denied: User lacks view_member_activity permission",
                 extra={
@@ -313,9 +317,9 @@ async def get_user_activity(
             )
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Insufficient permissions to view other member's activity"
+                detail="Insufficient permissions to view other member's activity",
             )
-        
+
         logger.info(
             "Permission granted: User has view_member_activity permission",
             extra={
@@ -433,7 +437,9 @@ async def verify_audit_integrity(
 
     # Check admin permissions for audit integrity verification
     role_service = RoleManagementService(db)
-    if not role_service.check_permission(organization.id, current_user.id, "view_audit_logs"):
+    if not role_service.check_permission(
+        UUID(str(organization.id)), UUID(str(current_user.id)), "view_audit_logs"
+    ):
         logger.warning(
             "Permission denied: User lacks view_audit_logs permission",
             extra={
@@ -443,7 +449,7 @@ async def verify_audit_integrity(
         )
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Insufficient permissions to verify audit integrity"
+            detail="Insufficient permissions to verify audit integrity",
         )
 
     audit_service = AuditService(db)
@@ -502,7 +508,9 @@ async def cleanup_old_audit_logs(
 
     # Check admin permissions for audit cleanup
     role_service = RoleManagementService(db)
-    if not role_service.check_permission(organization.id, current_user.id, "view_audit_logs"):
+    if not role_service.check_permission(
+        UUID(str(organization.id)), UUID(str(current_user.id)), "view_audit_logs"
+    ):
         logger.warning(
             "Permission denied: User lacks view_audit_logs permission for cleanup",
             extra={
@@ -512,7 +520,7 @@ async def cleanup_old_audit_logs(
         )
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="Insufficient permissions to perform audit cleanup"
+            detail="Insufficient permissions to perform audit cleanup",
         )
 
     audit_service = AuditService(db)

@@ -6,12 +6,22 @@ import { Skeleton } from '@/components/ui/skeleton'
 import type { AuditStatistics } from '../types'
 
 interface StatisticsCardsProps {
-  statistics: AuditStatistics
+  statistics: AuditStatistics | null
   isLoading: boolean
 }
 
 export function StatisticsCards({ statistics, isLoading }: StatisticsCardsProps) {
   if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {Array.from({ length: 4 }, (_, i) => (
+          <Skeleton key={`skeleton-${i}`} className="h-24" />
+        ))}
+      </div>
+    )
+  }
+
+  if (!statistics) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {Array.from({ length: 4 }, (_, i) => (

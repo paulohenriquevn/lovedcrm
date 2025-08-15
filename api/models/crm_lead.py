@@ -160,11 +160,11 @@ class Lead(Base):
         - Direct jumps are allowed with some restrictions
         """
         current_stage = self.stage
-        
+
         # If stage is not changing, allow it
         if current_stage == new_stage:
             return True
-            
+
         # Define stage ordering for sequential progression
         stage_order = {
             PipelineStage.LEAD: 0,
@@ -173,57 +173,57 @@ class Lead(Base):
             PipelineStage.NEGOCIACAO: 3,
             PipelineStage.FECHADO: 4,
         }
-        
+
         current_order = stage_order[current_stage]
         new_order = stage_order[new_stage]
-        
+
         # Always allow forward sequential progression
         if new_order == current_order + 1:
             return True
-            
+
         # Always allow backward movement (except from FECHADO)
         if new_order < current_order and current_stage != PipelineStage.FECHADO:
             return True
-            
+
         # Allow jumping forward, but with validation
         if new_order > current_order:
             # Cannot jump directly to FECHADO from LEAD
             if current_stage == PipelineStage.LEAD and new_stage == PipelineStage.FECHADO:
                 return False
-                
+
             # Need basic contact info for advanced stages
-            if new_order >= 2:  # PROPOSTA or later
-                if not self.email and not self.phone:
-                    return False
-                    
+            if new_order >= 2 and not self.email and not self.phone:  # PROPOSTA or later
+                return False
+
             return True
-            
+
         # Special rule: Once FECHADO, can only reopen to NEGOCIACAO
         if current_stage == PipelineStage.FECHADO:
             return new_stage == PipelineStage.NEGOCIACAO
-            
+
         # Default: allow transition
         return True
 
     def get_transition_requirements(self, new_stage: PipelineStage) -> List[str]:
         """Get requirements that must be met for stage transition.
-        
+
         Returns list of requirements that are not met.
         """
         requirements = []
-        
-        if new_stage in [PipelineStage.PROPOSTA, PipelineStage.NEGOCIACAO, PipelineStage.FECHADO]:
-            if not self.email and not self.phone:
-                requirements.append("Contact information (email or phone) is required")
-                
-        if new_stage == PipelineStage.PROPOSTA:
-            if not self.estimated_value:
-                requirements.append("Estimated value should be defined for proposals")
-                
-        if new_stage == PipelineStage.FECHADO:
-            if self.stage == PipelineStage.LEAD:
-                requirements.append("Cannot close lead directly - must progress through pipeline")
-                
+
+        if (
+            new_stage in [PipelineStage.PROPOSTA, PipelineStage.NEGOCIACAO, PipelineStage.FECHADO]
+            and not self.email
+            and not self.phone
+        ):
+            requirements.append("Contact information (email or phone) is required")
+
+        if new_stage == PipelineStage.PROPOSTA and not self.estimated_value:
+            requirements.append("Estimated value should be defined for proposals")
+
+        if new_stage == PipelineStage.FECHADO and self.stage == PipelineStage.LEAD:
+            requirements.append("Cannot close lead directly - must progress through pipeline")
+
         return requirements
 
     def move_to_stage(self, new_stage: PipelineStage, notes: Optional[str] = None):
@@ -235,7 +235,7 @@ class Lead(Base):
             else:
                 error_msg = f"Invalid transition from {self.stage} to {new_stage}"
             raise ValueError(error_msg)
-            
+
         old_stage = self.stage
         self.stage = new_stage
         self.updated_at = func.now()

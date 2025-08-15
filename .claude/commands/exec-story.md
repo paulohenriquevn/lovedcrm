@@ -185,7 +185,7 @@ Análise Contextual do Codebase (EVIDÊNCIAS OBRIGATÓRIAS):
   ✅ Database: ./migrate status + schema structure analysis
   ✅ Backend: api/models/ + api/services/ + api/routers/ mapping
   ✅ Frontend: components/ui/ + app/[locale]/admin/ structure
-  ✅ Tests: tests/e2e/api/ coverage for multi-tenancy validation
+  ✅ Tests: tests/e2e/api/ - 175+ testes E2E com ambiente Docker completo
 ```
 
 ### **FASE 2: DESIGN E ESPECIFICAÇÃO (10-15 min)**
@@ -229,7 +229,7 @@ Step 2.3: Vertical Slice Decomposition
     - Database: schema/model changes
     - Backend: API endpoints + business logic
     - Frontend: UI components + integration
-    - Testing: E2E validation + org isolation
+    - Testing: E2E validation usando fixtures multi-tenant + Docker environment
 
   User Value: Usuário pode usar funcionalidade imediatamente
 ```
@@ -353,6 +353,13 @@ Multi-tenancy Validation:
   Organization Models: [Models com organization_id identificados]
   Org Middleware: [Middleware patterns identificados]
   Frontend Context: [useOrgContext patterns identificados]
+
+E2E Test Infrastructure:
+  Docker Environment: docker-compose.test.yml com postgres-test:5434 + api-test:8001
+  Test Database: saas_test com migrations automáticas + health checks
+  Mock Services: Stripe (9080), Email (8025), S3 (9000) via WireMock/MailHog/MinIO
+  Fixtures Available: 175+ testes, authenticated_user, clean_database, multi-org isolation
+  Hot Updates: make test-hot-migrate (2s), make test-hot-data (3s) vs restart completo (45s)
 ```
 
 ---
@@ -400,9 +407,43 @@ Multi-tenancy Validation:
 
 [Steps detalhados para components e pages]
 
-#### **Slice 4: End-to-End Integration + Testing ([X]h)**
+#### **Slice 4: End-to-End Testing + Integration ([X]h)**
 
-[Steps detalhados para integration e testing]
+**Step N: E2E Test Implementation ([X]h)**
+
+- **Objetivo**: Implementar testes E2E seguindo GOLDEN RULE (funcionalidade primeiro)
+- **Environment**: 
+  ```bash
+  # Setup ambiente Docker completo
+  make setup-test-start     # Docker: postgres-test:5434, api-test:8001
+  make test-verify          # Health check de todos os serviços
+  ```
+- **Test Structure**:
+  ```python
+  # tests/e2e/api/test_[feature].py
+  class TestFeatureSuccess:     # PRIORITY 1: 2xx responses
+      def test_feature_works(self, authenticated_user, api_client):
+          # authenticated_user já inclui X-Org-Id headers
+          
+  class TestFeatureValidation:  # PRIORITY 2: 4xx/5xx responses  
+      def test_feature_validation(self, api_client):
+          # Validation e security tests
+  ```
+- **Fixtures Disponíveis**:
+  - `authenticated_user`: JWT + X-Org-Id automático
+  - `clean_database`: Cleanup multi-tenant seguro
+  - `second_organization_user`: Cross-org isolation testing
+- **Execution**:
+  ```bash
+  # Específico para a feature
+  pytest tests/e2e/api/test_[feature].py -v
+  
+  # Success scenarios apenas (PRIORITY 1)
+  pytest tests/e2e/api/ -k "Success" -v
+  ```
+- **Validation**: Testes passam seguindo arquitetura multi-tenant
+- **Rollback**: Hot updates disponíveis (make test-hot-data)
+- **Org-Safety**: X-Org-Id isolation validado automaticamente
 
 ---
 
@@ -419,7 +460,9 @@ Functional Criteria:
 Technical Criteria:
   ✅ Multi-tenancy: Organization isolation 100% funcional
   ✅ Vertical Slice: End-to-end user workflow funcionando
-  ✅ Quality: TypeScript + tests passing
+  ✅ Quality: TypeScript + E2E tests passing
+  ✅ E2E Tests: Success scenarios (2xx) + validation scenarios (4xx/5xx) implementados
+  ✅ Test Environment: Docker services healthy (postgres-test, api-test, mocks)
   ✅ Performance: Response times < [X]ms
   ✅ Security: No vulnerabilidades introduzidas
 
@@ -441,9 +484,11 @@ Integration Tests:
   - Frontend-backend integration
 
 E2E Tests:
-  - Complete user workflow
-  - Multi-tenant isolation
-  - Cross-org data protection
+  - Complete user workflow via fixtures (authenticated_user, clean_database)
+  - Multi-tenant isolation com X-Org-Id headers automáticos
+  - Docker test environment (postgres-test:5434, api-test:8001)
+  - GOLDEN RULE: PRIORITY 1 (2xx) → PRIORITY 2 (4xx/5xx)
+  - Hot updates disponíveis: make test-hot-migrate, make test-hot-data
 ```
 
 ---
@@ -563,8 +608,7 @@ Dependencies:
 - ✅ **DEVE**: Salvar automaticamente TODOS os planos gerados
 - ✅ **DEVE**: Usar diretório: `docs/plans/`
 - ✅ **DEVE**: Formato filename: `[ID]-[slug-title]-execution-plan.md`
-- ✅ **DEVE**: Atualizar CHANGELOG.md com entrada de planejamento
-- ✅ **DEVE**: Confirmar salvamento com paths completos no final
+- ✅ **DEVE**: Confirmar salvamento com path completo no final
 
 #### **💾 PROCESSO DE SALVAMENTO**
 
@@ -578,14 +622,8 @@ Step 2: Salvar Plano
   - Content: Plano completo gerado
   - Validation: Arquivo salvo com sucesso
 
-Step 3: Atualizar CHANGELOG
-  - Path: CHANGELOG.md (raiz do projeto)
-  - Content: Entrada de planejamento
-  - Action: Adicionar no topo do CHANGELOG
-
-Step 4: Confirmar Salvamento
+Step 3: Confirmar Salvamento
   - Output: "✅ PLANO SALVO: docs/plans/[filename].md"
-  - Output: "✅ CHANGELOG ATUALIZADO: CHANGELOG.md"
 ```
 
 ---
@@ -603,7 +641,6 @@ Step 4: Confirmar Salvamento
 
 - **Plano Detalhado**: 100% executável com comandos específicos
 - **docs/plans/**: Arquivo salvo automaticamente
-- **CHANGELOG.md**: Entrada automática gerada
 - **Evidence-Based**: Baseado em análise REAL do codebase
 - **Multi-tenant Compliant**: Organization isolation guaranteed
 

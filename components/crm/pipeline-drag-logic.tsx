@@ -65,9 +65,7 @@ function notifyStageChange(
   })
 }
 
-function createErrorHandler(
-  reloadLeadsData: () => Promise<void>
-): (error: unknown) => void {
+function createErrorHandler(reloadLeadsData: () => Promise<void>): (error: unknown) => void {
   return (error: unknown): void => {
     // eslint-disable-next-line no-console
     console.error('Erro ao mover lead:', error)
